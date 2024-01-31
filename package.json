@@ -1,0 +1,38 @@
+{
+  "name": "ecrin-eden-website",
+  "version": "1.0.0",
+  "description": "Full stack project crafted with Node.js, React & MySQL. Seamlessly manage appointments & explore services. Elevate your massage experience digitally!",
+  "main": "index.ts",
+  "scripts": {
+    "install-dependencies": "npm install && npm install --prefix client && npm install --prefix server",
+    "start": "npm run start:server && npm run start:client",
+    "start:server": "npm start --prefix server",
+    "start:client": "npm run dev --prefix client",
+    "build": "npm run build:server && npm run build:client",
+    "build:server": "npm run build --prefix server",
+    "build:client": "npm run build --prefix client",
+    "test": "npm run test:server && npm run test:client",
+    "test:server": "npm test --prefix server",
+    "test:client": "npm test --prefix client",
+    "lint": "npm run lint:server && npm run lint:client",
+    "lint:server": "npm run lint --prefix server",
+    "lint:client": "npm run lint --prefix client",
+    "deploy": "TODO"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hugocostier/ecrin-eden-website.git"
+  },
+  "keywords": [
+    "Full-Stack",
+    "Node.js",
+    "React",
+    "MySQL"
+  ],
+  "author": "Hugo Costier",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/hugocostier/ecrin-eden-website/issues"
+  },
+  "homepage": "https://github.com/hugocostier/ecrin-eden-website#readme"
+}

@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+    # Node.js backend
+    server:
+        container_name: ecrin-eden-server
+        restart: unless-stopped
+        image: ecrin-eden-server-prod:1.0.0
+        build:
+            context: .app/server
+            dockerfile: Dockerfile
+        ports:
+            - '8080:8080'
+        depends_on:
+            - database
+        networks:
+            - app-network
+
+    # React frontend
+    client:
+        container_name: ecrin-eden-client
+        restart: unless-stopped
+        image: ecrin-eden-client-prod:1.0.0
+        build:
+            context: .app/client
+            dockerfile: Dockerfile
+        ports:
+            - '3000:3000'
+        depends_on:
+            - server
+        networks:
+            - app-network
+
+    # MySQL database
+    database:
+        image: mysql:latest
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+        ports:
+            - '3306:3306'
+        volumes:
+            - mysql_data:/var/lib/mysql
+        entrypoint: ['sh', '-c', 'chown -R mysql:mysql /var/lib/mysql && exec docker-entrypoint.sh mysqld']
+        networks:
+            - app-network
+
+    # phpMyAdmin
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        restart: always
+        ports:
+            - '8080:80'
+        environment:
+            PMA_HOST: database
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+        networks:
+            - app-network
+
+networks:
+    app-network:
+        driver: bridge
+
+volumes:
+    mysql_data:

@@ -1,0 +1,8 @@
+node_modules
+build
+.vscode
+.DS_STORE
+.env
+*.log
+tmp
+secrets
