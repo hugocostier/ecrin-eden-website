@@ -1,0 +1,179 @@
+{
+  "home": {
+    "header": [
+      {
+        "title": "Écrin d'Eden, un voyage à fleur de peau",
+        "subtitle": "Massages bien-être",
+        "image": "./assets/images/hero-section.jpg"
+      }
+    ],
+    "main": [
+      {
+        "title": "Nouveau nouveau titre",
+        "text": "Partenaire de votre bien-être, vous offre un moment privilégié, dans un espace calme, cocooning, chaleureux, propice au lâcher-prise. \nVous y trouverez un accompagnement personnalisé pour une détente globale, tant au niveau du corps que de l'esprit, grâce à différentes techniques de massage. \nA votre arrivée, un entretien individuel permettre un recueil de données qui seront utilisées pour façonner un soin sur mesure, unique, adapté à vos besoins, vos attentes et réalités du moment, et aboutira à un total lâcher-prise. Votre écrin d'Eden vous attend pour une pause bien méritée loin du stress quotidien.",
+        "image": "TODO"
+      },
+      {
+        "title": "Praticienne certifiée en Massage Bien-Être®",
+        "text": "Infirmière diplômée d'État, c'est ma passion pour les massages qui m'a conduit à choisir la célèbre école européenne du Toucher-massage®, institut Joël Savatowski, pour y suivre une formation certifiante spécialisée. Ce cursus riche m'a permis de maîtriser différentes techniques de massage. \nMes 25 ans d'expérience dans les soins, m'ont appris à m'adapter aux besoins de chacun, alliant empathie, sensibilité, qualité d'écoute. Ces expériences me permettent de vous proposer des massages personnalisés, au plus près de vos attentes et de vos besoins.",
+        "image": "TODO"
+      }
+    ],
+    "video": [
+      {
+        "video": "TODO"
+      }
+    ],
+    "footer": [
+      {
+        "text": "Toute utilisation du terme massage sur ce site fait référence aux massages bien-être. Les prestations n'ont aucun but thérapeutique et en raison de leur nature, ne s'apparentent en rien, ni dans les contenus, ni dans les objectifs, à la pratique de la masso-kinésithérapie, ainsi qu'à toute pratique médicale. \nMes massages n'ont aucune finalité érotique, tantrique ou sexuelle, et sont réalisés dans le respect de la personne et de la praticienne."
+      }
+    ]
+  },
+  "services": {
+    "header": [
+      {
+        "title": "Écrin d'Eden, une invitation au lâcher-prise",
+        "images": [
+          "TODO",
+          "TODO",
+          "TODO"
+        ]
+      }
+    ],
+    "main": [
+      {
+        "title": "L'art du sur mesure",
+        "text": "Afin de créer un moment d'exception, Écrin d'Eden vous propose des massages personnalisés, adaptés à vos envies, vos besoins. Vous choisissez les zones du corps à privilégier, la pression, l'ambiance olfactive et auditive qui vous font rêver. \nGrâce à la maîtrise de plusieurs techniques de massage bien-être, nous façonnerons un soin sur mesure, unique, juste pour vous, un voyage à fleur de peau inoubliable. \nVous accéderez à une libération des tensions nerveuses, musculaires, à une meilleure circulation énergétique et lymphatique, à une relaxation absolue, une réduction du stress, pour un bien-être physique et psychique. \n\nNotre protocole s'inscrit dans la lignée tradition du Massage Essentiel® \n\nSoin complet du corps, alliant la parfaite synthèse des techniques de massage Californien et Suédois. Il privilégie le rythme, la fluidité, les sensations agréables, les manoeuvres reliantes et enveloppantes, associées à un travail plus en profondeur, spécifique des différentes parties du corps, afin de dénouer les tensions et contractures musculaires."
+      }
+    ],
+    "services": [
+      {
+        "title": "Massage Essentiel®",
+        "time": "60'",
+        "text": "Soin complet, de l'ensemble du corps, des pieds à la tête ; grand relaxant, il est adapté à vos besoins et vos envies. C'est vous qui le personnalisez.",
+        "image": "TODO"
+      },
+      {
+        "title": "Massage Essentiel®",
+        "time": "90' à 120'",
+        "text": "Est fait pour les amoureux du modelage qui veulent que ça ne s'arrête jamais. Un soin personnalisé pour prendre le temps de vous évader.",
+        "image": "TODO"
+      },
+      {
+        "title": "Le Sur Mesure",
+        "time": "30'",
+        "text": "Un petit moment de douceur à votre image. Idéal pour découvrir le monde du massage bien-être. Le Sur Mesure 30' vous permet de choisir 2 zones à masser, un focus sur ce que vous préférez.",
+        "image": "TODO"
+      },
+      {
+        "title": "Massage Essentiel®",
+        "time": "Femme enceinte",
+        "text": "Le massage prénatal permet d'aborder en toute sérénité les métamorphoses physiques et psychiques qui accompagnent la grossesse. \nEnveloppant et en position latérale, ce massage permet à la future maman de se laisser complètement bercer par la fluidité des mouvements, donnant au corps une sensation de légèreté et d'unité. Face aux modification physiques, physiologiques, émotionnelles, qu'engendre la grossesse, cette parenthèse de détente apporte un bienfait indéniable à la future Maman. \nEn effet, la grossesse s'accompagne souvent de tensions musculaires, de douleurs au niveau du dos, de sensations de jambes lourdes, de problèmes de sommeil, de nervosité, de stress... qui peuvent perturber cette période spéciale. \nEn agissant sur ces différents points, le massage, sera alors un précieux allié pour retrouver sérénité et vous offrir un doux moment de détente et de totale harmonie avec votre bébé.",
+        "image": "TODO"
+      }
+    ]
+  },
+  "prices": {
+    "header": [
+      {
+        "title": "Tarifs Massages",
+        "image": "TODO"
+      }
+    ],
+    "main": [
+      {
+        "title": "Massage",
+        "duration": "30 minutes",
+        "price": "40€"
+      },
+      {
+        "title": "Massage",
+        "duration": "60 minutes",
+        "price": "55€"
+      },
+      {
+        "title": "Massage",
+        "duration": "90 minutes",
+        "price": "75€"
+      },
+      {
+        "title": "Massage",
+        "duration": "120 minutes",
+        "price": "85€"
+      },
+      {
+        "title": "Forfait 5 séances",
+        "duration": "60 minutes",
+        "price": "250€"
+      },
+      {
+        "title": "Forfait 5 séances",
+        "duration": "90 minutes",
+        "price": "350€"
+      }
+    ],
+    "more-infos": [
+      {
+        "title": "Massage à domicile",
+        "price": "Supplément de 15 à 30€ selon la zone."
+      },
+      {
+        "text": "Le règlement peut s'effectuer par :",
+        "choices": [
+          "Chèque",
+          "Espèces",
+          "Carte cadeau"
+        ],
+        "more": "Les cartes bancaires ne sont pas acceptées."
+      }
+    ]
+  },
+  "gift-cards": {
+    "main": [
+      {
+        "title": "Carte Cadeau",
+        "text": "Offrez du bien-être... \nEn version papier cartonné avec une jolie enveloppe, ou en version numérique, la carte cadeau ravira sa ou son destinataire. \nValable 1 an, toutes les prestations proposées peuvent être offertes. \nPour obtenir la carte cadeau, contactez-moi par mail ou par téléphone.",
+        "image": "TODO"
+      }
+    ]
+  },
+  "certifications": {
+    "header": [
+      {
+        "title": "Agrément FFMBE",
+        "images": [
+          "TODO",
+          "TODO",
+          "TODO"
+        ]
+      }
+    ],
+    "main": [
+      {
+        "title": "En confiance, \nFaire le choix d'un praticien agrée",
+        "text": "Avec la création de la Fédération Française de Massages Bien-Être en 2004, tous les acteurs de la profession (praticiens, centre de formation...) oeuvrent à son encadrement par leurs engagements, leurs compétences et leur professionnalisme. \nLes praticiens agréés F.F.M.B.E adoptent un code de déontologie, offrant une protection aux usages contre les dérives dans ce domaine. \nLa F.F.M.B.E a été sollicitée pour créer une charte de qualité des professionnels du bien-être afin de lutter contre la prostitution et le proxénétisme des salons dits \"de massages\". \nPraticienne agrée F.F.M.B.E, je suis également membre du réseau France Massage, qui vous garantit les services d'un professionnel de confiance, formé selon les normes de la Fédération Française de Massages Bien-Être. Je m'engage donc à respecter les codes de déontologie du massage.",
+        "image": "TODO"
+      },
+      {
+        "title": "Le Massage Bien-Être®",
+        "text": "Le praticien en massage bien-être intervient dans de nombreux contextes et environnements. \nIl adapte ses interventions et agence les espaces en fonction des techniques utilisées. \nIl propose des séances de relaxation basées sur des approches bien-être non thérapeutiques et les techniques de relaxation. \nIl cherche à stimuler la circulation des énergies pour permettre de ses libérer de tensions et de se sentir mieux en travaillant également sur le lâcher-prise. \nC'est un professionnel des techniques de relaxation et de bien-être pour procurer une détente corporelle et une relaxation afin d'obtenir un état de bien-être général. \nLes séances proposées visent à améliorer le bien-être, en utilisant différentes approches et techniques dont les techniques de relaxation californiennes, suédoises, hawaïennes, indiennes, balinaises, orientales... des techniques définies par une gestuelle très précise.",
+        "image": "TODO"
+      }
+    ]
+  },
+  "contact": {
+    "header": [
+      {
+        "title": "Contactez-moi",
+        "image": "TODO",
+        "name": "Salon Écrin d'Eden",
+        "address": "302 Route des Tronquisses",
+        "zip": "30960",
+        "city": "Les Mages",
+        "phone": "07.62.06.77.82",
+        "email": "contact@ecrindeden.com"
+      }
+    ]
+  }
+}
