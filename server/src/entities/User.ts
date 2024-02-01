@@ -15,12 +15,17 @@ export class User extends BaseEntity {
     id: number | undefined
 
     @Column({ 
-        unique: true
+        unique: true, 
+        type: 'varchar',
+        length: 255
     }) 
     @IsEmail() 
     email: string | undefined
 
-    @Column()
+    @Column({ 
+        type: 'varchar',
+        length: 100
+    })
     @Length(8, 100, { message: 'Password must be at least 8 characters long'})
     @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[a-zA-Z\d@$!%*?&]{8,}$/, { message: "Password must contain at least one uppercase letter, one lowercase letter, one number and one special character" })
     password: string | undefined

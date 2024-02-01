@@ -8,18 +8,21 @@ export class Service extends BaseEntity {
     @PrimaryGeneratedColumn() 
     id: number | undefined
 
-    @Column()
+    @Column({
+        type: 'varchar',
+        length: 100, 
+    })
     @IsNotEmpty({ message: 'Name cannot be empty' })
     name: string | undefined 
 
-    @Column() 
+    @Column({ type: 'numeric' }) 
     @IsInt({ message: 'Duration must be a number' })
     @Min(1, { message: 'Duration must be at least 1 minute' })
     @Max(180, { message: "Duration cannot exceed 180 minutes (3 hours)" })
     @IsNotEmpty({ message: 'Duration cannot be empty' })
     duration: number | undefined 
 
-    @Column()
+    @Column({ type: 'numeric' })
     @IsInt({ message: 'Price must be a number' })
     @Min(0, { message: 'Price cannot be negative' })
     @IsNotEmpty({ message: 'Price cannot be empty' })
