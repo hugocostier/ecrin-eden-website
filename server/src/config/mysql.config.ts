@@ -1,11 +1,17 @@
 import dotenv from 'dotenv';
+import { dirname } from 'path';
+import 'reflect-metadata';
 import { DataSource } from "typeorm";
+import { fileURLToPath } from 'url';
 import { Appointment } from '../entities/Appointment.js';
 import { Client } from '../entities/Client.js';
 import { Service } from '../entities/Service.js';
 import { User } from '../entities/User.js';
 
 dotenv.config() 
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 const AppDataSource = new DataSource({
     type: 'mysql', 
