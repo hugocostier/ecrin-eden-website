@@ -1,12 +1,12 @@
-import { ValidationError, validate } from "class-validator"
-import { NextFunction, Request, Response } from "express"
+import { ValidationError, validate } from 'class-validator'
+import { NextFunction, Request, Response } from 'express'
 
-export const validationMiddleware = (type: any) => {
+export const validationMiddleware = (type: typeof Object) => {
     return async (req: Request, res: Response, next: NextFunction) => {
         const instance = new type() 
 
         Object.keys(req.body).forEach((key: string) => {        
-            instance[key] = req.body[key]
+            instance[key as keyof typeof instance] = req.body[key]
         }) 
 
         const errors: ValidationError[] = await validate(instance, { stopAtFirstError: true })

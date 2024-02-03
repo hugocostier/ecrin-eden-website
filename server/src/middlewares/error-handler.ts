@@ -1,8 +1,8 @@
-import { NextFunction, Request, Response } from 'express';
-import { QueryFailedError } from 'typeorm';
-import { CustomAPIError } from '../errors/custom-errors.js';
+import { Request, Response } from 'express'
+import { QueryFailedError } from 'typeorm'
+import { CustomAPIError } from '../errors/custom-errors.js'
 
-const errorHandlerMiddleware = (err: Error, req: Request, res: Response, next: NextFunction) => {
+const errorHandlerMiddleware = (err: Error, req: Request, res: Response) => {
     console.log(err)
 
     if (err instanceof QueryFailedError) {

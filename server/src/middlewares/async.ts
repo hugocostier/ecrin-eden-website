@@ -1,7 +1,6 @@
-import { NextFunction, Request, Response } from "express";
-import 'express-async-handler';
+import { NextFunction, Request, Response } from 'express'
 
-const asyncWrapper = (fn: any) => {
+const asyncWrapper = (fn: (req: Request, res: Response, next: NextFunction) => Promise<void>) => {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
             await fn(req, res, next) 
