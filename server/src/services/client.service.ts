@@ -1,6 +1,6 @@
-import { Client } from "../entities/Client.js";
-import { CustomAPIError } from "../errors/custom-errors.js";
-import { ClientRepository } from "../repositories/client.repository.js";
+import { Client } from '../entities/Client.js'
+import { CustomAPIError } from '../errors/custom-errors.js'
+import { ClientRepository } from '../repositories/client.repository.js'
 
 export class ClientService {
     private _clientRepository = ClientRepository

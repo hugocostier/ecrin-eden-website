@@ -1,12 +1,12 @@
-import { NextFunction, Request, Response } from 'express'
-import asyncHandler from "../middlewares/async.js"
-import AppointmentService from "../services/appointment.service.js"
+import { Request, Response } from 'express'
+import asyncHandler from '../middlewares/async.js'
+import AppointmentService from '../services/appointment.service.js'
 
 class AppointmentController {
     private _appointmentService = new AppointmentService() 
 
     // Get an appointment
-    public getAppointmentById = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    public getAppointmentById = asyncHandler(async (req: Request, res: Response) => {
         const { id: appointmentId } = req.params
         
         const appointment = await this._appointmentService.getAppointmentById(appointmentId)
@@ -18,7 +18,7 @@ class AppointmentController {
     })
     
     // Get appointments with options
-    public getAppointments = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    public getAppointments = asyncHandler(async (req: Request, res: Response) => {
         const { showHistory, showAll, rangeStart, rangeEnd, day } = req.body 
 
         const appointments = await this._appointmentService.getAppointments(showHistory, showAll, rangeStart, rangeEnd, day)
@@ -30,7 +30,7 @@ class AppointmentController {
     }) 
 
     // Get appointments for a client with options
-    public getAppointmentsByClient = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    public getAppointmentsByClient = asyncHandler(async (req: Request, res: Response) => {
         const { id: clientId } = req.params
         const { showHistory, showAll, rangeStart, rangeEnd, day } = req.body 
 
@@ -43,7 +43,7 @@ class AppointmentController {
     })
 
     // Get appointments for a service with options
-    public getAppointmentsByService = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    public getAppointmentsByService = asyncHandler(async (req: Request, res: Response) => {
         const { id: serviceId } = req.params
         const { showAll } = req.body
         
@@ -56,7 +56,7 @@ class AppointmentController {
     })
 
     // Count all appointments in a day
-    public countAppointmentsForDay = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    public countAppointmentsForDay = asyncHandler(async (req: Request, res: Response) => {
         const { date } = req.body
         
         const count = await this._appointmentService.countAppointmentsForDay(date)
@@ -68,7 +68,7 @@ class AppointmentController {
     })
 
     // Count all appointments for a client in a week
-    public countAppointmentsForWeekAndClient = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    public countAppointmentsForWeekAndClient = asyncHandler(async (req: Request, res: Response) => {
         const { clientId } = req.params
         const { startDate, endDate } = req.body
         
@@ -81,7 +81,7 @@ class AppointmentController {
     })
 
     // Add an appointment
-    public addAppointment = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {     
+    public addAppointment = asyncHandler(async (req: Request, res: Response) => {     
         const {
             date, 
             is_away,
@@ -106,7 +106,7 @@ class AppointmentController {
     })
 
     // Update an appointment
-    public updateAppointment = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    public updateAppointment = asyncHandler(async (req: Request, res: Response) => {
         const { id: appointmentId } = req.params
         
         const appointment = await this._appointmentService.updateAppointment(appointmentId, req.body)
@@ -119,7 +119,7 @@ class AppointmentController {
     })
 
     // Delete an appointment
-    public deleteAppointment = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    public deleteAppointment = asyncHandler(async (req: Request, res: Response) => {
         const { id: appointmentId } = req.params
         
         const appointment = await this._appointmentService.deleteAppointment(appointmentId)

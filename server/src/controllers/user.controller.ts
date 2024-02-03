@@ -1,11 +1,11 @@
-import { NextFunction, Request, Response } from 'express';
-import asyncHandler from '../middlewares/async.js';
-import { UserService } from "../services/user.service.js";
+import { Request, Response } from 'express'
+import asyncHandler from '../middlewares/async.js'
+import { UserService } from '../services/user.service.js'
 
 class UserController {
     private _userService = new UserService
 
-    public getAllUsers = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    public getAllUsers = asyncHandler(async (req: Request, res: Response) => {
         const users = await this._userService.getAllUsers()
 
         res.status(200).json({
@@ -14,7 +14,7 @@ class UserController {
         })
     })
 
-    public getUser = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    public getUser = asyncHandler(async (req: Request, res: Response) => {
         const { id: userId } = req.params
 
         const user = await this._userService.getUser(userId)
@@ -25,7 +25,7 @@ class UserController {
         })
     })
 
-    public getUserByEmail = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    public getUserByEmail = asyncHandler(async (req: Request, res: Response) => {
         const { email } = req.params
 
         const user = await this._userService.getUserByEmail(email)
@@ -36,7 +36,7 @@ class UserController {
         })
     }) 
 
-    public updateUser = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    public updateUser = asyncHandler(async (req: Request, res: Response) => {
         const { id: userId } = req.params
 
         const user = await this._userService.updateUser(userId, req.body)
@@ -47,7 +47,7 @@ class UserController {
         })
     })
 
-    public deleteUser = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    public deleteUser = asyncHandler(async (req: Request, res: Response) => {
         const { id: userId } = req.params
 
         await this._userService.deleteUser(userId)

@@ -1,6 +1,6 @@
-import { User } from "../entities/User.js"
-import { CustomAPIError } from "../errors/custom-errors.js"
-import { UserRepository } from "../repositories/user.repository.js"
+import { User } from '../entities/User.js'
+import { CustomAPIError } from '../errors/custom-errors.js'
+import { UserRepository } from '../repositories/user.repository.js'
 
 
 export class UserService {
@@ -58,7 +58,7 @@ export class UserService {
             throw new CustomAPIError(`No user found with id ${id}`, 404)
         }
 
-        return await this._userRepository.update(id, user)
+        return await this._userRepository.update(id, userData)
     }
 
     async deleteUser(id: string) {

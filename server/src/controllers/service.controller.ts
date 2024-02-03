@@ -1,12 +1,12 @@
-import { NextFunction, Request, Response } from 'express';
-import asyncHandler from '../middlewares/async.js';
-import { ServiceService } from '../services/service.service.js';
+import { Request, Response } from 'express'
+import asyncHandler from '../middlewares/async.js'
+import { ServiceService } from '../services/service.service.js'
 
 class ServiceController {
     private _serviceService = new ServiceService
 
     // Get all services
-    public getAllServices = asyncHandler(async(req: Request, res: Response, next: NextFunction) => {
+    public getAllServices = asyncHandler(async(req: Request, res: Response) => {
         const services = await this._serviceService.getAllServices() 
     
         res.status(200).json({ 
@@ -16,7 +16,7 @@ class ServiceController {
     })
 
     // Get a service 
-    public getService = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    public getService = asyncHandler(async (req: Request, res: Response) => {
         const { id: serviceId } = req.params
 
         const service = await this._serviceService.getService(serviceId) 
@@ -28,7 +28,7 @@ class ServiceController {
     }) 
     
     // Add a service 
-    public addService = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    public addService = asyncHandler(async (req: Request, res: Response) => {
         const {
             name, 
             duration, 
@@ -49,7 +49,7 @@ class ServiceController {
     }) 
 
     // Update a service 
-    public updateService = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    public updateService = asyncHandler(async (req: Request, res: Response) => {
         const { id: serviceId } = req.params
 
         const service = await this._serviceService.updateService(serviceId, req.body)
@@ -62,7 +62,7 @@ class ServiceController {
     })
 
     // Delete a service 
-    public deleteService = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    public deleteService = asyncHandler(async (req: Request, res: Response) => {
         const { id: serviceId } = req.params
         
         const service = await this._serviceService.deleteService(serviceId)

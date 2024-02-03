@@ -1,5 +1,5 @@
-import datasource from "../config/mysql.config.js";
-import { Client } from "../entities/Client.js";
+import datasource from '../config/mysql.config.js'
+import { Client } from '../entities/Client.js'
 
 export const ClientRepository = datasource.getRepository(Client).extend({
     async findById(id: number) {

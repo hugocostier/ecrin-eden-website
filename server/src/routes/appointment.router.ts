@@ -1,7 +1,7 @@
-import express from 'express';
-import appointment from '../controllers/appointment.controller.js';
-import { Appointment } from '../entities/Appointment.js';
-import { validationMiddleware } from '../middlewares/validation.js';
+import express from 'express'
+import appointment from '../controllers/appointment.controller.js'
+import { Appointment } from '../entities/Appointment.js'
+import { validationMiddleware } from '../middlewares/validation.js'
 
 const router = express.Router() 
 

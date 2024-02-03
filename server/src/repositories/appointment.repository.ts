@@ -1,6 +1,6 @@
-import { Between, LessThan, MoreThanOrEqual } from "typeorm";
-import datasource from "../config/mysql.config.js";
-import { Appointment } from "../entities/Appointment.js";
+import { Between, LessThan, MoreThanOrEqual } from 'typeorm'
+import datasource from '../config/mysql.config.js'
+import { Appointment } from '../entities/Appointment.js'
 
 export const AppointmentRepository = datasource.getRepository(Appointment).extend({
     // Find an appointment by id

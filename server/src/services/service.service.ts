@@ -1,6 +1,6 @@
-import { Service } from "../entities/Service.js";
-import { CustomAPIError } from "../errors/custom-errors.js";
-import { ServiceRepository } from "../repositories/service.repository.js";
+import { Service } from '../entities/Service.js'
+import { CustomAPIError } from '../errors/custom-errors.js'
+import { ServiceRepository } from '../repositories/service.repository.js'
 
 export class ServiceService {
     private _serviceRepository= ServiceRepository
@@ -27,7 +27,7 @@ export class ServiceService {
 
     async addService(serviceData: Partial<Service>) {        
         if (!serviceData.name || !serviceData.duration || !serviceData.price) {
-            throw new CustomAPIError(`Please provide the service's name, price and duration`, 400)
+            throw new CustomAPIError('Please provide the service\'s name, price and duration', 400)
         }
 
         const service = await this._serviceRepository.create(serviceData).save()

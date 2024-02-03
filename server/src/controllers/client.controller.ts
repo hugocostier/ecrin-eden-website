@@ -1,12 +1,12 @@
-import { NextFunction, Request, Response } from "express";
-import asyncHandler from "../middlewares/async.js";
-import { ClientService } from "../services/client.service.js";
+import { Request, Response } from 'express'
+import asyncHandler from '../middlewares/async.js'
+import { ClientService } from '../services/client.service.js'
 
 class ClientController {
     private _clientService = new ClientService
 
     // Get all clients
-    public getAllClients = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    public getAllClients = asyncHandler(async (req: Request, res: Response) => {
         const clients = await this._clientService.getAllClients() 
 
         res.status(200).json({
@@ -16,7 +16,7 @@ class ClientController {
     })
 
     // Get a client
-    public getClient = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    public getClient = asyncHandler(async (req: Request, res: Response) => {
         const { id: clientId } = req.params
 
         const client = await this._clientService.getClient(clientId)
@@ -28,7 +28,7 @@ class ClientController {
     })
 
     // Get a client by name
-    public getClientByName = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    public getClientByName = asyncHandler(async (req: Request, res: Response) => {
         const { first_name, last_name } = req.body 
 
         const client = await this._clientService.getClientByName(first_name, last_name)
@@ -40,7 +40,7 @@ class ClientController {
     })
 
     // Add a client
-    public addClient = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    public addClient = asyncHandler(async (req: Request, res: Response) => {
         const {
             first_name, 
             last_name, 
@@ -71,7 +71,7 @@ class ClientController {
     })
 
     // Update a client
-    public updateClient = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    public updateClient = asyncHandler(async (req: Request, res: Response) => {
         const { id: clientId } = req.params 
 
         const client = await this._clientService.updateClient(clientId, req.body)
@@ -84,7 +84,7 @@ class ClientController {
     })
 
     // Delete a client
-    public deleteClient = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    public deleteClient = asyncHandler(async (req: Request, res: Response) => {
         const { id: clientId } = req.params 
 
         const client = await this._clientService.deleteClient(clientId)
@@ -97,7 +97,7 @@ class ClientController {
     })
 
     // Get client address
-    public getClientAddress = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    public getClientAddress = asyncHandler(async (req: Request, res: Response) => {
         const { id: clientId } = req.params 
 
         const address = await this._clientService.getAddress(clientId)
@@ -109,7 +109,7 @@ class ClientController {
     }) 
 
     // Get client profile picture
-    public getClientProfilePicture = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    public getClientProfilePicture = asyncHandler(async (req: Request, res: Response) => {
         const { id: clientId } = req.params 
 
         const profilePicture = await this._clientService.getProfilePicture(clientId)
@@ -121,7 +121,7 @@ class ClientController {
     })
 
     // Get client shared notes
-    public getClientSharedNotes = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    public getClientSharedNotes = asyncHandler(async (req: Request, res: Response) => {
         const { id: clientId } = req.params 
 
         const sharedNotes = await this._clientService.getSharedNotes(clientId)
@@ -133,7 +133,7 @@ class ClientController {
     })
 
     // Get client personal information
-    public getClientPersonalInfo = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    public getClientPersonalInfo = asyncHandler(async (req: Request, res: Response) => {
         const { id: clientId } = req.params 
 
         const personalInfo = await this._clientService.getClientPersonalInfo(clientId)
@@ -145,7 +145,7 @@ class ClientController {
     }) 
 
     // Delete client personal information
-    public deleteClientPersonalInfo = asyncHandler(async (req: Request, res: Response, next: NextFunction) => { 
+    public deleteClientPersonalInfo = asyncHandler(async (req: Request, res: Response) => { 
         const { id: clientId } = req.params 
 
         const personalInfo = await this._clientService.deletePersonalInfo(clientId)

@@ -1,8 +1,8 @@
-import { UpdateResult } from "typeorm"
-import { DeleteResult } from "typeorm/browser"
-import { Appointment } from "../entities/Appointment.js"
-import { CustomAPIError } from "../errors/custom-errors.js"
-import { AppointmentRepository } from "../repositories/appointment.repository.js"
+import { UpdateResult } from 'typeorm'
+import { DeleteResult } from 'typeorm/browser'
+import { Appointment } from '../entities/Appointment.js'
+import { CustomAPIError } from '../errors/custom-errors.js'
+import { AppointmentRepository } from '../repositories/appointment.repository.js'
 
 class AppointmentService {
     private _appointmentRepository = AppointmentRepository
@@ -57,7 +57,7 @@ class AppointmentService {
             appointments = await this._appointmentRepository.findPast()
 
             if (!appointments || appointments.length === 0) {
-                throw new CustomAPIError(`No past appointments found`, 404)
+                throw new CustomAPIError('No past appointments found', 404)
             }
 
             return appointments
@@ -67,7 +67,7 @@ class AppointmentService {
             appointments = await this._appointmentRepository.find()
 
             if (!appointments || appointments.length === 0) {
-                throw new CustomAPIError(`No appointments found`, 404)
+                throw new CustomAPIError('No appointments found', 404)
             }
 
             return appointments
@@ -77,7 +77,7 @@ class AppointmentService {
             appointments = await this._appointmentRepository.findUpcoming()
 
             if (!appointments || appointments.length === 0) {
-                throw new CustomAPIError(`No upcoming appointments found`, 404)
+                throw new CustomAPIError('No upcoming appointments found', 404)
             }
 
             return appointments
