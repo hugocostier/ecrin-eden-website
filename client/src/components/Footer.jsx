@@ -8,6 +8,33 @@ import logo from '../assets/images/logo.jpg'
 
 library.add(faFacebookF, faInstagram, faXTwitter, faLinkedinIn, faArrowUp)
 
+const pages = [
+    {
+        name: 'Accueil',
+        link: '/'
+    },
+    {
+        name: 'Prestations',
+        link: '/services'
+    },
+    {
+        name: 'Tarifs',
+        link: '/prices'
+    },
+    {
+        name: 'Cartes cadeau',
+        link: '/gift-cards'
+    },
+    {
+        name: 'Agrément',
+        link: '/certification'
+    },
+    {
+        name: 'Contact',
+        link: '/contact'
+    }
+]
+
 export const Footer = () => {
     return (
         <>
@@ -21,11 +48,9 @@ export const Footer = () => {
                         <div className="column navigation">
                             <h4>Navigation</h4>
                             <div className='nav-links'>
-                                <Link to={'/'}>Accueil</Link>
-                                <Link to={'/services'}>Prestations</Link>
-                                <Link to={'/prices'}>Tarifs</Link>
-                                <Link to={'/gift-cards'}>Cartes cadeau</Link>
-                                <Link to={'/certification'}>Agrément</Link>
+                                {pages.map((page, index) => (
+                                    <Link to={page.link} key={index}>{page.name}</Link>
+                                ))}
                             </div>
                         </div>
 
