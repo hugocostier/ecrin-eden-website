@@ -34,5 +34,7 @@
   "bugs": {
     "url": "https://github.com/hugocostier/ecrin-eden-website/issues"
   },
-  "homepage": "https://github.com/hugocostier/ecrin-eden-website#readme"
+  "homepage": "https://github.com/hugocostier/ecrin-eden-website#readme",
+  "dependencies": {},
+  "devDependencies": {}
 }
