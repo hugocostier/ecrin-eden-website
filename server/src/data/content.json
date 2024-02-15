@@ -2,31 +2,53 @@
   "home": {
     "header": [
       {
-        "title": "Écrin d'Eden, un voyage à fleur de peau",
-        "subtitle": "Massages bien-être",
-        "image": "./assets/images/hero-section.jpg"
+        "title": "Écrin d'Eden",
+        "subtitle": "Un voyage à fleur de peau ...",
+        "image": "/src/assets/images/home/hero-section.jpeg"
       }
     ],
     "main": [
       {
-        "title": "Nouveau nouveau titre",
-        "text": "Partenaire de votre bien-être, vous offre un moment privilégié, dans un espace calme, cocooning, chaleureux, propice au lâcher-prise. \nVous y trouverez un accompagnement personnalisé pour une détente globale, tant au niveau du corps que de l'esprit, grâce à différentes techniques de massage. \nA votre arrivée, un entretien individuel permettre un recueil de données qui seront utilisées pour façonner un soin sur mesure, unique, adapté à vos besoins, vos attentes et réalités du moment, et aboutira à un total lâcher-prise. Votre écrin d'Eden vous attend pour une pause bien méritée loin du stress quotidien.",
-        "image": "TODO"
+        "title": "Écrin d'Eden",
+        "subtitle": "Partenaire de votre bien-être,",
+        "text": "Vous offre un moment privilégié, dans un espace calme, cocooning, chaleureux, propice au lâcher-prise. \nVous y trouverez un accompagnement personnalisé pour une détente globale, tant au niveau du corps que de l'esprit, grâce à différentes techniques de massage. \nA votre arrivée, un entretien individuel permettre un recueil de données qui seront utilisées pour façonner un soin sur mesure, unique, adapté à vos besoins, vos attentes et réalités du moment, et aboutira à un total lâcher-prise. Votre écrin d'Eden vous attend pour une pause bien méritée loin du stress quotidien.",
+        "image": [
+          "/src/assets/images/home/image1.jpeg",
+          "/src/assets/images/home/image2.jpeg",
+          "/src/assets/images/home/image3.jpeg"
+        ]
       },
       {
         "title": "Praticienne certifiée en Massage Bien-Être®",
         "text": "Infirmière diplômée d'État, c'est ma passion pour les massages qui m'a conduit à choisir la célèbre école européenne du Toucher-massage®, institut Joël Savatowski, pour y suivre une formation certifiante spécialisée. Ce cursus riche m'a permis de maîtriser différentes techniques de massage. \nMes 25 ans d'expérience dans les soins, m'ont appris à m'adapter aux besoins de chacun, alliant empathie, sensibilité, qualité d'écoute. Ces expériences me permettent de vous proposer des massages personnalisés, au plus près de vos attentes et de vos besoins.",
-        "image": "TODO"
+        "image": "/src/assets/images/home/image4.jpeg"
       }
     ],
     "video": [
       {
-        "video": "TODO"
+        "video": "/src/assets/images/home/video1.mp4"
       }
     ],
     "footer": [
       {
         "text": "Toute utilisation du terme massage sur ce site fait référence aux massages bien-être. Les prestations n'ont aucun but thérapeutique et en raison de leur nature, ne s'apparentent en rien, ni dans les contenus, ni dans les objectifs, à la pratique de la masso-kinésithérapie, ainsi qu'à toute pratique médicale. \nMes massages n'ont aucune finalité érotique, tantrique ou sexuelle, et sont réalisés dans le respect de la personne et de la praticienne."
+      }
+    ],
+    "reviews": [
+      {
+        "text": "Un moment de détente et de bien-être, un massage sur mesure, adapté à mes besoins, un vrai moment de lâcher-prise. Merci pour ce moment de douceur.",
+        "author": "Marie D.",
+        "image": "/src/assets/images/home/review1.png"
+      },
+      {
+        "text": "Un massage très professionnel, une ambiance chaleureuse, un vrai moment de détente. Je recommande vivement.",
+        "author": "Emma P.",
+        "image": "/src/assets/images/home/review1.png"
+      },
+      {
+        "text": "Un massage sur mesure, adapté à mes besoins, un vrai moment de lâcher-prise. Merci pour ce moment de douceur.",
+        "author": "Alice C.",
+        "image": "/src/assets/images/home/review1.png"
       }
     ]
   },
@@ -113,7 +135,7 @@
         "price": "350€"
       }
     ],
-    "more-infos": [
+    "more": [
       {
         "title": "Massage à domicile",
         "price": "Supplément de 15 à 30€ selon la zone."
@@ -172,7 +194,7 @@
         "zip": "30960",
         "city": "Les Mages",
         "phone": "07.62.06.77.82",
-        "email": "contact@ecrindeden.com"
+        "email": "contact@ecrin-eden.com"
       }
     ]
   }
