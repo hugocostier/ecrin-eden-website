@@ -15,7 +15,7 @@ export const serviceLoader = async () => {
 
         if (data && data.content) {
             // Cache the data in local storage
-            localStorage.setItem('cachedServiceContent', JSON.stringify(data.content))
+            // localStorage.setItem('cachedServiceContent', JSON.stringify(data.content))
 
             // And return it
             return { serviceContent: data.content }

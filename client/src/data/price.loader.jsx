@@ -15,7 +15,7 @@ export const priceLoader = async () => {
 
         if (data && data.content) {
             // Cache the data in local storage
-            localStorage.setItem('cachedPriceContent', JSON.stringify(data.content))
+            // localStorage.setItem('cachedPriceContent', JSON.stringify(data.content))
 
             // And return it
             return { priceContent: data.content }

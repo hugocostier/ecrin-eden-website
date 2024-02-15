@@ -15,7 +15,7 @@ export const homeLoader = async () => {
 
         if (data && data.content) {
             // Cache the data in local storage
-            localStorage.setItem('cachedHomeContent', JSON.stringify(data.content))
+            // localStorage.setItem('cachedHomeContent', JSON.stringify(data.content))
 
             // And return it
             return { homeContent: data.content }

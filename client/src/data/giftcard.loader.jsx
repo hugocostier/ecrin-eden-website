@@ -15,7 +15,7 @@ export const giftCardLoader = async () => {
 
         if (data && data.content) {
             // Cache the data in local storage
-            localStorage.setItem('cachedGiftCardContent', JSON.stringify(data.content))
+            // localStorage.setItem('cachedGiftCardContent', JSON.stringify(data.content))
 
             // And return it
             return { giftCardContent: data.content }

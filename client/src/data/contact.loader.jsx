@@ -15,7 +15,7 @@ export const contactLoader = async () => {
 
         if (data && data.content) {
             // Cache the data in local storage
-            localStorage.setItem('cachedContactContent', JSON.stringify(data.content))
+            // localStorage.setItem('cachedContactContent', JSON.stringify(data.content))
 
             // And return it
             return { contactContent: data.content }

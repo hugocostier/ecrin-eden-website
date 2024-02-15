@@ -15,7 +15,7 @@ export const certificationLoader = async () => {
 
         if (data && data.content) {
             // Cache the data in local storage
-            localStorage.setItem('cachedCertificationContent', JSON.stringify(data.content))
+            // localStorage.setItem('cachedCertificationContent', JSON.stringify(data.content))
 
             // And return it
             return { certificationContent: data.content }
