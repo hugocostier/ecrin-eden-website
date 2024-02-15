@@ -39,7 +39,7 @@ export const Footer = () => {
     return (
         <>
             <footer>
-                <section className='top'>
+                <section className='footer-top'>
                     <button className='btn-appointment'>
                         <Link to={'/schedule-appointment'}>Prendre rendez-vous</Link>
                     </button>
@@ -108,7 +108,7 @@ export const Footer = () => {
                         <img src={logo} alt='logo' className='logo'/>
                     </div>
                 </section>
-                <section className="bottom">
+                <section className="footer-bottom">
                     <p className="copyright">© 2024 Écrin d&apos;Eden</p>
                     <div className="legal">
                         <Link to={'/contact'}>Contact</Link>
