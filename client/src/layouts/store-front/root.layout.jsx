@@ -1,4 +1,3 @@
-import { Outlet } from 'react-router-dom'
 import {
     Footer,
     Navbar
@@ -8,7 +7,6 @@ export const StoreRoot = () => {
     return (
         <>
             <Navbar />
-            <Outlet />
             <Footer />
         </>
     )
