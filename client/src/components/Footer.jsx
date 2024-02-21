@@ -3,7 +3,7 @@ import { faFacebookF, faInstagram, faLinkedinIn, faXTwitter } from '@fortawesome
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Link } from "react-router-dom"
-import '../assets/css/footer.css'
+import '../assets/css/store-front/footer.css'
 import logo from '../assets/images/logo.jpg'
 
 library.add(faFacebookF, faInstagram, faXTwitter, faLinkedinIn, faArrowUp)
@@ -57,8 +57,8 @@ export const Footer = () => {
                         <div className='column contact'>
                             <h4>Contact</h4>
                             <p>
-                                contact@ecrin-eden.com <br />
-                                07.62.06.77.82 <br />
+                                <a href='mailto:contact@ecrin-eden.com' id='mail'>contact@ecrin-eden.com</a><br />
+                                <a href='tel:0762067782' id='phone' >07.62.06.77.82</a><br />
                                 302 Route des Tronquisses, <br /> 
                                 30960 Les Mages
                             </p>

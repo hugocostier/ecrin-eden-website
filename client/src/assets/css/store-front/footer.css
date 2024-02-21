@@ -92,6 +92,12 @@ section.footer-top .contact {
     grid-row: 2/3;
 }
 
+#mail, 
+#phone {
+    font-size: inherit; 
+    line-height: inherit; 
+}
+
 section.footer-top .schedule {
     grid-column: 1/4;
     grid-row: 3/4;
