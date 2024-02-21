@@ -1,5 +1,5 @@
 import { useLoaderData } from 'react-router-dom'
-import '../../assets/css/Home.page.css'
+import '../../assets/css/store-front/Home.page.css'
 import { Loading } from '../../components/Loading'
 import { useLoader } from '../../hooks/useLoader.hook'
 
@@ -9,7 +9,7 @@ export const HomePage = () => {
     const loading = useLoader(homeContent)
 
     return (
-        <div>
+        <>
             {loading ? (
                 <Loading />
             ) : (
@@ -78,6 +78,6 @@ export const HomePage = () => {
                     </>
                 ) : null 
             )}
-        </div>
+        </>
     )
 }

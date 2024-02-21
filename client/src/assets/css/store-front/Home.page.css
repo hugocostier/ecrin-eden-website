@@ -11,7 +11,6 @@ section.home-hero {
         margin-left: 5vw;
 
         h1 {
-            font-size: 5rem;
             color: var(--white);
             margin: 0; 
         }
@@ -39,18 +38,11 @@ section.home-card {
 
     .card-content {
         div {           
-            h3 {
-                font-size: 2rem; 
+            h3, h4 {
                 font-weight: normal; 
             }
 
-            h4 {
-                font-size: 1.5rem; 
-                font-weight: normal;
-            }
-    
             p {
-                font-size: 1rem; 
                 text-align: justify;
             }
         }
@@ -154,12 +146,7 @@ section.home-reviews {
             color: var(--white); 
             padding: 0 8%;
 
-            h3 {
-                font-size: 1.5rem;  
-            }
-
             p {
-                font-size: 1rem; 
                 margin: 10px 0;  
             }
 
@@ -193,10 +180,6 @@ section.home-reviews {
         .hero-content {
             padding-top: 45vh; 
             width: max-content;
-
-            h1 {
-                font-size: 5.5rem;
-            }
 
             h2 {
                 font-size: 1.5rem;
@@ -315,10 +298,6 @@ section.home-reviews {
             display: flex; 
             flex-direction: column;
             padding-top: 30vh; 
-
-            h1 {
-                font-size: 6rem;
-            }
         
             h2 {
                 font-size: 1.75rem;
@@ -334,18 +313,8 @@ section.home-reviews {
     section.home-card {
         .card-content {
             div {           
-                h3 {
-                    font-size: 2.25rem; 
+                h3, h4 {
                     font-weight: normal; 
-                }
-    
-                h4 {
-                    font-size: 1.625rem; 
-                    font-weight: normal;
-                }
-        
-                p {
-                    font-size: 1.175rem; 
                 }
             }
         }
@@ -387,25 +356,9 @@ section.home-reviews {
     section.second-card {
         grid-template-columns: 0.8fr 100px 1fr; 
     } 
-    
-    section.home-warning {
-        p {
-            font-size: 1.175rem; 
-        }
-    }
 
     section.home-reviews {
-        .review {
-            .review-content {
-                h3 {
-                    font-size: 1.75rem;  
-                }
-    
-                p {
-                    font-size: 1.175rem; 
-                }
-            }
-    
+        .review {    
             img {
                 width: 100px; 
                 height: 100px; 
@@ -419,17 +372,11 @@ section.home-reviews {
         .card-content {
             div {           
                 h3 {
-                    font-size: 2.5rem; 
                     font-weight: normal; 
                 }
     
                 h4 {
-                    font-size: 1.75rem; 
                     font-weight: normal;
-                }
-        
-                p {
-                    font-size: 1.25rem; 
                 }
             }
         }
