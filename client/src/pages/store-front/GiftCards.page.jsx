@@ -1,4 +1,5 @@
 import { useLoaderData } from 'react-router-dom'
+import '../../assets/css/store-front/GiftCards.page.css'
 import { Loading } from '../../components/Loading'
 import { useLoader } from '../../hooks/useLoader.hook'
 
@@ -8,22 +9,26 @@ export const GiftCardsPage = () => {
     const loading = useLoader(giftCardContent)
 
     return (
-        <div>
+        <>
             {loading ? (
                 <Loading />
             ) : (
                 giftCardContent ? (
                     <>
-                        {giftCardContent.main && giftCardContent.main.map((main, index) => (
-                            <div className='giftCard-title' key={index + 1}>
-                                <h1>{main.title}</h1>
-                                <p>{main.text}</p>
-                                <img src={main.image} alt={`giftCard ${index + 1}`}/>
+                        <section className="gift-card">
+                            <div className='gift-card-content'>
+                                <h2>{giftCardContent.main[0].title}</h2>
+                                {giftCardContent.main[0].text.map((text, index) => (
+                                    <p key={index}>{text}</p>
+                                ))}
                             </div>
-                        ))}
+                            <div className="gift-card-image">
+                                <img src={giftCardContent.main[0].image} alt={'giftCard 1'}/>
+                            </div>
+                        </section>
                     </>
                 ) : null 
             )}
-        </div>
+        </>
     )
 }
