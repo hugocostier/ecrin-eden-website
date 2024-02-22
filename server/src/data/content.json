@@ -55,44 +55,61 @@
   "services": {
     "header": [
       {
-        "title": "Écrin d'Eden, une invitation au lâcher-prise",
+        "title": "Les massages bien-être",
+        "subtitle": "Une invitation au lâcher-prise",
         "images": [
-          "TODO",
-          "TODO",
-          "TODO"
+          "/src/assets/images/services/hero1.jpeg",
+          "/src/assets/images/services/hero2.jpeg"
         ]
       }
     ],
     "main": [
       {
         "title": "L'art du sur mesure",
-        "text": "Afin de créer un moment d'exception, Écrin d'Eden vous propose des massages personnalisés, adaptés à vos envies, vos besoins. Vous choisissez les zones du corps à privilégier, la pression, l'ambiance olfactive et auditive qui vous font rêver. \nGrâce à la maîtrise de plusieurs techniques de massage bien-être, nous façonnerons un soin sur mesure, unique, juste pour vous, un voyage à fleur de peau inoubliable. \nVous accéderez à une libération des tensions nerveuses, musculaires, à une meilleure circulation énergétique et lymphatique, à une relaxation absolue, une réduction du stress, pour un bien-être physique et psychique. \n\nNotre protocole s'inscrit dans la lignée tradition du Massage Essentiel® \n\nSoin complet du corps, alliant la parfaite synthèse des techniques de massage Californien et Suédois. Il privilégie le rythme, la fluidité, les sensations agréables, les manoeuvres reliantes et enveloppantes, associées à un travail plus en profondeur, spécifique des différentes parties du corps, afin de dénouer les tensions et contractures musculaires."
+        "text": [
+          "Afin de créer un moment d'exception, Écrin d'Eden vous propose des massages personnalisés, adaptés à vos envies, vos besoins. Vous choisissez les zones du corps à privilégier, la pression, l'ambiance olfactive et auditive qui vous font rêver.",
+          "Grâce à la maîtrise de plusieurs techniques de massage bien-être, nous façonnerons un soin sur mesure, unique, juste pour vous, un voyage à fleur de peau inoubliable.",
+          "Vous accéderez à une libération des tensions nerveuses, musculaires, à une meilleure circulation énergétique et lymphatique, à une relaxation absolue, une réduction du stress, pour un bien-être physique et psychique.",
+          "Notre protocole s'inscrit dans la lignée tradition du Massage Essentiel®",
+          "Soin complet du corps, alliant la parfaite synthèse des techniques de massage Californien et Suédois. Il privilégie le rythme, la fluidité, les sensations agréables, les manoeuvres reliantes et enveloppantes, associées à un travail plus en profondeur, spécifique des différentes parties du corps, afin de dénouer les tensions et contractures musculaires."
+        ]
       }
     ],
     "services": [
       {
         "title": "Massage Essentiel®",
         "time": "60'",
-        "text": "Soin complet, de l'ensemble du corps, des pieds à la tête ; grand relaxant, il est adapté à vos besoins et vos envies. C'est vous qui le personnalisez.",
-        "image": "TODO"
+        "text": [
+          "Soin complet, de l'ensemble du corps, des pieds à la tête ; grand relaxant, il est adapté à vos besoins et vos envies. C'est vous qui le personnalisez."
+        ],
+        "image": "/src/assets/images/services/image1.jpeg"
       },
       {
         "title": "Massage Essentiel®",
         "time": "90' à 120'",
-        "text": "Est fait pour les amoureux du modelage qui veulent que ça ne s'arrête jamais. Un soin personnalisé pour prendre le temps de vous évader.",
-        "image": "TODO"
+        "text": [
+          "Est fait pour les amoureux du modelage qui veulent que ça ne s'arrête jamais. Un soin personnalisé pour prendre le temps de vous évader."
+        ],
+        "image": "/src/assets/images/services/image2.jpeg"
       },
       {
         "title": "Le Sur Mesure",
         "time": "30'",
-        "text": "Un petit moment de douceur à votre image. Idéal pour découvrir le monde du massage bien-être. Le Sur Mesure 30' vous permet de choisir 2 zones à masser, un focus sur ce que vous préférez.",
-        "image": "TODO"
+        "text": [
+          "Un petit moment de douceur à votre image. Idéal pour découvrir le monde du massage bien-être. Le Sur Mesure 30' vous permet de choisir 2 zones à masser, un focus sur ce que vous préférez."
+        ],
+        "image": "/src/assets/images/services/image3.jpeg"
       },
       {
         "title": "Massage Essentiel®",
         "time": "Femme enceinte",
-        "text": "Le massage prénatal permet d'aborder en toute sérénité les métamorphoses physiques et psychiques qui accompagnent la grossesse. \nEnveloppant et en position latérale, ce massage permet à la future maman de se laisser complètement bercer par la fluidité des mouvements, donnant au corps une sensation de légèreté et d'unité. Face aux modification physiques, physiologiques, émotionnelles, qu'engendre la grossesse, cette parenthèse de détente apporte un bienfait indéniable à la future Maman. \nEn effet, la grossesse s'accompagne souvent de tensions musculaires, de douleurs au niveau du dos, de sensations de jambes lourdes, de problèmes de sommeil, de nervosité, de stress... qui peuvent perturber cette période spéciale. \nEn agissant sur ces différents points, le massage, sera alors un précieux allié pour retrouver sérénité et vous offrir un doux moment de détente et de totale harmonie avec votre bébé.",
-        "image": "TODO"
+        "text": [
+          "Le massage prénatal permet d'aborder en toute sérénité les métamorphoses physiques et psychiques qui accompagnent la grossesse.",
+          "Enveloppant et en position latérale, ce massage permet à la future maman de se laisser complètement bercer par la fluidité des mouvements, donnant au corps une sensation de légèreté et d'unité. Face aux modification physiques, physiologiques, émotionnelles, qu'engendre la grossesse, cette parenthèse de détente apporte un bienfait indéniable à la future Maman.",
+          "En effet, la grossesse s'accompagne souvent de tensions musculaires, de douleurs au niveau du dos, de sensations de jambes lourdes, de problèmes de sommeil, de nervosité, de stress... qui peuvent perturber cette période spéciale.",
+          "En agissant sur ces différents points, le massage, sera alors un précieux allié pour retrouver sérénité et vous offrir un doux moment de détente et de totale harmonie avec votre bébé."
+        ],
+        "image": "/src/assets/images/services/image4.jpeg"
       }
     ]
   },
@@ -155,8 +172,13 @@
     "main": [
       {
         "title": "Carte Cadeau",
-        "text": "Offrez du bien-être... \nEn version papier cartonné avec une jolie enveloppe, ou en version numérique, la carte cadeau ravira sa ou son destinataire. \nValable 1 an, toutes les prestations proposées peuvent être offertes. \nPour obtenir la carte cadeau, contactez-moi par mail ou par téléphone.",
-        "image": "TODO"
+        "text": [
+          "Offrez du bien-être...",
+          "En version papier cartonné avec une jolie enveloppe, ou en version numérique, la carte cadeau ravira sa ou son destinataire.",
+          "Valable 1 an, toutes les prestations proposées peuvent être offertes.",
+          "Pour obtenir la carte cadeau, contactez-moi par mail ou par téléphone."
+        ],
+        "image": "/src/assets/images/gift-cards/image1.jpeg"
       }
     ]
   },
@@ -164,23 +186,26 @@
     "header": [
       {
         "title": "Agrément FFMBE",
-        "images": [
-          "TODO",
-          "TODO",
-          "TODO"
-        ]
+        "images": "/src/assets/images/certifications/hero.jpeg"
       }
     ],
     "main": [
       {
         "title": "En confiance, \nFaire le choix d'un praticien agrée",
         "text": "Avec la création de la Fédération Française de Massages Bien-Être en 2004, tous les acteurs de la profession (praticiens, centre de formation...) oeuvrent à son encadrement par leurs engagements, leurs compétences et leur professionnalisme. \nLes praticiens agréés F.F.M.B.E adoptent un code de déontologie, offrant une protection aux usages contre les dérives dans ce domaine. \nLa F.F.M.B.E a été sollicitée pour créer une charte de qualité des professionnels du bien-être afin de lutter contre la prostitution et le proxénétisme des salons dits \"de massages\". \nPraticienne agrée F.F.M.B.E, je suis également membre du réseau France Massage, qui vous garantit les services d'un professionnel de confiance, formé selon les normes de la Fédération Française de Massages Bien-Être. Je m'engage donc à respecter les codes de déontologie du massage.",
-        "image": "TODO"
+        "images": [
+          "/src/assets/images/certifications/image1.jpeg",
+          "/src/assets/images/certifications/image2.jpeg"
+        ]
       },
       {
         "title": "Le Massage Bien-Être®",
         "text": "Le praticien en massage bien-être intervient dans de nombreux contextes et environnements. \nIl adapte ses interventions et agence les espaces en fonction des techniques utilisées. \nIl propose des séances de relaxation basées sur des approches bien-être non thérapeutiques et les techniques de relaxation. \nIl cherche à stimuler la circulation des énergies pour permettre de ses libérer de tensions et de se sentir mieux en travaillant également sur le lâcher-prise. \nC'est un professionnel des techniques de relaxation et de bien-être pour procurer une détente corporelle et une relaxation afin d'obtenir un état de bien-être général. \nLes séances proposées visent à améliorer le bien-être, en utilisant différentes approches et techniques dont les techniques de relaxation californiennes, suédoises, hawaïennes, indiennes, balinaises, orientales... des techniques définies par une gestuelle très précise.",
-        "image": "TODO"
+        "images": [
+          "/src/assets/images/certifications/image3.jpeg",
+          "/src/assets/images/certifications/image4.jpeg",
+          "/src/assets/images/certifications/image5.jpeg"
+        ]
       }
     ]
   },
@@ -188,7 +213,10 @@
     "header": [
       {
         "title": "Contactez-moi",
-        "image": "TODO",
+        "images": [
+          "/src/assets/images/contact/hero1.jpeg",
+          "/src/assets/images/contact/hero2.jpeg"
+        ],
         "name": "Salon Écrin d'Eden",
         "address": "302 Route des Tronquisses",
         "zip": "30960",
