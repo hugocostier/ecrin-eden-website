@@ -86,8 +86,9 @@
     --white: rgb(250, 250, 250); 
 
     /* Alerts */
+    --red: #ff0019;
     --red-light: #f8d7da; 
-    --red-dark: #842029; 
+    --red-dark: #9f1924; 
     --green-light: #d1e7dd;
     --green-dark: #0f5132;
 
@@ -231,7 +232,7 @@ h5 {
         font-size: 1.5rem; 
     }
 
-    p {
+    p, input, textarea, select, button {
         font-size: 1.125rem; 
     }
 }
@@ -253,7 +254,7 @@ h5 {
         font-size: 1.55rem; 
     }
 
-    p {
+    p, input, textarea, select, button {
         font-size: 1.25rem; 
     }
 }
