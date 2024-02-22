@@ -1,6 +1,7 @@
 import { useLoaderData } from 'react-router-dom'
 import '../../assets/css/store-front/Services.page.css'
 import { Loading } from '../../components/Loading'
+import { PageTitle } from '../../components/PageTitle'
 import { useLoader } from '../../hooks/useLoader.hook'
 
 export const ServicesPage = () => {
@@ -15,14 +16,7 @@ export const ServicesPage = () => {
             ) : (
                 serviceContent ? (
                     <>
-                        <section className='service-title'>
-                            <h2>{serviceContent.header[0].title}</h2>
-                            {serviceContent.header[0].images.map((images, index) => (
-                                <div className="image" key={index} >
-                                    <img src={images} alt={`service ${index + 1}`}/>
-                                </div>
-                            ))}
-                        </section>
+                        <PageTitle content={serviceContent} pageName='service'></PageTitle>
 
                         <section className='service-main'>
                             <section className='card card-intro'>

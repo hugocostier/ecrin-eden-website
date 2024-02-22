@@ -1,42 +1,3 @@
-section.service-title {
-    display: grid; 
-    grid-template-columns: 1fr; 
-    background-color: var(--secondary-500);
-    color: var(--white); 
-    text-align: center; 
-    align-items: center;
-    padding: 40px 0;
-    
-    h2 {
-        grid-column: 1 / 2;
-        grid-row: 1 / 2;
-        margin: 0 8% 30px 8%; 
-    }
-
-    .image {
-        grid-column: 1 / 2; 
-        grid-row: 2 / 3;
-        margin: 0 8%; 
-        
-        img {
-            width: 100%;
-            object-fit: cover; 
-            object-position: 50% 50%; 
-        }
-
-        &:first-of-type {
-            width: 64%; 
-            animation: slide-right 1.5s ease;
-        }
-
-        &:last-of-type {
-            width: 50%; 
-            justify-self: end; 
-            animation: slide-left 1.5s ease; 
-        }
-    }
-}
-
 section.service-main {
     .card {
         .card-content {
@@ -129,45 +90,7 @@ section.service-footer {
     }
 }
 
-@keyframes slide-right {
-    0% {
-        opacity: 0; 
-        transform: translateX(-100%);
-    }
-    100% {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-@keyframes slide-left {
-    0% {
-        opacity: 0;
-        transform: translateX(100%);
-    }
-    100% {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-@media screen and (min-width: 640px) {
-    section.service-title {
-        .image {            
-            &:first-of-type {
-                width: 43%; 
-                justify-self: center; 
-                margin-right: 20%; 
-            }
-    
-            &:last-of-type {
-                width: 26%; 
-                justify-self: center; 
-                margin-left: 40%;
-            }
-        }
-    }
-    
+@media screen and (min-width: 640px) {   
     section.service-main {
         margin-bottom: 30px; 
 
@@ -201,30 +124,6 @@ section.service-footer {
 }
 
 @media screen and (min-width: 1024px) {
-    section.service-title {
-        grid-template-rows: 1fr; 
-        padding: 0; 
-
-        h2 {
-            margin: 0; 
-            z-index: 1;
-            translate: -10vw 0; 
-        }
-    
-        .image {
-            display: grid; 
-            grid-row: 1 / 2;
-    
-            &:first-of-type {
-                width: 30%; 
-            }
-    
-            &:last-of-type {
-                width: 20%; 
-            }
-        }
-    }
-
     section.service-main {
         .card:not(:first-of-type) {
             height: calc(100vh - 80px);
