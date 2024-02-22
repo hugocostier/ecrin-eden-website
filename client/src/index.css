@@ -232,7 +232,7 @@ h5 {
         font-size: 1.5rem; 
     }
 
-    p, input, textarea, select, button {
+    p, input, textarea, select, button, li {
         font-size: 1.125rem; 
     }
 }
@@ -254,7 +254,7 @@ h5 {
         font-size: 1.55rem; 
     }
 
-    p, input, textarea, select, button {
+    p, input, textarea, select, button, li {
         font-size: 1.25rem; 
     }
 }
