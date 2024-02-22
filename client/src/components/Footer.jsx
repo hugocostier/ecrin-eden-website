@@ -57,8 +57,8 @@ export const Footer = () => {
                         <div className='column contact'>
                             <h4>Contact</h4>
                             <p>
-                                <a href='mailto:contact@ecrin-eden.com' id='mail'>contact@ecrin-eden.com</a><br />
-                                <a href='tel:0762067782' id='phone' >07.62.06.77.82</a><br />
+                                <a href='mailto:contact@ecrin-eden.com' id='footer-mail'>contact@ecrin-eden.com</a><br />
+                                <a href='tel:0762067782' id='footer-phone' >07.62.06.77.82</a><br />
                                 302 Route des Tronquisses, <br /> 
                                 30960 Les Mages
                             </p>

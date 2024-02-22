@@ -92,8 +92,8 @@ section.footer-top .contact {
     grid-row: 2/3;
 }
 
-#mail, 
-#phone {
+#footer-mail, 
+#footer-phone {
     font-size: inherit; 
     line-height: inherit; 
 }
