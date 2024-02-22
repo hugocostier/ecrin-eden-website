@@ -6,7 +6,7 @@
   "scripts": {
     "install-dependencies": "npm install && npm install --prefix client && npm install --prefix server",
     "start": "npm run start:server && npm run start:client",
-    "start:server": "npm start --prefix server",
+    "start:server": "npm run dev --prefix server",
     "start:client": "npm run dev --prefix client",
     "build": "npm run build:server && npm run build:client",
     "build:server": "npm run build --prefix server",
