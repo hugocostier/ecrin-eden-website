@@ -1,4 +1,4 @@
-import { useLoaderData } from 'react-router-dom'
+import { Link, useLoaderData } from 'react-router-dom'
 import '../../assets/css/store-front/Home.page.css'
 import { Loading } from '../../components/Loading'
 import { useLoader } from '../../hooks/useLoader.hook'
@@ -19,7 +19,7 @@ export const HomePage = () => {
                             <div className='hero-content'>
                                 <h1>{homeContent.header[0].title}</h1>
                                 <h2>{homeContent.header[0].subtitle}</h2>
-                                <button className='btn'>Massages bien-être</button>
+                                <Link to='services'><button className='btn'>Massages bien-être</button></Link>
                             </div>
                         </section>
 
