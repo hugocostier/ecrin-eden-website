@@ -1,5 +1,7 @@
 import { useLoaderData } from 'react-router-dom'
+import '../../assets/css/store-front/Prices.page.css'
 import { Loading } from '../../components/Loading'
+import { PageTitle } from '../../components/PageTitle'
 import { useLoader } from '../../hooks/useLoader.hook'
 
 export const PricesPage = () => {
@@ -8,46 +10,50 @@ export const PricesPage = () => {
     const loading = useLoader(priceContent)
 
     return (
-        <div>
+        <>
             {loading ? (
                 <Loading />
             ) : (
                 priceContent ? (
                     <>
-                        {priceContent.header && priceContent.header.map((header, index) => (
-                            <div className='price-title' key={index + 1}>
-                                <h1>{header.title}</h1>
-                                <img src={header.image} alt={`price ${index + 1}`}/>
-                            </div>
-                        ))}
+                        <PageTitle content={priceContent} pageName='price'></PageTitle>
 
-                        <div className='price-main'>
-                            {priceContent.main.map((main, index) => (
-                                <div className='card' key={index + 1}>
-                                    <h3>{main.title}</h3>
-                                    <p>{main.duration}</p>
-                                    <p>{main.price}</p>
-                                </div>
-                            ))}
-                        </div>
-
-                        <div className='price-more'>
-                            <div>
-                                <h3>{priceContent.more[0].title}</h3>
-                                <p>{priceContent.more[0].price}</p>
-                            </div>
-
-                            <div>
-                                <p>{priceContent.more[1].text}</p>
-                                {priceContent.more[1].choices.map((choice, index) => (
-                                    <p key={index + 1}>{choice}</p>
+                        <section className='price-main'>
+                            <section className="price-cards">
+                                <h3>Tarifs</h3>
+                                {priceContent.main.map((main, index) => (
+                                    <div className='card' key={index + 1}>
+                                        <div>
+                                            <p>{main.title}</p>
+                                            <p>{main.duration}</p>
+                                        </div>
+                                        <p>{main.price}</p>
+                                    </div>
                                 ))}
-                                <p>{priceContent.more[1].more}</p>
-                            </div>
-                        </div>
+                            </section>
+                        
+                            <section className='price-more'>
+                                <div>
+                                    <h4>{priceContent.more[0].title}</h4>
+                                    <p>{priceContent.more[0].price}</p>
+                                </div>
+
+                                <div>
+                                    <p>{priceContent.more[1].text}</p>
+                                    {priceContent.more[1].choices.map((choice, index) => (
+                                        <li key={index + 1}>{choice}</li>
+                                    ))}
+                                    <p>{priceContent.more[1].more}</p>
+                                </div>
+                            </section>
+                        
+                            <section className="price-image">
+                                <img src={priceContent.image} alt={priceContent.alt} />
+                            </section>
+                        </section>
                     </>
                 ) : null 
             )}
-        </div>
+        </>
     )
 }
