@@ -8,9 +8,16 @@ class UserController {
     public getAllUsers = asyncHandler(async (req: Request, res: Response) => {
         const users = await this._userService.getAllUsers()
 
+        const usersList = users.map((user) => {
+            return {
+                email: user.email, 
+                role: user.role
+            }
+        })
+
         res.status(200).json({
             success: true,
-            data: users
+            data: usersList
         })
     })
 

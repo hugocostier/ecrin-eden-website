@@ -36,20 +36,6 @@ export class UserService {
         return user
     }
 
-    async addUser(userData: Partial<User>) {
-        if (!userData.email || !userData.password) {
-            throw new CustomAPIError('Please provide both email and password', 400)
-        }
-
-        const user = await this._userRepository.create(userData).save() 
-
-        if (!user) {
-            throw new CustomAPIError('User could not be created', 500)
-        }
-
-        return user
-    }
-
     async updateUser(id: string, userData: Partial<User>) {
         const user = await this._userRepository.findById(parseInt(id
         ))

@@ -1,12 +1,17 @@
-import datasource from '../config/mysql.config.js'
+import AppDataSource from '../config/mysql.config.js'
 import { User } from '../entities/User.js'
 
-export const UserRepository = datasource.getRepository(User).extend({
+export const UserRepository = AppDataSource.getRepository(User).extend({
     async findById(id: number) {
-        return await this.findOneBy({ id})
+        const user = await this.findOneBy({ id })
+
+        return user ? { email: user.email, role: user.role } : null
     }, 
 
     async findByEmail(email: string) {
-        return await this.findOneBy({ email })
-    }
+        const user = await this.findOneBy({ email })
+
+        return user ? { email: user.email, role: user.role } : null
+    }, 
+
 })
