@@ -117,38 +117,40 @@
     "header": [
       {
         "title": "Tarifs Massages",
-        "image": "TODO"
+        "images": [
+          "/src/assets/images/prices/hero.jpeg"
+        ]
       }
     ],
     "main": [
       {
         "title": "Massage",
-        "duration": "30 minutes",
+        "duration": "30 min",
         "price": "40€"
       },
       {
         "title": "Massage",
-        "duration": "60 minutes",
+        "duration": "60 min",
         "price": "55€"
       },
       {
         "title": "Massage",
-        "duration": "90 minutes",
+        "duration": "90 min",
         "price": "75€"
       },
       {
         "title": "Massage",
-        "duration": "120 minutes",
+        "duration": "120 min",
         "price": "85€"
       },
       {
         "title": "Forfait 5 séances",
-        "duration": "60 minutes",
+        "duration": "60 min",
         "price": "250€"
       },
       {
         "title": "Forfait 5 séances",
-        "duration": "90 minutes",
+        "duration": "90 min",
         "price": "350€"
       }
     ],
@@ -166,7 +168,8 @@
         ],
         "more": "Les cartes bancaires ne sont pas acceptées."
       }
-    ]
+    ],
+    "image": "/src/assets/images/prices/image1.jpeg"
   },
   "gift-cards": {
     "main": [
