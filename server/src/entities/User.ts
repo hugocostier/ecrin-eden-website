@@ -1,6 +1,5 @@
-import { hash } from 'bcrypt'
 import { IsEmail, IsEnum, Length, Matches } from 'class-validator'
-import { BaseEntity, BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
+import { BaseEntity, BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 import { Client } from './Client.js'
 
 export enum UserRole {
@@ -38,6 +37,12 @@ export class User extends BaseEntity {
     @IsEnum(UserRole)
         role: string = UserRole.USER
 
+    @Column({
+        type: 'varchar',
+        length: 100,
+    })
+    salt: string | undefined
+
     @CreateDateColumn() 
         created_at: Date | undefined
 
@@ -45,45 +50,8 @@ export class User extends BaseEntity {
         updated_at: Date | undefined
 
     // Foreign key for clients
-    @OneToOne(() => Client, client => client.id)
-        client: Client | undefined
-
-    // Validate that email is unique before inserting or updating
-    @BeforeInsert() 
-    @BeforeUpdate() 
-    async validateUniqueEmail() {
-        const existingUser = await User.findOne({ where: { email: this.email }})
-
-        if (existingUser && existingUser.id !== this.id) {
-            throw new Error('Email already in use')
-        }
-    }
-
-    // Hash password before inserting or updating
-    @BeforeInsert()
-    @BeforeUpdate() 
-    async hashPassword(): Promise<void> {
-        if (this.password) {
-            this.password = await hash(this.password, 10)
-        }
-    }
-
-    // Associate user with existing client or create new client if it doesn't exist
-    static async associateWithClient(firstName: string, lastName: string, email: string, password: string): Promise<User> { 
-        const existingClient = await Client.findOne({ where: { first_name: firstName, last_name: lastName }})
-
-        const newUser = this.create({ email, password}) 
+    @OneToOne(() => Client, client => client.user)
+    @JoinColumn({ name: 'client_id'})
+        client: Client | undefined 
         
-        if (existingClient) {
-            newUser.client = existingClient
-        } else {
-            const newClient = Client.create({ first_name: firstName, last_name: lastName })
-            await newClient.save()
-
-            newUser.client = newClient
-        }
-        
-        return newUser.save()
-    }
-
 }
