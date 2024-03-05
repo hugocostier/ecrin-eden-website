@@ -85,17 +85,19 @@ class AppointmentController {
         const {
             date, 
             is_away,
-            status,
             client_notes,
-            private_notes
+            private_notes, 
+            service, 
+            client
         } = req.body
 
         const appointment = await this._appointmentService.addAppointment({
             date, 
             is_away,
-            status,
             client_notes,
-            private_notes
+            private_notes, 
+            service, 
+            client 
         })
 
         res.status(201).json({

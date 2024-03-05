@@ -1,8 +1,8 @@
 import { Between, LessThan, MoreThanOrEqual } from 'typeorm'
-import datasource from '../config/mysql.config.js'
+import AppDataSource from '../config/mysql.config.js'
 import { Appointment } from '../entities/Appointment.js'
 
-export const AppointmentRepository = datasource.getRepository(Appointment).extend({
+export const AppointmentRepository = AppDataSource.getRepository(Appointment).extend({
     // Find an appointment by id
     async findById(id: number) {
         return await this.findOneBy({ id })
