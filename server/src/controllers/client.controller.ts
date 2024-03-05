@@ -97,16 +97,16 @@ class ClientController {
     })
 
     // Get client address
-    public getClientAddress = asyncHandler(async (req: Request, res: Response) => {
-        const { id: clientId } = req.params 
+    // public getClientAddress = asyncHandler(async (req: Request, res: Response) => {
+    //     const { id: clientId } = req.params 
 
-        const address = await this._clientService.getAddress(clientId)
+    //     const address = await this._clientService.getAddress(clientId)
 
-        res.status(200).json({
-            success: true, 
-            data: address
-        })
-    }) 
+    //     res.status(200).json({
+    //         success: true, 
+    //         data: address
+    //     })
+    // }) 
 
     // Get client profile picture
     public getClientProfilePicture = asyncHandler(async (req: Request, res: Response) => {
@@ -121,16 +121,16 @@ class ClientController {
     })
 
     // Get client shared notes
-    public getClientSharedNotes = asyncHandler(async (req: Request, res: Response) => {
-        const { id: clientId } = req.params 
+    // public getClientSharedNotes = asyncHandler(async (req: Request, res: Response) => {
+    //     const { id: clientId } = req.params 
 
-        const sharedNotes = await this._clientService.getSharedNotes(clientId)
+    //     const sharedNotes = await this._clientService.getSharedNotes(clientId)
 
-        res.status(200).json({
-            success: true, 
-            data: sharedNotes
-        })
-    })
+    //     res.status(200).json({
+    //         success: true, 
+    //         data: sharedNotes
+    //     })
+    // })
 
     // Get client personal information
     public getClientPersonalInfo = asyncHandler(async (req: Request, res: Response) => {

@@ -39,21 +39,21 @@ export class ClientService {
     }
     
     // Get the address of a client 
-    async getAddress(clientId: string) {
-        const client = await this._checkIfClientExists(clientId)
+    // async getAddress(clientId: string) {
+    //     const client = await this._checkIfClientExists(clientId)
         
-        if (!client) {
-            throw new CustomAPIError(`No client found with id ${clientId}`, 404)
-        }
+    //     if (!client) {
+    //         throw new CustomAPIError(`No client found with id ${clientId}`, 404)
+    //     }
 
-        const address = await this._clientRepository.getAddress(parseInt(clientId))
+    //     const address = await this._clientRepository.getAddress(parseInt(clientId))
 
-        if (!address) {
-            throw new CustomAPIError(`No address found for client with id ${clientId}`, 404)
-        }
+    //     if (!address) {
+    //         throw new CustomAPIError(`No address found for client with id ${clientId}`, 404)
+    //     }
 
-        return address
-    }
+    //     return address
+    // }
 
     // Get personal info of a client
     async getClientPersonalInfo(clientId: string) {
@@ -73,21 +73,21 @@ export class ClientService {
     }
 
     // Get shared notes of a client 
-    async getSharedNotes(clientId: string) {
-        const client = await this._checkIfClientExists(clientId)
+    // async getSharedNotes(clientId: string) {
+    //     const client = await this._checkIfClientExists(clientId)
         
-        if (!client) {
-            throw new CustomAPIError(`No client found with id ${clientId}`, 404)
-        }
+    //     if (!client) {
+    //         throw new CustomAPIError(`No client found with id ${clientId}`, 404)
+    //     }
 
-        const sharedNotes = await this._clientRepository.getSharedNotes(parseInt(clientId))
+    //     const sharedNotes = await this._clientRepository.getSharedNotes(parseInt(clientId))
 
-        if (!sharedNotes) {
-            throw new CustomAPIError(`No shared notes found for client with id ${clientId}`, 404)
-        }
+    //     if (!sharedNotes) {
+    //         throw new CustomAPIError(`No shared notes found for client with id ${clientId}`, 404)
+    //     }
 
-        return sharedNotes
-    }
+    //     return sharedNotes
+    // }
 
     // Get profile picture 
     async getProfilePicture(clientId: string) {
@@ -112,9 +112,9 @@ export class ClientService {
             throw new CustomAPIError('Please provide both first and last name', 400)
         }
 
-        const existingClient = await this.getClientByName(clientData.first_name, clientData.last_name)
-        console.log(existingClient)
-        if (existingClient && existingClient.length > 0) {
+        const existingClient = await this._clientRepository.findByName(clientData.first_name, clientData.last_name)
+        
+        if (existingClient) {
             throw new CustomAPIError(`Client with name ${clientData.first_name} ${clientData.last_name} already exists`, 400)
         }
 
@@ -129,7 +129,11 @@ export class ClientService {
 
     // Update a client 
     async updateClient(id: string, clientData: Partial<Client>) {
-        await this._checkIfClientExists(id)
+        const clientExists = await this._checkIfClientExists(id)
+
+        if (!clientExists) {
+            throw new CustomAPIError(`No client found with id ${id}`, 404)
+        }
 
         const client = await this._clientRepository.update(id, clientData)
 
@@ -142,7 +146,11 @@ export class ClientService {
 
     // Delete a client 
     async deleteClient(id: string) {
-        await this._checkIfClientExists(id)
+        const clientExists = await this._checkIfClientExists(id)
+
+        if (!clientExists) {
+            throw new CustomAPIError(`No client found with id ${id}`, 404)
+        }
 
         const result = await this._clientRepository.delete(id)
 
@@ -152,13 +160,20 @@ export class ClientService {
     }
 
     async deletePersonalInfo(id: string) {
-        await this._checkIfClientExists(id)
+        const clientExists = await this._checkIfClientExists(id)
+
+        if (!clientExists) {
+            throw new CustomAPIError(`No client found with id ${id}`, 404)
+        }
 
         const result = await this._clientRepository.update(id, {
             phone_number: undefined, 
             address: undefined, 
             postal_code: undefined, 
-            city: undefined
+            city: undefined, 
+            shared_notes: undefined,
+            private_notes: undefined, 
+            profile_picture: undefined
         })
 
         if (!result) {
