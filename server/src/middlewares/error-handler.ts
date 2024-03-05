@@ -3,13 +3,11 @@ import { QueryFailedError } from 'typeorm'
 import { CustomAPIError } from '../errors/custom-errors.js'
 
 const errorHandlerMiddleware = (err: Error, req: Request, res: Response) => {
-    console.log(err)
-
+    console.error(err)
+    
     if (err instanceof QueryFailedError) {
-        const errorMessage = err.message || 'Database query failed'
-
-        return res.status(500).json({
-            msg: errorMessage, 
+        return res.status(400).json({
+            msg: 'Invalid data provided', 
             success: false
         })
     }
