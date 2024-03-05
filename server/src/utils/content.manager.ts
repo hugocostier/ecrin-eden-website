@@ -3,7 +3,7 @@ import path from 'path'
 
 class ContentManager {
     private _dirname = path.resolve()
-    private _contentFilePath = path.join(this._dirname, './dist/data/content.json')
+    private _contentFilePath = path.join(this._dirname, './src/data/content.json')
 
     private _cachedContent: any = null
 
