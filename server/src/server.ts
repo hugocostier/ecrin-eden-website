@@ -12,6 +12,11 @@ const app = express()
 // Database 
 import AppDataSource from './config/mysql.config.js'
 
+// Authentication 
+import session from 'express-session'
+import passport from 'passport'
+import passportConfig from './config/auth.config.js'
+
 // Other 
 import cors, { CorsOptions } from 'cors'
 import 'express-async-errors'
@@ -28,9 +33,9 @@ import appointmentRouter from './routes/appointment.router.js'
 import authRouter from './routes/auth.router.js'
 import clientRouter from './routes/client.router.js'
 import contentRouter from './routes/content.router.js'
+import formRouter from './routes/form.router.js'
 import serviceRouter from './routes/service.router.js'
 import userRouter from './routes/user.router.js'
-
 
 /**
  * ############### GENERAL SETUP ###############
@@ -42,10 +47,9 @@ if (process.env.NODE_ENV === 'development') {
 
 // CORS policy
 const corsOptions: CorsOptions = {
-    origin: process.env.CORS_ORIGIN,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    origin: process.env.CLIENT_URL,
     credentials: true,
+    optionsSuccessStatus: 200
 }
 app.use(cors(corsOptions))
 
@@ -59,6 +63,21 @@ const __dirname = dirname(__filename)
 
 app.use(express.static(path.resolve(__dirname, '../../client')))
 
+// Authentication 
+app.use(passportConfig.initialize())
+
+app.use(session({
+    secret: 'secret', 
+    resave: false, 
+    saveUninitialized: false, 
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 24 * 7, 
+        secure: process.env.NODE_ENV === 'production' ? true : 'auto', 
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', 
+    }, 
+}))
+
+app.use(passport.authenticate('session'))
 
 /**
  * ############### ROUTES ###############
@@ -69,6 +88,7 @@ app.use('/api/v1/appointments', appointmentRouter)
 app.use('/api/v1/services', serviceRouter)
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/users', userRouter)
+app.use('/api/v1/form', formRouter)
 
 app.get('*', (req: Request, res: Response) => {
     res.sendFile(path.resolve(__dirname, '../../client', 'index.html'))
