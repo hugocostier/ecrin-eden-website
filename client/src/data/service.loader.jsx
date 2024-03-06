@@ -19,7 +19,7 @@ export const serviceLoader = async () => {
 
             // And return it
             return { serviceContent: data.content }
-        } 
+        }
     } catch (error) {
         console.error('Error fetching service data :', error)
     }

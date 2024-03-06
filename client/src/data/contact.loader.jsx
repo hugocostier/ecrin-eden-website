@@ -19,7 +19,7 @@ export const contactLoader = async () => {
 
             // And return it
             return { contactContent: data.content }
-        } 
+        }
     } catch (error) {
         console.error('Error fetching contact data :', error)
     }

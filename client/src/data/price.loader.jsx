@@ -19,7 +19,7 @@ export const priceLoader = async () => {
 
             // And return it
             return { priceContent: data.content }
-        } 
+        }
     } catch (error) {
         console.error('Error fetching price data :', error)
     }

@@ -19,7 +19,7 @@ export const certificationLoader = async () => {
 
             // And return it
             return { certificationContent: data.content }
-        } 
+        }
     } catch (error) {
         console.error('Error fetching certification data :', error)
     }
