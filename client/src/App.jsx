@@ -17,22 +17,14 @@ import {
 } from './data'
 
 import {
+    AdminRoot,
     ClientRoot,
     StoreRoot
 } from './layouts'
 
-import {
-    CertificationPage,
-    ContactPage,
-    ErrorPage,
-    GiftCardsPage,
-    HomePage,
-    LoginRegisterPage,
-    PricesPage,
-    ServicesPage
-} from './pages'
+import * as page from './pages'
 
-import { PrivateRoute } from './components/PrivateRoute'
+// import { PrivateRoute } from './components/PrivateRoute'
 
 const Router = createBrowserRouter(
     createRoutesFromElements(
@@ -40,78 +32,172 @@ const Router = createBrowserRouter(
             <Route
                 path='/'
                 element={<StoreRoot />}
-                errorElement={<ErrorPage />}
+                errorElement={<page.ErrorPage />}
             >
                 <Route
                     index={true}
-                    element={<HomePage />}
+                    element={<page.HomePage />}
                     loader={homeLoader}
                 />
 
                 <Route
                     path='services'
-                    element={<ServicesPage />}
+                    element={<page.ServicesPage />}
                     loader={serviceLoader}
                 />
 
                 <Route
                     path='prices'
-                    element={<PricesPage />}
+                    element={<page.PricesPage />}
                     loader={priceLoader}
                 />
 
                 <Route
                     path='gift-cards'
-                    element={<GiftCardsPage />}
+                    element={<page.GiftCardsPage />}
                     loader={giftCardLoader}
                 />
 
                 <Route
                     path='certification'
-                    element={<CertificationPage />}
+                    element={<page.CertificationPage />}
                     loader={certificationLoader}
                 />
 
                 <Route
                     path='contact'
-                    element={<ContactPage />}
+                    element={<page.ContactPage />}
                     loader={contactLoader}
                 />
             </Route>
 
             <Route
                 path='/login'
-                element={<LoginRegisterPage />}
-                errorElement={<ErrorPage />}
+                element={<page.LoginRegisterPage />}
+                errorElement={<page.ErrorPage />}
             />
 
-            <Route element={<PrivateRoute />} >
+            {/* <Route element={<PrivateRoute />} > */}
+            <Route
+                path='/user'
+                element={<ClientRoot />}
+                errorElement={<page.ErrorPage />}
+            >
                 <Route
-                    path='/user'
-                    element={<ClientRoot />}
-                    errorElement={<ErrorPage />}
+                    index={true}
+                    element={<page.MyDashboard />}
+                />
+
+                <Route
+                    path='appointments'
+                    element={<page.MyAppointments />}
+                />
+
+                <Route
+                    path='preferences'
+                    element={<page.MyPreferences />}
+                />
+
+                <Route
+                    path='account'
+                    element={<page.AccountPage />}
+                />
+
+                <Route
+                    path='settings'
+                    element={<page.SettingsPage />}
+                />
+            </Route>
+            {/* </Route> */}
+
+            {/* <Route element={<PrivateRoute />} > */}
+            <Route
+                path='/admin'
+                element={<AdminRoot />}
+                errorElement={<page.ErrorPage />}
+            >
+                <Route
+                    index={true}
+                    element={<page.AdminDashboard />}
+                />
+
+                <Route
+                    path='appointments'
                 >
                     <Route
                         index={true}
-                        element={<ContactPage />}
-                        loader={contactLoader}
+                        element={<page.AdminAppointments />}
+                    />
+
+
+                    <Route
+                        path=':id'
+                        element={<page.SeeAppointment />}
+                    />
+
+                    <Route
+                        path='add'
+                        element={<page.AddAppointment />}
+                    />
+
+                    <Route
+                        path='update/:id'
+                        element={<page.UpdateAppointment />}
                     />
                 </Route>
+
+                <Route
+                    path='clients'
+                >
+                    <Route
+                        index={true}
+                        element={<page.AdminClients />}
+                    />
+
+                    <Route
+                        path=':id'
+                        element={<page.SeeClient />}
+                    />
+
+                    <Route
+                        path='add'
+                        element={<page.AddClient />}
+                    />
+
+                    <Route
+                        path='update/:id'
+                        element={<page.UpdateClient />}
+                    />
+                </Route>
+
+                <Route
+                    path='content'
+                >
+                    <Route
+                        index={true}
+                        element={<page.AdminContent />}
+                    />
+
+                    <Route
+                        path='update/:id'
+                        element={<page.UpdateContent />}
+                    />
+                </Route>
+
+                <Route
+                    path='account'
+                    element={<page.AccountPage />}
+                />
+
+                <Route
+                    path='settings'
+                    element={<page.SettingsPage />}
+                />
             </Route>
+            {/* </Route> */}
         </Route>
     )
 )
-
-// {
-//     path: 'dashboard', 
-//     element: <DashboardLayout queryClient={queryClient}/>, 
-//     children: [
-//         {
-//             path: 'admin', 
-//             element: <Admin />, 
-//         },
-//     ]
-// }
 
 export const App = () => {
     return (
