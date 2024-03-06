@@ -13,6 +13,7 @@ const app = express()
 import AppDataSource from './config/mysql.config.js'
 
 // Authentication 
+import MongoDBStoreFactory from 'connect-mongodb-session'
 import session from 'express-session'
 import passport from 'passport'
 import passportConfig from './config/auth.config.js'
@@ -66,14 +67,30 @@ app.use(express.static(path.resolve(__dirname, '../../client')))
 // Authentication 
 app.use(passportConfig.initialize())
 
+// Store 
+const MongoDBStore = MongoDBStoreFactory(session)
+
+const store = new MongoDBStore({
+    uri: process.env.MONGODB_URI ? process.env.MONGODB_URI : '', 
+    databaseName: 'ecrin-eden-website', 
+    collection: 'sessions', 
+    expires: 1000 * 60 * 60 * 24 * 7,
+}, (error) => {
+    if (error) {
+        console.log(error)
+    }
+})
+
 app.use(session({
-    secret: 'secret', 
+    secret: process.env.SESSION_SECRET ? process.env.SESSION_SECRET : '', 
     resave: false, 
     saveUninitialized: false, 
+    store: store, 
     cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 7, 
         secure: process.env.NODE_ENV === 'production' ? true : 'auto', 
         sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', 
+        httpOnly: true
     }, 
 }))
 
