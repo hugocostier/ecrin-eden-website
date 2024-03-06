@@ -6,7 +6,7 @@ import { PageTitle } from '../../components/PageTitle'
 import { useLoader } from '../../hooks/useLoader.hook'
 
 export const ContactPage = () => {
-    const { contactContent } = useLoaderData() 
+    const { contactContent } = useLoaderData()
     const loading = useLoader(contactContent)
 
     const removeDot = (string) => {
@@ -45,15 +45,15 @@ export const ContactPage = () => {
             },
             body: JSON.stringify(form)
         })
-        
+
         if (res.status === 200) {
             alert('Votre message a bien été envoyé')
         } else {
             alert('Une erreur est survenue, veuillez réessayer plus tard')
         }
-        
+
         console.log(res)
-    }    
+    }
 
     return (
         <>
@@ -77,7 +77,7 @@ export const ContactPage = () => {
                                 <div className="address">
                                     <h4>Adresse</h4>
                                     <p>
-                                        {contactContent.header[0].address}<br /> 
+                                        {contactContent.header[0].address}<br />
                                         {contactContent.header[0].zip}, {contactContent.header[0].city}<br />
                                         <a href={`tel:${removeDot(contactContent.header[0].phone)}`}>{contactContent.header[0].phone}</a><br />
                                         <a href={`mailto:${contactContent.header[0].email}`}>{contactContent.header[0].email}</a><br />
@@ -93,63 +93,53 @@ export const ContactPage = () => {
 
                                 <form action=''>
                                     <legend>Écrivez-nous</legend>
-                                    <input 
-                                        type="text" 
-                                        id="last-name" 
-                                        name="last-name" 
-                                        className="contact-input" 
-                                        placeholder='Nom*' 
-                                        required 
+                                    <input
+                                        type="text"
+                                        name="last-name"
+                                        placeholder='Nom*'
+                                        required
                                         onChange={(e) => setLastName(e.target.value)}
                                         onBlur={(e) => checkInput(e.target)}
                                     />
 
-                                    <input 
-                                        type="text" 
-                                        id="first-name" 
-                                        name="first-name" 
-                                        className="contact-input" 
-                                        placeholder='Prénom*' 
+                                    <input
+                                        type="text"
+                                        name="first-name"
+                                        placeholder='Prénom*'
                                         required
                                         onChange={(e) => setFirstName(e.target.value)}
                                         onBlur={(e) => checkInput(e.target)}
                                     />
 
-                                    <input 
-                                        type="email" 
-                                        id="email" 
-                                        name="email" 
-                                        className="contact-input" 
-                                        placeholder='Email*' 
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        placeholder='Email*'
                                         required
                                         onChange={(e) => setEmail(e.target.value)}
                                         onBlur={(e) => checkInput(e.target)}
                                     />
 
-                                    <input 
-                                        type="tel" 
-                                        id="phone" 
-                                        name="phone" 
+                                    <input
+                                        type="tel"
+                                        name="phone"
                                         pattern="[0-9]{2}[0-9]{2}[0-9]{2}[0-9]{2}[0-9]{2}"
                                         maxLength="10"
-                                        className="contact-input"
                                         placeholder='Téléphone'
                                         onChange={(e) => setPhone(e.target.value)}
                                     />
 
-                                    <textarea 
-                                        id="message" 
-                                        name="message" 
-                                        className="contact-input" 
-                                        placeholder='Écrivez votre message ici...' 
+                                    <textarea
+                                        name="message"
+                                        placeholder='Écrivez votre message ici...'
                                         required
                                         onChange={(e) => setMessage(e.target.value)}
                                         onBlur={(e) => checkInput(e.target)}
                                     ></textarea>
 
-                                    <input 
-                                        type="submit" 
-                                        value="Envoyer" 
+                                    <input
+                                        type="submit"
+                                        value="Envoyer"
                                         className="contact-submit"
                                         onClick={sendContactForm}
                                     />
@@ -157,11 +147,11 @@ export const ContactPage = () => {
                             </section>
 
                             <section className="google-maps">
-                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d701.1594698066873!2d4.1745485248625185!3d44.22432565040747!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12b45bbebd052277%3A0xa1a154f9f13ed3b1!2s302%20Rte%20des%20Tronquisses%2C%2030960%20Les%20Mages!5e0!3m2!1sen!2sfr!4v1708537846604!5m2!1sen!2sfr" width="600" height="450" style={{border:"0"}} allowFullScreen={false} loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
+                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d701.1594698066873!2d4.1745485248625185!3d44.22432565040747!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12b45bbebd052277%3A0xa1a154f9f13ed3b1!2s302%20Rte%20des%20Tronquisses%2C%2030960%20Les%20Mages!5e0!3m2!1sen!2sfr!4v1708537846604!5m2!1sen!2sfr" width="600" height="450" style={{ border: "0" }} allowFullScreen={false} loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
                             </section>
                         </section>
                     </>
-                ) : null 
+                ) : null
             )}
         </>
     )
