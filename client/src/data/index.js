@@ -4,4 +4,3 @@ export { giftCardLoader } from './giftCard.loader'
 export { homeLoader } from './home.loader'
 export { priceLoader } from './price.loader'
 export { serviceLoader } from './service.loader'
-

@@ -1,4 +1,5 @@
 export { Footer } from './Footer'
+export { Loading } from './Loading'
 export { LoginForm } from './LoginForm'
 export { Navbar } from './Navbar'
 export { OverlayPanel } from './OverlayPanel'
