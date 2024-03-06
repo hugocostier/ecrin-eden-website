@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import '../../assets/css/store-front/Login.page.css';
-import { LoginForm, OverlayPanel, RegisterForm } from '../../components';
+import '../assets/css/store-front/Login.page.css';
+import { LoginForm, OverlayPanel, RegisterForm } from '../components';
 
 export const LoginRegisterPage = () => {
     const [isSignUpActive, setIsSignUpActive] = useState(false);
