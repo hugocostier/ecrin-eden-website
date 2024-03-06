@@ -151,6 +151,10 @@ a.active {
 
 /* Mobile & Tablets */
 @media screen and (max-width: 1023px) {
+    .nav-bar:not(.open) > .logo-nav {
+        z-index: 3;
+    }
+
     .nav-bar > .logo-nav {
         width: 60px;
         margin-left: 20px;
