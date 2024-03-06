@@ -1,2 +1,5 @@
-export { Footer } from './Footer';
-export { Navbar } from './Navbar';
+export { Footer } from './Footer'
+export { LoginForm } from './LoginForm'
+export { Navbar } from './Navbar'
+export { OverlayPanel } from './OverlayPanel'
+export { RegisterForm } from './RegisterForm'

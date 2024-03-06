@@ -1,8 +1,8 @@
 const BASE_URL = 'http://localhost:3000/api/v1'
 
 const fetchApi = async (url) => {
-    try { 
-        const response = await fetch(`${BASE_URL}/${url}`) 
+    try {
+        const response = await fetch(`${BASE_URL}/${url}`)
 
         if (!response.ok) {
             throw new Error('HTTP Error ! Status: ' + response.status)
@@ -14,7 +14,7 @@ const fetchApi = async (url) => {
     } catch (error) {
         console.error('Error fetching API :', error)
 
-        throw error 
+        throw error
     }
 }
 
