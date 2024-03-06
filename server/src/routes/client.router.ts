@@ -15,6 +15,9 @@ router.route('/:id')
     .patch(auth.isLoggedIn, auth.isAuthorized, validationMiddleware(Client), client.updateClient)
     .delete(auth.isAdmin, client.deleteClient)
 
+router.route('/user/:id') 
+    .get(client.getClientByUser)
+
 // router.route('/client/:id/address')
 //     .get(client.getClientAddress)
 

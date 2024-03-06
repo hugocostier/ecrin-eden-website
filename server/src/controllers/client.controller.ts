@@ -39,6 +39,18 @@ class ClientController {
         })
     })
 
+    // Get a client by it's related user
+    public getClientByUser = asyncHandler(async (req: Request, res: Response) => {
+        const { id: userId } = req.params 
+
+        const client = await this._clientService.getClientByUser(userId)
+
+        res.status(200).json({
+            success: true, 
+            data: client
+        })
+    })
+
     // Add a client
     public addClient = asyncHandler(async (req: Request, res: Response) => {
         const {

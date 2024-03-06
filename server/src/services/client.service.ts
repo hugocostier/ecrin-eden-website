@@ -37,6 +37,17 @@ export class ClientService {
 
         return client
     }
+
+    // Get a client by it's related user
+    async getClientByUser(userId: string) {
+        const client = await this._clientRepository.findByUser(parseInt(userId))
+
+        if (!client) {
+            throw new CustomAPIError(`No client found with user id ${userId}`, 404)
+        }
+
+        return client
+    }
     
     // Get the address of a client 
     // async getAddress(clientId: string) {
