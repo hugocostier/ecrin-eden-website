@@ -11,7 +11,7 @@ export const ClientRepository = AppDataSource.getRepository(Client).extend({
     }, 
 
     async findByUser(user_id: number) {
-        return await this.findOneBy({ user : { id: user_id } })
+        return await this.findOneBy({ user: { id: user_id } })
     },
 
     // async getSharedNotes(id: number) {

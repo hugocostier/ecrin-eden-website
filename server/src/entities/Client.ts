@@ -94,7 +94,7 @@ export class Client extends BaseEntity {
     // Foreign key for users
     @OneToOne(() => User, user => user.client, { nullable: true })
     @JoinColumn({ name: 'user_id' })
-        user: User | undefined
+        user: User | null = null 
     
     // Foreign key for appointments
     @OneToMany(() => Appointment, appointment => appointment.client)
