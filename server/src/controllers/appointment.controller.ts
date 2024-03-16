@@ -69,7 +69,7 @@ class AppointmentController {
 
     // Count all appointments for a client in a week
     public countAppointmentsForWeekAndClient = asyncHandler(async (req: Request, res: Response) => {
-        const { clientId } = req.params
+        const { id: clientId } = req.params
         const { startDate, endDate } = req.body
         
         const count = await this._appointmentService.countAppointmentsForWeekAndClient(startDate, endDate, clientId)
@@ -84,6 +84,7 @@ class AppointmentController {
     public addAppointment = asyncHandler(async (req: Request, res: Response) => {     
         const {
             date, 
+            time, 
             is_away,
             client_notes,
             private_notes, 
@@ -93,6 +94,7 @@ class AppointmentController {
 
         const appointment = await this._appointmentService.addAppointment({
             date, 
+            time, 
             is_away,
             client_notes,
             private_notes, 

@@ -15,16 +15,17 @@ router.route('/:id')
     .patch(auth.isLoggedIn, auth.isAuthorized, validationMiddleware(Appointment), appointment.updateAppointment)
     .delete(auth.isLoggedIn, auth.isAuthorized, appointment.deleteAppointment)
 
-router.route('/client/:clientId') 
-    .get(auth.isAdmin, appointment.getAppointmentsByClient)
+router.route('/client/:id') 
+    .post(auth.isLoggedIn, auth.isAuthorized, appointment.getAppointmentsByClient)
 
-router.route('/service/:serviceId')
+router.route('/service/:id')
     .get(auth.isLoggedIn, auth.isAuthorized, appointment.getAppointmentsByService)
 
 router.route('/count')
     .get(auth.isLoggedIn, auth.isAuthorized, appointment.countAppointmentsForDay)
 
-router.route('/count/:clientId')
-    .get(auth.isLoggedIn, auth.isAuthorized, appointment.countAppointmentsForWeekAndClient)
+router.route('/count/:id')
+    .post(auth.isLoggedIn, appointment.countAppointmentsForWeekAndClient)
+
 
 export default router 

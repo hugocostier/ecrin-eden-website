@@ -20,6 +20,10 @@ export class Appointment extends BaseEntity {
     @IsDateString() 
         date: Date | undefined
 
+    @Column({ type: 'time' })
+    @IsDateString() 
+        time: Date | undefined
+
     @Column({ type: 'boolean' })
     @IsBoolean({ message: 'Is away must be a boolean'}) 
         is_away: boolean = false
