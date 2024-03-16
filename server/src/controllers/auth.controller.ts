@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import passport from 'passport';
 import { User } from '../entities/User.js';
+import { CustomAPIError } from '../errors/custom-errors.js';
 import { AuthService } from '../services/auth.service.js';
 
 class AuthController {
@@ -10,21 +11,18 @@ class AuthController {
         try {
             const { email, password, first_name, last_name } = req.body
 
-            const user = await this._authService.register(email, password, first_name, last_name)
-
-            if (!user) {
-                return res.status(400).json({
-                    success: false,
-                    msg: 'User could not be created'
-                })
-            }
+            const user = await this._authService.register(email, password, first_name.toLowerCase(), last_name.toLowerCase())
 
             return res.status(201).json({
-                success: true,
                 data: user, 
-                msg: 'User registered successfully'
+                message: 'User registered successfully'
             })
         } catch (error) {
+            if (error instanceof CustomAPIError) {
+                return res.status(error.statusCode).json({ 
+                    message: error.message 
+                })
+            }
             next(error)
         }
     }
@@ -36,7 +34,8 @@ class AuthController {
             }
 
             if (!user) {
-                return res.status(401).send(info)
+                console.log(info)
+                return res.status(401).json({ message: info.message })
             }
 
             req.logIn(user, (err: Error) => {
@@ -44,7 +43,7 @@ class AuthController {
                     return next(err)
                 }
 
-                return res.status(201).json(req.user)
+                return res.status(201).json({ user: req.user })
             })
         }) (req, res, next)       
     }
@@ -62,7 +61,7 @@ class AuthController {
 
     public currentUser = async (req: Request, res: Response, next: NextFunction) => {
         if (req.isAuthenticated()) {
-            return res.status(200).json(req.user)
+            return res.status(200).json({ user: req.user, message: 'You are authenticated on the server'})
         }
 
         return res.status(401).json({ error: 'Not authenticated' })

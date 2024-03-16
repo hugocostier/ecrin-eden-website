@@ -20,10 +20,10 @@ function generateRandomPassword(length: number): string | undefined {
 
 passport.use(
     new LocalStrategy(async (username, password, done) => {
-        const user = await AuthRepository.authenticateUser(username, password)
+        const { user, message } = await AuthRepository.authenticateUser(username, password)
 
         if (!user) {
-            return done(null, false, { message: 'Incorrect username or password' })
+            return done(null, false, { message })
         }
 
         return done(null, user)

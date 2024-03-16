@@ -37,7 +37,7 @@ export const AuthRepository = AppDataSource.getRepository(User).extend({
     },
 
     // Authenticate user with email and password
-    async authenticateUser(email: string, password: string) {
+    async authenticateUser(email: string, password: string): Promise<{ user: Partial<User> | false, message: string }> {
         return new Promise((resolve, reject) => {
             // Find the user by email
             const request = 'SELECT * FROM user WHERE email = ?'
@@ -47,23 +47,23 @@ export const AuthRepository = AppDataSource.getRepository(User).extend({
                 .then((result) => {
                     // If the user is not found, return false
                     if (!result || result.length === 0) {
-                        resolve(false)
+                        resolve({ user: false, message: 'User not found' })
                     } else {
                         const user = { id: result[0].id, username: result[0].email, role: result[0].role }
 
                         // Hash the provided password with the salt
                         crypto.scrypt(password, Buffer.from(result[0].salt, 'hex'), 32, (err, hashedPassword) => {
                             if (err) {
-                                reject(err)
+                                reject({ error: err, message: 'Error hashing password' })
                             }
 
                             // Compare the hashed password with the stored password
                             if (!crypto.timingSafeEqual(Buffer.from(result[0].password, 'hex'), hashedPassword)) {
                                 // If the passwords do not match, return false
-                                resolve(false)
+                                resolve({ user: false, message: 'Incorrect password' })
                             } else {
                                 // If the passwords match, return the user
-                                resolve(user)
+                                resolve({ user: user, message: 'User authenticated' })
                             }
                         })
                     }

@@ -10,22 +10,33 @@ export class AuthService {
 
     async register(email: string, password: string, firstName: string, lastName: string) {
         if (!email || !password) {
-            throw new CustomAPIError('Please provide both email and password', 400)
+            throw new CustomAPIError('Provide both email and password', 400)
         }
 
         if (!firstName || !lastName) {
-            throw new CustomAPIError('Please provide both first and last name', 400)
+            throw new CustomAPIError('Provide both first and last name', 400)
         }
 
         // Check if user already exists
         const user = await this._userRepository.findByEmail(email)
 
         if (user) {
-            throw new CustomAPIError('An user with this email already exists', 400)
+            throw new CustomAPIError('Email already exists', 400)
         }
 
         // Check if a client with the same first and last name exists
-        let client = await this._clientRepository.findByName(firstName, lastName)
+        let client = await this._clientRepository.createQueryBuilder('client')
+            .leftJoinAndSelect('client.user', 'user')
+            .where('client.first_name = :firstName', { firstName })
+            .andWhere('client.last_name = :lastName', { lastName })
+            .getOne()
+
+        console.log('Client: ', client)
+
+        // If a client is found
+        if (client && client.user) {
+            throw new CustomAPIError('Client already exists', 400)
+        }
 
         // If no client is found
         if (!client) {
