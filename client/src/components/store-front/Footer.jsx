@@ -3,8 +3,8 @@ import { faFacebookF, faInstagram, faLinkedinIn, faXTwitter } from '@fortawesome
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Link } from "react-router-dom"
-import '../assets/css/store-front/footer.css'
-import logo from '../assets/images/logo.jpg'
+import '../../assets/css/store-front/footer.css'
+import logo from '../../assets/images/logo.jpg'
 
 library.add(faFacebookF, faInstagram, faXTwitter, faLinkedinIn, faArrowUp)
 
@@ -59,7 +59,7 @@ export const Footer = () => {
                             <p>
                                 <a href='mailto:contact@ecrin-eden.com' id='footer-mail'>contact@ecrin-eden.com</a><br />
                                 <a href='tel:0762067782' id='footer-phone' >07.62.06.77.82</a><br />
-                                302 Route des Tronquisses, <br /> 
+                                302 Route des Tronquisses, <br />
                                 30960 Les Mages
                             </p>
                         </div>
@@ -69,7 +69,7 @@ export const Footer = () => {
                             <p>
                                 Du Mercredi au Vendredi de 17h à 19h <br />
                                 Le Samedi de 10h à 19h <br />
-                                <span style={{fontWeight: 'bold'}}>[Uniquement sur rendez-vous]</span>
+                                <span style={{ fontWeight: 'bold' }}>[Uniquement sur rendez-vous]</span>
                             </p>
                         </div>
 
@@ -99,13 +99,13 @@ export const Footer = () => {
                                         top: 0,
                                         behavior: 'smooth'
                                     })
-                            }}>
+                                }}>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="26" height="26" fill="currentColor" transform='rotate(-90)'><path d="m23.25 13.35-9.9 9.9-.7-.7 9-9H3.1v-1h18.59l-9-9 .7-.7 9.9 9.9a.48.48 0 0 1-.04.6Z"></path></svg>
-                                
+
                             </button>
                         </div>
 
-                        <img src={logo} alt='logo' className='logo'/>
+                        <img src={logo} alt='logo' className='logo' />
                     </div>
                 </section>
                 <section className="footer-bottom">

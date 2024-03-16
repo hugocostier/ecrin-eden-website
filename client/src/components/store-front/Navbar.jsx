@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, Outlet } from 'react-router-dom'
-import '../assets/css/navbar.css'
-import logo from '../assets/images/logo.jpg'
-import { useAuth } from '../hooks/useAuth'
+import '../../assets/css/navbar.css'
+import logo from '../../assets/images/logo.jpg'
+import { useAuth } from '../../hooks/useAuth.hook'
 
 const pages = [
     {
@@ -52,7 +52,6 @@ export const Navbar = () => {
                 })
 
                 const res = await response.json()
-                console.log('res :', res)
 
                 if (res.data) {
                     setUserInfo({
