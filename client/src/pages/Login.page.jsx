@@ -1,8 +1,12 @@
 import { useState } from 'react';
+import { Navigate } from 'react-router-dom';
 import '../assets/css/store-front/Login.page.css';
 import { LoginForm, OverlayPanel, RegisterForm } from '../components';
+import { useAuth } from '../hooks/useAuth.hook';
 
 export const LoginRegisterPage = () => {
+    const user = useAuth()
+
     const [isSignUpActive, setIsSignUpActive] = useState(false);
 
     const handleSignUpClick = () => {
@@ -11,6 +15,10 @@ export const LoginRegisterPage = () => {
 
     const handleSignInClick = () => {
         setIsSignUpActive(false);
+    }
+
+    if (user.loggedIn) {
+        return <Navigate to='/user' replace />
     }
 
     return (
