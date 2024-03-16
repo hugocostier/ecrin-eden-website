@@ -1,10 +1,10 @@
 import { useLoaderData } from 'react-router-dom'
 import '../../assets/css/store-front/GiftCards.page.css'
-import { Loading } from '../../components/Loading'
+import { Loading } from '../../components'
 import { useLoader } from '../../hooks/useLoader.hook'
 
 export const GiftCardsPage = () => {
-    const { giftCardContent } = useLoaderData() 
+    const { giftCardContent } = useLoaderData()
 
     const loading = useLoader(giftCardContent)
 
@@ -23,11 +23,11 @@ export const GiftCardsPage = () => {
                                 ))}
                             </div>
                             <div className="gift-card-image">
-                                <img src={giftCardContent.main[0].image} alt={'giftCard 1'}/>
+                                <img src={giftCardContent.main[0].image} alt={'giftCard 1'} />
                             </div>
                         </section>
                     </>
-                ) : null 
+                ) : null
             )}
         </>
     )

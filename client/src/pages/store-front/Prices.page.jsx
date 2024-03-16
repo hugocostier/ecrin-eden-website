@@ -1,11 +1,10 @@
 import { useLoaderData } from 'react-router-dom'
 import '../../assets/css/store-front/Prices.page.css'
-import { Loading } from '../../components/Loading'
-import { PageTitle } from '../../components/PageTitle'
+import { Loading, PageTitle } from '../../components'
 import { useLoader } from '../../hooks/useLoader.hook'
 
 export const PricesPage = () => {
-    const { priceContent } = useLoaderData() 
+    const { priceContent } = useLoaderData()
 
     const loading = useLoader(priceContent)
 
@@ -31,7 +30,7 @@ export const PricesPage = () => {
                                     </div>
                                 ))}
                             </section>
-                        
+
                             <section className='price-more'>
                                 <div>
                                     <h4>{priceContent.more[0].title}</h4>
@@ -46,13 +45,13 @@ export const PricesPage = () => {
                                     <p>{priceContent.more[1].more}</p>
                                 </div>
                             </section>
-                        
+
                             <section className="price-image">
                                 <img src={priceContent.image} alt={priceContent.alt} />
                             </section>
                         </section>
                     </>
-                ) : null 
+                ) : null
             )}
         </>
     )

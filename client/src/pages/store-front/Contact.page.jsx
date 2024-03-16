@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { useLoaderData } from 'react-router-dom'
 import '../../assets/css/store-front/Contact.page.css'
-import { Loading } from '../../components/Loading'
-import { PageTitle } from '../../components/PageTitle'
+import { Loading, PageTitle } from '../../components'
 import { useLoader } from '../../hooks/useLoader.hook'
 
 export const ContactPage = () => {

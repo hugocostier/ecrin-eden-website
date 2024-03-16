@@ -1,10 +1,10 @@
 import { Link, useLoaderData } from 'react-router-dom'
 import '../../assets/css/store-front/Home.page.css'
-import { Loading } from '../../components/Loading'
+import { Loading } from "../../components"
 import { useLoader } from '../../hooks/useLoader.hook'
 
 export const HomePage = () => {
-    const { homeContent } = useLoaderData() 
+    const { homeContent } = useLoaderData()
 
     const loading = useLoader(homeContent)
 
@@ -15,7 +15,7 @@ export const HomePage = () => {
             ) : (
                 homeContent ? (
                     <>
-                        <section className='home-hero' style={{backgroundImage:`url(${homeContent.header[0].image})`}}>
+                        <section className='home-hero' style={{ backgroundImage: `url(${homeContent.header[0].image})` }}>
                             <div className='hero-content'>
                                 <h1>{homeContent.header[0].title}</h1>
                                 <h2>{homeContent.header[0].subtitle}</h2>
@@ -33,14 +33,14 @@ export const HomePage = () => {
                             </div>
                             <div className='card-image'>
                                 {homeContent.main[0].image.map((image, index) => (
-                                    <img src={image} alt={`Image ${index + 1}`} key={index + 1}/>
+                                    <img src={image} alt={`Image ${index + 1}`} key={index + 1} />
                                 ))}
                             </div>
                         </section>
 
                         <section className='home-video'>
                             <video controls>
-                                <source src={homeContent.video[0].video} type='video/mp4'/>
+                                <source src={homeContent.video[0].video} type='video/mp4' />
                             </video>
                         </section>
 
@@ -53,7 +53,7 @@ export const HomePage = () => {
                             </div>
                             <div className='card-background'></div>
                             <div className='card-image'>
-                                <img src={homeContent.main[1].image} alt={`Image 1`}/>
+                                <img src={homeContent.main[1].image} alt={`Image 1`} />
                             </div>
                         </section>
 
@@ -67,7 +67,7 @@ export const HomePage = () => {
                         <section className='home-reviews'>
                             {homeContent.reviews.map((review, index) => (
                                 <div className='review' key={index + 1}>
-                                    <img src={review.image} alt={`Image ${index + 1}`}/>
+                                    <img src={review.image} alt={`Image ${index + 1}`} />
                                     <div className='review-content'>
                                         <p><q>{review.text}</q></p>
                                         <h3>{review.author}</h3>
@@ -76,7 +76,7 @@ export const HomePage = () => {
                             ))}
                         </section>
                     </>
-                ) : null 
+                ) : null
             )}
         </>
     )
