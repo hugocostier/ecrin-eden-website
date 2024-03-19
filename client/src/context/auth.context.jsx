@@ -102,7 +102,6 @@ export const AuthProvider = () => {
                     setLoggedIn(false)
                     localStorage.removeItem('user')
                     localStorage.removeItem('expiration')
-                    navigate('/')
 
                     resolve(res)
                 })
@@ -110,7 +109,7 @@ export const AuthProvider = () => {
                     reject(err)
                 })
         })
-    }, [navigate])
+    }, [])
 
     const logOut = useCallback(() => {
         toast.promise(logOutPromise(), {
