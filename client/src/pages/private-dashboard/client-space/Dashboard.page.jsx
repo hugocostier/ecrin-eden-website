@@ -7,15 +7,13 @@ import { calculateWeekBounds } from '../../../utils/calculateWeekBounds.util'
 
 const StyledDashboard = StyledComponents.main`
     display: grid; 
-    grid-template-columns: 3fr 1fr; 
-    grid-template-rows: 200px max-content;
+    grid-template-columns: 1fr; 
     gap: 20px;
     padding: 20px;     
-
     overflow-y: auto;
 
     .page-header {
-        grid-column: 1 / 3; 
+        grid-column: 1 / 2; 
     }
 
     .calendar-container {
@@ -23,16 +21,36 @@ const StyledDashboard = StyledComponents.main`
         grid-row: 2 / 3; 
     }
 
-    aside {
-        grid-column: 2 / 3;
-        grid-row: 2 / 3; 
+    @media screen and (max-width: 1023px) {
+        aside {
+            display: none; 
+        }
+    }
 
-        img {
-            width: 100%; 
-            height: 100%;
-            object-fit: cover; 
-            object-position: 70% 30%; 
-            border-radius: 10px;
+    @media screen and (min-width: 1024px) {
+        grid-template-columns: 3fr 1fr; 
+        grid-template-rows: 200px max-content;
+
+        .page-header {
+            grid-column: 1 / 3; 
+        }
+    
+        .calendar-container {
+            grid-column: 1 / 2;
+            grid-row: 2 / 3; 
+        }
+
+        aside {
+            grid-column: 2 / 3;
+            grid-row: 2 / 3; 
+    
+            img {
+                width: 100%; 
+                height: 100%;
+                object-fit: cover; 
+                object-position: 70% 30%; 
+                border-radius: 10px;
+            }
         }
     }
 `
@@ -47,9 +65,9 @@ export const MyDashboard = () => {
             const firstDayOfWeek = weekBounds.firstDay.toISOString().split('T')[0];
             const lastDayOfWeek = weekBounds.lastDay.toISOString().split('T')[0];
 
-            const fetchData = async () => {
-                try {
-                    const response = await fetch(`http://localhost:3000/api/v1/appointments/count/${user.id}`, {
+            const fetchData = () => {
+                return new Promise((resolve, reject) => {
+                    fetch(`http://localhost:3000/api/v1/appointments/count/${user.id}`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -59,18 +77,23 @@ export const MyDashboard = () => {
                             endDate: lastDayOfWeek,
                         }),
                         credentials: 'include'
-                    });
-
-                    if (!response.ok) {
-                        throw new Error('HTTP Error ! Status: ' + response.status);
-                    }
-
-                    const data = await response.json();
-                    setCount(data.data); // Update count state with fetched data
-                } catch (error) {
-                    console.error('Error fetching data:', error);
-                }
-            };
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('HTTP Error ! Status: ' + response.status);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            setCount(data.data); // Update count state with fetched data
+                            resolve();
+                        })
+                        .catch(error => {
+                            console.error('Error fetching data:', error);
+                            reject();
+                        });
+                })
+            }
 
             fetchData();
         }
