@@ -10,6 +10,33 @@ const StyledSubMenu = StyledComponents.div`
     button {
         padding-left: 15px;
     }
+
+    @media screen and (max-width: 1023px) { 
+        &.open {
+            width: 100%;
+            overflow: visible; 
+            animation: slide-right 0.5s ease-in-out;
+        }
+
+        @keyframes slide-right {
+            0% {
+                transform: translateX(-10%);
+                overflow: hidden;
+            }
+            50% {
+                overflow: visible;
+            }
+            100% {
+                transform: translateX(0);
+                overflow: visible;
+            }
+        }
+
+        div {
+            display: flex; 
+            flex-direction: row; 
+        }
+    }
 `
 
 export const SubMenu = ({ item, activeItem, handleClick }) => {
@@ -21,11 +48,7 @@ export const SubMenu = ({ item, activeItem, handleClick }) => {
     return (
         <StyledSubMenu
             className={`${isSubNavOpen(item.name, item.items) ? 'open' : ''}`}
-            style={{
-                height: !isSubNavOpen(item.name, item.items)
-                    ? 0
-                    : navRef.current?.clientHeight,
-            }}
+            style={{ height: !isSubNavOpen(item.name, item.items) ? 0 : navRef.current?.clientHeight }}
         >
             <div ref={navRef}>
                 {item?.items.map((subItem) => (
@@ -35,6 +58,7 @@ export const SubMenu = ({ item, activeItem, handleClick }) => {
                         icon={subItem.icon}
                         isActive={activeItem === subItem}
                         hasSubNav={!!subItem.items}
+                        navigateTo={subItem.to ? subItem.to : null}
                         key={subItem.name}
                     />
                 ))}

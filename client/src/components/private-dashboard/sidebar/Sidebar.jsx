@@ -7,25 +7,32 @@ import { SubMenu } from './SubMenu'
 
 const StyledSidebar = StyledComponents.aside`
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-    width: 260px;
     height: 100%;
-    padding: 0 16px;
     background: #1d212a;
     border-right: 1px solid #2e303e;
     transition: width 0.4s;    
+    
+    @media screen and (max-width: 1023px) {
+        overflow-x: auto; 
+    }
+    
+    @media screen and (min-width: 1024px) {
+        flex-direction: column;
+        width: 260px;
+        gap: 8px;
+        padding: 0 16px;
+    }
 `
 
 export const Sidebar = ({ menuItems, user }) => {
-    const [activeItem, setActiveItem] = useState('')
+    const [activeItem, setActiveItem] = useState('Accueil')
 
     const handleClick = (item) => {
-        setActiveItem(item !== activeItem ? item : '')
+        setActiveItem((prevActiveItem) => prevActiveItem !== item ? item : '')
     }
 
     return (
-        <StyledSidebar>
+        <StyledSidebar className='user-navbar'>
             <NavHeader user={user} />
             {menuItems.map((item) => (
                 <>
@@ -36,6 +43,7 @@ export const Sidebar = ({ menuItems, user }) => {
                             icon={item.icon}
                             isActive={activeItem === item.name}
                             hasSubNav={!!item.items}
+                            navigateTo={item.to ? item.to : null}
                         />
                     )}
                     {item.items && (
@@ -46,6 +54,7 @@ export const Sidebar = ({ menuItems, user }) => {
                                 icon={item.icon}
                                 isActive={activeItem === item.name}
                                 hasSubNav={!!item.items}
+                                to={item.to ? item.to : null}
                             />
                             <SubMenu
                                 activeItem={activeItem}
