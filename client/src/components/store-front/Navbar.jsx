@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, Outlet } from 'react-router-dom'
-import '../../assets/css/navbar.css'
+import StyledComponents, { keyframes } from 'styled-components'
 import logo from '../../assets/images/logo.jpg'
+import burger from '../../assets/images/svg/burger.svg'
+import close from '../../assets/images/svg/close.svg'
 import { useAuth } from '../../hooks/useAuth.hook'
 
 const pages = [
@@ -85,7 +87,7 @@ export const Navbar = () => {
 
     return (
         <>
-            <header>
+            <NavbarContainer>
                 <div className={`nav-bar ${isOpen}`}>
                     <Link to={'/'} key={'logo-accueil'} className='logo-nav'>
                         <img src={logo} alt='logo' />
@@ -161,10 +163,391 @@ export const Navbar = () => {
                         </button>
                     </div>
                 </section >
-            </header >
+            </NavbarContainer >
             <main className={`page ${isOpen}`}>
                 <Outlet />
             </main>
         </>
     )
 }
+
+const appearMobile = keyframes`
+    0% {
+        opacity: 0;
+        translate: 0 30px;
+    }
+    100% {
+        opacity: 1;
+    }
+`
+
+const appearDesktop = keyframes`
+    0% {
+        translate: -100vw 0;
+    }
+    100% {
+        translate: 0 0;
+        transition: ease-in-out;
+    }
+`
+
+const menu_in = keyframes`
+    0% {
+        clip-path: ellipse(60% 60% at 0% 50%);
+    }
+    100% {
+        clip-path: ellipse(120% 120% at 0% 50%);
+    }
+`
+
+const NavbarContainer = StyledComponents.header`
+    width: 100%;
+    height: 80px;
+
+    .nav-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        height: 80px;
+        top: 0;
+        left: 0;
+        background: var(--primary-500);
+        box-shadow: var(--shadow-3);
+        transition: 0.3s;
+
+        .logo-nav {
+            width: 60px;
+            margin-left: 20px;
+            cursor: pointer;
+
+            img {
+                width: 100%;
+                object-fit: cover;
+            }
+        }
+
+        &.open > .logo-nav {
+            visibility: hidden;
+        }
+    }
+
+    button {
+        border: 0;
+        padding: 0;
+        background: transparent;
+        cursor: pointer;
+
+        &.burger,
+        &.burger.desktop-version {
+            z-index: 4;
+            margin-right: 20px;
+            display: grid;
+            place-items: center;
+            width: 40px;
+            height: 40px;
+            background-image: url(${burger});
+            background-repeat: no-repeat;
+            background-position: center;
+
+            &.open,
+            &.open.desktop-version {
+                color: var(--white);
+                background-image: url(${close});
+            }
+        }
+    }
+
+    .menu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        width: 100%;
+
+        nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            &:hover > a {
+                opacity: 0.25;
+            }
+
+            &> a:hover { 
+                opacity: 1;
+            }
+        }
+
+        &.open {
+            opacity: 1;
+            visibility: visible;
+
+            a {
+                opacity: 1;
+            }
+        }
+
+        a {
+            position: relative;
+            color: var(--white);
+            padding: 12px 0;
+            text-decoration: none;
+            text-transform: capitalize;
+            opacity: 0;
+            cursor: pointer;
+            transition: 0.4s;
+
+            &::before,
+            &::after {
+                transition: 0.4s;
+            }
+
+            &:not(:first-of-type)::before,
+            &:not(:first-of-type)::after {
+                content: '';
+                position: absolute;
+                left: 0;
+                bottom: 10px;
+                width: 100%;
+                height: 2px;
+                border-radius: 2px;
+            }
+
+            &::before {
+                opacity: 0;
+                background: #fafafa33;
+            }
+
+            &::after {
+                transform: scaleX(0);
+                transform-origin: 0% 50%;
+                background: var(--white);
+            }
+
+            &:hover::before {
+                opacity: 1;
+            }
+            
+            &:hover::after {
+                transform: scaleX(1);
+            }
+        }
+
+        .login,
+        .logged-user {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+            padding: 0;
+        }
+    }
+
+    a.active {
+        color: var(--primary-500);
+        font-weight: bold;
+    }
+
+    #user-picture {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 10px;
+    }
+
+    .user {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    .logout {
+        width: 26px;
+        height: 26px;
+        color: var(--red-light);
+        cursor: pointer;
+        
+        &:hover {
+            color: var(--red-dark);
+        }
+    }
+
+    @media screen and (max-width: 1023px) {
+        .nav-bar {
+            &:not(.open) > .logo-nav {
+                z-index: 3;
+            }
+
+            &> .logo-nav {
+                width: 60px;
+                margin-left: 20px;
+                cursor: pointer;
+            }
+            
+            &.open {
+                background-color: var(--background-color);
+            }
+        }
+    
+        .burger {
+            &.mobile-version,
+            &.desktop-version {
+                display: none;
+            }
+        }
+    
+        .background {
+            position: fixed;
+            z-index: 2;
+            top: 44px;
+            left: 44px;
+            aspect-ratio: 1/1;
+            translate: -50% -50%;
+            height: 88px;
+            background: var(--black);
+            border-radius: 50%;
+            opacity: 0;
+            transition: 0.6s;
+
+            &.open {
+                height: 400vh;
+                opacity: 0.95;
+            }
+        }
+    
+        .menu {
+            z-index: 3;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.05s;
+
+            nav {
+                flex-direction: column;
+                margin: 0 auto;
+            }
+
+            a {
+                font-size: 1.75em;
+            }
+
+            .login,
+            .logged-user {
+                position: absolute;
+                top: calc((80px / 2) - (42px / 2));
+                left: 30px;
+            }
+
+            .login {
+                font-size: 1.5em;
+            }
+        }
+    
+        .logged-user span {
+            font-size: 24px;
+        }
+    
+        .logout {
+            margin-left: 20px;
+        }
+    
+        .login > svg {
+            margin-right: 15px;
+        }
+    
+        .appear {
+            animation: ${appearMobile} 0.35s backwards;
+
+            &.user {
+                padding: 0;
+            }
+        }
+    
+        .page {
+            transition: 0.6s;
+            
+            &.open {
+                filter: blur(10px);
+            }
+        }
+    }
+
+    @media screen and (min-width: 1024px) {
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 2;
+        }
+    
+        .burger {
+            &.open:not(.desktop-version) {
+                display: none;
+            }
+
+            &.open.desktop-version {
+                right: 0px;
+            }
+        }
+    
+        .background,
+        .background.open {
+            display: none;
+        }
+    
+        .desktop-version {
+            width: 100%;
+            height: 80px;
+            
+            &.open:not(.burger) {
+                position: fixed;
+                background-color: var(--grey-900);
+                z-index: 3;
+                animation: ${appearDesktop} 1s;
+            }
+        }
+    
+        .menu {
+            height: 80px;
+            background: var(--grey-900);
+            translate: -100% 0;
+            transition: translate 1s cubic-bezier(0.175, 0.885, 0.32, 1);
+
+            &.open {
+                translate: 0;
+                animation: ${menu_in} 0.5s;
+            }
+
+            nav {
+                flex-direction: row;
+                justify-content: left;
+                width: 100%;
+            }
+
+            a {
+                font-size: 1.175em;
+                margin: 0 20px;
+            }
+            
+            .login,
+            .logged-user {
+                position: absolute;
+                top: calc((80px / 2) - (32.89px / 2));
+                right: calc(60px + 2%);
+                font-size: 1.175em;
+            }
+
+            .logged-user {
+                top: auto;
+            }
+        }
+    
+        .login > svg {
+            margin-right: 15px;
+        }
+    }
+`
