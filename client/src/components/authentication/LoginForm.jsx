@@ -137,6 +137,8 @@ export const FormContainer = StyledComponents.section`
 export const LoginForm = () => {
     const auth = useAuth()
 
+    const [rememberMe, setRememberMe] = useState(false)
+
     const [input, setInput] = useState({
         username: '',
         password: ''
@@ -146,7 +148,12 @@ export const LoginForm = () => {
         e.preventDefault()
 
         if (input.username !== '' && input.password !== '') {
-            auth.logIn(input)
+            auth.logIn({
+                username: input.username,
+                password: input.password,
+                remember_me: rememberMe
+            }, rememberMe)
+
             return
         }
 
@@ -204,7 +211,11 @@ export const LoginForm = () => {
                     onBlur={(e) => checkInput(e.target)}
                 />
                 <div className="remember-me">
-                    <input type="checkbox" id="remember-me" />
+                    <input
+                        type="checkbox"
+                        id="remember-me"
+                        onChange={() => setRememberMe(!rememberMe)}
+                    />
                     <label htmlFor="remember-me">Se souvenir de moi</label>
                 </div>
                 <a href="">Mot de passe oublié ?</a>

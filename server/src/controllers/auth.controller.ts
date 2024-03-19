@@ -43,6 +43,11 @@ class AuthController {
                     return next(err)
                 }
 
+                if (req.body.remember_me) {
+                    // Set the session to expire in 14 days
+                    req.session.cookie.maxAge = 1000 * 60 * 60 * 24 * 14
+                }
+
                 return res.status(201).json({ user: req.user })
             })
         }) (req, res, next)       

@@ -9,7 +9,7 @@ export const AuthProvider = () => {
     const [loggedIn, setLoggedIn] = useState(false)
     const navigate = useNavigate()
 
-    const logInPromise = (data) => {
+    const logInPromise = (data, remember) => {
         return new Promise((resolve, reject) => {
             fetch('http://localhost:3000/api/v1/auth/login/password', {
                 method: 'POST',
@@ -46,7 +46,8 @@ export const AuthProvider = () => {
                     setUser(res.user)
                     setLoggedIn(true)
 
-                    const expiration = new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 7)
+                    // Set expiration date to 7 days or 14 days if remember me is checked
+                    const expiration = remember ? new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 14) : new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 7)
 
                     localStorage.setItem('user', JSON.stringify(res.user))
                     localStorage.setItem('expiration', expiration)
@@ -61,8 +62,8 @@ export const AuthProvider = () => {
         })
     }
 
-    const logIn = (data) => {
-        toast.promise(logInPromise(data), {
+    const logIn = (data, remember) => {
+        toast.promise(logInPromise(data, remember), {
             pending: 'Connexion...',
             success: 'Connexion réussie !',
             error: {
