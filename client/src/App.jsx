@@ -53,18 +53,16 @@ const Router = createBrowserRouter(
             </Route>
 
             <Route
-                path='/login'
+                path='login'
                 element={<page.LoginRegisterPage />}
                 errorElement={<page.ErrorPage />}
             />
 
             <Route element={<PrivateRoute isAllowed={['user', 'admin']} redirectPath='/login' />} >
                 <Route
-                    path='/user'
+                    path='user'
                     element={
-                        // <PrivateRoute redirectPath='/login'>
                         <PrivateRoot />
-                        // </PrivateRoute>
                     }
                     errorElement={<page.ErrorPage />}
                 >
