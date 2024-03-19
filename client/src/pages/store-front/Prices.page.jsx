@@ -1,5 +1,5 @@
 import { useLoaderData } from 'react-router-dom'
-import '../../assets/css/store-front/Prices.page.css'
+import StyledComponents from 'styled-components'
 import { Loading, PageTitle } from '../../components'
 import { useLoader } from '../../hooks/useLoader.hook'
 
@@ -17,8 +17,8 @@ export const PricesPage = () => {
                     <>
                         <PageTitle content={priceContent} pageName='price'></PageTitle>
 
-                        <section className='price-main'>
-                            <section className="price-cards">
+                        <PriceContent className='price-main'>
+                            <PriceCard className="price-cards">
                                 <h3>Tarifs</h3>
                                 {priceContent.main.map((main, index) => (
                                     <div className='card' key={index + 1}>
@@ -29,9 +29,9 @@ export const PricesPage = () => {
                                         <p>{main.price}</p>
                                     </div>
                                 ))}
-                            </section>
+                            </PriceCard>
 
-                            <section className='price-more'>
+                            <PriceMore className='price-more'>
                                 <div>
                                     <h4>{priceContent.more[0].title}</h4>
                                     <p>{priceContent.more[0].price}</p>
@@ -44,15 +44,128 @@ export const PricesPage = () => {
                                     ))}
                                     <p>{priceContent.more[1].more}</p>
                                 </div>
-                            </section>
+                            </PriceMore>
 
-                            <section className="price-image">
+                            <PriceImage className="price-image">
                                 <img src={priceContent.image} alt={priceContent.alt} />
-                            </section>
-                        </section>
+                            </PriceImage>
+                        </PriceContent>
                     </>
                 ) : null
             )}
         </>
     )
 }
+
+const PriceContent = StyledComponents.section`
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 50px;
+
+    @media screen and (min-width: 1024px) {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0;
+        margin-top: 50px;
+    }
+`
+
+const PriceCard = StyledComponents.section`
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin: 0 8%;
+    margin-top: 50px;
+
+    h3 {
+        margin-bottom: 0;
+    }
+
+    .card {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--grey-400);
+
+        div {
+            display: flex;
+            gap: 15px;
+        }
+
+        p {
+            margin-bottom: 8px;
+        }
+    }
+
+    @media screen and (min-width: 1024px) {
+        margin-top: 0;
+    }
+`
+
+const PriceMore = StyledComponents.section`
+    display: grid;
+    grid-template-columns: 1fr;
+    margin: 0 8%;
+
+    div {
+        margin-bottom: 10px;
+
+        h4 {
+            font-weight: normal;
+            margin-bottom: 12px;
+        }
+    }
+
+    p {
+        margin: 0;
+    }
+
+    li {
+        margin-left: 10px;
+
+        &:last-of-type {
+            margin-bottom: 10px;
+        }
+    }
+
+    @media screen and (min-width: 1024px) {
+        display: block;
+        margin-top: 30px;
+        align-self: center;
+    }
+`
+
+const PriceImage = StyledComponents.section`
+    display: grid;
+    grid-template-columns: 1fr;
+    background-color: var(--primary-500);
+    padding: 50px 0;
+
+    img {
+        width: 50%;
+        object-fit: cover;
+        object-position: 50% 50%;
+        margin: 0 auto;
+        opacity: 0.7;
+    }
+
+    @media screen and (min-width: 768px) and (max-width: 1023px) {
+        .price-image {
+            img {
+                aspect-ratio: 1 / 1;
+            }
+        }
+    }
+
+    @media screen and (min-width: 1024px) {
+        grid-column: 2 / 3;
+        grid-row: 1 / 3;
+        align-items: center;
+        padding: 0;
+
+        img {
+            width: 70%;
+            margin-top: 10%;
+            margin-bottom: 10%;
+            max-height: 600px;
+        }
+    }
+`
