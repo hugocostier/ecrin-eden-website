@@ -3,6 +3,7 @@ import { faApple, faFacebookF, faGoogle } from '@fortawesome/free-brands-svg-ico
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import { useAuth } from '../../hooks/useAuth.hook';
+import { FormContainer } from './LoginForm';
 
 library.add(faFacebookF, faGoogle, faApple)
 
@@ -44,7 +45,7 @@ export const RegisterForm = () => {
     }
 
     return (
-        <section className="form-container register-container">
+        <FormContainer className="form-container register-container">
             <form onSubmit={handleRegister}>
                 <h2>Inscription</h2>
                 <div className="social-container">
@@ -64,6 +65,7 @@ export const RegisterForm = () => {
                     name='last_name'
                     placeholder="Nom"
                     required
+                    autoComplete='family-name'
                     onChange={handleInput}
                     onBlur={(e) => checkInput(e.target)}
                 />
@@ -72,6 +74,7 @@ export const RegisterForm = () => {
                     name='first_name'
                     placeholder="Prénom"
                     required
+                    autoComplete='given-name'
                     onChange={handleInput}
                     onBlur={(e) => checkInput(e.target)}
                 />
@@ -80,19 +83,21 @@ export const RegisterForm = () => {
                     name='email'
                     placeholder="Email"
                     required
+                    autoComplete='email'
                     onChange={handleInput}
                     onBlur={(e) => checkInput(e.target)}
                 />
                 <input
                     type="password"
                     name='password'
-                    required
                     placeholder="Mot de passe"
+                    required
+                    autoComplete='new-password'
                     onChange={handleInput}
                     onBlur={(e) => checkInput(e.target)}
                 />
                 <button>S&apos;inscrire</button>
             </form>
-        </section>
+        </FormContainer>
     )
 } 
