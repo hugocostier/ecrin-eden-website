@@ -1,7 +1,27 @@
 import PropTypes from 'prop-types';
-import styled, { keyframes } from 'styled-components';
+import StyledComponents, { keyframes } from 'styled-components';
 
-const slideRight= keyframes`
+export const PageTitle = ({ content, pageName }) => {
+    return (
+        <>
+            <PageTitleSection className={`${pageName}-title`}>
+                <h2>{content.header[0].title}</h2>
+                {content.header[0].images.map((images, index) => (
+                    <div className="image" key={index} >
+                        <img src={images} alt={`${pageName} ${index + 1}`} />
+                    </div>
+                ))}
+            </PageTitleSection>
+        </>
+    )
+}
+
+PageTitle.propTypes = {
+    content: PropTypes.object.isRequired,
+    pageName: PropTypes.string.isRequired
+};
+
+const slideRight = keyframes`
     0% {
         opacity: 0; 
         transform: translateX(-100%);
@@ -12,7 +32,7 @@ const slideRight= keyframes`
     }
 `
 
-const slideLeft= keyframes`
+const slideLeft = keyframes`
     0% {
         opacity: 0; 
         transform: translateX(100%);
@@ -23,7 +43,7 @@ const slideLeft= keyframes`
     }
 `
 
-const PageTitleSection = styled.section`
+const PageTitleSection = StyledComponents.section`
     display: grid; 
     grid-template-columns: 1fr; 
     background-color: var(--secondary-500);
@@ -101,24 +121,3 @@ const PageTitleSection = styled.section`
         }
     }
 `
-
-
-export const PageTitle = ({ content, pageName }) => {
-    return (
-        <>
-            <PageTitleSection className={`${pageName}-title`}>
-                <h2>{content.header[0].title}</h2>
-                {content.header[0].images.map((images, index) => (
-                    <div className="image" key={index} >
-                        <img src={images} alt={`${pageName} ${index + 1}`}/>
-                    </div>
-                ))}
-            </PageTitleSection>
-        </>
-    )
-}
-
-PageTitle.propTypes = {
-    content: PropTypes.object.isRequired,
-    pageName: PropTypes.string.isRequired
-};
