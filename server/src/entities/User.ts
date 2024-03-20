@@ -43,6 +43,19 @@ export class User extends BaseEntity {
     })
     salt: string | undefined
 
+    @Column({
+        type: 'varchar', 
+        length: 4,
+        nullable: true
+    })
+    otp: string | null = null 
+
+    @Column({
+        type: 'datetime',
+        nullable: true
+    })
+    otpExpires: Date | null = null 
+
     @CreateDateColumn() 
         created_at: Date | undefined
 

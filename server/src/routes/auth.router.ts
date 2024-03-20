@@ -32,4 +32,12 @@ router.route('/current-user')
 router.route('/logout')
     .get(auth.logout)
 
+// Send OTP to user email
+router.route('/forgot-password')
+    .post(auth.sendOTP)
+
+// Reset user password
+router.route('/reset-password') 
+    .post(auth.resetUserPassword)
+
 export default router 
