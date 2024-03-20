@@ -1,11 +1,150 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faApple, faFacebookF, faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import StyledComponents from 'styled-components';
+import { RecoveryContext } from '../../context/passwordRecovery.context';
 import { useAuth } from '../../hooks/useAuth.hook';
 
 library.add(faFacebookF, faGoogle, faApple)
+
+export const LoginForm = () => {
+    const auth = useAuth()
+    const navigate = useNavigate()
+
+    const { setEmail, email, setOtp, setAccessFromLogin } = useContext(RecoveryContext)
+
+    const navigateToOTP = () => {
+        if (email) {
+            const OTP = Math.floor(Math.random() * 9000 + 1000)
+            console.log(OTP)
+            setOtp(OTP)
+
+            return new Promise((resolve, reject) => {
+                fetch('http://localhost:3000/api/v1/auth/forgot-password', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        recipient_email: email,
+                        otp: OTP
+                    })
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data)
+                        resolve(data)
+                        navigate('/recover-password')
+                    })
+                    .catch(err => reject(err))
+            })
+        }
+
+        return toast.error('Saisissez votre email', { containerId: 'action-status' })
+    }
+
+    const [rememberMe, setRememberMe] = useState(false)
+
+    const [input, setInput] = useState({
+        username: '',
+        password: ''
+    })
+
+    const handleLogin = (e) => {
+        e.preventDefault()
+
+        if (input.username !== '' && input.password !== '') {
+            auth.logIn({
+                username: input.username,
+                password: input.password,
+                remember_me: rememberMe
+            }, rememberMe)
+
+            return
+        }
+
+        alert('Saisissez votre email et mot de passe')
+    }
+
+    const handleInput = (e) => {
+        const { name, value } = e.target
+        setInput((prev) => ({
+            ...prev,
+            [name]: value
+        }))
+
+        if (name === 'username') {
+            setEmail(value)
+        }
+    }
+
+    const checkInput = (input) => {
+        if (input.value === '') {
+            input.classList.add('incorrect')
+        } else {
+            input.classList.remove('incorrect')
+        }
+    }
+
+    return (
+        <FormContainer className="form-container sign-in-container">
+            <form onSubmit={handleLogin}>
+                <h2>Connexion</h2>
+                <div className="social-container">
+                    <a href="" className="social">
+                        <FontAwesomeIcon icon='fa-brands fa-facebook-f' />
+                    </a>
+                    <a href="" className="social">
+                        <FontAwesomeIcon icon='fa-brands fa-google' />
+                    </a>
+                    <a href="" className="social">
+                        <FontAwesomeIcon icon='fa-brands fa-apple' />
+                    </a>
+                </div>
+                <span>ou utilise ton compte</span>
+                <input
+                    type="email"
+                    name="username"
+                    placeholder="Email"
+                    required
+                    autoComplete='username'
+                    onChange={handleInput}
+                    onBlur={(e) => checkInput(e.target)}
+                />
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Mot de passe"
+                    required
+                    autoComplete='current-password'
+                    onChange={handleInput}
+                    onBlur={(e) => checkInput(e.target)}
+                />
+                <div className="remember-me">
+                    <input
+                        type="checkbox"
+                        id="remember-me"
+                        onChange={() => setRememberMe(!rememberMe)}
+                    />
+                    <label htmlFor="remember-me">Se souvenir de moi</label>
+                </div>
+                <div
+                    id='forgot-password'
+                    onClick={() => {
+                        setAccessFromLogin(true)
+                        navigateToOTP()
+                    }}
+                >
+                    Mot de passe oublié ?
+                </div>
+                <button>Se connecter</button>
+            </form>
+        </FormContainer>
+    )
+}
 
 export const FormContainer = StyledComponents.section`
     position: absolute;
@@ -57,6 +196,10 @@ export const FormContainer = StyledComponents.section`
                 height: 40px;
                 width: 40px;
             }
+        }
+
+        #forgot-password {
+            text-decoration: underline; 
         }
     }
 
@@ -133,94 +276,3 @@ export const FormContainer = StyledComponents.section`
         }
     }
 `
-
-export const LoginForm = () => {
-    const auth = useAuth()
-
-    const [rememberMe, setRememberMe] = useState(false)
-
-    const [input, setInput] = useState({
-        username: '',
-        password: ''
-    })
-
-    const handleLogin = (e) => {
-        e.preventDefault()
-
-        if (input.username !== '' && input.password !== '') {
-            auth.logIn({
-                username: input.username,
-                password: input.password,
-                remember_me: rememberMe
-            }, rememberMe)
-
-            return
-        }
-
-        alert('Saisissez votre email et mot de passe')
-    }
-
-    const handleInput = (e) => {
-        const { name, value } = e.target
-        setInput((prev) => ({
-            ...prev,
-            [name]: value
-        }))
-    }
-
-    const checkInput = (input) => {
-        if (input.value === '') {
-            input.classList.add('incorrect')
-        } else {
-            input.classList.remove('incorrect')
-        }
-    }
-
-    return (
-        <FormContainer className="form-container sign-in-container">
-            <form onSubmit={handleLogin}>
-                <h2>Connexion</h2>
-                <div className="social-container">
-                    <a href="" className="social">
-                        <FontAwesomeIcon icon='fa-brands fa-facebook-f' />
-                    </a>
-                    <a href="" className="social">
-                        <FontAwesomeIcon icon='fa-brands fa-google' />
-                    </a>
-                    <a href="" className="social">
-                        <FontAwesomeIcon icon='fa-brands fa-apple' />
-                    </a>
-                </div>
-                <span>ou utilise ton compte</span>
-                <input
-                    type="email"
-                    name="username"
-                    placeholder="Email"
-                    required
-                    autoComplete='username'
-                    onChange={handleInput}
-                    onBlur={(e) => checkInput(e.target)}
-                />
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Mot de passe"
-                    required
-                    autoComplete='current-password'
-                    onChange={handleInput}
-                    onBlur={(e) => checkInput(e.target)}
-                />
-                <div className="remember-me">
-                    <input
-                        type="checkbox"
-                        id="remember-me"
-                        onChange={() => setRememberMe(!rememberMe)}
-                    />
-                    <label htmlFor="remember-me">Se souvenir de moi</label>
-                </div>
-                <a href="">Mot de passe oublié ?</a>
-                <button>Se connecter</button>
-            </form>
-        </FormContainer>
-    )
-}
