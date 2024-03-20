@@ -2,7 +2,9 @@ import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } 
 import { Bounce, Slide, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.min.css'
 import { PrivateRoute } from './components'
+import { PrivateLogin } from './components/authentication/PrivateLogin'
 import { AuthProvider } from './context/auth.context'
+import { PasswordRecoveryProvider } from './context/passwordRecovery.context'
 import { certificationLoader, contactLoader, giftCardLoader, homeLoader, priceLoader, serviceLoader } from './data'
 import { PrivateRoot, StoreRoot } from './layouts'
 import * as page from './pages'
@@ -52,18 +54,29 @@ const Router = createBrowserRouter(
                 />
             </Route>
 
-            <Route
-                path='login'
-                element={<page.LoginRegisterPage />}
-                errorElement={<page.ErrorPage />}
-            />
+            <Route element={<PasswordRecoveryProvider />}>
+                <Route
+                    path='/login'
+                    element={<page.LoginRegisterPage />}
+                />
+
+                <Route element={<PrivateLogin />} >
+                    <Route
+                        path='/recover-password'
+                        element={<page.RecoverPassword />}
+                    />
+
+                    <Route
+                        path='/reset-password'
+                        element={<page.ResetPassword />}
+                    />
+                </Route>
+            </Route>
 
             <Route element={<PrivateRoute isAllowed={['user', 'admin']} redirectPath='/login' />} >
                 <Route
-                    path='user'
-                    element={
-                        <PrivateRoot />
-                    }
+                    path='/user'
+                    element={<PrivateRoot />}
                     errorElement={<page.ErrorPage />}
                 >
                     <Route
