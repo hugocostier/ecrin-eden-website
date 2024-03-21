@@ -1,6 +1,23 @@
 import PropTypes from 'prop-types'
 import StyledComponents from 'styled-components'
 
+export const NavHeader = ({ user }) => (
+    <StyledNavHeader>
+        <div className="profile-picture">
+            <img src={user.profilePicture ? user.profilePicture : 'src/assets/images/default-profile-picture.png'} alt='profile' />
+        </div>
+
+        <div className='user-info'>
+            <h3>{user.firstName && user.lastName ? user.firstName + ' ' + user.lastName : 'John Doe'}</h3>
+            <p>{user.role === 'admin' ? 'Administrateur' : 'Utilisateur'}</p>
+        </div>
+    </StyledNavHeader>
+)
+
+NavHeader.propTypes = {
+    user: PropTypes.object.isRequired
+}
+
 const StyledNavHeader = StyledComponents.header`
     @media screen and (max-width: 1023px) {
         display: none; 
@@ -48,20 +65,3 @@ const StyledNavHeader = StyledComponents.header`
         }
     }
 `
-
-export const NavHeader = ({ user }) => (
-    <StyledNavHeader>
-        <div className="profile-picture">
-            <img src={user.profilePicture ? user.profilePicture : 'src/assets/images/default-profile-picture.png'} alt='profile' />
-        </div>
-
-        <div className='user-info'>
-            <h3>{user.firstName && user.lastName ? user.firstName + ' ' + user.lastName : 'John Doe'}</h3>
-            <p>{user.role === 'admin' ? 'Administrateur' : 'Utilisateur'}</p>
-        </div>
-    </StyledNavHeader>
-)
-
-NavHeader.propTypes = {
-    user: PropTypes.object.isRequired
-}
