@@ -4,6 +4,47 @@ import StyledComponents from 'styled-components';
 import logo from '../../assets/images/logo.jpg';
 import { useAuth } from '../../hooks/useAuth.hook';
 
+export const Header = ({ user }) => {
+    const auth = useAuth()
+    const navigate = useNavigate()
+
+    const handleLogout = () => {
+        navigate('/')
+        auth.logOut()
+    }
+
+    return (
+        <StyledHeader className='user-header'>
+            <div className='logo-container'>
+                <Link to={'/'} key={'logo-accueil'} className='logo-nav'>
+                    <img src={logo} alt='logo' />
+                </Link>
+            </div>
+
+            <div className='title-container'>
+                <h2>Espace personnel</h2>
+            </div>
+
+            <div className='user-container'>
+                <div className='user'>
+                    <img id='user-picture' src={user.profilePicture ? user.profilePicture : 'src/assets/images/default-profile-picture.png'} alt='profile' />
+                    <p>{user.firstName && user.lastName ? user.firstName + ' ' + user.lastName : 'John Doe'}</p>
+                    <button
+                        onClick={() => handleLogout()}
+                        className='logout'
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M4 18H6V20H18V4H6V6H4V3C4 2.44772 4.44772 2 5 2H19C19.5523 2 20 2.44772 20 3V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V18ZM6 11H13V13H6V16L1 12L6 8V11Z"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </StyledHeader>
+    )
+}
+
+Header.propTypes = {
+    user: PropTypes.object.isRequired
+}
+
 const StyledHeader = StyledComponents.header`
     display: grid;
     grid-template-columns: auto 1fr; 
@@ -38,8 +79,7 @@ const StyledHeader = StyledComponents.header`
     .user-container {
         grid-column: 3 / 4;
         display: flex;
-        justify-content: flex-end;
-        align-items: center;
+        justify-content: center;
         align-items: center;
         margin-right: 5vw;
 
@@ -47,6 +87,15 @@ const StyledHeader = StyledComponents.header`
             height: 50px;
             display: flex;
             justify-content: center;
+            align-items: center;
+
+            #user-picture {
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                object-fit: cover;
+                margin-right: 10px;
+            }
 
             p {
                 margin: 0;
@@ -59,6 +108,8 @@ const StyledHeader = StyledComponents.header`
                 margin-left: 16px; 
                 color: var(--red-light);
                 cursor: pointer;
+                background: transparent;
+                border: none;
     
                 &:hover {
                     color: var(--red-dark);
@@ -102,44 +153,3 @@ const StyledHeader = StyledComponents.header`
 
     }
 `
-
-export const Header = ({ user }) => {
-    const auth = useAuth()
-    const navigate = useNavigate()
-
-    const handleLogout = () => {
-        navigate('/')
-        auth.logOut()
-    }
-
-    return (
-        <StyledHeader className='user-header'>
-            <div className='logo-container'>
-                <Link to={'/'} key={'logo-accueil'} className='logo-nav'>
-                    <img src={logo} alt='logo' />
-                </Link>
-            </div>
-
-            <div className='title-container'>
-                <h2>Espace personnel</h2>
-            </div>
-
-            <div className='user-container'>
-                <div className='user'>
-                    <img id='user-picture' src={user.profilePicture ? user.profilePicture : 'src/assets/images/default-profile-picture.png'} alt='profile' />
-                    <p>{user.firstName && user.lastName ? user.firstName + ' ' + user.lastName : 'John Doe'}</p>
-                    <button
-                        onClick={() => handleLogout()}
-                        className='logout'
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M4 18H6V20H18V4H6V6H4V3C4 2.44772 4.44772 2 5 2H19C19.5523 2 20 2.44772 20 3V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V18ZM6 11H13V13H6V16L1 12L6 8V11Z"></path></svg>
-                    </button>
-                </div>
-            </div>
-        </StyledHeader>
-    )
-}
-
-Header.propTypes = {
-    user: PropTypes.object.isRequired
-}
