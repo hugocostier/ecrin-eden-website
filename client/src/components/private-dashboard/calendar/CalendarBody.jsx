@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import StyledComponents from 'styled-components'
-import { fetchAppointments, fetchDayAppointments } from '../../../data'
+import { fetchAppointments } from '../../../data'
 import { renderDay, renderMonth, renderWeek } from '../../../utils/renderCalendar.util'
 import { Days } from './Days'
 import { Week } from './Week'
@@ -30,7 +30,7 @@ export const CalendarBody = ({ currentDate, currentView }) => {
             const today = new Date(currentDate.year, currentDate.month, currentDate.day)
             const todayFormatted = today.toLocaleDateString('fr-FR', options).split('/').reverse().join('-')
 
-            toast.promise(fetchDayAppointments(todayFormatted, 6), {
+            toast.promise(fetchAppointments({ day: todayFormatted, clientId: 6 }), {
                 pending: 'Chargement...',
                 success: 'Rendez-vous récupérés !',
                 error: 'Erreur lors de la récupération des rendez-vous'
@@ -64,7 +64,7 @@ export const CalendarBody = ({ currentDate, currentView }) => {
                 rangeEndFormatted = rangeEnd.toLocaleDateString('fr-FR', options).split('/').reverse().join('-')
             }
 
-            toast.promise(fetchAppointments(rangeStartFormatted, rangeEndFormatted, 6), {
+            toast.promise(fetchAppointments({ rangeStart: rangeStartFormatted, rangeEnd: rangeEndFormatted, clientId: 6 }), {
                 pending: 'Chargement...',
                 success: 'Rendez-vous récupérés !',
                 error: 'Erreur lors de la récupération des rendez-vous'
