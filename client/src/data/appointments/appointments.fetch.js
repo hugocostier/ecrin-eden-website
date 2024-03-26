@@ -1,5 +1,15 @@
-export const fetchAppointments = (rangeStart, rangeEnd, clientId) => {
+export const fetchAppointments = (options) => {
     const API_URL = 'http://localhost:3000/api/v1'
+
+    const { clientId, showHistory, showAll, rangeStart, rangeEnd, day } = options
+
+    const body = {
+        ...(showHistory && { showHistory }),
+        ...(showAll && { showAll }),
+        ...(rangeStart && { rangeStart }),
+        ...(rangeEnd && { rangeEnd }),
+        ...(day && { day }),
+    }
 
     return new Promise((resolve, reject) => {
         fetch(`${API_URL}/appointments/client/${clientId}`, {
@@ -8,10 +18,7 @@ export const fetchAppointments = (rangeStart, rangeEnd, clientId) => {
                 'Content-Type': 'application/json',
             },
             credentials: 'include',
-            body: JSON.stringify({
-                rangeStart,
-                rangeEnd,
-            }),
+            body: JSON.stringify(body),
         })
             .then((response) => {
                 if (!response.ok) {
@@ -32,19 +39,25 @@ export const fetchAppointments = (rangeStart, rangeEnd, clientId) => {
     })
 }
 
-export const fetchDayAppointments = (day, clientId) => {
+export const fetchCountAppointments = (options) => {
     const API_URL = 'http://localhost:3000/api/v1'
 
+    const { clientId, firstDayOfWeek, lastDayOfWeek, today } = options
+
+    const body = {
+        ...(firstDayOfWeek && { startDate: firstDayOfWeek }),
+        ...(lastDayOfWeek && { endDate: lastDayOfWeek }),
+        ...(today && { date: today }),
+    }
+
     return new Promise((resolve, reject) => {
-        fetch(`${API_URL}/appointments/client/${clientId}`, {
+        fetch(`${API_URL}/appointments/count/${clientId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             credentials: 'include',
-            body: JSON.stringify({
-                day,
-            }),
+            body: JSON.stringify(body),
         })
             .then((response) => {
                 if (!response.ok) {
@@ -53,13 +66,11 @@ export const fetchDayAppointments = (day, clientId) => {
 
                 return response.json()
             })
-            .then((appointments) => {
-                setTimeout(() => {
-                    resolve(appointments)
-                }, 500)
+            .then((count) => {
+                resolve(count)
             })
             .catch((error) => {
-                console.error('Error fetching appointments:', error)
+                console.error('Error fetching data:', error)
                 reject([])
             })
     })
