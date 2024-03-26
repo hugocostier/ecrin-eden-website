@@ -52,7 +52,8 @@ export const AuthProvider = () => {
                     localStorage.setItem('user', JSON.stringify(res.user))
                     localStorage.setItem('expiration', expiration)
 
-                    navigate('/user')
+                    if (res.user.role === 'admin') navigate('/admin')
+                    else navigate('/user')
 
                     resolve(res)
                 })
