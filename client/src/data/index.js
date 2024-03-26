@@ -7,4 +7,4 @@ export { priceLoader } from './price.loader'
 export { serviceLoader } from './service.loader'
 
 // Fetches
-export { fetchAppointments, fetchDayAppointments } from './appointments/appointments.fetch'
+export { fetchAppointments, fetchCountAppointments } from './appointments/appointments.fetch'
