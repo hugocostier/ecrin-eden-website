@@ -2,8 +2,57 @@ import { useEffect, useState } from 'react'
 import StyledComponents from 'styled-components'
 import image from '../../../assets/images/dashboard.jpg'
 import { Calendar } from '../../../components/private-dashboard/calendar/Calendar'
-import { useUserInfo } from '../../../hooks/useUserInfo.hook'
+import { fetchCountAppointments } from '../../../data'
+import { useClientInfo } from '../../../hooks/useClientInfo.hook'
 import { calculateWeekBounds } from '../../../utils/calculateWeekBounds.util'
+
+export const MyDashboard = () => {
+    const client = useClientInfo();
+    const [count, setCount] = useState(null);
+
+    useEffect(() => {
+        if (client.id) {
+            const weekBounds = calculateWeekBounds(new Date());
+            const firstDayOfWeek = weekBounds.firstDay.toISOString().split('T')[0];
+            const lastDayOfWeek = weekBounds.lastDay.toISOString().split('T')[0];
+
+            fetchCountAppointments({ clientId: client.id, firstDayOfWeek, lastDayOfWeek, today: new Date().toISOString().split('T')[0] })
+                .then(count => {
+                    setCount(count.data);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        }
+
+        return () => {
+            setCount(null);
+        }
+    }, [client.id]); // Fetch data whenever client.id changes
+
+    return (
+        <StyledDashboard>
+            <section className='page-header'>
+                <h2>Bonjour {client.firstName},</h2>
+                {count !== null && count > 0 ?
+                    (
+                        <p>Tu as {count} rendez-vous cette semaine.</p>
+                    )
+                    : count === null ? (
+                        <p>Tu n&apos;as pas de rendez-vous cette semaine.</p>
+                    ) : (
+                        <p>Loading...</p>
+                    )}
+            </section>
+
+            <Calendar />
+
+            <aside>
+                <img src={image} alt='dashboard' />
+            </aside>
+        </StyledDashboard>
+    );
+};
 
 const StyledDashboard = StyledComponents.main`
     display: grid; 
@@ -54,71 +103,3 @@ const StyledDashboard = StyledComponents.main`
         }
     }
 `
-
-export const MyDashboard = () => {
-    const user = useUserInfo();
-    const [count, setCount] = useState(null);
-
-    useEffect(() => {
-        if (user.id) {
-            const weekBounds = calculateWeekBounds(new Date());
-            const firstDayOfWeek = weekBounds.firstDay.toISOString().split('T')[0];
-            const lastDayOfWeek = weekBounds.lastDay.toISOString().split('T')[0];
-
-            const fetchData = () => {
-                return new Promise((resolve, reject) => {
-                    fetch(`http://localhost:3000/api/v1/appointments/count/${user.id}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            startDate: firstDayOfWeek,
-                            endDate: lastDayOfWeek,
-                        }),
-                        credentials: 'include'
-                    })
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('HTTP Error ! Status: ' + response.status);
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            setCount(data.data); // Update count state with fetched data
-                            resolve();
-                        })
-                        .catch(error => {
-                            console.error('Error fetching data:', error);
-                            reject();
-                        });
-                })
-            }
-
-            fetchData();
-        }
-    }, [user.id]); // Fetch data whenever user.id changes
-
-    return (
-        <StyledDashboard>
-            <section className='page-header'>
-                <h2>Bonjour {user.firstName},</h2>
-                {count !== null && count > 0 ?
-                    (
-                        <p>Tu as {count} rendez-vous cette semaine.</p>
-                    )
-                    : count === null ? (
-                        <p>Tu n&apos;as pas de rendez-vous cette semaine.</p>
-                    ) : (
-                        <p>Loading...</p>
-                    )}
-            </section>
-
-            <Calendar />
-
-            <aside>
-                <img src={image} alt='dashboard' />
-            </aside>
-        </StyledDashboard>
-    );
-};
