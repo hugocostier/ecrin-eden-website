@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Link, NavLink, Outlet } from 'react-router-dom'
 import StyledComponents, { keyframes } from 'styled-components'
 import logo from '../../assets/images/logo.jpg'
 import burger from '../../assets/images/svg/burger.svg'
 import close from '../../assets/images/svg/close.svg'
 import { useAuth } from '../../hooks/useAuth.hook'
+import { useClientInfo } from '../../hooks/useClientInfo.hook'
 
 const pages = [
     {
@@ -36,45 +37,9 @@ const pages = [
 export const Navbar = () => {
     // Manage the state of the user
     const auth = useAuth()
+    const client = useClientInfo()
 
-    const [userInfo, setUserInfo] = useState({
-        firstName: '',
-        lastName: '',
-        profilePicture: ''
-    })
-
-    useEffect(() => {
-        const getUserInfo = async () => {
-            try {
-                const response = await fetch(`http://localhost:3000/api/v1/clients/user/${auth.user.id}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                })
-
-                const res = await response.json()
-
-                if (res.data) {
-                    setUserInfo({
-                        firstName: res.data.first_name,
-                        lastName: res.data.last_name,
-                        profilePicture: res.data.profile_picture ? res.data.profile_picture : 'src/assets/images/default-profile-picture.png'
-                    })
-                } else {
-                    throw new Error(res.message)
-                }
-            } catch (err) {
-                console.error('Error getting user info :', err)
-            }
-        }
-
-        (async () => {
-            if (auth.user) {
-                await getUserInfo()
-            }
-        })()
-    }, [auth.user])
+    const account = auth?.user?.role === 'admin' ? '/admin' : '/user'
 
     // Manage the state of the menu
     const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -104,15 +69,15 @@ export const Navbar = () => {
                             {auth.user ? (
                                 <div className='logged-user'>
                                     <Link
-                                        to={'/user'}
+                                        to={account}
                                         key={'user'}
                                         className={isMenuOpen ? 'appear user' : 'user'}
                                         style={{
                                             animationDelay: '0.1s'
                                         }}
                                     >
-                                        <img id='user-picture' src={userInfo.profilePicture} alt='profile' />
-                                        <span>{userInfo.firstName} {userInfo.lastName}</span>
+                                        <img id='user-picture' src={client.profilePicture} alt='profile' />
+                                        <span>{client.firstName} {client.lastName}</span>
                                     </Link>
                                     <button
                                         onClick={() => auth.logOut()}
