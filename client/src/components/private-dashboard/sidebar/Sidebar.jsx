@@ -5,8 +5,8 @@ import { NavButton } from './NavButton'
 import { NavHeader } from './NavHeader'
 import { SubMenu } from './SubMenu'
 
-export const Sidebar = ({ menuItems, user }) => {
-    const [activeItem, setActiveItem] = useState('Accueil')
+export const Sidebar = ({ menuItems }) => {
+    const [activeItem, setActiveItem] = useState('')
 
     const handleClick = (item) => {
         setActiveItem((prevActiveItem) => prevActiveItem !== item ? item : '')
@@ -14,7 +14,7 @@ export const Sidebar = ({ menuItems, user }) => {
 
     return (
         <StyledSidebar className='user-navbar'>
-            <NavHeader user={user} />
+            <NavHeader />
             {menuItems.map((item, index) => (
                 <Fragment key={index}>
                     {!item.items && (
@@ -51,8 +51,7 @@ export const Sidebar = ({ menuItems, user }) => {
 }
 
 Sidebar.propTypes = {
-    menuItems: PropTypes.array.isRequired,
-    user: PropTypes.object.isRequired,
+    menuItems: PropTypes.array.isRequired
 }
 
 const StyledSidebar = StyledComponents.aside`

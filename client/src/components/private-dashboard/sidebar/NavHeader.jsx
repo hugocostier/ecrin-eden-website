@@ -1,21 +1,23 @@
-import PropTypes from 'prop-types'
 import StyledComponents from 'styled-components'
+import { useAuth } from '../../../hooks/useAuth.hook'
+import { useClientInfo } from '../../../hooks/useClientInfo.hook'
 
-export const NavHeader = ({ user }) => (
-    <StyledNavHeader>
-        <div className="profile-picture">
-            <img src={user.profilePicture ? user.profilePicture : 'src/assets/images/default-profile-picture.png'} alt='profile' />
-        </div>
+export const NavHeader = () => {
+    const auth = useAuth()
+    const client = useClientInfo()
 
-        <div className='user-info'>
-            <h3>{user.firstName && user.lastName ? user.firstName + ' ' + user.lastName : 'John Doe'}</h3>
-            <p>{user.role === 'admin' ? 'Administrateur' : 'Utilisateur'}</p>
-        </div>
-    </StyledNavHeader>
-)
+    return (
+        <StyledNavHeader>
+            <div className="profile-picture">
+                <img src={client.profilePicture ? client.profilePicture : 'src/assets/images/default-profile-picture.png'} alt='profile' />
+            </div>
 
-NavHeader.propTypes = {
-    user: PropTypes.object.isRequired
+            <div className='user-info'>
+                <h3>{client.firstName && client.lastName ? client.firstName + ' ' + client.lastName : 'John Doe'}</h3>
+                <p>{auth.user.role === 'admin' ? 'Administrateur' : 'Utilisateur'}</p>
+            </div>
+        </StyledNavHeader>
+    )
 }
 
 const StyledNavHeader = StyledComponents.header`

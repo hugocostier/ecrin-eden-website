@@ -1,10 +1,13 @@
-import { useEffect, useState } from 'react'
-import { useAuth } from './useAuth.hook'
+import { createContext, useEffect, useState } from 'react'
+import { Outlet } from 'react-router-dom'
+import { useAuth } from '../hooks/useAuth.hook'
 
-export const useUserInfo = () => {
+export const ClientContext = createContext()
+
+export const ClientProvider = () => {
     const auth = useAuth()
 
-    const [userInfo, setUserInfo] = useState({
+    const [clientInfo, setClientInfo] = useState({
         firstName: '',
         lastName: '',
         profilePicture: '',
@@ -13,7 +16,7 @@ export const useUserInfo = () => {
     })
 
     useEffect(() => {
-        const getUserInfo = async () => {
+        const getClientInfo = async () => {
             try {
                 if (auth.user) {
                     const response = await fetch(`http://localhost:3000/api/v1/clients/user/${auth.user.id}`, {
@@ -27,7 +30,9 @@ export const useUserInfo = () => {
                     const res = await response.json()
 
                     if (res.data) {
-                        setUserInfo({
+                        console.log('Client', res.data)
+
+                        setClientInfo({
                             id: res.data.id,
                             firstName: res.data.first_name,
                             lastName: res.data.last_name,
@@ -42,8 +47,12 @@ export const useUserInfo = () => {
             }
         }
 
-        getUserInfo()
+        getClientInfo()
     }, [auth.user])
 
-    return userInfo
+    return (
+        <ClientContext.Provider value={clientInfo}>
+            <Outlet />
+        </ClientContext.Provider>
+    )
 }

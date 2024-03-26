@@ -1,12 +1,16 @@
-import PropTypes from 'prop-types';
 import { Link, useNavigate } from 'react-router-dom';
 import StyledComponents from 'styled-components';
+import defaultPicture from '../../assets/images/default-profile-picture.png';
 import logo from '../../assets/images/logo.jpg';
 import { useAuth } from '../../hooks/useAuth.hook';
+import { useClientInfo } from '../../hooks/useClientInfo.hook';
 
-export const Header = ({ user }) => {
+export const Header = () => {
     const auth = useAuth()
+    const client = useClientInfo()
     const navigate = useNavigate()
+
+    console.log(client)
 
     const handleLogout = () => {
         navigate('/')
@@ -27,8 +31,8 @@ export const Header = ({ user }) => {
 
             <div className='user-container'>
                 <div className='user'>
-                    <img id='user-picture' src={user.profilePicture ? user.profilePicture : 'src/assets/images/default-profile-picture.png'} alt='profile' />
-                    <p>{user.firstName && user.lastName ? user.firstName + ' ' + user.lastName : 'John Doe'}</p>
+                    <img id='user-picture' src={client.profilePicture ? client.profilePicture : defaultPicture} alt='profile' />
+                    <p>{client.firstName && client.lastName ? client.firstName + ' ' + client.lastName : 'John Doe'}</p>
                     <button
                         onClick={() => handleLogout()}
                         className='logout'
@@ -39,10 +43,6 @@ export const Header = ({ user }) => {
             </div>
         </StyledHeader>
     )
-}
-
-Header.propTypes = {
-    user: PropTypes.object.isRequired
 }
 
 const StyledHeader = StyledComponents.header`
