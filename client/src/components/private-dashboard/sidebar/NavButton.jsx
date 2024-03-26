@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import { Link, useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import StyledComponents from 'styled-components'
 import { useAuth } from '../../../hooks/useAuth.hook'
 import { Icon } from './Icon'
@@ -41,6 +41,10 @@ export const NavButton = ({ onClick, name, icon, isActive, hasSubNav, navigateTo
     return (
         <StyledNavLink
             to={navigateTo}
+
+            {...(navigateTo === '/user' ? { end: true } : {})}
+            {...(navigateTo === '/admin' ? { end: true } : {})}
+
             onClick={() => onClick(name)}
             className={isActive ? 'active' : ''}
         >
@@ -60,7 +64,7 @@ NavButton.propTypes = {
     navigateTo: PropTypes.string
 }
 
-const StyledNavLink = StyledComponents(Link)`
+const StyledNavLink = StyledComponents(NavLink)`
     position: relative;
     display: flex;
     background: transparent;
