@@ -17,6 +17,10 @@ export const LoginRegisterPage = () => {
     }
 
     if (user.loggedIn) {
+        if (user.user.role === 'admin') {
+            return <Navigate to='/admin' replace />
+        }
+
         return <Navigate to='/user' replace />
     }
 
