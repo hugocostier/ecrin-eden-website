@@ -207,11 +207,7 @@ class AuthController {
         }
 
         const now = Date.now() // Get the current time
-        console.log('Now:', now)
         const otpTime = new Date(user.otpExpires).getTime() // Get the time the token expires
-        console.log('Otp time:', otpTime)
-
-        console.log('otpTime - now:', otpTime - now)
 
         // Check if the OTP has expired (10 minutes)
         if (otpTime - now <= 0) {
