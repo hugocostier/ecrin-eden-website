@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, NavLink, Outlet } from 'react-router-dom'
 import StyledComponents, { keyframes } from 'styled-components'
-import logo from '../../assets/images/logo.jpg'
+import logo from '../../assets/images/logo-white.png'
 import burger from '../../assets/images/svg/burger.svg'
 import close from '../../assets/images/svg/close.svg'
 import { useAuth } from '../../hooks/useAuth.hook'
@@ -182,9 +182,10 @@ const NavbarContainer = StyledComponents.header`
         transition: 0.3s;
 
         .logo-nav {
-            width: 60px;
+            width: 70px;
             margin-left: 20px;
             cursor: pointer;
+            line-height: 0;
 
             img {
                 width: 100%;
@@ -345,12 +346,6 @@ const NavbarContainer = StyledComponents.header`
         .nav-bar {
             &:not(.open) > .logo-nav {
                 z-index: 3;
-            }
-
-            &> .logo-nav {
-                width: 60px;
-                margin-left: 20px;
-                cursor: pointer;
             }
             
             &.open {

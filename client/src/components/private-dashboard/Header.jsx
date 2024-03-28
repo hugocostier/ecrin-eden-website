@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import StyledComponents from 'styled-components';
 import defaultPicture from '../../assets/images/default-profile-picture.png';
-import logo from '../../assets/images/logo.jpg';
+import logo from '../../assets/images/logo-white.png';
 import { useAuth } from '../../hooks/useAuth.hook';
 import { useClientInfo } from '../../hooks/useClientInfo.hook';
 

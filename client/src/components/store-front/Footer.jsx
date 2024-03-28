@@ -4,7 +4,7 @@ import { faArrowUp } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Link } from "react-router-dom"
 import StyledComponents from 'styled-components'
-import logo from '../../assets/images/logo.jpg'
+import logo from '../../assets/images/logo-black.png'
 
 library.add(faFacebookF, faInstagram, faXTwitter, faLinkedinIn, faArrowUp)
 
@@ -293,10 +293,6 @@ const FooterTop = StyledComponents.section`
             column-gap: 20px;
         }
     
-        .logo {
-            margin: 0 0 50px;
-        }
-    
         &> .btn-appointment {
             width: 70%;
             font-size: 1.25em;
@@ -375,13 +371,6 @@ const FooterTop = StyledComponents.section`
         .navigate {
             grid-column: 1/2;
             grid-row: 2/3;
-            align-self: center;
-        }
-    
-        .logo {
-            grid-column: 1/2;
-            grid-row: 1/2;
-            margin: 0 auto;
             align-self: center;
         }
     }
