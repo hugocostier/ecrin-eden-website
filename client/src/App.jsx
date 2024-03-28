@@ -83,7 +83,7 @@ const Router = createBrowserRouter(
                     <Route
                         index={true}
                         element={
-                            <PrivateRoute isAllowed={['user', 'admin']} redirectPath='/login' >
+                            <PrivateRoute isAllowed={['user']} redirectPath='/login' >
                                 <page.MyDashboard />
                             </PrivateRoute>
                         }
@@ -92,7 +92,7 @@ const Router = createBrowserRouter(
                     <Route
                         path='appointments'
                         element={
-                            <PrivateRoute isAllowed={['user', 'admin']} redirectPath='/login' >
+                            <PrivateRoute isAllowed={['user']} redirectPath='/login' >
                                 <page.MyAppointments />
                             </PrivateRoute>
                         }
@@ -101,7 +101,7 @@ const Router = createBrowserRouter(
                     <Route
                         path='preferences'
                         element={
-                            <PrivateRoute isAllowed={['user', 'admin']} redirectPath='/login' >
+                            <PrivateRoute isAllowed={['user']} redirectPath='/login' >
                                 <page.MyPreferences />
                             </PrivateRoute>
                         }
@@ -110,7 +110,7 @@ const Router = createBrowserRouter(
                     <Route
                         path='account'
                         element={
-                            <PrivateRoute isAllowed={['user', 'admin']} redirectPath='/login' >
+                            <PrivateRoute isAllowed={['user']} redirectPath='/login' >
                                 <page.AccountPage />
                             </PrivateRoute>
                         }
@@ -119,151 +119,149 @@ const Router = createBrowserRouter(
                     <Route
                         path='settings'
                         element={
-                            <PrivateRoute isAllowed={['user', 'admin']} redirectPath='/login' >
+                            <PrivateRoute isAllowed={['user']} redirectPath='/login' >
                                 <page.SettingsPage />
                             </PrivateRoute>
                         }
                     />
                 </Route>
 
-                <Route element={<PrivateRoute isAllowed={['admin']} redirectPath='/login' />} >
+                <Route
+                    path='/admin'
+                    element={<PrivateRoot />}
+                    errorElement={<page.ErrorPage />}
+                >
                     <Route
-                        path='/admin'
-                        element={<PrivateRoot />}
-                        errorElement={<page.ErrorPage />}
+                        index={true}
+                        element={
+                            <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
+                                <page.AdminDashboard />
+                            </PrivateRoute>
+                        }
+                    />
+
+                    <Route
+                        path='appointments'
                     >
                         <Route
                             index={true}
                             element={
                                 <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
-                                    <page.AdminDashboard />
+                                    <page.AdminAppointments />
+                                </PrivateRoute>
+                            }
+                        />
+
+
+                        <Route
+                            path=':id'
+                            element={
+                                <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
+                                    <page.SeeAppointment />
                                 </PrivateRoute>
                             }
                         />
 
                         <Route
-                            path='appointments'
-                        >
-                            <Route
-                                index={true}
-                                element={
-                                    <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
-                                        <page.AdminAppointments />
-                                    </PrivateRoute>
-                                }
-                            />
-
-
-                            <Route
-                                path=':id'
-                                element={
-                                    <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
-                                        <page.SeeAppointment />
-                                    </PrivateRoute>
-                                }
-                            />
-
-                            <Route
-                                path='add'
-                                element={
-                                    <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
-                                        <page.AddAppointment />
-                                    </PrivateRoute>
-                                }
-                            />
-
-                            <Route
-                                path='update/:id'
-                                element={
-                                    <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
-                                        <page.UpdateAppointment />
-                                    </PrivateRoute>
-                                }
-                            />
-                        </Route>
-
-                        <Route
-                            path='clients'
-
-                        >
-                            <Route
-                                index={true}
-                                element={
-                                    <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
-                                        <page.AdminClients />
-                                    </PrivateRoute>
-                                }
-                            />
-
-                            <Route
-                                path=':id'
-                                element={
-                                    <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
-                                        <page.SeeClient />
-                                    </PrivateRoute>
-                                }
-                            />
-
-                            <Route
-                                path='add'
-                                element={
-                                    <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
-                                        <page.AddClient />
-                                    </PrivateRoute>
-                                }
-                            />
-
-                            <Route
-                                path='update/:id'
-                                element={
-                                    <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
-                                        <page.UpdateClient />
-                                    </PrivateRoute>
-                                }
-                            />
-                        </Route>
-
-                        <Route
-                            path='content'
-
-                        >
-                            <Route
-                                index={true}
-                                element={
-                                    <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
-                                        <page.AdminContent />
-                                    </PrivateRoute>
-                                }
-                            />
-
-                            <Route
-                                path='update/:id'
-                                element={
-                                    <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
-                                        <page.UpdateContent />
-                                    </PrivateRoute>
-                                }
-                            />
-                        </Route>
-
-                        <Route
-                            path='account'
+                            path='add'
                             element={
                                 <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
-                                    <page.AccountPage />
+                                    <page.AddAppointment />
                                 </PrivateRoute>
                             }
                         />
 
                         <Route
-                            path='settings'
+                            path='update/:id'
                             element={
                                 <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
-                                    <page.SettingsPage />
+                                    <page.UpdateAppointment />
                                 </PrivateRoute>
                             }
                         />
                     </Route>
+
+                    <Route
+                        path='clients'
+
+                    >
+                        <Route
+                            index={true}
+                            element={
+                                <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
+                                    <page.AdminClients />
+                                </PrivateRoute>
+                            }
+                        />
+
+                        <Route
+                            path=':id'
+                            element={
+                                <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
+                                    <page.SeeClient />
+                                </PrivateRoute>
+                            }
+                        />
+
+                        <Route
+                            path='add'
+                            element={
+                                <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
+                                    <page.AddClient />
+                                </PrivateRoute>
+                            }
+                        />
+
+                        <Route
+                            path='update/:id'
+                            element={
+                                <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
+                                    <page.UpdateClient />
+                                </PrivateRoute>
+                            }
+                        />
+                    </Route>
+
+                    <Route
+                        path='content'
+
+                    >
+                        <Route
+                            index={true}
+                            element={
+                                <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
+                                    <page.AdminContent />
+                                </PrivateRoute>
+                            }
+                        />
+
+                        <Route
+                            path='update/:id'
+                            element={
+                                <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
+                                    <page.UpdateContent />
+                                </PrivateRoute>
+                            }
+                        />
+                    </Route>
+
+                    <Route
+                        path='account'
+                        element={
+                            <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
+                                <page.AccountPage />
+                            </PrivateRoute>
+                        }
+                    />
+
+                    <Route
+                        path='settings'
+                        element={
+                            <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
+                                <page.SettingsPage />
+                            </PrivateRoute>
+                        }
+                    />
                 </Route>
             </Route>
         </Route>
