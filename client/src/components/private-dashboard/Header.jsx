@@ -10,8 +10,6 @@ export const Header = () => {
     const client = useClientInfo()
     const navigate = useNavigate()
 
-    console.log(client)
-
     const handleLogout = () => {
         navigate('/')
         auth.logOut()

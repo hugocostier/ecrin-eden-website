@@ -1,5 +1,6 @@
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useCallback, useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom'
+import defaultPicture from '../assets/images/default-profile-picture.png'
 import { useAuth } from '../hooks/useAuth.hook'
 
 export const ClientContext = createContext()
@@ -15,40 +16,47 @@ export const ClientProvider = () => {
         id: ''
     })
 
-    useEffect(() => {
-        const getClientInfo = async () => {
-            try {
-                if (auth.user) {
-                    const response = await fetch(`http://localhost:3000/api/v1/clients/user/${auth.user.id}`, {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        credentials: 'include'
+    const getClientInfo = useCallback(() => {
+        return new Promise((resolve, reject) => {
+            fetch(`http://localhost:3000/api/v1/clients/user/${auth.user.id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include'
+            })
+                .then(async response => {
+                    if (!response.ok) {
+                        throw new Error('HTTP Error ! Status: ' + response.status)
+                    }
+
+                    return response.json()
+                })
+                .then(res => {
+                    if (!res.data) {
+                        reject({ message: 'Client not found' })
+                    }
+
+                    setClientInfo({
+                        id: res.data.id,
+                        firstName: res.data.first_name,
+                        lastName: res.data.last_name,
+                        profilePicture: res.data.profile_picture ? res.data.profile_picture : defaultPicture
                     })
 
-                    const res = await response.json()
+                    resolve(res)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    }, [auth])
 
-                    if (res.data) {
-                        console.log('Client', res.data)
-
-                        setClientInfo({
-                            id: res.data.id,
-                            firstName: res.data.first_name,
-                            lastName: res.data.last_name,
-                            profilePicture: res.data.profile_picture ? res.data.profile_picture : 'src/assets/images/default-profile-picture.png'
-                        })
-                    } else {
-                        throw new Error(res.message)
-                    }
-                }
-            } catch (err) {
-                console.error('Error getting user info :', err)
-            }
+    useEffect(() => {
+        if (auth.user) {
+            getClientInfo()
         }
-
-        getClientInfo()
-    }, [auth.user])
+    }, [getClientInfo, auth.user])
 
     return (
         <ClientContext.Provider value={clientInfo}>

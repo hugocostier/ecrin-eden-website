@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import StyledComponents from 'styled-components'
 import { Header, Sidebar } from '../../components'
@@ -108,6 +109,13 @@ const adminMenu = [
 
 export const PrivateRoot = () => {
     const user = useAuth()
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        setLoading(false)
+    }, [user])
+
+    if (loading) return null
 
     const items = user.user.role === 'admin' ? adminMenu : userMenu
 
