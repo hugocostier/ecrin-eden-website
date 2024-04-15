@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import StyledComponents from 'styled-components'
-import { fetchClientPreferences, updateClientPreferences } from '../../../data/admin/preferences'
+import { fetchClientPreferences, updateClientPreferences } from '../../../data/admin/preferences.fetch'
 import { useClientInfo } from '../../../hooks/useClientInfo.hook'
 
 export const MyPreferences = () => {
