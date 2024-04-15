@@ -86,7 +86,10 @@ class AuthController {
     }
 
     public isAdmin = async (req: Request, res: Response, next: NextFunction) => {
-        if (req.isAuthenticated() && req.user?.role === 'admin') {
+        // Get the user from the request 
+        const user = req.user as User 
+
+        if (req.isAuthenticated() && user.role === 'admin') {
             return next()
         }
 
@@ -94,14 +97,14 @@ class AuthController {
     }
 
     public isAuthorized = async (req: Request, res: Response, next: NextFunction) => {
-        // Get the id of the authenticated user
-        const userId = req.user?.id
+        // Get the user from the request
+        const user = req.user as User
 
         // Get the id of the ressource owner
         const ressourceId = parseInt(req.params.id)
 
         // Compare the ids
-        if (userId === ressourceId || req.user?.role === 'admin') {
+        if (user.id === ressourceId || user.role === 'admin') {
             // If they match, call next()
             return next()
         }
