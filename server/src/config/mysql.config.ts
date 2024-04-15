@@ -5,6 +5,7 @@ import { DataSource } from 'typeorm'
 import { fileURLToPath } from 'url'
 import { Appointment } from '../entities/Appointment.js'
 import { Client } from '../entities/Client.js'
+import { Preferences } from '../entities/Preferences.js'
 import { Service } from '../entities/Service.js'
 import { User } from '../entities/User.js'
 
@@ -22,7 +23,7 @@ const AppDataSource = new DataSource({
     database: process.env.MYSQL_DB,
     synchronize: true,
     logging: true, 
-    entities: [User, Client, Service, Appointment], 
+    entities: [User, Client, Service, Appointment, Preferences], 
     migrations: [__dirname + '/../migrations/*.ts'],
     subscribers: [__dirname + '/../subscribers/*.ts'],
 })
