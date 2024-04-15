@@ -3,8 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import StyledComponents from 'styled-components'
 import defaultPicture from '../../../../assets/images/default-profile-picture.png'
-import { fetchClient, updateClient } from "../../../../data/admin/clients"
-import { fetchClientPreferences } from '../../../../data/admin/preferences'
+import { fetchClient, updateClient } from "../../../../data/admin/clients.fetch"
+import { fetchClientPreferences } from '../../../../data/admin/preferences.fetch'
 import { SERVER_URL } from '../../../../utils/serverUrl.util'
 
 export const UpdateClient = () => {

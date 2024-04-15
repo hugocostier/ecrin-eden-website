@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import StyledComponents from 'styled-components'
-import { deleteClient, fetchClients } from "../../../../data/admin/clients"
+import { deleteClient, fetchClients } from "../../../../data/admin/clients.fetch"
 
 export const AdminClients = () => {
     const [clients, setClients] = useState([])

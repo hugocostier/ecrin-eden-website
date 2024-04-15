@@ -2,7 +2,7 @@ import { Fragment, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { fetchAppointments } from '../../../../data'
-import { fetchClient } from '../../../../data/admin/clients'
+import { fetchClient } from '../../../../data/admin/clients.fetch'
 
 export const SeeClient = () => {
     const { id: clientId } = useParams()
@@ -69,7 +69,7 @@ export const SeeClient = () => {
                                         <td>{appointment.date}</td>
                                         <td>{appointment.time}</td>
                                         <td>{appointment.status}</td>
-                                        <td>{appointment.is_away ? 'A domicile' : 'Au salon de massage'}</td>
+                                        <td>{appointment.is_away ? 'A domicile' : 'Au salon'}</td>
                                         <td>{appointment.service.name}</td>
                                         <td>{appointment.service.duration}</td>
                                         <td>{appointment.clientNotes}</td>

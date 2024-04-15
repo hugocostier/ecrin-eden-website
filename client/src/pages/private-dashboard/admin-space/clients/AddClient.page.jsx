@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import StyledComponents from 'styled-components'
 import defaultPicture from '../../../../assets/images/default-profile-picture.png'
-import { addClient } from "../../../../data/admin/clients"
+import { addClient } from "../../../../data/admin/clients.fetch"
 
 export const AddClient = () => {
     const navigate = useNavigate()
