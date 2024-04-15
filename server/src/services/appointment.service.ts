@@ -85,7 +85,7 @@ class AppointmentService {
     }
 
     // Get appointments for a client with options
-    async getAppointmentsByClient(clientId: string, showHistory?: boolean, showAll?: boolean, rangeStart?: string, rangeEnd?: string, day?: Date): Promise<Appointment[]> {
+    async getAppointmentsByClient(clientId: string, showHistory?: boolean, showAll?: boolean, rangeStart?: string, rangeEnd?: string, day?: Date) {
         let appointments = undefined
 
         // Return all appointments for a day 

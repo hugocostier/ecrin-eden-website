@@ -25,8 +25,31 @@ export const AppointmentRepository = AppDataSource.getRepository(Appointment).ex
 
     // Find all appointments for a client
     async findByClient(clientId: number) {
-        return await this.find({ where: { client: { id: clientId } } })
-    },
+        // return await this.find({ where: { client: { id: clientId } } })
+
+        const appointments = await this.createQueryBuilder('appointment')
+            .leftJoinAndSelect('appointment.client', 'client')
+            .leftJoinAndSelect('appointment.service', 'service')
+            .where('client.id = :id', { id: clientId })
+            .getMany()
+
+        const appointmentsData = appointments.map((appointment) => {
+            return {
+                id: appointment.id,
+                date: appointment.date,
+                time: appointment.time,
+                isAway: appointment.is_away,
+                clientNotes: appointment.client_notes,
+                privateNotes: appointment.private_notes,
+                service: {
+                    name: appointment.service?.name,
+                    duration: appointment.service?.duration
+                }
+            }
+        })
+
+        return appointmentsData
+    }, 
 
     // Find all appointments for a client in a day
     async findByClientForDay(clientId: number, date: Date) {
