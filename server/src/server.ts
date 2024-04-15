@@ -26,6 +26,7 @@ import path, { dirname } from 'path'
 import { fileURLToPath } from 'url'
 
 // Middleware
+import multer from './config/multer.config.js'
 import errorHandlerMiddleware from './middlewares/error-handler.js'
 import notFoundMiddleware from './middlewares/not-found.js'
 
@@ -35,6 +36,7 @@ import authRouter from './routes/auth.router.js'
 import clientRouter from './routes/client.router.js'
 import contentRouter from './routes/content.router.js'
 import formRouter from './routes/form.router.js'
+import preferencesRouter from './routes/preferences.router.js'
 import serviceRouter from './routes/service.router.js'
 import userRouter from './routes/user.router.js'
 
@@ -58,11 +60,16 @@ app.use(cors(corsOptions))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
+// Multer 
+app.use(multer.single('profile_picture'))
+
 // Static files
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
-app.use(express.static(path.resolve(__dirname, '../../client')))
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')))
+
+console.log(path.join(__dirname, '..', 'uploads'))
 
 // Authentication 
 app.use(passportConfig.initialize())
@@ -106,6 +113,7 @@ app.use('/api/v1/services', serviceRouter)
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/users', userRouter)
 app.use('/api/v1/form', formRouter)
+app.use('/api/v1/preferences', preferencesRouter)
 
 app.get('*', (req: Request, res: Response) => {
     res.sendFile(path.resolve(__dirname, '../../client', 'index.html'))
