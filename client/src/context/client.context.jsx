@@ -1,6 +1,5 @@
 import { createContext, useCallback, useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom'
-import defaultPicture from '../assets/images/default-profile-picture.png'
 import { useAuth } from '../hooks/useAuth.hook'
 
 export const ClientContext = createContext()
@@ -41,7 +40,7 @@ export const ClientProvider = () => {
                         id: res.data.id,
                         firstName: res.data.first_name,
                         lastName: res.data.last_name,
-                        profilePicture: res.data.profile_picture ? res.data.profile_picture : defaultPicture
+                        profilePicture: res.data.profile_picture
                     })
 
                     resolve(res)
