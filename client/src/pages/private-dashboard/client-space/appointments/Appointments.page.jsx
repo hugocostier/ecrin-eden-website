@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { fetchAppointments } from '../../../../data'
@@ -6,7 +6,6 @@ import { useClientInfo } from '../../../../hooks/useClientInfo.hook'
 
 export const MyAppointments = () => {
     const client = useClientInfo()
-
     const [appointments, setAppointments] = useState([])
 
     useEffect(() => {
@@ -33,7 +32,7 @@ export const MyAppointments = () => {
     }, [client.id])
 
     return (
-        <section>
+        <main>
             {appointments.length === 0 ? (
                 <>
                     <h2>Vous n&apos;avez pas de rendez-vous à venir</h2>
@@ -54,8 +53,8 @@ export const MyAppointments = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {appointments.map((appointment) => (
-                                <>
+                            {appointments.map((appointment, index) => (
+                                <Fragment key={index}>
                                     <tr key={appointment.id}>
                                         <td>{appointment.date}</td>
                                         <td>{appointment.time}</td>
@@ -71,12 +70,12 @@ export const MyAppointments = () => {
                                             <Link>Annuler le rendez-vous</Link>
                                         </td>
                                     </tr >
-                                </>
+                                </Fragment>
                             ))}
                         </tbody>
                     </table>
                 </section>
             )}
-        </ section>
+        </main>
     )
 }
