@@ -1,9 +1,11 @@
 import { Client } from '../entities/Client.js'
 import { CustomAPIError } from '../errors/custom-errors.js'
 import { ClientRepository } from '../repositories/client.repository.js'
+import { PreferencesRepository } from '../repositories/preferences.repository.js'
 
 export class ClientService {
     private _clientRepository = ClientRepository
+    private _preferencesRepository = PreferencesRepository
 
     // Get all clients
     async getAllClients() {
@@ -16,15 +18,38 @@ export class ClientService {
         return allClients
     }
 
-    // Get a client 
     async getClient(id: string) {
-        const client = await this._clientRepository.findById(parseInt(id))
+        const client = await this._clientRepository.createQueryBuilder('client')
+            .leftJoin('client.user', 'user')
+            .select([
+                'client', 
+                'user.id', 
+                'user.email'
+            ])
+            .where('client.id = :id', { id: parseInt(id) })
+            .getOne()
 
         if (!client) {
             throw new CustomAPIError(`No client found with id ${id}`, 404)
         }
 
-        return client
+        const returnedClient = {
+            id: client.id,
+            first_name: client.first_name,
+            last_name: client.last_name,
+            phone_number: client.phone_number,
+            birth_date: client.birth_date,
+            address: client.address,
+            postal_code: client.postal_code,
+            city: client.city,
+            shared_notes: client.shared_notes,
+            private_notes: client.private_notes,
+            profile_picture: client.profile_picture,
+            user_id: client.user?.id,
+            user_email: client.user?.email
+        }
+
+        return returnedClient
     }
 
     // Get a client by name 
@@ -129,10 +154,30 @@ export class ClientService {
             throw new CustomAPIError(`Client with name ${clientData.first_name} ${clientData.last_name} already exists`, 400)
         }
 
+        // Create a new client
         const client = await this._clientRepository.create(clientData).save() 
 
         if (!client) {
             throw new CustomAPIError('Client could not be created', 500)
+        }
+
+        // Create preferences for the client
+        const preferences = await this._preferencesRepository.create({}).save()
+
+        if (!preferences) {
+            throw new CustomAPIError('Preferences could not be created', 500)
+        }
+
+        // Link the preferences with the client
+        if (client.id) {
+            const linkedPreferences = await this._clientRepository.update(client.id, { preferences })
+
+            if (!linkedPreferences) {
+                throw new CustomAPIError('Preferences could not be linked to client', 500)
+            }
+
+            preferences.client = client 
+            await preferences.save()
         }
 
         return client
@@ -147,6 +192,8 @@ export class ClientService {
         }
 
         const client = await this._clientRepository.update(id, clientData)
+
+        console.log(client)
 
         if (!client) {
             throw new CustomAPIError(`Client with id ${id} could not be updated`, 500)
