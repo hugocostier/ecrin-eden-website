@@ -1,21 +1,27 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import StyledComponents from 'styled-components'
 import defaultPicture from '../../assets/images/default-profile-picture.png'
-import { fetchAccount } from '../../data/account.fetch'
-import { useAuth } from '../../hooks/useAuth.hook'
+import { fetchClient, updateClient } from "../../data/admin/clients.fetch"
 import { useClientInfo } from '../../hooks/useClientInfo.hook'
+import { SERVER_URL } from '../../utils/serverUrl.util'
 
 export const AccountPage = () => {
+    const navigate = useNavigate()
     const client = useClientInfo()
-    const user = useAuth()
 
     const [isEditable, setIsEditable] = useState(false)
+    const [previewImage, setPreviewImage] = useState('')
+    const [account, setAccount] = useState({})
+
     const [input, setInput] = useState({
         lastName: '',
         firstName: '',
         phone: '',
+        birthDate: '',
         address: '',
-        zipCode: '',
+        postalCode: '',
         city: '',
         email: '',
         profilePicture: '',
@@ -23,61 +29,72 @@ export const AccountPage = () => {
     })
 
     useEffect(() => {
-        if (user.user.id && client.id) {
-            fetchAccount(user.user.id, client.id)
-                .then((data) => {
-                    setInput({
-                        lastName: data.data.lastName ? data.data.lastName : '',
-                        firstName: data.data.firstName ? data.data.firstName : '',
-                        phone: data.data.phone ? data.data.phone : '',
-                        address: data.data.address ? data.data.address : '',
-                        zipCode: data.data.postalCode ? data.data.postalCode : '',
-                        city: data.data.city ? data.data.city : '',
-                        email: data.data.email ? data.data.email : '',
-                        password: data.data.password ? data.data.password : '',
-                        passwordConfirm: '',
-                        profilePicture: data.data.profilePicture ? data.data.profilePicture : '',
-                        sharedInfo: data.data.sharedNotes ? data.data.sharedNotes : '',
-                    })
+        fetchClient(client.id)
+            .then(fetchedClient => {
+                setAccount(fetchedClient)
+                setInput({
+                    lastName: fetchedClient.last_name ? fetchedClient.last_name : '',
+                    firstName: fetchedClient.first_name ? fetchedClient.first_name : '',
+                    phone: fetchedClient.phone_number ? fetchedClient.phone_number : '',
+                    birthDate: fetchedClient.birth_date ? fetchedClient.birth_date.split('T')[0] : '',
+                    address: fetchedClient.address ? fetchedClient.address : '',
+                    postalCode: fetchedClient.postal_code ? fetchedClient.postal_code : '',
+                    city: fetchedClient.city ? fetchedClient.city : '',
+                    email: fetchedClient.user_email ? fetchedClient.user_email : '',
+                    profilePicture: fetchedClient.profile_picture ? fetchedClient.profile_picture : '',
+                    sharedNotes: fetchedClient.shared_notes ? fetchedClient.shared_notes : '',
+                    privateNotes: fetchedClient.private_notes ? fetchedClient.private_notes : '',
                 })
-                .catch((error) => {
-                    console.error('Error fetching data:', error)
-                })
-        }
+            })
+            .catch(error => {
+                console.error('Error fetching client:', error)
+            })
 
         return () => {
-            setInput({
-                lastName: '',
-                firstName: '',
-                phone: '',
-                address: '',
-                zipCode: '',
-                city: '',
-                email: '',
-                profilePicture: '',
-                sharedInfo: '',
-            })
+            setAccount({})
         }
-    }, [user.user.id, client.id])
+    }, [client.id])
 
     const handleChange = (e) => {
-        setInput({
-            ...input,
-            [e.target.name]: e.target.value,
-        })
+        if (e.target.name === 'profilePicture') {
+            const file = e.target.files[0]
+
+            if (file) {
+                const reader = new FileReader()
+
+                reader.onloadend = () => {
+                    setPreviewImage(reader.result)
+                }
+
+                reader.readAsDataURL(file)
+
+                setInput({
+                    ...input,
+                    profilePicture: file,
+                })
+            }
+        }
+        else {
+            setInput({
+                ...input,
+                [e.target.name]: e.target.value,
+            })
+        }
     }
 
     const handleCancel = () => {
         setInput({
-            lastName: '',
-            firstName: '',
-            phone: '',
-            address: '',
-            zipCode: '',
-            city: '',
-            email: '',
-            profilePicture: '',
-            sharedInfo: '',
+            firstName: account.first_name,
+            lastName: account.last_name,
+            phone: account.phone_number ? account.phone_number : '',
+            birthDate: account.birth_date ? account.birth_date.split('T')[0] : '',
+            address: account.address ? account.address : '',
+            postalCode: account.postal_code ? account.postal_code : '',
+            city: account.city ? account.city : '',
+            email: account.user_email ? account.user_email : '',
+            profilePicture: account.profile_picture ? account.profile_picture : '',
+            sharedNotes: account.shared_notes ? account.shared_notes : '',
+            privateNotes: account.private_notes ? account.private_notes : '',
         })
 
         setIsEditable(false)
@@ -85,37 +102,63 @@ export const AccountPage = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log(input)
+
+        toast.promise(updateClient(client.id, input), {
+            pending: 'Modification...',
+            success: 'Informations personnelles modifiées !',
+            error: 'Erreur lors de la modification de vos informations personnelles'
+        }, { containerId: 'notification' })
+            .then(() => {
+                setInput({
+                    lastName: '',
+                    firstName: '',
+                    phone: '',
+                    birthDate: '',
+                    address: '',
+                    postalCode: '',
+                    city: '',
+                    email: '',
+                    profilePicture: '',
+                    sharedNotes: '',
+                    privateNotes: '',
+                })
+
+                const currentPath = window.location.pathname
+                navigate(currentPath.replace('/account', ''))
+            })
+            .catch(error => {
+                console.error('Error updating personal info:', error)
+            })
     }
 
     return (
-        <AccountContainer>
+        <Account>
             <h2>Mon compte</h2>
 
             <AccountForm>
-                {/* <label htmlFor="last-name">Nom</label> */}
+                <legend className='form-legend'>Informations personnelles</legend>
                 <input
                     type="text"
                     name="lastName"
                     id="last-name"
+                    required
                     value={input.lastName}
                     onChange={handleChange}
                     disabled={!isEditable}
-                // placeholder='Nom'
+                    placeholder='Nom'
                 />
 
-                {/* <label htmlFor="first-name">Prénom</label> */}
                 <input
                     type="text"
                     name="firstName"
                     id="first-name"
+                    required
                     value={input.firstName}
                     onChange={handleChange}
                     disabled={!isEditable}
-                // placeholder='Prénom'
+                    placeholder='Prénom'
                 />
 
-                {/* <label htmlFor="phone">Téléphone</label> */}
                 <input
                     type="tel"
                     name="phone"
@@ -123,21 +166,30 @@ export const AccountPage = () => {
                     value={input.phone}
                     onChange={handleChange}
                     disabled={!isEditable}
-                // placeholder='Téléphone'
+                    placeholder='Numéro de téléphone'
                 />
 
-                {/* <label htmlFor="email">Email</label> */}
+                <input
+                    type="date"
+                    name="birthDate"
+                    id="birth-date"
+                    value={input.birthDate}
+                    onChange={handleChange}
+                    disabled={!isEditable}
+                    placeholder='Date de naissance'
+                />
+
                 <input
                     type="email"
                     name="email"
                     id="email"
+                    required
                     value={input.email}
                     onChange={handleChange}
                     disabled={!isEditable}
-                // placeholder='Email'
+                    placeholder='Email'
                 />
 
-                {/* <label htmlFor="address">Adresse</label> */}
                 <input
                     type="text"
                     name="address"
@@ -145,21 +197,19 @@ export const AccountPage = () => {
                     value={input.address}
                     onChange={handleChange}
                     disabled={!isEditable}
-                // placeholder='Adresse'
+                    placeholder='Adresse'
                 />
 
-                {/* <label htmlFor="zip-code">Code postal</label> */}
                 <input
                     type="text"
-                    name="zipCode"
-                    id="zip-code"
-                    value={input.zipCode}
+                    name="postalCode"
+                    id="postal-code"
+                    value={input.postalCode}
                     onChange={handleChange}
                     disabled={!isEditable}
-                // placeholder='Code postal'
+                    placeholder='Code postal'
                 />
 
-                {/* <label htmlFor="city">Ville</label> */}
                 <input
                     type="text"
                     name="city"
@@ -167,35 +217,39 @@ export const AccountPage = () => {
                     value={input.city}
                     onChange={handleChange}
                     disabled={!isEditable}
-                // placeholder='Ville'
+                    placeholder='Ville'
                 />
 
                 <label
                     htmlFor="profile-picture"
                     id='profile-picture-container'
-                    style={{ cursor: isEditable ? 'pointer' : 'default' }}
                 >
-                    <img src={input.profilePicture ? input.profilePicture : defaultPicture} alt='profile-picture' />
+                    <div className='img-upload'>
+                        <img
+                            src={previewImage || (input.profilePicture ? `${SERVER_URL}/${input.profilePicture}` : defaultPicture)}
+                            alt='profile-picture'
+                            style={{ cursor: isEditable ? 'pointer' : 'default' }}
+                        />
+                    </div>
                 </label>
                 <input
                     type="file"
                     name="profilePicture"
                     id="profile-picture"
                     accept='image/*'
-                    value={input.profilePicture}
                     onChange={handleChange}
                     disabled={!isEditable}
                     style={{ display: 'none' }}
                 />
 
-                {/* <label htmlFor="shared-info">Informations partagées</label> */}
                 <textarea
-                    name="sharedInfo"
-                    id="shared-info"
-                    value={input.sharedInfo}
+                    name="sharedNotes"
+                    id="shared-notes"
+                    value={input.sharedNotes}
                     onChange={handleChange}
                     disabled={!isEditable}
-                // placeholder='Informations partagées'
+                    placeholder='Informations partagées avec le client'
+                    rows={8}
                 />
 
                 {!isEditable && (
@@ -227,18 +281,15 @@ export const AccountPage = () => {
                     </div>
                 )}
             </AccountForm>
-
-            <button
-                type="button"
-            >
-                Supprimer mon compte
-            </button>
-        </AccountContainer >
+        </Account>
     )
 }
 
-const AccountContainer = StyledComponents.main`
-    padding: 20px; 
+const Account = StyledComponents.main`
+    h2 {
+        text-align: center;
+        margin: 0; 
+    }
 `
 
 const AccountForm = StyledComponents.form`
@@ -248,22 +299,41 @@ const AccountForm = StyledComponents.form`
     row-gap: 0.5rem;
     max-width: 1000px;
     margin: 0 auto;
+    margin-bottom: 2rem;
+
+    legend {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-top: 1rem;
+
+        &:first-of-type {
+            grid-column: 1 / 3;
+            grid-row: 1 / 2;
+        }
+    }
     
     label {
         &#profile-picture-container {
             grid-column: 2 / 3;
-            grid-row: 1 / 4; 
-
+            grid-row: 2 / 6; 
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            align-items: center;
-            justify-items: center;
-            
-            img {
-                grid-column: 2 / 3;
-                width: 100%;
-                object-fit: cover;
-            }
+            border-radius: 50%;
+              
+            .img-upload {
+                width: 200px;
+                height: 200px;
+                overflow: hidden;
+                border-radius: 50%;
+                justify-self: center;
+                align-self: center;
+                
+                img {
+                    max-width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    object-position: 50% 50%; 
+                }
+            }            
         }
     }
 
@@ -271,6 +341,10 @@ const AccountForm = StyledComponents.form`
         margin-top: 0.5rem;
         padding: 0.5rem;
         width: 100%;
+
+        &:not(#email, [type='file']) {
+            text-transform: capitalize;
+        }
 
         &#last-name, &#first-name, &#phone {
             grid-column: 1 / 2; 
@@ -284,7 +358,7 @@ const AccountForm = StyledComponents.form`
             grid-column: 2 / 3;
         }
 
-        &#zip-code {
+        &#postal-code {
             grid-column: 1 / 2;
         }
     }
@@ -292,8 +366,9 @@ const AccountForm = StyledComponents.form`
     textarea {
         margin-top: 0.5rem;
         padding: 0.5rem;
+        resize: none;
         
-        &#shared-info {
+        &#shared-notes {
             grid-column: 1 / 3; 
         }
     }
