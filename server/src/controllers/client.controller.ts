@@ -85,6 +85,10 @@ class ClientController {
     // Update a client
     public updateClient = asyncHandler(async (req: Request, res: Response) => {
         const { id: clientId } = req.params 
+        
+        if (req.file) {
+            req.body.profile_picture = req.file.path
+        }
 
         const client = await this._clientService.updateClient(clientId, req.body)
 
