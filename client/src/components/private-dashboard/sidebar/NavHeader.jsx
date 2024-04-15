@@ -1,6 +1,8 @@
-import StyledComponents from 'styled-components'
-import { useAuth } from '../../../hooks/useAuth.hook'
-import { useClientInfo } from '../../../hooks/useClientInfo.hook'
+import StyledComponents from 'styled-components';
+import defaultPicture from "../../../assets/images/default-profile-picture.png";
+import { useAuth } from '../../../hooks/useAuth.hook';
+import { useClientInfo } from '../../../hooks/useClientInfo.hook';
+import { SERVER_URL } from '../../../utils/serverUrl.util';
 
 export const NavHeader = () => {
     const auth = useAuth()
@@ -9,7 +11,7 @@ export const NavHeader = () => {
     return (
         <StyledNavHeader>
             <div className="profile-picture">
-                <img src={client.profilePicture ? client.profilePicture : 'src/assets/images/default-profile-picture.png'} alt='profile' />
+                <img src={client.profilePicture ? `${SERVER_URL}/${client.profilePicture}` : defaultPicture} alt='profile' />
             </div>
 
             <div className='user-info'>
@@ -38,11 +40,14 @@ const StyledNavHeader = StyledComponents.header`
             height: 100px;
             width: 100px;
             overflow: hidden;
+            border-radius: 50%;
             margin-top: 30px;
 
             img { 
-                width: 100%;
-                object-fit: cover;    
+                max-width: 100%;
+                height: 100%;
+                object-fit: cover;
+                object-position: 50% 50%;   
             }
         }
 

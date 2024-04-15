@@ -4,6 +4,7 @@ import defaultPicture from '../../assets/images/default-profile-picture.png';
 import logo from '../../assets/images/logo-white.png';
 import { useAuth } from '../../hooks/useAuth.hook';
 import { useClientInfo } from '../../hooks/useClientInfo.hook';
+import { SERVER_URL } from '../../utils/serverUrl.util';
 
 export const Header = () => {
     const auth = useAuth()
@@ -14,6 +15,10 @@ export const Header = () => {
         navigate('/')
         auth.logOut()
     }
+
+    console.log('link: ', client.profilePicture ? `${SERVER_URL}/${client.profilePicture}` : defaultPicture)
+
+    console.log('client pp: ', client.profilePicture)
 
     return (
         <StyledHeader className='user-header'>
@@ -29,7 +34,7 @@ export const Header = () => {
 
             <div className='user-container'>
                 <div className='user'>
-                    <img id='user-picture' src={client.profilePicture ? client.profilePicture : defaultPicture} alt='profile' />
+                    <img id='user-picture' src={client.profilePicture ? `${SERVER_URL}/${client.profilePicture}` : defaultPicture} alt='profile' />
                     <p>{client.firstName && client.lastName ? client.firstName + ' ' + client.lastName : 'John Doe'}</p>
                     <button
                         onClick={() => handleLogout()}

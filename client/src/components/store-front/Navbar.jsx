@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { Link, NavLink, Outlet } from 'react-router-dom'
 import StyledComponents, { keyframes } from 'styled-components'
+import defaultPicture from "../../assets/images/default-profile-picture.png"
 import logo from '../../assets/images/logo-white.png'
 import burger from '../../assets/images/svg/burger.svg'
 import close from '../../assets/images/svg/close.svg'
 import { useAuth } from '../../hooks/useAuth.hook'
 import { useClientInfo } from '../../hooks/useClientInfo.hook'
+import { SERVER_URL } from '../../utils/serverUrl.util'
 
 const pages = [
     {
@@ -76,7 +78,7 @@ export const Navbar = () => {
                                             animationDelay: '0.1s'
                                         }}
                                     >
-                                        <img id='user-picture' src={client.profilePicture} alt='profile' />
+                                        <img id='user-picture' src={client.profilePicture ? `${SERVER_URL}/${client.profilePicture}` : defaultPicture} alt='profile' />
                                         <span>{client.firstName} {client.lastName}</span>
                                     </Link>
                                     <button
