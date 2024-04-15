@@ -8,11 +8,11 @@ const router = express.Router()
 
 router.route('/')
     .get(auth.isAdmin, client.getAllClients)
-    .post(auth.isAdmin, validationMiddleware(Client), client.addClient)
+    .post(auth.isAdmin, client.addClient)
 
 router.route('/:id')
     .get(auth.isLoggedIn, auth.isAuthorized, client.getClient)
-    .patch(auth.isLoggedIn, auth.isAuthorized, validationMiddleware(Client), client.updateClient)
+    .patch(auth.isLoggedIn, auth.isAuthorized, client.updateClient)
     .delete(auth.isAdmin, client.deleteClient)
 
 router.route('/user/:id') 
