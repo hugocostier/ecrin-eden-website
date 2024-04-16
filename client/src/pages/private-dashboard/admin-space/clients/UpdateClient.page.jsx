@@ -4,7 +4,7 @@ import { toast } from 'react-toastify'
 import StyledComponents from 'styled-components'
 import defaultPicture from '../../../../assets/images/default-profile-picture.png'
 import { fetchClient, updateClient } from "../../../../data/admin/clients.fetch"
-import { fetchClientPreferences } from '../../../../data/admin/preferences.fetch'
+import { fetchClientPreferences, updateClientPreferences } from '../../../../data/admin/preferences.fetch'
 import { SERVER_URL } from '../../../../utils/serverUrl.util'
 
 export const UpdateClient = () => {
@@ -29,13 +29,19 @@ export const UpdateClient = () => {
         profilePicture: '',
         sharedNotes: '',
         privateNotes: '',
+        question1: '',
+        question2: '',
+        question3: '',
+        question4: '',
+        question5: '',
     })
 
     useEffect(() => {
         fetchClient(clientId)
             .then(fetchedClient => {
                 setClient(fetchedClient)
-                setInput({
+                setInput(i => ({
+                    ...i,
                     lastName: fetchedClient.last_name ? fetchedClient.last_name : '',
                     firstName: fetchedClient.first_name ? fetchedClient.first_name : '',
                     phone: fetchedClient.phone_number ? fetchedClient.phone_number : '',
@@ -47,7 +53,7 @@ export const UpdateClient = () => {
                     profilePicture: fetchedClient.profile_picture ? fetchedClient.profile_picture : '',
                     sharedNotes: fetchedClient.shared_notes ? fetchedClient.shared_notes : '',
                     privateNotes: fetchedClient.private_notes ? fetchedClient.private_notes : '',
-                })
+                }))
 
                 if (fetchedClient.user_id) {
                     setHasAccount(true)
@@ -60,6 +66,14 @@ export const UpdateClient = () => {
         fetchClientPreferences(clientId)
             .then(preferences => {
                 setPreferences(preferences)
+                setInput(i => ({
+                    ...i,
+                    question1: preferences.question_1 ? preferences.question_1 : '',
+                    question2: preferences.question_2 ? preferences.question_2 : '',
+                    question3: preferences.question_3 ? preferences.question_3 : '',
+                    question4: preferences.question_4 ? preferences.question_4 : '',
+                    question5: preferences.question_5 ? preferences.question_5 : '',
+                }))
             })
             .catch(error => {
                 console.error('Error fetching client preferences:', error)
@@ -70,6 +84,8 @@ export const UpdateClient = () => {
             setPreferences({})
         }
     }, [clientId])
+
+    console.log('input:', input)
 
     const handleChange = (e) => {
         if (e.target.name === 'profilePicture') {
@@ -91,10 +107,10 @@ export const UpdateClient = () => {
             }
         }
         else {
-            setInput({
-                ...input,
+            setInput((prevInput) => ({
+                ...prevInput,
                 [e.target.name]: e.target.value,
-            })
+            }))
         }
     }
 
@@ -111,6 +127,11 @@ export const UpdateClient = () => {
             profilePicture: client.profile_picture ? client.profile_picture : '',
             sharedNotes: client.shared_notes ? client.shared_notes : '',
             privateNotes: client.private_notes ? client.private_notes : '',
+            question_1: preferences.question_1 ? preferences.question_1 : '',
+            question_2: preferences.question_2 ? preferences.question_2 : '',
+            question_3: preferences.question_3 ? preferences.question_3 : '',
+            question_4: preferences.question_4 ? preferences.question_4 : '',
+            question_5: preferences.question_5 ? preferences.question_5 : '',
         })
 
         setIsEditable(false)
@@ -119,7 +140,10 @@ export const UpdateClient = () => {
     const handleSubmit = (e) => {
         e.preventDefault()
 
-        toast.promise(updateClient(clientId, input), {
+        toast.promise(() => {
+            updateClient(clientId, input)
+            updateClientPreferences(clientId, input)
+        }, {
             pending: 'Modification...',
             success: 'Client modifié !',
             error: 'Erreur lors de la modification du client'
@@ -137,6 +161,11 @@ export const UpdateClient = () => {
                     profilePicture: '',
                     sharedNotes: '',
                     privateNotes: '',
+                    question1: '',
+                    question2: '',
+                    question3: '',
+                    question4: '',
+                    question5: '',
                 })
 
                 navigate(-1)
@@ -161,6 +190,7 @@ export const UpdateClient = () => {
                     onChange={handleChange}
                     disabled={hasAccount ? true : !isEditable}
                     placeholder='Nom'
+                    autoComplete='off'
                 />
 
                 <input
@@ -172,6 +202,7 @@ export const UpdateClient = () => {
                     onChange={handleChange}
                     disabled={hasAccount ? true : !isEditable}
                     placeholder='Prénom'
+                    autoComplete='off'
                 />
 
                 <input
@@ -182,6 +213,7 @@ export const UpdateClient = () => {
                     onChange={handleChange}
                     disabled={hasAccount ? true : !isEditable}
                     placeholder='Numéro de téléphone'
+                    autoComplete='off'
                 />
 
                 <input
@@ -192,6 +224,7 @@ export const UpdateClient = () => {
                     onChange={handleChange}
                     disabled={hasAccount ? true : !isEditable}
                     placeholder='Date de naissance'
+                    autoComplete='off'
                 />
 
                 <input
@@ -203,6 +236,7 @@ export const UpdateClient = () => {
                     onChange={handleChange}
                     disabled={hasAccount ? true : !isEditable}
                     placeholder='Email'
+                    autoComplete='off'
                 />
 
                 <input
@@ -213,6 +247,7 @@ export const UpdateClient = () => {
                     onChange={handleChange}
                     disabled={hasAccount ? true : !isEditable}
                     placeholder='Adresse'
+                    autoComplete='off'
                 />
 
                 <input
@@ -223,6 +258,7 @@ export const UpdateClient = () => {
                     onChange={handleChange}
                     disabled={hasAccount ? true : !isEditable}
                     placeholder='Code postal'
+                    autoComplete='off'
                 />
 
                 <input
@@ -233,6 +269,7 @@ export const UpdateClient = () => {
                     onChange={handleChange}
                     disabled={hasAccount ? true : !isEditable}
                     placeholder='Ville'
+                    autoComplete='off'
                 />
 
                 <label
@@ -259,12 +296,13 @@ export const UpdateClient = () => {
 
 
                 <legend className='form-legend'>Préférences</legend>
-                <label htmlFor="question-1">Êtes-vous frileux&#x28;se&#x29; ?</label>
+                <label htmlFor="question-1" className='user_preferences'>Êtes-vous frileux&#x28;se&#x29; ?</label>
                 <select
                     name="question1"
                     id="question-1"
-                    value={preferences.question_1}
-                    disabled
+                    value={input.question1}
+                    onChange={handleChange}
+                    disabled={hasAccount ? true : !isEditable}
                 >
                     <option
                         value="non"
@@ -288,30 +326,35 @@ export const UpdateClient = () => {
                     </option>
                 </select>
 
-                <label htmlFor="question-2">Quelles sont les zones où vous préférez recevoir des massages ?</label>
+                <label htmlFor="question-2" className='user_preferences'>Quelles sont les zones où vous préférez recevoir des massages ?</label>
                 <input
                     type="text"
                     name="question2"
                     id="question-2"
-                    value={preferences.question_2}
-                    disabled
+                    value={input.question2}
+                    onChange={handleChange}
+                    disabled={hasAccount ? true : !isEditable}
+                    placeholder="Votre réponse..."
                 />
 
-                <label htmlFor="question-3">Quelles sont les zones où vous n&apos;appréciez pas trop être massé ?</label>
+                <label htmlFor="question-3" className='user_preferences'>Quelles sont les zones où vous n&apos;appréciez pas trop être massé ?</label>
                 <input
                     type="text"
                     name="question3"
                     id="question-3"
-                    value={preferences.question_3}
-                    disabled
+                    value={input.question3}
+                    onChange={handleChange}
+                    disabled={hasAccount ? true : !isEditable}
+                    placeholder="Votre réponse..."
                 />
 
-                <label htmlFor="question-4">Quel type de pression aimez-vous ?</label>
+                <label htmlFor="question-4" className='user_preferences'>Quel type de pression aimez-vous ?</label>
                 <select
                     name="question4"
                     id="question-4"
-                    value={preferences.question_4}
-                    disabled
+                    value={input.question4}
+                    onChange={handleChange}
+                    disabled={hasAccount ? true : !isEditable}
                 >
                     <option
                         value="faible"
@@ -335,13 +378,14 @@ export const UpdateClient = () => {
                     </option>
                 </select>
 
-                <label htmlFor="question-5">Avez vous des éléments particuliers à signaler ?</label>
+                <label htmlFor="question-5" className='user_preferences'>Avez vous des éléments particuliers à signaler ?</label>
                 <textarea
                     name="question5"
                     id="question-5"
-                    value={preferences.question_5}
-                    disabled
-                    placeholder='Informations partagées avec le client'
+                    value={input.question5 ? input.question5 : undefined}
+                    onChange={handleChange}
+                    disabled={hasAccount ? true : !isEditable}
+                    placeholder="Votre réponse..."
                     rows={6}
                 />
 
@@ -410,30 +454,28 @@ const ClientRecord = StyledComponents.main`
 
 const StyledForm = StyledComponents.form`
     display: grid; 
-    grid-template-columns: repeat(2, 1fr);
-    column-gap: 1rem;
+    grid-template-columns: 1fr;
     row-gap: 0.5rem;
     max-width: 1000px;
     margin: 0 auto;
     margin-bottom: 2rem;
 
     legend {
+        text-align: center;
         font-size: 1.5rem;
         font-weight: bold;
         margin-top: 1rem;
-        grid-column: 1 / 3;
     }
     
     label {
         &#profile-picture-container {
-            grid-column: 2 / 3;
             grid-row: 2 / 6; 
             display: grid;
             border-radius: 50%;
               
             .img-upload {
-                width: 200px;
-                height: 200px;
+                width: 150px;
+                height: 150px;
                 overflow: hidden;
                 border-radius: 50%;
                 justify-self: center;
@@ -457,50 +499,87 @@ const StyledForm = StyledComponents.form`
         &:not(#email, [type='file']) {
             text-transform: capitalize;
         }
-
-        &#last-name, &#first-name, &#phone, &#postal-code {
-            grid-column: 1 / 2; 
-        }
-
-        &#address, &#email {
-            grid-column: 1 / 3;
-        }
-
-        &#city {
-            grid-column: 2 / 3;
-        }
-
-        &#question-1, 
-        &#question-2, 
-        &#question-3, 
-        &#question-4 {
-            grid-column: 1 / 3;     
-        }
     }
 
     textarea {
         margin-top: 0.5rem;
         padding: 0.5rem;
         resize: none;
-        
-        &#shared-notes, &#private-notes, &#question-5 {
-            grid-column: 1 / 3; 
-        }
     }
 
     button {
         margin-top: 1rem;
         padding: 0.5rem;
-
-        &#edit {
-            grid-column: 1 / 3;
-        }
-
     }
 
     #button-container {
-        grid-column: 1 / 3;
         display: grid; 
         grid-template-columns: 1fr 1fr;
+    }
+
+    #question-1, #question-2, #question-3, #question-4, #question-5 {
+        margin-top: 0; 
+    }
+
+    @media screen and (min-width: 640px) {
+        grid-template-columns: repeat(2, 1fr);
+        column-gap: 1rem;
+
+        legend {
+            text-align: left;
+            grid-column: 1 / 3;
+        }
+        
+        label {
+            &.user_preferences {
+                grid-column: 1 / 3;
+            }
+    
+            &#profile-picture-container {
+                grid-column: 2 / 3;
+                  
+                .img-upload {
+                    width: 200px;
+                    height: 200px;
+                }  
+            }
+        }
+
+        input, select {   
+            &#last-name, &#first-name, &#phone, &#postal-code {
+                grid-column: 1 / 2; 
+            }
+    
+            &#address, &#email {
+                grid-column: 1 / 3;
+            }
+    
+            &#city {
+                grid-column: 2 / 3;
+            }
+    
+            &#question-1, 
+            &#question-2, 
+            &#question-3, 
+            &#question-4 {
+                grid-column: 1 / 3;     
+            }
+        }
+
+        textarea {            
+            &#shared-notes, &#private-notes, &#question-5 {
+                grid-column: 1 / 3; 
+            }
+        }
+
+        button {    
+            &#edit {
+                grid-column: 1 / 3;
+            }
+        }
+
+        #button-container {
+            grid-column: 1 / 3;
+        }
     }
 `
