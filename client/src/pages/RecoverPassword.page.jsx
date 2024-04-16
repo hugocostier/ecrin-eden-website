@@ -30,8 +30,6 @@ export const RecoverPassword = () => {
                     setDisable(true)
                     alert('Un nouveau code a été envoyé à votre adresse email')
                     setTimerCount(60)
-
-                    console.log(data)
                     resolve(data)
                 })
                 .catch(err => reject(err))

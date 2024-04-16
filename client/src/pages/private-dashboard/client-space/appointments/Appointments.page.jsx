@@ -18,8 +18,6 @@ export const MyAppointments = () => {
         }, { containerId: 'notification' })
             .then(fetchedAppointments => {
                 setAppointments(fetchedAppointments.data)
-
-                console.log('Appointments fetched:', fetchedAppointments.data)
             })
             .catch(error => {
                 console.error('Error fetching events:', error)

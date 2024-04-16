@@ -29,8 +29,6 @@ export const UpdateAppointment = ({ appointment, user }) => {
             is_away: formData.get('is_away'),
             notes: formData.get('notes')
         }
-
-        console.log('Appointment data:', data)
     }
 
     const updateAppointment = (data) => {

@@ -157,7 +157,6 @@ export const AuthProvider = () => {
                     return response.json()
                 })
                 .then(res => {
-                    console.log('Response:', res)
                     if (res.message && (res.status === 400 || res.status === 500)) {
                         reject({ message: res.message })
                     }

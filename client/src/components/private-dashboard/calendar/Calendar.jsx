@@ -75,7 +75,6 @@ export const Calendar = () => {
                 newDate.setDate(newDate.getDate() + 7);
             }
         } else if (direction === 'prev') {
-            console.log('Current Date Prev : ', newDate.getDate())
             if (newDate.getDate() - 7 < 1) {
                 const diff = Math.abs(newDate.getDate() - 7)
                 const prevMonth = new Date(newDate.getFullYear(), newDate.getMonth() - 1, 1)

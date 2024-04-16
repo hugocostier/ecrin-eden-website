@@ -19,7 +19,6 @@ export const LoginForm = () => {
     const navigateToOTP = () => {
         if (email) {
             const OTP = Math.floor(Math.random() * 9000 + 1000)
-            console.log(OTP)
             setOtp(OTP)
 
             return new Promise((resolve, reject) => {
@@ -35,7 +34,6 @@ export const LoginForm = () => {
                 })
                     .then(res => res.json())
                     .then(data => {
-                        console.log(data)
                         resolve(data)
                         navigate('/recover-password')
                     })

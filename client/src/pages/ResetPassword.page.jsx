@@ -27,7 +27,6 @@ export const ResetPassword = () => {
             })
                 .then(res => res.json())
                 .then(data => {
-                    console.log(data)
                     resolve(data)
                     navigate('/login')
                 })

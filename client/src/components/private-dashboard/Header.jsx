@@ -16,10 +16,6 @@ export const Header = () => {
         auth.logOut()
     }
 
-    console.log('link: ', client.profilePicture ? `${SERVER_URL}/${client.profilePicture}` : defaultPicture)
-
-    console.log('client pp: ', client.profilePicture)
-
     return (
         <StyledHeader className='user-header'>
             <div className='logo-container'>
