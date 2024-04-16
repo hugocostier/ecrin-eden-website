@@ -31,8 +31,6 @@ export class AuthService {
             .andWhere('client.last_name = :lastName', { lastName })
             .getOne()
 
-        console.log('Client: ', client)
-
         // If a client is found
         if (client && client.user) {
             throw new CustomAPIError('Client already exists', 400)

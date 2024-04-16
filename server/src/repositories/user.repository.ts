@@ -8,8 +8,6 @@ export const UserRepository = AppDataSource.getRepository(User).extend({
             .where('user.id = :id', { id })
             .getOne()
 
-        console.log('User', user)
-
         const dataToReturn = user ? {
             email: user.email, 
             password: user.password, 

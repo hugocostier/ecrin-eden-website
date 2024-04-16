@@ -30,7 +30,6 @@ class ContentController {
     public updateContent = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
         const { page: pageName, section: sectionName, id: contentID } = req.params
         const content = contentManager.updateContentForPage(pageName, sectionName, contentID, req.body)
-        console.log(content)
     
         if (!content) {
             return next(createCustomError(`No content with id: ${contentID}`, 404))

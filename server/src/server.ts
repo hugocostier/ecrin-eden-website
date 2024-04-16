@@ -69,8 +69,6 @@ const __dirname = dirname(__filename)
 
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')))
 
-console.log(path.join(__dirname, '..', 'uploads'))
-
 // Authentication 
 app.use(passportConfig.initialize())
 

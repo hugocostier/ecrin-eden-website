@@ -39,7 +39,6 @@ class AuthController {
             }
 
             if (!user) {
-                console.log(info)
                 return res.status(401).json({ message: info.message })
             }
 

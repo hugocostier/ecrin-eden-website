@@ -193,8 +193,6 @@ export class ClientService {
 
         const client = await this._clientRepository.update(id, clientData)
 
-        console.log(client)
-
         if (!client) {
             throw new CustomAPIError(`Client with id ${id} could not be updated`, 500)
         }

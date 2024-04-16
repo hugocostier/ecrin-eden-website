@@ -54,8 +54,6 @@ export class UserService {
             .where('user.id = :id', { id })
             .getOne()
 
-        console.log('User delete:', user)
-
         if (!user) {
             throw new CustomAPIError(`No user found with id ${id}`, 404)
         }
@@ -71,8 +69,6 @@ export class UserService {
                 .leftJoinAndSelect('client.user', 'user')
                 .where('client.id = :id', { id: clientId })
                 .getOne()
-
-            console.log('Client to update:', client)
 
             if (!client) {
                 throw new CustomAPIError(`No client found with id ${clientId}`, 404)
