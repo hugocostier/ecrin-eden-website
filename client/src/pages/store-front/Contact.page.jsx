@@ -29,20 +29,19 @@ export const ContactPage = () => {
     const sendContactForm = async (e) => {
         e.preventDefault()
 
-        const form = {
-            lastName,
-            firstName,
-            phone,
-            email,
-            message
-        }
+        const formData = new FormData()
+        formData.append('lastName', lastName)
+        formData.append('firstName', firstName)
+        formData.append('phone', phone)
+        formData.append('email', email)
+        formData.append('message', message)
 
         const res = await fetch('http://localhost:3000/api/v1/form/send-contact-form', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(form)
+            body: formData
         })
 
         if (res.status === 200) {
@@ -50,8 +49,6 @@ export const ContactPage = () => {
         } else {
             alert('Une erreur est survenue, veuillez réessayer plus tard')
         }
-
-        console.log(res)
     }
 
     return (
