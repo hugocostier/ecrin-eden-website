@@ -40,16 +40,6 @@ export class Appointment extends BaseEntity {
 
     @Column({ 
         type: 'varchar', 
-        length: 1020, 
-        nullable: true 
-    })
-    @IsOptional() 
-    @IsString({ message: 'Client notes must be a string' })
-    @Length(0, 1020, { message: 'Client notes cannot exceed 1020 characters' })
-        client_notes: string | undefined 
-
-    @Column({ 
-        type: 'varchar', 
         length: 1020,
         nullable: true 
     }) 
