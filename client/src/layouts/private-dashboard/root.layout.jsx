@@ -128,7 +128,7 @@ export const PrivateRoot = () => {
     )
 }
 
-const StyledRoot = StyledComponents.div`
+const StyledRoot = StyledComponents.section`
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 60px 50px 1fr;
@@ -148,6 +148,7 @@ const StyledRoot = StyledComponents.div`
     main {
         grid-row: 3 / 4;
         overflow-y: auto;
+        margin: 4%; 
     }
 
     @media screen and (min-width: 1024px) {
@@ -167,6 +168,7 @@ const StyledRoot = StyledComponents.div`
         main {
             grid-column: 2 / 3;
             grid-row: 2 / 3;
+            margin: 2%;
         }
     }
 `
