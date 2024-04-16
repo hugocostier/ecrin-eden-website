@@ -230,10 +230,13 @@ h5 {
 
     p,
     input,
+    label,
     textarea,
     select,
     button,
-    li {
+    li,
+    td,
+    th {
         font-size: 1.125rem;
     }
 }
@@ -257,10 +260,13 @@ h5 {
 
     p,
     input,
+    label,
     textarea,
     select,
     button,
-    li {
+    li,
+    td,
+    th {
         font-size: 1.25rem;
     }
 }
