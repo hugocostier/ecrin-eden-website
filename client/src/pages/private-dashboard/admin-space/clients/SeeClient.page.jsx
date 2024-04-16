@@ -1,13 +1,24 @@
 import { Fragment, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useSearchParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import StyledComponents from 'styled-components'
+import { FilterAppointments } from '../../../../components/private-dashboard/appointments/FilterAppointments'
 import { fetchAppointments } from '../../../../data'
 import { fetchClient } from '../../../../data/admin/clients.fetch'
+import { filterAppointments } from '../../../../utils/filterAppointments.util'
 
 export const SeeClient = () => {
     const { id: clientId } = useParams()
     const [client, setClient] = useState({})
     const [appointments, setAppointments] = useState([])
+
+    const [searchParams, setSearchParams] = useSearchParams({
+        filter: 'date',
+        show: 'showAll'
+    })
+
+    const filter = searchParams.get('filter')
+    const show = searchParams.get('show')
 
     useEffect(() => {
         fetchClient(clientId)
@@ -18,15 +29,13 @@ export const SeeClient = () => {
                 console.error('Error fetching client:', error)
             })
 
-        toast.promise(fetchAppointments({ clientId, showAll: true }), {
+        toast.promise(fetchAppointments({ clientId, show }), {
             pending: 'Chargement...',
             success: 'Rendez-vous récupérés !',
             error: 'Erreur lors de la récupération des rendez-vous'
         }, { containerId: 'notification' })
             .then(fetchedAppointments => {
                 setAppointments(fetchedAppointments.data)
-
-                console.log('Appointments fetched:', fetchedAppointments.data)
             })
             .catch(error => {
                 console.error('Error fetching events:', error)
@@ -36,19 +45,27 @@ export const SeeClient = () => {
             setClient({})
             setAppointments([])
         }
-    }, [clientId])
+    }, [clientId, show])
 
     return (
         <main>
-            <h2>Historique client</h2>
-            <h3>{client.first_name} {client.last_name}</h3>
+            <PageHeader>
+                <h2>Historique client</h2>
+                <h3>{client.first_name} {client.last_name}</h3>
+            </PageHeader>
+
+            <FilterAppointments filter={filter} show={show} setSearchParams={setSearchParams} appointments={appointments} />
 
             {appointments.length === 0 ? (
                 <>
                     <p>Aucun rendez-vous pour ce client</p>
                 </>
-            ) : (
-                <section className='clients-list'>
+            ) : (filterAppointments(filter, show, appointments) &&
+                <ClientHistory>
+                    <div>
+                        <p>Nombre de rendez-vous: {appointments.length}</p>
+                    </div>
+
                     <table>
                         <thead>
                             <tr>
@@ -58,7 +75,6 @@ export const SeeClient = () => {
                                 <th>Lieu</th>
                                 <th>Prestation</th>
                                 <th>Durée</th>
-                                <th>Commentaire client</th>
                                 <th>Commentaire praticien</th>
                             </tr>
                         </thead>
@@ -67,20 +83,92 @@ export const SeeClient = () => {
                                 <Fragment key={index}>
                                     <tr key={appointment.id}>
                                         <td>{appointment.date}</td>
-                                        <td>{appointment.time}</td>
+                                        <td>{appointment.time.slice(0, 5)}</td>
                                         <td>{appointment.status}</td>
                                         <td>{appointment.is_away ? 'A domicile' : 'Au salon'}</td>
                                         <td>{appointment.service.name}</td>
                                         <td>{appointment.service.duration}</td>
-                                        <td>{appointment.clientNotes}</td>
-                                        <td>{appointment.privateNotes}</td>
+                                        <td className='comment'>{appointment.privateNotes}</td>
                                     </tr>
                                 </Fragment>
                             ))}
                         </tbody>
                     </table>
-                </section>
+                </ClientHistory>
             )}
         </main>
     )
 }
+
+const PageHeader = StyledComponents.section`
+    margin-bottom: 30px;    
+
+    h2, h3 {
+        margin: 0;
+        margin-bottom: 10px; 
+        text-align: center;
+        text-transform: capitalize; 
+    }
+`
+
+const ClientHistory = StyledComponents.section`
+    overflow-x: auto;
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: 10px; 
+        margin-top: 20px;
+
+        thead {
+            background-color: #f4f4f4;
+        }
+
+        tbody {
+            tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+
+            tr:nth-child(odd) {
+                background-color: #ffffff;
+            }
+        }
+
+        tr {
+            th, td:not(.comment) {
+                white-space: nowrap;
+                text-transform: capitalize;
+            }
+
+            th, td {
+                padding: 10px;
+                text-align: left;
+                vertical-align: middle; 
+            }
+
+            td {
+                &.comment {
+                    white-space: pre-wrap;
+                }
+            }
+        }
+    }
+
+    @media screen and (max-width: 1023px) {
+        table {
+            td {
+                &.comment {
+                    min-width: 95vw; 
+                }
+            }
+        }
+    }
+
+    @media screen and (min-width: 1024px) {
+        td {
+            &.comment {
+                max-width: 30vw; 
+            }
+        }
+    } 
+`
