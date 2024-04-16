@@ -1,11 +1,12 @@
 export const fetchAppointments = (options) => {
     const API_URL = 'http://localhost:3000/api/v1'
 
-    const { clientId, showHistory, showAll, rangeStart, rangeEnd, day } = options
+    const { clientId, show, rangeStart, rangeEnd, day } = options
 
     const body = {
-        ...(showHistory && { showHistory }),
-        ...(showAll && { showAll }),
+        ...(show === 'showAll' && { showAll: true }),
+        ...(show === 'showUpcoming' && { showUpcoming: true }),
+        ...(show === 'showHistory' && { showHistory: true }),
         ...(rangeStart && { rangeStart }),
         ...(rangeEnd && { rangeEnd }),
         ...(day && { day }),
