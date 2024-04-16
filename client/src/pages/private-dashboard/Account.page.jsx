@@ -294,34 +294,28 @@ const Account = StyledComponents.main`
 
 const AccountForm = StyledComponents.form`
     display: grid; 
-    grid-template-columns: repeat(2, 1fr);
-    column-gap: 1rem;
+    grid-template-columns: 1fr;
     row-gap: 0.5rem;
     max-width: 1000px;
     margin: 0 auto;
     margin-bottom: 2rem;
 
     legend {
+        text-align: center;
         font-size: 1.5rem;
         font-weight: bold;
         margin-top: 1rem;
-
-        &:first-of-type {
-            grid-column: 1 / 3;
-            grid-row: 1 / 2;
-        }
     }
     
     label {
         &#profile-picture-container {
-            grid-column: 2 / 3;
             grid-row: 2 / 6; 
             display: grid;
             border-radius: 50%;
               
             .img-upload {
-                width: 200px;
-                height: 200px;
+                width: 150px;
+                height: 150px;
                 overflow: hidden;
                 border-radius: 50%;
                 justify-self: center;
@@ -333,7 +327,7 @@ const AccountForm = StyledComponents.form`
                     object-fit: cover;
                     object-position: 50% 50%; 
                 }
-            }            
+            }  
         }
     }
 
@@ -345,46 +339,72 @@ const AccountForm = StyledComponents.form`
         &:not(#email, [type='file']) {
             text-transform: capitalize;
         }
-
-        &#last-name, &#first-name, &#phone {
-            grid-column: 1 / 2; 
-        }
-
-        &#address, &#email {
-            grid-column: 1 / 3;
-        }
-
-        &#city {
-            grid-column: 2 / 3;
-        }
-
-        &#postal-code {
-            grid-column: 1 / 2;
-        }
     }
 
     textarea {
         margin-top: 0.5rem;
         padding: 0.5rem;
         resize: none;
-        
-        &#shared-notes {
-            grid-column: 1 / 3; 
-        }
     }
 
     button {
         margin-top: 1rem;
         padding: 0.5rem;
-
-        &#edit {
-            grid-column: 1 / 3;
-        }
     }
 
     #button-container {
-        grid-column: 1 / 3;
         display: grid; 
         grid-template-columns: 1fr 1fr;
+    }
+
+    @media screen and (min-width: 640px) {
+        grid-template-columns: repeat(2, 1fr);
+        column-gap: 1rem;
+
+        legend {
+            text-align: left;
+            grid-column: 1 / 3;
+        }
+        
+        label {    
+            &#profile-picture-container {
+                grid-column: 2 / 3;
+                  
+                .img-upload {
+                    width: 200px;
+                    height: 200px;
+                }  
+            }
+        }
+
+        input {   
+            &#last-name, &#first-name, &#phone, &#postal-code {
+                grid-column: 1 / 2; 
+            }
+    
+            &#address, &#email {
+                grid-column: 1 / 3;
+            }
+    
+            &#city {
+                grid-column: 2 / 3;
+            }
+        }
+
+        textarea {            
+            &#shared-notes {
+                grid-column: 1 / 3; 
+            }
+        }
+
+        button {    
+            &#edit {
+                grid-column: 1 / 3;
+            }
+        }
+
+        #button-container {
+            grid-column: 1 / 3;
+        }
     }
 `
