@@ -38,8 +38,8 @@ export const AppointmentRepository = AppDataSource.getRepository(Appointment).ex
                 id: appointment.id,
                 date: appointment.date,
                 time: appointment.time,
+                status: appointment.status,
                 isAway: appointment.is_away,
-                clientNotes: appointment.client_notes,
                 privateNotes: appointment.private_notes,
                 service: {
                     name: appointment.service?.name,
@@ -58,12 +58,60 @@ export const AppointmentRepository = AppDataSource.getRepository(Appointment).ex
 
     // Find all upcoming appointments for a client
     async findUpcomingByClient(clientId: number) {
-        return await this.find({ where: { client: { id: clientId }, date: MoreThanOrEqual(new Date()) } })
+        // return await this.find({ where: { client: { id: clientId }, date: MoreThanOrEqual(new Date()) } })
+
+        const appointments = await this.createQueryBuilder('appointment')
+            .leftJoinAndSelect('appointment.client', 'client')
+            .leftJoinAndSelect('appointment.service', 'service')
+            .where('client.id = :id', { id: clientId })
+            .andWhere('appointment.date >= :date', { date: new Date().toISOString().split('T')[0] }) 
+            .getMany()
+
+        const appointmentsData = appointments.map((appointment) => {
+            return {
+                id: appointment.id,
+                date: appointment.date,
+                time: appointment.time,
+                status: appointment.status,
+                isAway: appointment.is_away,
+                privateNotes: appointment.private_notes,
+                service: {
+                    name: appointment.service?.name,
+                    duration: appointment.service?.duration
+                }
+            }
+        })
+
+        return appointmentsData
     },
 
     // Find all past appointments for a client
     async findPastByClient(clientId: number) {
-        return await this.find({ where: { client: { id: clientId }, date: LessThan(new Date()) } })
+        // return await this.find({ where: { client: { id: clientId }, date: LessThan(new Date()) } })
+
+        const appointments = await this.createQueryBuilder('appointment')
+            .leftJoinAndSelect('appointment.client', 'client')
+            .leftJoinAndSelect('appointment.service', 'service')
+            .where('client.id = :id', { id: clientId })
+            .andWhere('appointment.date < :date', { date: new Date().toISOString().split('T')[0] })
+            .getMany()
+
+        const appointmentsData = appointments.map((appointment) => {
+            return {
+                id: appointment.id,
+                date: appointment.date,
+                time: appointment.time,
+                status: appointment.status,
+                isAway: appointment.is_away,
+                privateNotes: appointment.private_notes,
+                service: {
+                    name: appointment.service?.name,
+                    duration: appointment.service?.duration
+                }
+            }
+        })
+
+        return appointmentsData
     },
 
     // Find all appointments between a date range
