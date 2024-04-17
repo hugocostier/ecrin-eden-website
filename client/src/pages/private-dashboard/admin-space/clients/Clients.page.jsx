@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react"
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import StyledComponents from 'styled-components'
+import { SearchBar } from "../../../../components/private-dashboard/SearchBar"
 import { deleteClient, fetchClients } from "../../../../data/admin/clients.fetch"
 
 export const AdminClients = () => {
     const [clients, setClients] = useState([])
+    const [searchParams, setSearchParams] = useSearchParams({ search: '' })
+    const searchInput = searchParams.get('search')
 
     const handleDelete = (id) => {
         const confirmDelete = window.confirm('Êtes vous sur de vouloir supprimer ce client ?')
@@ -41,13 +44,19 @@ export const AdminClients = () => {
         }
     }, [])
 
+    const filteredClients = clients.filter(client => client.first_name.toLowerCase().includes(searchInput.toLowerCase()) || client.last_name.toLowerCase().includes(searchInput.toLowerCase()))
+
     return (
         <ClientPage>
             <h2>Mes clients</h2>
 
-            <Link to={'add'} className='btn add-client'>Ajouter un client</Link>
+            <ActionSection>
+                <Link to={'add'} className='btn add-client'>Ajouter un client</Link>
 
-            {clients.length === 0 ? (
+                <SearchBar searchInput={searchInput} setSearchParams={setSearchParams} />
+            </ActionSection>
+
+            {filteredClients.length === 0 ? (
                 <h3>Aucun client trouvé</h3>
             ) :
                 <section className='clients-list'>
@@ -62,7 +71,7 @@ export const AdminClients = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {clients.map(client => (
+                            {filteredClients.map(client => (
                                 <tr key={client.id}>
                                     <td>{client.first_name}</td>
                                     <td>{client.last_name}</td>
@@ -90,8 +99,6 @@ export const AdminClients = () => {
 }
 
 const ClientPage = StyledComponents.main`
-    margin: 20px; 
-
     .btn {
         &.add-client {
             padding: 10px 20px;
@@ -102,6 +109,23 @@ const ClientPage = StyledComponents.main`
 
     .clients-list {
         overflow-x: auto;
+    }
+
+    @media screen and (max-width: 768px) {
+        h2 { 
+            text-align: center; 
+        }
+    }
+`
+
+const ActionSection = StyledComponents.section`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @media screen and (max-width: 768px) {
+        flex-direction: column;
+        gap: 10px;
     }
 `
 
