@@ -2,26 +2,15 @@ import PropTypes from 'prop-types'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import StyledComponents from 'styled-components'
-import { fetchAppointments } from '../../../data'
+import { fetchAllAppointments, fetchAppointments } from '../../../data'
+import { useAuth } from '../../../hooks/useAuth.hook'
 import { renderDay, renderMonth, renderWeek } from '../../../utils/renderCalendar.util'
 import { Days } from './Days'
 import { Week } from './Week'
 
-const StyledCalendarBody = StyledComponents.table`
-    width: 95%;
-    margin: 0 auto;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-
-    tbody, thead {
-        th {
-            width: calc(100% / 7); 
-        }
-    }
-`
-
 export const CalendarBody = ({ currentDate, currentView }) => {
     const [appointments, setAppointments] = useState([])
+    const isAdmin = useAuth().user.role === 'admin'
 
     useEffect(() => {
         const options = { timeZone: 'Europe/Paris', year: 'numeric', month: '2-digit', day: '2-digit' }
@@ -30,17 +19,31 @@ export const CalendarBody = ({ currentDate, currentView }) => {
             const today = new Date(currentDate.year, currentDate.month, currentDate.day)
             const todayFormatted = today.toLocaleDateString('fr-FR', options).split('/').reverse().join('-')
 
-            toast.promise(fetchAppointments({ day: todayFormatted, clientId: 6 }), {
-                pending: 'Chargement...',
-                success: 'Rendez-vous récupérés !',
-                error: 'Erreur lors de la récupération des rendez-vous'
-            }, { containerId: 'notification' })
-                .then(fetchedAppointments => {
-                    setAppointments(fetchedAppointments.data)
-                })
-                .catch(error => {
-                    console.error('Error fetching events:', error)
-                })
+            if (isAdmin) {
+                toast.promise(fetchAllAppointments({ day: todayFormatted }), {
+                    pending: 'Chargement...',
+                    success: 'Rendez-vous récupérés !',
+                    error: 'Erreur lors de la récupération des rendez-vous'
+                }, { containerId: 'notification' })
+                    .then(fetchedAppointments => {
+                        setAppointments(fetchedAppointments.data)
+                    })
+                    .catch(error => {
+                        console.error('Error fetching events:', error)
+                    })
+            } else {
+                toast.promise(fetchAppointments({ day: todayFormatted, clientId: 6 }), {
+                    pending: 'Chargement...',
+                    success: 'Rendez-vous récupérés !',
+                    error: 'Erreur lors de la récupération des rendez-vous'
+                }, { containerId: 'notification' })
+                    .then(fetchedAppointments => {
+                        setAppointments(fetchedAppointments.data)
+                    })
+                    .catch(error => {
+                        console.error('Error fetching events:', error)
+                    })
+            }
         } else {
             let rangeStart, rangeEnd, rangeStartFormatted, rangeEndFormatted
 
@@ -64,23 +67,37 @@ export const CalendarBody = ({ currentDate, currentView }) => {
                 rangeEndFormatted = rangeEnd.toLocaleDateString('fr-FR', options).split('/').reverse().join('-')
             }
 
-            toast.promise(fetchAppointments({ rangeStart: rangeStartFormatted, rangeEnd: rangeEndFormatted, clientId: 6 }), {
-                pending: 'Chargement...',
-                success: 'Rendez-vous récupérés !',
-                error: 'Erreur lors de la récupération des rendez-vous'
-            }, { containerId: 'notification' })
-                .then(fetchedAppointments => {
-                    setAppointments(fetchedAppointments.data)
-                })
-                .catch(error => {
-                    console.error('Error fetching events:', error)
-                })
+            if (isAdmin) {
+                toast.promise(fetchAllAppointments({ rangeStart: rangeStartFormatted, rangeEnd: rangeEndFormatted }), {
+                    pending: 'Chargement...',
+                    success: 'Rendez-vous récupérés !',
+                    error: 'Erreur lors de la récupération des rendez-vous'
+                }, { containerId: 'notification' })
+                    .then(fetchedAppointments => {
+                        setAppointments(fetchedAppointments.data)
+                    })
+                    .catch(error => {
+                        console.error('Error fetching events:', error)
+                    })
+            } else {
+                toast.promise(fetchAppointments({ rangeStart: rangeStartFormatted, rangeEnd: rangeEndFormatted, clientId: 6 }), {
+                    pending: 'Chargement...',
+                    success: 'Rendez-vous récupérés !',
+                    error: 'Erreur lors de la récupération des rendez-vous'
+                }, { containerId: 'notification' })
+                    .then(fetchedAppointments => {
+                        setAppointments(fetchedAppointments.data)
+                    })
+                    .catch(error => {
+                        console.error('Error fetching events:', error)
+                    })
+            }
         }
 
         return () => {
             setAppointments([])
         }
-    }, [currentDate, currentView])
+    }, [currentDate, currentView, isAdmin])
 
     return (
         <StyledCalendarBody className={currentView}>
@@ -114,3 +131,16 @@ CalendarBody.propTypes = {
     currentDate: PropTypes.object.isRequired,
     currentView: PropTypes.string.isRequired
 }
+
+const StyledCalendarBody = StyledComponents.table`
+    width: 95%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+
+    tbody, thead {
+        th {
+            width: calc(100% / 7); 
+        }
+    }
+`
