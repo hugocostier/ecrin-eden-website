@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import StyledComponents from 'styled-components'
 import image from '../../../assets/images/dashboard.jpg'
 import { Calendar } from '../../../components/private-dashboard/calendar/Calendar'
-import { fetchCountAppointments } from '../../../data'
+import { countUserAppointments } from '../../../data'
 import { useClientInfo } from '../../../hooks/useClientInfo.hook'
 import { calculateWeekBounds } from '../../../utils/calculateWeekBounds.util'
 
@@ -16,7 +16,7 @@ export const MyDashboard = () => {
             const firstDayOfWeek = weekBounds.firstDay.toISOString().split('T')[0];
             const lastDayOfWeek = weekBounds.lastDay.toISOString().split('T')[0];
 
-            fetchCountAppointments({ clientId: client.id, firstDayOfWeek, lastDayOfWeek, today: new Date().toISOString().split('T')[0] })
+            countUserAppointments({ clientId: client.id, firstDayOfWeek, lastDayOfWeek, today: new Date().toISOString().split('T')[0] })
                 .then(count => {
                     setCount(count.data);
                 })
