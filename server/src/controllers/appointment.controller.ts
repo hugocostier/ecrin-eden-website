@@ -96,7 +96,6 @@ class AppointmentController {
             date, 
             time, 
             is_away,
-            client_notes,
             private_notes, 
             service, 
             client 

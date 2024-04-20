@@ -8,7 +8,7 @@ class AppointmentService {
     private _appointmentRepository = AppointmentRepository
 
     // Get an appointment
-    async getAppointmentById(id: string): Promise<Appointment> {
+    async getAppointmentById(id: string) {
         const appointment = await this._appointmentRepository.findById(parseInt(id))
 
         if (!appointment) {
@@ -19,15 +19,15 @@ class AppointmentService {
     }
 
     // Get appointments with options
-    async getAppointments(showHistory?: boolean, showAll?: boolean, rangeStart?: Date, rangeEnd?: Date, day?: Date): Promise<Appointment[]> {
+    async getAppointments(showHistory?: boolean, showAll?: boolean, rangeStart?: string, rangeEnd?: string, day?: Date) {
         let appointments = undefined
 
         // Return all appointments for a day 
         if (day) {
             // Check if day is a valid date
-            if (isNaN(day.getTime())) {
-                throw new CustomAPIError(`Invalid date ${day}`, 400)
-            }
+            // if (isNaN(day.getTime())) {
+            //     throw new CustomAPIError(`Invalid date ${day}`, 400)
+            // }
 
             appointments = await this._appointmentRepository.findByDay(day) 
 
@@ -39,12 +39,15 @@ class AppointmentService {
         } 
         // Return all appointments between a date range
         else if (rangeStart && rangeEnd) {
+            const rangeStartDate = new Date(rangeStart)
+            const rangeEndDate = new Date(rangeEnd)
+
             // Check if rangeStart and rangeEnd are valid dates
-            if (isNaN(rangeStart.getTime()) || isNaN(rangeEnd.getTime())) {
+            if (isNaN(rangeStartDate.getTime()) || isNaN(rangeEndDate.getTime())) {
                 throw new CustomAPIError(`Invalid date range ${rangeStart} - ${rangeEnd}`, 400)
             }
 
-            appointments = await this._appointmentRepository.findByDateRange(rangeStart, rangeEnd) 
+            appointments = await this._appointmentRepository.findByDateRange(rangeStartDate, rangeEndDate) 
 
             if (!appointments) {
                 throw new CustomAPIError(`No appointments found between ${rangeStart} and ${rangeEnd}`, 404)
@@ -64,7 +67,7 @@ class AppointmentService {
         } 
         // Return all appointments
         else if (showAll) {
-            appointments = await this._appointmentRepository.find()
+            appointments = await this._appointmentRepository.findAll()
 
             if (!appointments) {
                 throw new CustomAPIError('No appointments found', 404)
