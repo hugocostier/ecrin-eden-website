@@ -4,13 +4,6 @@ import { calculateWeekBounds } from '../../../utils/calculateWeekBounds.util';
 import { CalendarBody } from './CalendarBody';
 import { CalendarHeader } from './CalendarHeader';
 
-const StyledCalendar = StyledComponents.section`
-    background: var(--grey-300); 
-    border-radius: 10px;
-
-    height: max-content;
-`
-
 export const Calendar = () => {
     const [currentView, setCurrentView] = useState('day');
 
@@ -141,3 +134,10 @@ export const Calendar = () => {
         </StyledCalendar>
     )
 }
+
+const StyledCalendar = StyledComponents.section`
+    background: var(--grey-300); 
+    border-radius: 10px;
+
+    height: max-content;
+`
