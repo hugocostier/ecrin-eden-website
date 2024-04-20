@@ -5,18 +5,15 @@
   "main": "index.ts",
   "scripts": {
     "install-dependencies": "npm install && npm install --prefix client && npm install --prefix server",
-    "start": "npm run start:server && npm run start:client",
+    "start": "concurrently \"npm run start:server\" \"npm run start:client\"",
     "start:server": "npm run dev --prefix server",
     "start:client": "npm run dev --prefix client",
-    "build": "npm run build:server && npm run build:client",
+    "build": "concurrently \"npm run build:server\" \"npm run build:client\"",
     "build:server": "npm run build --prefix server",
     "build:client": "npm run build --prefix client",
-    "test": "npm run test:server && npm run test:client",
+    "test": "concurrently \"npm run test:server\" \"npm run test:client\"",
     "test:server": "npm test --prefix server",
     "test:client": "npm test --prefix client",
-    "lint": "npm run lint:server && npm run lint:client",
-    "lint:server": "npm run lint --prefix server",
-    "lint:client": "npm run lint --prefix client",
     "deploy": "TODO"
   },
   "repository": {
@@ -35,6 +32,7 @@
     "url": "https://github.com/hugocostier/ecrin-eden-website/issues"
   },
   "homepage": "https://github.com/hugocostier/ecrin-eden-website#readme",
-  "dependencies": {},
-  "devDependencies": {}
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
 }
