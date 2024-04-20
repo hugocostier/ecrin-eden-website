@@ -6,7 +6,7 @@ import { Service } from './Service.js'
 export enum AppointmentStatus {
     PENDING = 'pending',
     CONFIRMED = 'confirmed',
-    CANCELLED = 'cancelled',
+    CANCELLED = 'canceled',
     COMPLETED = 'completed'
 }
 
