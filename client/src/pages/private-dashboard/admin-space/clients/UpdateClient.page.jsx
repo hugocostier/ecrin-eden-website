@@ -85,8 +85,6 @@ export const UpdateClient = () => {
         }
     }, [clientId])
 
-    console.log('input:', input)
-
     const handleChange = (e) => {
         if (e.target.name === 'profilePicture') {
             const file = e.target.files[0]
