@@ -88,7 +88,7 @@ export const SeeClient = () => {
                                         <td>{appointment.is_away ? 'A domicile' : 'Au salon'}</td>
                                         <td>{appointment.service.name}</td>
                                         <td>{appointment.service.duration}</td>
-                                        <td className='comment'>{appointment.privateNotes}</td>
+                                        <td className='comment'>{appointment.private_notes}</td>
                                     </tr>
                                 </Fragment>
                             ))}
