@@ -5,7 +5,61 @@ import { Appointment } from '../entities/Appointment.js'
 export const AppointmentRepository = AppDataSource.getRepository(Appointment).extend({
     // Find an appointment by id
     async findById(id: number) {
-        return await this.findOneBy({ id })
+        const appointment = await this.createQueryBuilder('appointment')
+            .leftJoinAndSelect('appointment.client', 'client')
+            .leftJoinAndSelect('appointment.service', 'service')
+            .where('appointment.id = :id', { id })
+            .getOne()
+
+        const appointmentData = {
+            id: appointment?.id,
+            date: appointment?.date,
+            time: appointment?.time,
+            status: appointment?.status,
+            is_away: appointment?.is_away,
+            private_notes: appointment?.private_notes,
+            client: {
+                last_name: appointment?.client?.last_name,
+                first_name: appointment?.client?.first_name,
+                phone: appointment?.client?.phone_number,
+                address: appointment?.client?.address,
+                city: appointment?.client?.city,
+                postal_code: appointment?.client?.postal_code,
+            },
+            service: {
+                name: appointment?.service?.name,
+                price: appointment?.service?.price,
+                duration: appointment?.service?.duration
+            }
+        }
+
+        return appointmentData
+    },
+
+    // Find all appointments
+    async findAll() {
+        const appointments = await this.find({ relations: ['client', 'service'] })
+
+        const appointmentsData = appointments.map((appointment) => {
+            return {
+                id: appointment.id,
+                date: appointment.date,
+                time: appointment.time,
+                status: appointment.status,
+                is_away: appointment.is_away,
+                private_notes: appointment.private_notes,
+                client: {
+                    last_name: appointment.client?.last_name,
+                    first_name: appointment.client?.first_name,
+                },
+                service: {
+                    name: appointment.service?.name,
+                    duration: appointment.service?.duration
+                }
+            }
+        })
+
+        return appointmentsData
     },
 
     // Find all appointments for a day
@@ -15,12 +69,66 @@ export const AppointmentRepository = AppDataSource.getRepository(Appointment).ex
 
     // Find all upcoming appointments
     async findUpcoming() {
-        return await this.find({ where: { date: MoreThanOrEqual(new Date()) } })
+        // return await this.find({ where: { date: MoreThanOrEqual(new Date()) } })
+
+        const appointments = await this.createQueryBuilder('appointment')
+            .leftJoinAndSelect('appointment.client', 'client')
+            .leftJoinAndSelect('appointment.service', 'service')
+            .where('appointment.date >= :date', { date: new Date().toISOString().split('T')[0] })
+            .getMany()
+
+        const appointmentsData = appointments.map((appointment) => {
+            return {
+                id: appointment.id,
+                date: appointment.date,
+                time: appointment.time,
+                status: appointment.status,
+                is_away: appointment.is_away,
+                private_notes: appointment.private_notes,
+                client: {
+                    last_name: appointment.client?.last_name,
+                    first_name: appointment.client?.first_name,
+                },
+                service: {
+                    name: appointment.service?.name,
+                    duration: appointment.service?.duration
+                }
+            }
+        })
+
+        return appointmentsData
     },
 
     // Find all past appointments
     async findPast() {
-        return await this.find({ where: { date: LessThan(new Date()) } })
+        // return await this.find({ where: { date: LessThan(new Date()) } })
+
+        const appointments = await this.createQueryBuilder('appointment')
+        .leftJoinAndSelect('appointment.client', 'client')
+        .leftJoinAndSelect('appointment.service', 'service')
+        .where('appointment.date < :date', { date: new Date().toISOString().split('T')[0] })
+        .getMany()
+
+        const appointmentsData = appointments.map((appointment) => {
+            return {
+                id: appointment.id,
+                date: appointment.date,
+                time: appointment.time,
+                status: appointment.status,
+                is_away: appointment.is_away,
+                private_notes: appointment.private_notes,
+                client: {
+                    last_name: appointment.client?.last_name,
+                    first_name: appointment.client?.first_name,
+                },
+                service: {
+                    name: appointment.service?.name,
+                    duration: appointment.service?.duration
+                }
+            }
+        })
+
+        return appointmentsData
     },
 
     // Find all appointments for a client
@@ -39,8 +147,8 @@ export const AppointmentRepository = AppDataSource.getRepository(Appointment).ex
                 date: appointment.date,
                 time: appointment.time,
                 status: appointment.status,
-                isAway: appointment.is_away,
-                privateNotes: appointment.private_notes,
+                is_away: appointment.is_away,
+                private_notes: appointment.private_notes,
                 service: {
                     name: appointment.service?.name,
                     duration: appointment.service?.duration
@@ -73,8 +181,8 @@ export const AppointmentRepository = AppDataSource.getRepository(Appointment).ex
                 date: appointment.date,
                 time: appointment.time,
                 status: appointment.status,
-                isAway: appointment.is_away,
-                privateNotes: appointment.private_notes,
+                is_away: appointment.is_away,
+                private_notes: appointment.private_notes,
                 service: {
                     name: appointment.service?.name,
                     duration: appointment.service?.duration
@@ -102,8 +210,8 @@ export const AppointmentRepository = AppDataSource.getRepository(Appointment).ex
                 date: appointment.date,
                 time: appointment.time,
                 status: appointment.status,
-                isAway: appointment.is_away,
-                privateNotes: appointment.private_notes,
+                is_away: appointment.is_away,
+                private_notes: appointment.private_notes,
                 service: {
                     name: appointment.service?.name,
                     duration: appointment.service?.duration
