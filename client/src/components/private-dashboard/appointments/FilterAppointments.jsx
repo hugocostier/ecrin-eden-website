@@ -4,7 +4,7 @@ import { filterAppointments } from '../../../utils/filterAppointments.util';
 
 export const FilterAppointments = ({ appointments, filter, show, setSearchParams }) => {
     return (
-        <FilterContainer>
+        <FilterContainer className='filters'>
             <div className='choice-container'>
                 <label htmlFor='filter'>Filtrer par:</label>
                 <select
