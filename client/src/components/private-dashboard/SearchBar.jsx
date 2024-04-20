@@ -3,7 +3,7 @@ import StyledComponents from 'styled-components';
 
 export const SearchBar = ({ searchInput, setSearchParams }) => {
     return (
-        <SearchBarContainer>
+        <SearchBarContainer className='search-bar'>
             <input
                 type="text"
                 id="searchInput"
