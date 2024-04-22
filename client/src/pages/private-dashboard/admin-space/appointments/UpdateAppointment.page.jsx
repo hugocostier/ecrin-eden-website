@@ -92,7 +92,7 @@ export const UpdateAppointment = () => {
                 <p>Client :</p>
                 <p>{appointment.client ? `${appointment.client.first_name} ${appointment.client.last_name}` : ''}</p>
 
-                <label htmlFor="is-away">Date :</label>
+                <label htmlFor="date">Date :</label>
                 <input
                     type="date"
                     name="date"
@@ -103,7 +103,7 @@ export const UpdateAppointment = () => {
                     disabled={!isEditable}
                 />
 
-                <label htmlFor="is-away">Heure :</label>
+                <label htmlFor="time">Heure :</label>
                 <input
                     type="time"
                     name="time"
