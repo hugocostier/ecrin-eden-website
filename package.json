@@ -4,7 +4,7 @@
   "description": "Full stack project crafted with Node.js, React & MySQL. Seamlessly manage appointments & explore services. Elevate your massage experience digitally!",
   "main": "index.ts",
   "scripts": {
-    "install-dependencies": "npm install && npm install --prefix client && npm install --prefix server",
+    "install-dependencies": "concurrently \"npm install\" \"npm install --prefix client\" \"npm install --prefix server\"",
     "start": "concurrently \"npm run start:server\" \"npm run start:client\"",
     "start:server": "npm run dev --prefix server",
     "start:client": "npm run dev --prefix client",
