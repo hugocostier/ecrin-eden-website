@@ -75,9 +75,7 @@ export const AdminAppointments = () => {
             </ActionSection>
 
             {filteredAppointments.length === 0 ? (
-                <>
-                    <p>Aucun rendez-vous trouvé</p>
-                </>
+                <h3>Aucun rendez-vous trouvé</h3>
             ) : (filterAppointments(filter, show, filteredAppointments) &&
                 <section className='appointments-list'>
                     <AppointmentsTable>

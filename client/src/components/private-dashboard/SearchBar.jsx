@@ -8,7 +8,12 @@ export const SearchBar = ({ searchInput, setSearchParams }) => {
                 type="text"
                 id="searchInput"
                 value={searchInput}
-                onChange={(e) => setSearchParams({ search: e.target.value })}
+                onChange={(e =>
+                    setSearchParams(prev => {
+                        prev.set('search', e.target.value)
+                        return prev
+                    })
+                )}
                 placeholder='Rechercher'
             />
         </SearchBarContainer>
