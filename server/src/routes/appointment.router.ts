@@ -27,7 +27,7 @@ router.route('/count')
     .post(auth.isLoggedIn, auth.isAuthorized, appointment.countAppointmentsForDay)
 
 router.route('/count/:id')
-    .post(auth.isLoggedIn, appointment.countAppointmentsForWeekAndClient)
+    .post(auth.isLoggedIn, auth.isAuthorized, appointment.countAppointmentsForWeekAndClient)
 
 
 export default router 

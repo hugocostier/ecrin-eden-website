@@ -49,7 +49,7 @@ export const AuthRepository = AppDataSource.getRepository(User).extend({
                     if (!result || result.length === 0) {
                         resolve({ user: false, message: 'User not found' })
                     } else {
-                        const user = { id: result[0].id, username: result[0].email, role: result[0].role }
+                        const user = { id: result[0].id, username: result[0].email, role: result[0].role, client: result[0].client_id }
 
                         // Hash the provided password with the salt
                         crypto.scrypt(password, Buffer.from(result[0].salt, 'hex'), 32, (err, hashedPassword) => {

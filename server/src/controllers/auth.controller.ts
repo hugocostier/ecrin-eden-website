@@ -103,7 +103,7 @@ class AuthController {
         const ressourceId = parseInt(req.params.id)
 
         // Compare the ids
-        if (user.id === ressourceId || user.role === 'admin') {
+        if (user.client === ressourceId || user.role === 'admin') {
             // If they match, call next()
             return next()
         }
