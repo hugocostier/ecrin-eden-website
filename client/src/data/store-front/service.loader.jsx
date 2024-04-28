@@ -1,4 +1,4 @@
-import fetchApi from '../utils/fetchApi.util'
+import fetchApi from '../../utils/fetchApi.util'
 
 export const serviceLoader = async () => {
     try {

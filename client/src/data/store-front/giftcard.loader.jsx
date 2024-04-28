@@ -1,4 +1,4 @@
-import fetchApi from '../utils/fetchApi.util'
+import fetchApi from '../../utils/fetchApi.util'
 
 export const giftCardLoader = async () => {
     try {
@@ -19,7 +19,7 @@ export const giftCardLoader = async () => {
 
             // And return it
             return { giftCardContent: data.content }
-        } 
+        }
     } catch (error) {
         console.error('Error fetching gift-card data :', error)
     }

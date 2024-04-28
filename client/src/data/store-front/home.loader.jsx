@@ -1,4 +1,4 @@
-import fetchApi from '../utils/fetchApi.util'
+import fetchApi from '../../utils/fetchApi.util'
 
 export const homeLoader = async () => {
     try {
@@ -19,7 +19,7 @@ export const homeLoader = async () => {
 
             // And return it
             return { homeContent: data.content }
-        } 
+        }
     } catch (error) {
         console.error('Error fetching home data :', error)
     }
