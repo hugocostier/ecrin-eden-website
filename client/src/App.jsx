@@ -1,14 +1,40 @@
+import { Suspense } from 'react'
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
 import { Bounce, Slide, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.min.css'
-import { PrivateRoute } from './components'
 import { PrivateLogin } from './components/authentication/PrivateLogin'
 import { AuthProvider } from './context/auth.context'
 import { ClientProvider } from './context/client.context'
 import { PasswordRecoveryProvider } from './context/passwordRecovery.context'
 import { certificationLoader, contactLoader, giftCardLoader, homeLoader, priceLoader, serviceLoader } from './data'
-import { PrivateRoot, StoreRoot } from './layouts'
+import { StoreRoot } from './layouts/store-front/root.layout'
 import * as page from './pages'
+import { lazyLoad } from './utils/lazyLoad.util'
+
+// STORE FRONT PAGES 
+const HomePage = lazyLoad('../../src/pages/store-front/Home.page', 'HomePage')
+const ServicesPage = lazyLoad('../../src/pages/store-front/Services.page', 'ServicesPage')
+const PricesPage = lazyLoad('../../src/pages/store-front/Prices.page', 'PricesPage')
+const GiftCardsPage = lazyLoad('../../src/pages/store-front/GiftCards.page', 'GiftCardsPage')
+const CertificationPage = lazyLoad('../../src/pages/store-front/Certification.page', 'CertificationPage')
+const ContactPage = lazyLoad('../../src/pages/store-front/Contact.page', 'ContactPage')
+const AppointmentPage = lazyLoad('../../src/pages/store-front/Appointment.page', 'AppointmentPage')
+
+
+// USER DASHBOARD PAGES
+// const UserDashboard = lazyLoad('../../src/pages/private-dashboard/client-space/Dashboard.page', 'UserDashboard')
+const UserAppointments = lazyLoad('../../src/pages/private-dashboard/client-space/appointments/Appointments.page', 'MyAppointments')
+// const UserUpdateAppointment = lazyLoad('../../src/pages/private-dashboard/client-space/appointments/UpdateAppointment.page', 'UserUpdateAppointment')
+// const UserPreferences = lazyLoad('../../src/pages/private-dashboard/client-space/Preferences.page', 'UserPreferences')
+
+// ADMIN DASHBOARD PAGES
+
+
+// SHARED PAGES 
+const PrivateRoot = lazyLoad('../../src/layouts/private-dashboard/root.layout', 'PrivateRoot')
+const PrivateRoute = lazyLoad('../../src/components/private-dashboard/PrivateRoute', 'PrivateRoute')
+// const AccountPage = lazyLoad('../../src/pages/private-dashboard/Account.page', 'AccountPage')
+// const SettingsPage = lazyLoad('../../src/pages/private-dashboard/Settings.page', 'SettingsPage')
 
 const Router = createBrowserRouter(
     createRoutesFromElements(
@@ -21,38 +47,44 @@ const Router = createBrowserRouter(
                 >
                     <Route
                         index={true}
-                        element={<page.HomePage />}
+                        element={<HomePage />}
                         loader={homeLoader}
                     />
 
                     <Route
                         path='services'
-                        element={<page.ServicesPage />}
+                        element={<ServicesPage />}
                         loader={serviceLoader}
                     />
 
                     <Route
                         path='prices'
-                        element={<page.PricesPage />}
+                        element={<PricesPage />}
                         loader={priceLoader}
                     />
 
                     <Route
                         path='gift-cards'
-                        element={<page.GiftCardsPage />}
+                        element={<GiftCardsPage />}
                         loader={giftCardLoader}
                     />
 
                     <Route
                         path='certification'
-                        element={<page.CertificationPage />}
+                        element={<CertificationPage />}
                         loader={certificationLoader}
                     />
 
                     <Route
                         path='contact'
-                        element={<page.ContactPage />}
+                        element={<ContactPage />}
                         loader={contactLoader}
+                    />
+
+                    <Route
+                        path='appointment'
+                        element={<AppointmentPage />}
+                    // loader={contactLoader}
                     />
                 </Route>
 
@@ -84,25 +116,38 @@ const Router = createBrowserRouter(
                         index={true}
                         element={
                             <PrivateRoute isAllowed={['user']} redirectPath='/login' >
-                                <page.MyDashboard />
+                                <page.UserDashboard />
                             </PrivateRoute>
                         }
                     />
 
                     <Route
                         path='appointments'
-                        element={
-                            <PrivateRoute isAllowed={['user']} redirectPath='/login' >
-                                <page.MyAppointments />
-                            </PrivateRoute>
-                        }
-                    />
+                    >
+                        <Route
+                            index={true}
+                            element={
+                                <PrivateRoute isAllowed={['user']} redirectPath='/login' >
+                                    <UserAppointments />
+                                </PrivateRoute>
+                            }
+                        />
+
+                        <Route
+                            path='update/:id'
+                            element={
+                                <PrivateRoute isAllowed={['user']} redirectPath='/login' >
+                                    <page.UserUpdateAppointment />
+                                </PrivateRoute>
+                            }
+                        />
+                    </Route>
 
                     <Route
                         path='preferences'
                         element={
                             <PrivateRoute isAllowed={['user']} redirectPath='/login' >
-                                <page.MyPreferences />
+                                <page.UserPreferences />
                             </PrivateRoute>
                         }
                     />
@@ -271,7 +316,7 @@ const Router = createBrowserRouter(
 export const App = () => {
     return (
         // Add fallback element on the route provider for when the page is loading
-        <>
+        <Suspense>
             <RouterProvider router={Router} />
             <ToastContainer
                 containerId='notification'
@@ -289,6 +334,6 @@ export const App = () => {
                 pauseOnFocusLoss={false}
                 transition={Bounce}
             />
-        </>
+        </Suspense>
     )
 }
