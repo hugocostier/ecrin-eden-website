@@ -5,7 +5,6 @@ export { RegisterForm } from './authentication/RegisterForm'
 
 // Private dashboard components
 export { Header } from './private-dashboard/Header'
-export { PrivateRoute } from './private-dashboard/PrivateRoute'
 export { Sidebar } from './private-dashboard/sidebar/Sidebar'
 
 // Client specific components

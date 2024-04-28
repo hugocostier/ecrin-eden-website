@@ -1,10 +1,10 @@
 // Loaders
-export { certificationLoader } from './certification.loader'
-export { contactLoader } from './contact.loader'
-export { giftCardLoader } from './giftcard.loader'
-export { homeLoader } from './home.loader'
-export { priceLoader } from './price.loader'
-export { serviceLoader } from './service.loader'
+export { certificationLoader } from './store-front/certification.loader'
+export { contactLoader } from './store-front/contact.loader'
+export { giftCardLoader } from './store-front/giftcard.loader'
+export { homeLoader } from './store-front/home.loader'
+export { priceLoader } from './store-front/price.loader'
+export { serviceLoader } from './store-front/service.loader'
 
 // Fetches
 export {

@@ -1,18 +1,19 @@
 // Store front pages
-export { CertificationPage } from './store-front/Certification.page'
-export { ContactPage } from './store-front/Contact.page'
-export { GiftCardsPage } from './store-front/GiftCards.page'
-export { HomePage } from './store-front/Home.page'
-export { PricesPage } from './store-front/Prices.page'
-export { ServicesPage } from './store-front/Services.page'
+// export { AppointmentPage } from './store-front/Appointment.page'
+// export { CertificationPage } from './store-front/Certification.page'
+// export { ContactPage } from './store-front/Contact.page'
+// export { GiftCardsPage } from './store-front/GiftCards.page'
+// export { HomePage } from './store-front/Home.page'
+// export { PricesPage } from './store-front/Prices.page'
+// export { ServicesPage } from './store-front/Services.page'
 
 // User dashboard pages
 export { AccountPage } from './private-dashboard/Account.page'
-export { MyAppointments } from './private-dashboard/client-space/appointments/Appointments.page'
-export { MyDashboard } from './private-dashboard/client-space/Dashboard.page'
-export { MyPreferences } from './private-dashboard/client-space/Preferences.page'
+// export { MyAppointments as UserAppointments } from './private-dashboard/client-space/appointments/Appointments.page'
+export { UpdateAppointment as UserUpdateAppointment } from './private-dashboard/client-space/appointments/UpdateAppointment.page'
+export { MyDashboard as UserDashboard } from './private-dashboard/client-space/Dashboard.page'
+export { MyPreferences as UserPreferences } from './private-dashboard/client-space/Preferences.page'
 export { SettingsPage } from './private-dashboard/Settings.page'
-// export { UpdateAppointment } from './private-dashboard/client-space/appointments/UpdateAppointment.page'
 
 // Admin dashboard pages
 export { AddAppointment } from './private-dashboard/admin-space/appointments/AddAppointment.page'
