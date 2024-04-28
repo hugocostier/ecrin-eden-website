@@ -41,7 +41,7 @@ export const Footer = () => {
             <FooterContainer>
                 <FooterTop className='footer-top'>
                     <button className='btn-appointment'>
-                        <Link to={'/schedule-appointment'}>Prendre rendez-vous</Link>
+                        <Link to={'/appointment'}>Prendre rendez-vous</Link>
                     </button>
 
                     <div className="footer-info">

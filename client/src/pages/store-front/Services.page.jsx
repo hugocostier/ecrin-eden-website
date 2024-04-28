@@ -1,4 +1,4 @@
-import { useLoaderData } from 'react-router-dom'
+import { Link, useLoaderData } from 'react-router-dom'
 import StyledComponents from 'styled-components'
 import { Loading, PageTitle } from '../../components'
 import { useLoader } from '../../hooks/useLoader.hook'
@@ -31,23 +31,23 @@ export const ServicesPage = () => {
                                 </div>
                             </section>
 
-                            {serviceContent.services.map((services, index) => (
+                            {serviceContent.services.map((service, index) => (
                                 <section className={`card card-${index}`} key={index + 1}>
                                     <div className="card-content">
-                                        <h3 className='title'>{services.title}</h3>
-                                        <p className='time'>{services.time}</p>
+                                        <h3 className='title'>{service.title}</h3>
+                                        <p className='time'>{service.time}</p>
                                         <div className="text">
-                                            {services.text.map((text, index) => (
+                                            {service.text.map((text, index) => (
                                                 <p key={index}>{text}</p>
                                             ))}
                                         </div>
-                                        <a href="" className='btn-book'>
-                                            <button>Réserver maintenant</button>
-                                        </a>
+                                        <Link to={`/appointment?service=${service.title.toLowerCase()}`} className='btn-book'>
+                                            Réserver maintenant
+                                        </Link>
                                     </div>
 
                                     <div className="card-image">
-                                        <img src={services.image} alt={`service ${index + 1}`} />
+                                        <img src={service.image} alt={`service ${index + 1}`} />
                                     </div>
                                 </section>
                             ))}
