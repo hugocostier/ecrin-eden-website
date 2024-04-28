@@ -9,6 +9,8 @@ import { /*addAppointment,*/ fetchAllAppointments } from '../../../../data/appoi
 export const AddAppointment = () => {
     const navigate = useNavigate()
 
+    const [times, setTimes] = useState([])
+
     const [disable, setDisable] = useState(true)
     const [clients, setClients] = useState([])
     const [services, setServices] = useState([])
@@ -67,6 +69,106 @@ export const AddAppointment = () => {
     }
 
     console.log('appointments:', appointments)
+
+    const setAvailableTimes = (date) => {
+        const openHours = {
+            monday: { start: 'closed', end: 'closed' },
+            tuesday: { start: 'closed', end: 'closed' },
+            wednesday: { start: '17:00', end: '19:00' },
+            thursday: { start: '17:00', end: '19:00' },
+            friday: { start: '17:00', end: '19:00' },
+            saturday: { start: '10:00', end: '19:00' },
+            sunday: { start: 'closed', end: 'closed' },
+        }
+
+        const availableTimes = []
+
+        const selectedDayName = new Date(date).toLocaleDateString('en-EN', { weekday: 'long' }).toLowerCase()
+
+        const start = openHours[selectedDayName].start
+        const end = openHours[selectedDayName].end
+
+        if (start === 'closed' || end === 'closed') {
+            return availableTimes
+        }
+
+        const startTime = new Date(`01/01/2000 ${start}`)
+        const endTime = new Date(`01/01/2000 ${end}`)
+        const endTimePlusOneHour = new Date(`01/01/2000 ${end}`)
+        endTimePlusOneHour.setHours(endTimePlusOneHour.getHours() + 1)
+
+        const currentTime = startTime
+
+        while (currentTime <= endTime) {
+            const time = currentTime.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+
+            if (currentTime >= startTime && currentTime <= endTimePlusOneHour) {
+                availableTimes.push(time)
+            }
+
+            currentTime.setTime(currentTime.getTime() + 600000)
+        }
+
+        return availableTimes
+    }
+
+
+    const findAvailableTimes = (date) => {
+        const openHours = {
+            monday: { start: 'closed', end: 'closed' },
+            tuesday: { start: 'closed', end: 'closed' },
+            wednesday: { start: '17:00', end: '19:00' },
+            thursday: { start: '17:00', end: '19:00' },
+            friday: { start: '17:00', end: '19:00' },
+            saturday: { start: '10:00', end: '19:00' },
+            sunday: { start: 'closed', end: 'closed' },
+        }
+
+        const availableTimes = []
+        const unavailableTimes = []
+
+        const selectedDayName = new Date(date).toLocaleDateString('en-EN', { weekday: 'long' }).toLowerCase()
+
+        const appointmentsForDay = appointments.find(appointment => appointment.date === date)
+
+        // For each appointment, check if the time is available, if it is check the duration of the service and add that period to the unavailable times
+        for (const appointment of appointmentsForDay) {
+            const appointmentTime = new Date(`01/01/2000 ${appointment.time}`)
+            const appointmentTimePlusDuration = new Date(`01/01/2000 ${appointment.time}`)
+            appointmentTimePlusDuration.setMinutes(appointmentTimePlusDuration.getMinutes() + appointment.duration)
+
+            if (appointmentTime >= openHours[selectedDayName].start && appointmentTime < openHours[selectedDayName].end) {
+                unavailableTimes.push(appointmentTime.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }))
+            }
+        }
+
+        // For each unavailable time, check if the current time is in that period, if it is, add the duration of the service to the current time
+        for (const unavailableTime of unavailableTimes) {
+            const unavailableTimeStart = new Date(`01/01/2000 ${unavailableTime}`)
+            const unavailableTimeEnd = new Date(`01/01/2000 ${unavailableTime}`)
+            unavailableTimeEnd.setMinutes(unavailableTimeEnd.getMinutes() + duration)
+
+            if (currentTime >= unavailableTimeStart && currentTime < unavailableTimeEnd) {
+                currentTime.setTime(currentTime.getTime() + (duration * 60000))
+            }
+        }
+
+        // If the current time is not in the unavailable times and the selected service duration fits in the current time, add the current time to the available times
+        while (currentTime < endTime) {
+            const time = currentTime.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+
+            if (currentTime >= startTime && currentTime < endTimePlusOneHour && !appointments.some(appointment => appointment.time === time && appointment.date === date)) {
+                availableTimes.push(time)
+            }
+
+            currentTime.setTime(currentTime.getTime() + (duration * 60000))
+        }
+
+        console.log('availableTimes:', availableTimes)
+        console.log('unavailableTimes:', unavailableTimes)
+        return availableTimes
+    }
+
 
     const calculateAvailableTimes = () => {
         if (!searchParams.get('date')) {
@@ -201,7 +303,8 @@ export const AddAppointment = () => {
                         (e) => {
                             handleChange(e)
                             fetchAppointments(e.target.value)
-                            calculateAvailableTimes()
+                            // calculateAvailableTimes()
+                            setTimes(setAvailableTimes(e.target.value))
                         }
                     }
                 />
@@ -221,8 +324,16 @@ export const AddAppointment = () => {
                     id="time"
                     value={searchParams.get('time')}
                     onChange={handleChange}
+                    required
                 >
-                    {calculateAvailableTimes().map(time => (
+                    {times.length === 0 && (
+                        <option
+                            value=""
+                        >
+                            Aucun créneau disponible
+                        </option>
+                    )}
+                    {times.length !== 0 && times.map(time => (
                         <option
                             key={time}
                             value={time}

@@ -84,7 +84,7 @@ export const UpdateAppointment = () => {
     }
 
     return (
-        <div>
+        <main>
             <h2>Modifier le rendez-vous</h2>
 
             <StyledForm>
@@ -207,7 +207,7 @@ export const UpdateAppointment = () => {
                     </div>
                 )}
             </StyledForm>
-        </div>
+        </main>
     )
 }
 
