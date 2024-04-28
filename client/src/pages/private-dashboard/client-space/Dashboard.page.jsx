@@ -7,28 +7,28 @@ import { useClientInfo } from '../../../hooks/useClientInfo.hook'
 import { calculateWeekBounds } from '../../../utils/calculateWeekBounds.util'
 
 export const MyDashboard = () => {
-    const client = useClientInfo();
-    const [count, setCount] = useState(null);
+    const client = useClientInfo()
+    const [count, setCount] = useState(null)
 
     useEffect(() => {
         if (client.id) {
-            const weekBounds = calculateWeekBounds(new Date());
-            const firstDayOfWeek = weekBounds.firstDay.toISOString().split('T')[0];
-            const lastDayOfWeek = weekBounds.lastDay.toISOString().split('T')[0];
+            const weekBounds = calculateWeekBounds(new Date())
+            const firstDayOfWeek = weekBounds.firstDay.toISOString().split('T')[0]
+            const lastDayOfWeek = weekBounds.lastDay.toISOString().split('T')[0]
 
             countUserAppointments({ clientId: client.id, firstDayOfWeek, lastDayOfWeek, today: new Date().toISOString().split('T')[0] })
                 .then(count => {
-                    setCount(count.data);
+                    setCount(count.data)
                 })
                 .catch(error => {
-                    console.error('Error fetching data:', error);
-                });
+                    console.error('Error fetching data:', error)
+                })
         }
 
         return () => {
-            setCount(null);
+            setCount(null)
         }
-    }, [client.id]); // Fetch data whenever client.id changes
+    }, [client.id]) // Fetch data whenever client.id changes
 
     return (
         <StyledDashboard>
@@ -51,8 +51,8 @@ export const MyDashboard = () => {
                 <img src={image} alt='dashboard' />
             </aside>
         </StyledDashboard>
-    );
-};
+    )
+}
 
 const StyledDashboard = StyledComponents.main`
     display: grid; 
