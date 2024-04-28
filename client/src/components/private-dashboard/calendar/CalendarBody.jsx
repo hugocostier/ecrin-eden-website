@@ -4,15 +4,19 @@ import { toast } from 'react-toastify'
 import StyledComponents from 'styled-components'
 import { fetchAllAppointments, fetchAppointments } from '../../../data'
 import { useAuth } from '../../../hooks/useAuth.hook'
+import { useClientInfo } from '../../../hooks/useClientInfo.hook'
 import { renderDay, renderMonth, renderWeek } from '../../../utils/renderCalendar.util'
 import { Days } from './Days'
 import { Week } from './Week'
 
 export const CalendarBody = ({ currentDate, currentView }) => {
+    const client = useClientInfo()
     const [appointments, setAppointments] = useState([])
     const isAdmin = useAuth().user.role === 'admin'
 
     useEffect(() => {
+        if (!client.id) return
+
         const options = { timeZone: 'Europe/Paris', year: 'numeric', month: '2-digit', day: '2-digit' }
 
         if (currentView === 'day') {
@@ -32,7 +36,7 @@ export const CalendarBody = ({ currentDate, currentView }) => {
                         console.error('Error fetching events:', error)
                     })
             } else {
-                toast.promise(fetchAppointments({ day: todayFormatted, clientId: 6 }), {
+                toast.promise(fetchAppointments({ day: todayFormatted, clientId: client.id }), {
                     pending: 'Chargement...',
                     success: 'Rendez-vous récupérés !',
                     error: 'Erreur lors de la récupération des rendez-vous'
@@ -80,7 +84,7 @@ export const CalendarBody = ({ currentDate, currentView }) => {
                         console.error('Error fetching events:', error)
                     })
             } else {
-                toast.promise(fetchAppointments({ rangeStart: rangeStartFormatted, rangeEnd: rangeEndFormatted, clientId: 6 }), {
+                toast.promise(fetchAppointments({ rangeStart: rangeStartFormatted, rangeEnd: rangeEndFormatted, clientId: client.id }), {
                     pending: 'Chargement...',
                     success: 'Rendez-vous récupérés !',
                     error: 'Erreur lors de la récupération des rendez-vous'
@@ -97,7 +101,7 @@ export const CalendarBody = ({ currentDate, currentView }) => {
         return () => {
             setAppointments([])
         }
-    }, [currentDate, currentView, isAdmin])
+    }, [currentDate, currentView, isAdmin, client.id])
 
     return (
         <StyledCalendarBody className={currentView}>
