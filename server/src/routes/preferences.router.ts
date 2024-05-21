@@ -1,12 +1,14 @@
-import express from 'express'
-import auth from '../controllers/auth.controller.js'
-import preferences from '../controllers/preferences.controller.js'
+import express, { Router } from 'express'
+import AuthController from '../controllers/auth.controller.js'
+import PreferencesController from '../controllers/preferences.controller.js'
 
-const router = express.Router() 
+const router: Router = express.Router() 
+
+const preferencesController: PreferencesController = new PreferencesController() 
+const authController: AuthController = new AuthController()
 
 router.route('/:id')
-    .get(auth.isLoggedIn, auth.isAuthorized, preferences.getPreferencesForClient)
-    .post(auth.isLoggedIn, auth.isAuthorized, preferences.addPreferences)
-    .patch(auth.isLoggedIn, auth.isAuthorized, preferences.updatePreferences)
+    .get(authController.isLoggedIn, authController.isAuthorized, preferencesController.getPreferencesForClient)
+    .patch(authController.isLoggedIn, authController.isAuthorized, preferencesController.updatePreferences)
 
 export default router 

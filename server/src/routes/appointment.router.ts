@@ -1,33 +1,34 @@
-import express from 'express'
-import appointment from '../controllers/appointment.controller.js'
-import auth from '../controllers/auth.controller.js'
-import { Appointment } from '../entities/Appointment.js'
-import { validationMiddleware } from '../middlewares/validation.js'
+import express, { Router } from 'express'
+import AppointmentController from '../controllers/appointment.controller.js'
+import AuthController from '../controllers/auth.controller.js'
 
-const router = express.Router() 
+const router: Router = express.Router() 
+
+const appointmentController: AppointmentController = new AppointmentController()
+const authController: AuthController = new AuthController() 
 
 router.route('/')
-    .post(auth.isAdmin, appointment.getAppointments)
+    .post(authController.isAdmin, appointmentController.getAppointments)
 
 router.route('/add')
-    .post(validationMiddleware(Appointment), appointment.addAppointment)
+    .post(appointmentController.addAppointment)
 
 router.route('/:id')
-    .get(auth.isLoggedIn, auth.isAuthorized, appointment.getAppointmentById)
-    .patch(auth.isLoggedIn, auth.isAuthorized, appointment.updateAppointment)
-    .delete(auth.isLoggedIn, auth.isAuthorized, appointment.deleteAppointment)
+    .get(authController.isLoggedIn, authController.isAuthorized, appointmentController.getAppointmentById)
+    .patch(authController.isLoggedIn, authController.isAuthorized, appointmentController.updateAppointment)
+    .delete(authController.isLoggedIn, authController.isAuthorized, appointmentController.deleteAppointment)
 
 router.route('/client/:id') 
-    .post(auth.isLoggedIn, auth.isAuthorized, appointment.getAppointmentsByClient)
+    .post(authController.isLoggedIn, authController.isAuthorized, appointmentController.getAppointmentsByClient)
 
 router.route('/service/:id')
-    .get(auth.isLoggedIn, auth.isAuthorized, appointment.getAppointmentsByService)
+    .get(authController.isLoggedIn, authController.isAuthorized, appointmentController.getAppointmentsByService)
 
 router.route('/count')
-    .post(auth.isLoggedIn, auth.isAuthorized, appointment.countAppointmentsForDay)
+    .post(authController.isLoggedIn, authController.isAuthorized, appointmentController.countAppointmentsForDay)
 
 router.route('/count/:id')
-    .post(auth.isLoggedIn, auth.isAuthorized, appointment.countAppointmentsForWeekAndClient)
+    .post(authController.isLoggedIn, authController.isAuthorized, appointmentController.countAppointmentsForWeekAndClient)
 
 
 export default router 

@@ -1,37 +1,26 @@
-import express from 'express'
-import auth from '../controllers/auth.controller.js'
-import client from '../controllers/client.controller.js'
-import { Client } from '../entities/Client.js'
-import { validationMiddleware } from '../middlewares/validation.js'
+import express, { Router } from 'express'
+import AuthController from '../controllers/auth.controller.js'
+import ClientController from '../controllers/client.controller.js'
 
-const router = express.Router() 
+const router: Router = express.Router() 
+
+const clientController: ClientController = new ClientController()
+const authController: AuthController = new AuthController()
 
 router.route('/')
-    .get(auth.isAdmin, client.getAllClients)
-    .post(auth.isAdmin, client.addClient)
+    .get(authController.isAdmin, clientController.getAllClients)
+    .post(authController.isAdmin, clientController.addClient)
 
 router.route('/:id')
-    .get(auth.isLoggedIn, auth.isAuthorized, client.getClient)
-    .patch(auth.isLoggedIn, auth.isAuthorized, client.updateClient)
-    .delete(auth.isAdmin, client.deleteClient)
+    .get(authController.isLoggedIn, authController.isAuthorized, clientController.getClient)
+    .patch(authController.isLoggedIn, authController.isAuthorized, clientController.updateClient)
+    .delete(authController.isAdmin, clientController.deleteClient)
 
 router.route('/user/:id') 
-    .get(client.getClientByUser)
-
-// router.route('/client/:id/address')
-//     .get(client.getClientAddress)
+    .get(clientController.getClientByUser)
 
 router.route('/client/:id/personal-info')
-    .get(auth.isLoggedIn, auth.isAuthorized, client.getClientPersonalInfo)
-    .delete(auth.isLoggedIn, auth.isAuthorized, client.deleteClientPersonalInfo)
-
-router.route('/client/:id/profile-picture')
-    .get(auth.isLoggedIn, auth.isAuthorized, client.getClientProfilePicture)
-
-// router.route('/client/:id/shared-notes')
-//     .get(client.getClientSharedNotes)
-
-router.route('/search/:firstName/:lastName')
-    .get(auth.isAdmin, client.getClientByName)
+    .get(authController.isLoggedIn, authController.isAuthorized, clientController.getClientPersonalInfo)
+    .delete(authController.isLoggedIn, authController.isAuthorized, clientController.deleteClientPersonalInfo)
 
 export default router 

@@ -1,18 +1,19 @@
-import express from 'express'
-import auth from '../controllers/auth.controller.js'
-import serviceController from '../controllers/service.controller.js'
-import { Service } from '../entities/Service.js'
-import { validationMiddleware } from '../middlewares/validation.js'
+import express, { Router } from 'express'
+import AuthController from '../controllers/auth.controller.js'
+import ServiceController from '../controllers/service.controller.js'
 
-const router = express.Router() 
+const router: Router = express.Router() 
+
+const serviceController = new ServiceController()
+const authController: AuthController = new AuthController()
 
 router.route('/')
     .get(serviceController.getAllServices)
-    .post(auth.isAdmin, validationMiddleware(Service), serviceController.addService)
+    .post(serviceController.addService)
 
 router.route('/:id')
     .get(serviceController.getService) 
-    .patch(auth.isAdmin, validationMiddleware(Service), serviceController.updateService)
-    .delete(auth.isAdmin, serviceController.deleteService)
+    .patch(authController.isAdmin, serviceController.updateService)
+    .delete(authController.isAdmin, serviceController.deleteService)
 
 export default router 

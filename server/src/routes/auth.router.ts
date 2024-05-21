@@ -1,8 +1,12 @@
-import express from 'express'
+import express, { Router } from 'express'
 import passport from 'passport'
-import auth from '../controllers/auth.controller.js'
+import AuthController from '../controllers/auth.controller.js'
+import OTPController from '../controllers/otp.controller.js'
 
-const router = express.Router() 
+const router: Router = express.Router() 
+
+const authController: AuthController = new AuthController()
+const otpController: OTPController = new OTPController() 
 
 // Google authentication 
 // router.route('/login/google') 
@@ -18,26 +22,30 @@ const router = express.Router()
 
 // Local authentication 
 router.route('/login/password') 
-    .post(auth.loginWithPassword)
+    .post(authController.loginWithPassword)
 
 // Register a new user
 router.route('/register')
-    .post(auth.register)
+    .post(authController.register)
+
+// Verify user email
+router.route('/verify-email')
+    .patch(authController.verifyUser)
 
 // Check if user is logged in
 router.route('/current-user')
-    .get(auth.currentUser) 
+    .get(authController.currentUser) 
 
 // Logout the user 
 router.route('/logout')
-    .get(auth.logout)
+    .get(authController.logout)
 
 // Send OTP to user email
 router.route('/forgot-password')
-    .post(auth.sendOTP)
+    .post(otpController.sendOTP)
 
 // Reset user password
 router.route('/reset-password') 
-    .post(auth.resetUserPassword)
+    .post(authController.resetUserPassword)
 
 export default router 
