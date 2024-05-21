@@ -1,38 +1,64 @@
-import crypto from 'crypto';
-import { NextFunction, Request, Response } from 'express';
-import passport from 'passport';
-import { User } from '../entities/User.js';
-import { CustomAPIError } from '../errors/custom-errors.js';
-import { UserRepository } from '../repositories/user.repository.js';
-import { AuthService } from '../services/auth.service.js';
-import EmailController from './email.controller.js';
+import crypto from 'crypto'
+import { NextFunction, Request, Response } from 'express'
+import passport from 'passport'
+import User from '../entities/User.entity.js'
+import { AuthService } from '../services/auth.service.js'
+import { UserService } from '../services/user.service.js'
+import BaseController from './base.controller.js'
+import EmailController from './email.controller.js'
 
-class AuthController {
-    private _authService = new AuthService()
-    private _userRepository = UserRepository
-    private _emailController = EmailController
+/**
+ * Controller that manages the authentication and authorization of users.
+ * 
+ * @class AuthController
+ * @property {AuthService} _authService - The `AuthService` instance to manage user authentication.
+ * @property {UserService} _userService - The `UserService` instance to manage user data.
+ * @property {EmailController} _emailController - The `EmailController` instance to manage email communication.
+ */
+export default class AuthController extends BaseController {
+    private _authService: AuthService = new AuthService()
+    private _userService: UserService = new UserService()
+    private _emailController: EmailController = new EmailController()
 
-    public register = async (req: Request, res: Response, next: NextFunction) => {
-        try {
+    /**
+     * Registers a new user
+     * 
+     * @async
+     * @method register
+     * @memberof AuthController
+     * @param {Request} req - The request object
+     * @param {Response} res - The response object
+     * @param {NextFunction} next - The next function
+     * @returns {Promise<Response<any, Record<string, any>> | undefined>} A response object with a status code and a message or the next function if an error occurs
+     */
+    public register = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+        await this.handleRequest(req, res, async () => {
             const { email, password, first_name, last_name } = req.body
+            
+            const token = crypto.randomBytes(32).toString('hex')
+            console.log('Token: ', token)
 
-            const user = await this._authService.register(email, password, first_name.toLowerCase(), last_name.toLowerCase())
+            await this._emailController.sendVerificationLink(email, token)
+                .catch((error: any) => {
+                    return res.status(500).json({ error: 'Error sending verification email' })
+                }) 
 
-            return res.status(201).json({
-                data: user, 
-                message: 'User registered successfully'
-            })
-        } catch (error) {
-            if (error instanceof CustomAPIError) {
-                return res.status(error.statusCode).json({ 
-                    message: error.message 
-                })
-            }
-            next(error)
-        }
+            return await this._authService.register(email, password, first_name.toLowerCase(), last_name.toLowerCase(), token) 
+        }, 'User registered successfully')
     }
 
-    public loginWithPassword = async (req: Request, res: Response, next: NextFunction) => {
+    /**
+     * Logs in a user with a password
+     * 
+     * @async
+     * @method loginWithPassword
+     * @memberof AuthController
+     * @param {Request} req - The request object
+     * @param {Response} res - The response object
+     * @param {NextFunction} next - The next function
+     * @returns {Promise<void>} A response object with a status code and a message or the next function if an error occurs
+     */
+    public loginWithPassword = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         passport.authenticate('local', (err: Error, user: User | false, info: { message: string }) => {
             if (err) {
                 return next(err)
@@ -48,8 +74,7 @@ class AuthController {
                 }
 
                 if (req.body.remember_me) {
-                    // Set the session to expire in 14 days
-                    req.session.cookie.maxAge = 1000 * 60 * 60 * 24 * 14
+                    req.session.cookie.maxAge = 1000 * 60 * 60 * 24 * 14 // Set the session to expire in 14 days
                 }
 
                 return res.status(201).json({ user: req.user })
@@ -61,14 +86,34 @@ class AuthController {
         // TODO
     }
 
-    public logout = async (req: Request, res: Response, next: NextFunction) => {
+    /**
+     * Logs out a user
+     * 
+     * @method logout
+     * @memberof AuthController
+     * @param {Request} req - The request object
+     * @param {Response} res - The response object
+     * @param {NextFunction} next - The next function
+     * @returns {void} A response object with a status code and a message or the next function if an error occurs
+     */
+    public logout = (req: Request, res: Response, next: NextFunction): void => {
         req.logout(() => {
             res.status(200).json({ message: 'Logged out' })
             res.end()
         })
     }
 
-    public currentUser = async (req: Request, res: Response, next: NextFunction) => {
+    /**
+     * Gets the current user
+     * 
+     * @method currentUser
+     * @memberof AuthController
+     * @param {Request} req - The request object
+     * @param {Response} res - The response object
+     * @param {NextFunction} next - The next function
+     * @returns {Response<any, Record<string, any>>} A response object with a status code and a message or the next function if the user is logged in
+     */
+    public currentUser = (req: Request, res: Response, next: NextFunction): Response<any, Record<string, any>> => {
         if (req.isAuthenticated()) {
             return res.status(200).json({ user: req.user, message: 'You are authenticated on the server'})
         }
@@ -76,7 +121,36 @@ class AuthController {
         return res.status(401).json({ error: 'Not authenticated' })
     }
 
-    public isLoggedIn = async (req: Request, res: Response, next: NextFunction) => {
+    /**
+     * Verifies a user
+     * 
+     * @async
+     * @method verifyUser
+     * @memberof AuthController
+     * @param {Request} req - The request object
+     * @param {Response} res - The response object
+     * @param {NextFunction} next - The next function
+     * @returns {Promise<void>} A response object with a status code and a message or the next function if an error occurs
+     */
+    public verifyUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        await this.handleRequest(req, res, async () => {
+            const { token, email } = req.params
+
+            return await this._authService.verifyUser(email, token)
+        }, 'User verified successfully')
+    }
+
+    /**
+     * Checks if the user is logged in
+     * 
+     * @method isLoggedIn
+     * @memberof AuthController
+     * @param {Request} req - The request object
+     * @param {Response} res - The response object
+     * @param {NextFunction} next - The next function
+     * @returns {void | Response<any, Record<string, any>>} A response object with a status code and a message or the next function if the user is logged in
+     */
+    public isLoggedIn = (req: Request, res: Response, next: NextFunction): void | Response<any, Record<string, any>> => {
         if (req.isAuthenticated()) {
             return next() 
         } 
@@ -84,9 +158,19 @@ class AuthController {
         return res.status(401).json({ error: 'Not authenticated' })
     }
 
-    public isAdmin = async (req: Request, res: Response, next: NextFunction) => {
-        // Get the user from the request 
-        const user = req.user as User 
+    /**
+     * Checks if the user is an admin
+     * 
+     * @async
+     * @method isAdmin
+     * @memberof AuthController
+     * @param {Request} req - The request object
+     * @param {Response} res - The response object
+     * @param {NextFunction} next - The next function
+     * @returns {void | Response<any, Record<string, any>>} A response object with a status code and a message or the next function if the user is an admin
+     */
+    public isAdmin = (req: Request, res: Response, next: NextFunction): void | Response<any, Record<string, any>> => {
+        const user: User = req.user as User
 
         if (req.isAuthenticated() && user.role === 'admin') {
             return next()
@@ -95,130 +179,48 @@ class AuthController {
         return res.status(401).json({ error: 'Not authorized' })
     }
 
-    public isAuthorized = async (req: Request, res: Response, next: NextFunction) => {
+    /**
+     * Checks if the user is authorized to access a ressource
+     * 
+     * @async
+     * @method isAuthorized
+     * @memberof AuthController
+     * @param {Request} req - The request object
+     * @param {Response} res - The response object
+     * @param {NextFunction} next - The next function
+     * @returns {void | Response<any, Record<string, any>>} A response object with a status code and a message or the next function if the user is authorized
+     */
+    public isAuthorized = (req: Request, res: Response, next: NextFunction): void | Response<any, Record<string, any>> => {
         // Get the user from the request
-        const user = req.user as User
+        const user: User = req.user as User
 
         // Get the id of the ressource owner
-        const ressourceId = parseInt(req.params.id)
+        const ressourceId: number = parseInt(req.params.id)
 
         // Compare the ids
-        if (user.client === ressourceId || user.role === 'admin') {
-            // If they match, call next()
+        if (user.client?.id === ressourceId || user.role === 'admin') {
             return next()
         }
         
-        // If they don't match, return 401
         return res.status(401).json({ error: 'Not authorized' })
     }
 
-    public sendOTP = async (req: Request, res: Response, next: NextFunction) => {
-        const { recipient_email: email, otp } = req.body 
+    /**
+     * Resets the password of a user
+     * 
+     * @async
+     * @method resetUserPassword
+     * @memberof AuthController
+     * @param {Request} req - The request object
+     * @param {Response} res - The response object
+     * @param {NextFunction} next - The next function
+     * @returns {Promise<Response<any, Record<string, any>>>} A response object with a status code and a message or the next function if an error occurs
+     */
+    public resetUserPassword = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+        await this.handleRequest(req, res, async () => {
+            const { email, otp, new_password: password } = req.body
 
-        // Find the user by email
-        const user = await this._userRepository.findOneBy({ email })
-            .catch((error) => {
-                return next(error)
-            }) 
-
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' })
-        }
-
-        if (!this.checkOTP(otp)) {
-            return res.status(401).json({ message: 'Invalid OTP' })
-        }
-
-        // Generate an expiration date for the OTP
-        const otpExpires = new Date(Date.now() + 600000) // 10 minutes
-
-        // Save the OTP and the expiration date to the user
-        user.otp = otp.toString()
-        user.otpExpires = otpExpires
-
-        // Save the user
-        await this._userRepository.save(user)
-            .catch((error) => {
-                return next(error)
-            })
-
-        // Send an email with the otp to the user
-        await this._emailController.sendResetPasswordOTP(email, otp)
-            .catch((error) => {
-                return next(error)
-            })
-
-        return res.status(200).json({ message: 'OTP sent to email' })
-    }
-
-    public resetUserPassword = async (req: Request, res: Response, next: NextFunction) => {
-        const { email, otp, new_password: password } = req.body
-
-        const user = await this._userRepository.findOneBy({ email })
-            .catch((error) => {
-                return next(error)
-            })
-
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' })
-        }
-
-        if (!this.checkOTP(otp) || !this.verifyOTP(user, otp)) {
-            return res.status(401).json({ message: 'Invalid OTP' })
-        }
-
-        // Get user salt
-        const salt = user.salt ? user.salt : crypto.randomBytes(16).toString('hex')
-
-        // Hash the new password with the salt
-        crypto.scrypt(password, Buffer.from(salt, 'hex'), 32, (err, hashedPassword) => {
-            if (err) {
-                return next(err)
-            }
-
-            // Convert the hashed password to a hex string
-            const hashedPasswordString = hashedPassword.toString('hex')
-
-            // Save the new password to the user
-            user.password = hashedPasswordString
-            user.salt = salt
-            user.otp = null
-            user.otpExpires = null
-
-            // Save the user
-            this._userRepository.save(user)
-                .catch((error) => {
-                    return next(error)
-                })
-        }) 
-
-        return res.status(200).json({ message: 'Password reset' })
-    }
-
-    private checkOTP = (otp: string) => {
-        const otpRegex = /^[0-9]{4}$/ // Regex for a 4-digit OTP
-    
-        // Check if the OTP is valid
-        return otpRegex.test(otp)
-    }
-
-    private verifyOTP = (user: User, otp: string) => {        
-        // Check if the user has an OTP and an OTP expiration date
-        if (!user.otp || !user.otpExpires) {
-            return false
-        }
-
-        const now = Date.now() // Get the current time
-        const otpTime = new Date(user.otpExpires).getTime() // Get the time the token expires
-
-        // Check if the OTP has expired (10 minutes)
-        if (otpTime - now <= 0) {
-            return false && { message: 'OTP expired' }
-        }
-
-        // Check if the OTP matches the user's OTP
-        return user.otp === otp.toString()
+            return await this._authService.resetPassword(email, otp, password)
+        }, 'Password reset successfully')
     }
 }
-
-export default new AuthController() 

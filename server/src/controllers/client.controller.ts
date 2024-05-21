@@ -1,177 +1,173 @@
 import { Request, Response } from 'express'
-import asyncHandler from '../middlewares/async.js'
+import Client from '../entities/Client.entity.js'
 import { ClientService } from '../services/client.service.js'
+import BaseController from './base.controller.js'
 
-class ClientController {
-    private _clientService = new ClientService
+/**
+ * Controller for clients
+ * 
+ * @class ClientController
+ * @extends BaseController
+ * @property {ClientService} _clientService - Instance of ClientService
+ */
+export default class ClientController extends BaseController {
+    private _clientService: ClientService = new ClientService()
 
-    // Get all clients
-    public getAllClients = asyncHandler(async (req: Request, res: Response) => {
-        const clients = await this._clientService.getAllClients() 
+    /**
+     * Get all clients
+     * 
+     * @method getAllClients
+     * @memberof ClientController
+     * @param {Request} req - Request object
+     * @param {Response} res - Response object
+     * @returns {Promise<void>} A promise that resolves when the clients are returned.
+     */
+    public getAllClients = async (req: Request, res: Response): Promise<void> => {
+        await this.handleRequest(req, res, async () => {
+            return await this._clientService.getAllClients()
+        }) 
+    }
 
-        res.status(200).json({
-            success: true, 
-            data: clients
+    /**
+     * Get a client
+     * 
+     * @method getClient
+     * @memberof ClientController
+     * @param {Request} req - Request object
+     * @param {Response} res - Response object
+     * @returns {Promise<void>} A promise that resolves when the client is returned.
+     */
+    public getClient = async (req: Request, res: Response): Promise<void> => {
+        await this.handleRequest(req, res, async () => {
+            const { id: clientId } = req.params
+
+            return await this._clientService.getClientWithUser(clientId)
+        }) 
+    }
+
+    /**
+     * Get a client by name
+     * 
+     * @method getClientByName
+     * @memberof ClientController
+     * @param {Request} req - Request object
+     * @param {Response} res - Response object
+     * @returns {Promise<void>} A promise that resolves when the client is returned.
+     */
+    public getClientByName = async (req: Request, res: Response): Promise<void> => {
+        await this.handleRequest(req, res, async () => {
+            const { first_name, last_name } = req.body 
+
+            return await this._clientService.getClientByName(first_name, last_name)
         })
-    })
+    }
 
-    // Get a client
-    public getClient = asyncHandler(async (req: Request, res: Response) => {
-        const { id: clientId } = req.params
+    /**
+     * Get a client by user
+     * 
+     * @method getClientByUser
+     * @memberof ClientController
+     * @param {Request} req - Request object
+     * @param {Response} res - Response object
+     * @returns {Promise<void>} A promise that resolves when the client is returned.
+     */
+    public getClientByUser = async (req: Request, res: Response): Promise<void> => {
+        await this.handleRequest(req, res, async () => {
+            const { id: userId } = req.params
 
-        const client = await this._clientService.getClient(clientId)
+            return await this._clientService.getClientByUser(userId)
+        }) 
+    }
+    
 
-        res.status(200).json({
-            success: true, 
-            data: client
-        })
-    })
+    /**
+     * Get a client's personal information
+     * 
+     * @method getClientPersonalInfo
+     * @memberof ClientController
+     * @param {Request} req - Request object
+     * @param {Response} res - Response object
+     * @returns {Promise<void>} A promise that resolves when the client's personal information is returned.
+     */
+    public getClientPersonalInfo = async (req: Request, res: Response): Promise<void> => {
+        await this.handleRequest(req, res, async () => {
+            const { id: clientId } = req.params 
 
-    // Get a client by name
-    public getClientByName = asyncHandler(async (req: Request, res: Response) => {
-        const { first_name, last_name } = req.body 
+            return await this._clientService.getClientPersonalInfo(clientId)
+        }) 
+    }
 
-        const client = await this._clientService.getClientByName(first_name, last_name)
+    /**
+     * Delete a client's personal information
+     * 
+     * @method deleteClientPersonalInfo
+     * @memberof ClientController
+     * @param {Request} req - Request object
+     * @param {Response} res - Response object
+     * @returns {Promise<void>} A promise that resolves when the client's personal information is deleted.
+     */
+    public deleteClientPersonalInfo = async (req: Request, res: Response): Promise<void> => { 
+        await this.handleRequest(req, res, async () => {
+            const { id: clientId } = req.params 
 
-        res.status(200).json({
-            success: true, 
-            data: client
-        })
-    })
+            return await this._clientService.deletePersonalInfo(clientId)
+        }, 'Personal information deleted successfully') 
+    }
 
-    // Get a client by it's related user
-    public getClientByUser = asyncHandler(async (req: Request, res: Response) => {
-        const { id: userId } = req.params 
+    /**
+     * Add a client
+     * 
+     * @method addClient
+     * @memberof ClientController
+     * @param {Request} req - Request object
+     * @param {Response} res - Response object
+     * @returns {Promise<void>} A promise that resolves when the client is added.
+     */
+    public addClient = async (req: Request, res: Response): Promise<void> => {
+        await this.handleRequest(req, res, async () => {
+            const validRequestBody: Partial<Client> = this.filterRequestBody(req.body, Client)
 
-        const client = await this._clientService.getClientByUser(userId)
+            return await this._clientService.createClient(validRequestBody)
+        }, 'Client added successfully', 201) 
+    }
 
-        res.status(200).json({
-            success: true, 
-            data: client
-        })
-    })
-
-    // Add a client
-    public addClient = asyncHandler(async (req: Request, res: Response) => {
-        const {
-            first_name, 
-            last_name, 
-            phone_number, 
-            address, 
-            postal_code, 
-            city, 
-            shared_notes, 
-            private_notes
-        } = req.body
+    /**
+     * Update a client
+     * 
+     * @method updateClient
+     * @memberof ClientController
+     * @param {Request} req - Request object
+     * @param {Response} res - Response object
+     * @returns {Promise<void>} A promise that resolves when the client is updated.
+     */
+    public updateClient = async (req: Request, res: Response): Promise<void> => {
+        await this.handleRequest(req, res, async () => {
+            const { id: clientId } = req.params 
         
-        const client = await this._clientService.createClient({
-            first_name, 
-            last_name, 
-            phone_number, 
-            address, 
-            postal_code, 
-            city, 
-            shared_notes, 
-            private_notes
-        })
+            if (req.file && req.file.path) {
+                req.body.profile_picture = req.file.path
+            }
+            
+            const validRequestBody: Partial<Client> = this.filterRequestBody(req.body, Client)
 
-        res.status(201).json({
-            success: true, 
-            data: client, 
-            msg: 'Client created successfully'
-        })
-    })
+            return await this._clientService.updateClient(clientId, validRequestBody)
+        }, 'Client updated successfully')
+    }
 
-    // Update a client
-    public updateClient = asyncHandler(async (req: Request, res: Response) => {
-        const { id: clientId } = req.params 
-        
-        if (req.file) {
-            req.body.profile_picture = req.file.path
-        }
+    /**
+     * Delete a client
+     * 
+     * @method deleteClient
+     * @memberof ClientController
+     * @param {Request} req - Request object
+     * @param {Response} res - Response object
+     * @returns {Promise<void>} A promise that resolves when the client is deleted.
+     */
+    public deleteClient = async (req: Request, res: Response): Promise<void> => {
+        await this.handleRequest(req, res, async () => {
+            const { id: clientId } = req.params 
 
-        const client = await this._clientService.updateClient(clientId, req.body)
-
-        res.status(200).json({
-            success: true, 
-            data: client, 
-            msg: 'Client updated successfully'
-        })
-    })
-
-    // Delete a client
-    public deleteClient = asyncHandler(async (req: Request, res: Response) => {
-        const { id: clientId } = req.params 
-
-        const client = await this._clientService.deleteClient(clientId)
-
-        res.status(200).json({
-            success: true, 
-            data: client, 
-            msg: 'Client deleted successfully'
-        })
-    })
-
-    // Get client address
-    // public getClientAddress = asyncHandler(async (req: Request, res: Response) => {
-    //     const { id: clientId } = req.params 
-
-    //     const address = await this._clientService.getAddress(clientId)
-
-    //     res.status(200).json({
-    //         success: true, 
-    //         data: address
-    //     })
-    // }) 
-
-    // Get client profile picture
-    public getClientProfilePicture = asyncHandler(async (req: Request, res: Response) => {
-        const { id: clientId } = req.params 
-
-        const profilePicture = await this._clientService.getProfilePicture(clientId)
-
-        res.status(200).json({
-            success: true, 
-            data: profilePicture
-        })
-    })
-
-    // Get client shared notes
-    // public getClientSharedNotes = asyncHandler(async (req: Request, res: Response) => {
-    //     const { id: clientId } = req.params 
-
-    //     const sharedNotes = await this._clientService.getSharedNotes(clientId)
-
-    //     res.status(200).json({
-    //         success: true, 
-    //         data: sharedNotes
-    //     })
-    // })
-
-    // Get client personal information
-    public getClientPersonalInfo = asyncHandler(async (req: Request, res: Response) => {
-        const { id: clientId } = req.params 
-
-        const personalInfo = await this._clientService.getClientPersonalInfo(clientId)
-
-        res.status(200).json({
-            success: true, 
-            data: personalInfo
-        })
-    }) 
-
-    // Delete client personal information
-    public deleteClientPersonalInfo = asyncHandler(async (req: Request, res: Response) => { 
-        const { id: clientId } = req.params 
-
-        const personalInfo = await this._clientService.deletePersonalInfo(clientId)
-
-        res.status(200).json({
-            success: true, 
-            data: personalInfo
-        })
-    })
-
+            return await this._clientService.deleteClient(clientId)
+        }, 'Client deleted successfully', 204) 
+    }
 }
-
-export default new ClientController()

@@ -1,69 +1,107 @@
 import { Request, Response } from 'express'
-import asyncHandler from '../middlewares/async.js'
+import User from '../entities/User.entity.js'
 import { UserService } from '../services/user.service.js'
+import BaseController from './base.controller.js'
 
-class UserController {
-    private _userService = new UserService
+/**
+ * Controller for users
+ * 
+ * @class UserController
+ * @extends BaseController
+ * @property {UserService} _userService - Instance of UserService
+ */
+export default class UserController extends BaseController {
+    private _userService: UserService = new UserService()
 
-    public getAllUsers = asyncHandler(async (req: Request, res: Response) => {
-        const users = await this._userService.getAllUsers()
+    /**
+     * Get all users
+     * 
+     * @method getAllUsers
+     * @memberof UserController
+     * @param {Request} req - Request object
+     * @param {Response} res - Response object
+     * @returns {Promise<void>} A promise that resolves when the users are returned.
+     */
+    public getAllUsers = async (req: Request, res: Response): Promise<void> => {
+        await this.handleRequest(req, res, async () => {
+            const users: User[] = await this._userService.getAllUsers()
 
-        const usersList = users.map((user) => {
-            return {
-                email: user.email, 
-                role: user.role
-            }
+            return users.map((user) => {
+                return {
+                    email: user.email, 
+                    role: user.role
+                }
+            })
+        }) 
+    }
+
+    /**
+     * Get a user by ID
+     * 
+     * @method getUser
+     * @memberof UserController
+     * @param {Request} req - Request object
+     * @param {Response} res - Response object
+     * @returns {Promise<void>} A promise that resolves when the user is returned.
+     */
+    public getUser = async (req: Request, res: Response): Promise<void> => {
+        await this.handleRequest(req, res, async () => {
+            const { id: userId } = req.params
+
+            return await this._userService.getUser(userId)
+        }) 
+    }
+
+    /**
+     * Get a user by email
+     * 
+     * @method getUserByEmail
+     * @memberof UserController
+     * @param {Request} req - Request object
+     * @param {Response} res - Response object
+     * @returns {Promise<void>} A promise that resolves when the user is returned.
+     */
+    public getUserByEmail = async (req: Request, res: Response): Promise<void> => {
+        await this.handleRequest(req, res, async () => {
+            const { email } = req.params
+
+            return await this._userService.getUserEmailAndRole(email)
         })
+    }
 
-        res.status(200).json({
-            success: true,
-            data: usersList
-        })
-    })
+    /**
+     * Update a user
+     * 
+     * @method updateUser
+     * @memberof UserController
+     * @param {Request} req - Request object
+     * @param {Response} res - Response object
+     * @returns {Promise<void>} A promise that resolves when the user is updated.
+     */
+    public updateUser = async (req: Request, res: Response): Promise<void> => {
+        await this.handleRequest(req, res, async () => {
+            const { id: userId } = req.params
 
-    public getUser = asyncHandler(async (req: Request, res: Response) => {
-        const { id: userId } = req.params
+            const validRequestBody: Partial<User> = this.filterRequestBody(req.body, User)
 
-        const user = await this._userService.getUser(userId)
+            return await this._userService.updateUser(userId, validRequestBody)
+        }, 'User updated successfully')
+    }
 
-        res.status(200).json({
-            success: true,
-            data: user
-        })
-    })
+    /**
+     * Delete a user
+     * 
+     * @method deleteUser
+     * @memberof UserController
+     * @param {Request} req - Request object
+     * @param {Response} res - Response object
+     * @returns {Promise<void>} A promise that resolves when the user is deleted.
+     */
+    public deleteUser = async (req: Request, res: Response): Promise<void> => {
+        await this.handleRequest(req, res, async () => {
+            const { id: userId } = req.params
 
-    public getUserByEmail = asyncHandler(async (req: Request, res: Response) => {
-        const { email } = req.params
-
-        const user = await this._userService.getUserByEmail(email)
-
-        res.status(200).json({
-            success: true,
-            data: user
-        })
-    }) 
-
-    public updateUser = asyncHandler(async (req: Request, res: Response) => {
-        const { id: userId } = req.params
-
-        const user = await this._userService.updateUser(userId, req.body)
-
-        res.status(200).json({
-            success: true,
-            data: user
-        })
-    })
-
-    public deleteUser = asyncHandler(async (req: Request, res: Response) => {
-        const { id: userId } = req.params
-
-        await this._userService.deleteUser(userId)
-
-        res.status(200).json({
-            success: true,
-            msg: 'User deleted successfully'
-        })
-    }) 
+            return await this._userService.deleteUser(userId)
+        }, 'User deleted successfully', 204)
+    }
 }
-
-export default new UserController()
