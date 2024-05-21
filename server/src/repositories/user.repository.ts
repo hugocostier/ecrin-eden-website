@@ -1,34 +1,102 @@
-import AppDataSource from '../config/mysql.config.js'
-import { User } from '../entities/User.js'
+import User from '../entities/User.entity.js'
+import BaseRepository from './base.repository.js'
 
-export const UserRepository = AppDataSource.getRepository(User).extend({
-    async findById(id: number) {
-        const user = await this.createQueryBuilder('user')
-            .leftJoinAndSelect('user.client', 'client')
-            .where('user.id = :id', { id })
-            .getOne()
+/**
+ * The `UserRepository` class extends the `BaseRepository` class and adds custom requests for user data.
+ * 
+ * @class UserRepository
+ * @extends BaseRepository
+ */
+export class UserRepository extends BaseRepository {
+    /**
+     * Initializes the data source and returns an extended repository with custom requests for user data.
+     * 
+     * @async
+     * @method extendUserRepository
+     * @memberof UserRepository
+     * @throws {Error} If there is an error extending the user repository.
+     * @returns The extended user repository.
+     */
+    public async extendUserRepository() {
+        try {
+            await this.initializeDataSource()
+            return this.userRepository()
+        } catch (error: any) {
+            console.error('Error extending user repository: ', error)
+            throw new Error(error)
+        }
+    }
 
-        const dataToReturn = user ? {
-            email: user.email, 
-            password: user.password, 
-            firstName: user.client?.first_name, 
-            lastName: user.client?.last_name,
-            phone: user.client?.phone_number, 
-            address: user.client?.address,
-            postalCode: user.client?.postal_code,
-            city: user.client?.city,
-            sharedNotes: user.client?.shared_notes,
-            privateNotes: user.client?.private_notes,
-            profilePicture: user.client?.profile_picture,
-        } : null
+    /**
+     * Adds custom requests to the user repository.
+     * 
+     * @method userRepository
+     * @memberof UserRepository
+     * @returns The extended user repository.
+     */
+    private async userRepository() {
+        return this.dataSource.getRepository(User).extend({
+            /**
+             * Finds a user by their id and returns their data.
+             * 
+             * @async
+             * @method findById
+             * @memberof userRepository
+             * @param {number} id - The id of the user to find.
+             * @returns {Promise<User | null>} The user data or null if the user is not found.
+             */
+            async findById(id: number): Promise<User | null> {        
+                return this.createQueryBuilder('user')
+                    .leftJoin('user.client', 'client')
+                    .select([
+                        'user.email',
+                        'user.password',
+                        'client.id',
+                        'client.first_name',
+                        'client.last_name',
+                        'client.phone_number',
+                        'client.birth_date',
+                        'client.address',
+                        'client.postal_code',
+                        'client.city',
+                        'client.shared_notes',
+                        'client.private_notes',
+                        'client.profile_picture',
+                    ])
+                    .where('user.id = :id', { id })
+                    .getOne()
+            }, 
+        
+            /**
+             * Finds a user by their email and returns their email and role.
+             * 
+             * @async
+             * @method findByEmail
+             * @memberof userRepository
+             * @param {string} email - The email of the user to find.
+             * @returns {Promise<{ email: string, role: string } | null>} The user email and role or null if the user is not found.
+             */
+            async findByEmail(email: string): Promise<{ email: string, role: string } | null> {
+                const user: User | null = await this.findOneBy({ email })
+        
+                return user ? { email: user.email, role: user.role } : null
+            }, 
 
-        return dataToReturn
-    }, 
-
-    async findByEmail(email: string) {
-        const user = await this.findOneBy({ email })
-
-        return user ? { email: user.email, role: user.role } : null
-    }, 
-
-})
+            /**
+             * Finds a user by their id and returns their data with the client data.
+             * 
+             * @async
+             * @method findUserWithClient
+             * @memberof userRepository
+             * @param {number} id - The id of the user to find.
+             * @returns {Promise<User | null>} The user data with the client data or null if the user is not found.
+             */
+            async findUserWithClient(id: number): Promise<User | null> {
+                return this.createQueryBuilder('user')
+                    .leftJoinAndSelect('user.client', 'client')
+                    .where('user.id = :id', { id })
+                    .getOne()
+            }
+        })
+    }
+}

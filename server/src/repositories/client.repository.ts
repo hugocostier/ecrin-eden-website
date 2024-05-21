@@ -1,80 +1,137 @@
-import AppDataSource from '../config/mysql.config.js'
-import { Client } from '../entities/Client.js'
+import Client from '../entities/Client.entity.js'
+import BaseRepository from './base.repository.js'
 
-export const ClientRepository = AppDataSource.getRepository(Client).extend({
-    async findById(id: number) {
-        return await this.findOneBy({ id })
-    }, 
+/**
+ * The `ClientRepository` class extends the `BaseRepository` class and adds custom requests for retrieving and manipulating client data from the data source.
+ * 
+ * @class ClientRepository
+ * @extends BaseRepository
+ */
+export class ClientRepository extends BaseRepository {
+    /**
+     * Initializes the data source and returns an extended repository with custom requests for client data.
+     * 
+     * @async
+     * @method extendClientRepository
+     * @memberof ClientRepository
+     * @throws {Error} If there is an error extending  the client repository.
+     * @returns The extended client repository.
+     */
+    public async extendClientRepository() {
+        try {
+            await this.initializeDataSource()
+            return this.clientRepository()
+        } catch (error: any) {
+            console.error('Error extending client repository: ', error)
+            throw new Error(error)
+        }
+    }
+    
+    /**
+     * Adds custom requests to the client repository.
+     * 
+     * @method clientRepository
+     * @memberof ClientRepository
+     * @returns The extended client repository.
+     */
+    private clientRepository() {
+        return this.dataSource.getRepository(Client).extend({
+            /**
+             * Finds a client by their id and returns their data.
+             * 
+             * @async
+             * @method findById
+             * @memberof clientRepository
+             * @param {number} id - The id of the client to find.
+             * @returns {Promise<Client | null>} The client data or null if the client is not found.
+             */
+            async findById(id: number): Promise<Client | null> {
+                return this.findOneBy({ id })
+            }, 
 
-    async findByName(first_name: string, last_name: string) {
-        return await this.findOneBy({ first_name, last_name })
-    }, 
+            /**
+             * Finds a client by their first and last name and returns their data.
+             * 
+             * @async
+             * @method findByName
+             * @memberof clientRepository
+             * @param {string} first_name - The first name of the client to find.
+             * @param {string} last_name - The last name of the client to find.
+             * @returns {Promise<Client | null>} The client data or null if the client is not found.
+             */
+            async findByName(first_name: string, last_name: string): Promise<Client | null> {
+                return this.findOneBy({ first_name, last_name })
+            }, 
 
-    async findByUser(user_id: number) {
-        return await this.findOneBy({ user: { id: user_id } })
-    },
+            /**
+             * Finds a client by their user id and returns their data.
+             * 
+             * @async
+             * @method findByUser
+             * @memberof clientRepository
+             * @param {number} user_id - The user id of the client to find.
+             * @returns {Promise<Client | null>} The client data or null if the client is not found.
+             */
+            async findByUser(user_id: number): Promise<Client | null> {
+                return this.findOneBy({ user: { id: user_id } })
+            },
 
-    // async getSharedNotes(id: number) {
-    //     return await this.query(`
-    //         SELECT shared_notes
-    //         FROM client 
-    //         WHERE id = ${id}
-    //     `)
-    // }, 
+            /**
+             * Finds a client by their id and returns their data with the associated user data.
+             * 
+             * @async
+             * @method getClientWithUser
+             * @memberof clientRepository
+             * @param {number} id - The id of the client to find.
+             * @returns {Promise<Client | null>} The client data with the associated user data or null if the client is not found.
+             */
+            async getClientWithUser(id: number): Promise<Client | null> {
+                return this.createQueryBuilder('client') 
+                    .leftJoin('client.user', 'user')
+                    .select([
+                        'client.id',
+                        'client.first_name',
+                        'client.last_name',
+                        'client.phone_number',
+                        'client.birth_date',
+                        'client.address',
+                        'client.postal_code',
+                        'client.city',
+                        'client.shared_notes',
+                        'client.private_notes',
+                        'client.profile_picture', 
+                        'user.id', 
+                        'user.email', 
+                    ])
+                    .where('client.id = :id', { id })
+                    .getOne()
+            }, 
 
-    // async getAddress(id: number) {
-    //     return await this.query(`
-    //         SELECT address, postal_code, city
-    //         FROM client 
-    //         WHERE id = ${id}
-    //     `)
-    // }, 
-
-    async getProfilePicture(id: number) {
-        const request = 'SELECT profile_picture FROM client WHERE id = ?'
-
-        return new Promise((resolve, reject) => {
-            AppDataSource.query(request, [id])
-                .catch((err) => reject(err))
-                .then((result) => {
-                    if (result === undefined) {
-                        resolve({ error: 'Profile picture not found' })
-                    } else {
-                        resolve(result)
-                    }
-                })
-        })
-    }, 
-
-    async getPersonalInfo(id: number) {
-        const request = 'SELECT first_name, last_name, phone_number, address, postal_code, city FROM client WHERE id = ?'
-
-        return new Promise((resolve, reject) => {
-            AppDataSource.query(request, [id]) 
-                .catch((err) => reject(err))
-                .then((result) => {
-                    if (result === undefined) {
-                        resolve({ error: 'Personal info not found' })
-                    } else {
-                        resolve(result)
-                    }
-                })
-        })
-    }, 
-
-    async getAccount(id: number) {
-        const request = 'SELECT user_id FROM client WHERE id = ?' 
-
-        return new Promise((resolve, reject) => {
-            AppDataSource.query(request, [id])
-                .catch((err) => reject(err))
-                .then((result) => {
-                    if (result === undefined) {
-                        resolve({ error: 'User not found' })
-                    } else {
-                        resolve(result)
-                    }
-                })
+            /**
+             * Finds a client by their id and returns their personal information.
+             * 
+             * @async
+             * @method getPersonalInfo
+             * @memberof clientRepository
+             * @param {number} id - The id of the client to find.
+             * @returns {Promise<Client | null>} The client's personal information or null if the client is not found.
+             */
+            async getPersonalInfo(id: number): Promise<Client | null> {
+                return this.createQueryBuilder('client') 
+                    .select([
+                        'client.first_name', 
+                        'client.last_name', 
+                        'client.phone_number', 
+                        'client.birth_date', 
+                        'client.address', 
+                        'client.postal_code', 
+                        'client.city', 
+                        'client.shared_notes',
+                        'client.profile_picture'
+                    ])
+                    .where('client.id = :id', { id })
+                    .getOne()
+            }
         })
     }
-})
+}
