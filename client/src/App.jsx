@@ -20,21 +20,35 @@ const CertificationPage = lazyLoad('../../src/pages/store-front/Certification.pa
 const ContactPage = lazyLoad('../../src/pages/store-front/Contact.page', 'ContactPage')
 const AppointmentPage = lazyLoad('../../src/pages/store-front/Appointment.page', 'AppointmentPage')
 
+// AUTHENTICATION PAGES
+const LoginRegisterPage = lazyLoad('../../src/pages/Login.page', 'LoginRegisterPage')
+const RecoverPassword = lazyLoad('../../src/pages/RecoverPassword.page', 'RecoverPassword')
+const ResetPassword = lazyLoad('../../src/pages/ResetPassword.page', 'ResetPassword')
 
 // USER DASHBOARD PAGES
-// const UserDashboard = lazyLoad('../../src/pages/private-dashboard/client-space/Dashboard.page', 'UserDashboard')
-const UserAppointments = lazyLoad('../../src/pages/private-dashboard/client-space/appointments/Appointments.page', 'MyAppointments')
-// const UserUpdateAppointment = lazyLoad('../../src/pages/private-dashboard/client-space/appointments/UpdateAppointment.page', 'UserUpdateAppointment')
-// const UserPreferences = lazyLoad('../../src/pages/private-dashboard/client-space/Preferences.page', 'UserPreferences')
+const UserDashboard = lazyLoad('../../src/pages/private-dashboard/client-space/Dashboard.page', 'UserDashboard')
+const UserAppointments = lazyLoad('../../src/pages/private-dashboard/client-space/appointments/Appointments.page', 'UserAppointments')
+const UserUpdateAppointment = lazyLoad('../../src/pages/private-dashboard/client-space/appointments/UpdateAppointment.page', 'UpdateAppointment')
+const UserPreferences = lazyLoad('../../src/pages/private-dashboard/client-space/Preferences.page', 'UserPreferences')
 
 // ADMIN DASHBOARD PAGES
-
+const AdminDashboard = lazyLoad('../../src/pages/private-dashboard/admin-space/Dashboard.page', 'AdminDashboard')
+const AdminAppointments = lazyLoad('../../src/pages/private-dashboard/admin-space/appointments/Appointments.page', 'AdminAppointments')
+const SeeAppointment = lazyLoad('../../src/pages/private-dashboard/admin-space/appointments/SeeAppointment.page', 'SeeAppointment')
+const AddAppointment = lazyLoad('../../src/pages/private-dashboard/admin-space/appointments/AddAppointment.page', 'AddAppointment')
+const UpdateAppointment = lazyLoad('../../src/pages/private-dashboard/admin-space/appointments/UpdateAppointment.page', 'UpdateAppointment')
+const AdminClients = lazyLoad('../../src/pages/private-dashboard/admin-space/clients/Clients.page', 'AdminClients')
+const SeeClient = lazyLoad('../../src/pages/private-dashboard/admin-space/clients/SeeClient.page', 'SeeClient')
+const AddClient = lazyLoad('../../src/pages/private-dashboard/admin-space/clients/AddClient.page', 'AddClient')
+const UpdateClient = lazyLoad('../../src/pages/private-dashboard/admin-space/clients/UpdateClient.page', 'UpdateClient')
+const AdminContent = lazyLoad('../../src/pages/private-dashboard/admin-space/content/Content.page', 'AdminContent')
+const UpdateContent = lazyLoad('../../src/pages/private-dashboard/admin-space/content/UpdateContent.page', 'UpdateContent')
 
 // SHARED PAGES 
 const PrivateRoot = lazyLoad('../../src/layouts/private-dashboard/root.layout', 'PrivateRoot')
 const PrivateRoute = lazyLoad('../../src/components/private-dashboard/PrivateRoute', 'PrivateRoute')
-// const AccountPage = lazyLoad('../../src/pages/private-dashboard/Account.page', 'AccountPage')
-// const SettingsPage = lazyLoad('../../src/pages/private-dashboard/Settings.page', 'SettingsPage')
+const AccountPage = lazyLoad('../../src/pages/private-dashboard/Account.page', 'AccountPage')
+const SettingsPage = lazyLoad('../../src/pages/private-dashboard/Settings.page', 'SettingsPage')
 
 const Router = createBrowserRouter(
     createRoutesFromElements(
@@ -91,18 +105,18 @@ const Router = createBrowserRouter(
                 <Route element={<PasswordRecoveryProvider />}>
                     <Route
                         path='/login'
-                        element={<page.LoginRegisterPage />}
+                        element={<LoginRegisterPage />}
                     />
 
                     <Route element={<PrivateLogin />} >
                         <Route
                             path='/recover-password'
-                            element={<page.RecoverPassword />}
+                            element={<RecoverPassword />}
                         />
 
                         <Route
                             path='/reset-password'
-                            element={<page.ResetPassword />}
+                            element={<ResetPassword />}
                         />
                     </Route>
                 </Route>
@@ -116,7 +130,7 @@ const Router = createBrowserRouter(
                         index={true}
                         element={
                             <PrivateRoute isAllowed={['user']} redirectPath='/login' >
-                                <page.UserDashboard />
+                                <UserDashboard />
                             </PrivateRoute>
                         }
                     />
@@ -137,7 +151,7 @@ const Router = createBrowserRouter(
                             path='update/:id'
                             element={
                                 <PrivateRoute isAllowed={['user']} redirectPath='/login' >
-                                    <page.UserUpdateAppointment />
+                                    <UserUpdateAppointment />
                                 </PrivateRoute>
                             }
                         />
@@ -147,7 +161,7 @@ const Router = createBrowserRouter(
                         path='preferences'
                         element={
                             <PrivateRoute isAllowed={['user']} redirectPath='/login' >
-                                <page.UserPreferences />
+                                <UserPreferences />
                             </PrivateRoute>
                         }
                     />
@@ -156,7 +170,7 @@ const Router = createBrowserRouter(
                         path='account'
                         element={
                             <PrivateRoute isAllowed={['user']} redirectPath='/login' >
-                                <page.AccountPage />
+                                <AccountPage />
                             </PrivateRoute>
                         }
                     />
@@ -165,7 +179,7 @@ const Router = createBrowserRouter(
                         path='settings'
                         element={
                             <PrivateRoute isAllowed={['user']} redirectPath='/login' >
-                                <page.SettingsPage />
+                                <SettingsPage />
                             </PrivateRoute>
                         }
                     />
@@ -180,7 +194,7 @@ const Router = createBrowserRouter(
                         index={true}
                         element={
                             <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
-                                <page.AdminDashboard />
+                                <AdminDashboard />
                             </PrivateRoute>
                         }
                     />
@@ -192,7 +206,7 @@ const Router = createBrowserRouter(
                             index={true}
                             element={
                                 <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
-                                    <page.AdminAppointments />
+                                    <AdminAppointments />
                                 </PrivateRoute>
                             }
                         />
@@ -202,7 +216,7 @@ const Router = createBrowserRouter(
                             path=':id'
                             element={
                                 <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
-                                    <page.SeeAppointment />
+                                    <SeeAppointment />
                                 </PrivateRoute>
                             }
                         />
@@ -211,7 +225,7 @@ const Router = createBrowserRouter(
                             path='add'
                             element={
                                 <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
-                                    <page.AddAppointment />
+                                    <AddAppointment />
                                 </PrivateRoute>
                             }
                         />
@@ -220,7 +234,7 @@ const Router = createBrowserRouter(
                             path='update/:id'
                             element={
                                 <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
-                                    <page.UpdateAppointment />
+                                    <UpdateAppointment />
                                 </PrivateRoute>
                             }
                         />
@@ -234,7 +248,7 @@ const Router = createBrowserRouter(
                             index={true}
                             element={
                                 <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
-                                    <page.AdminClients />
+                                    <AdminClients />
                                 </PrivateRoute>
                             }
                         />
@@ -243,7 +257,7 @@ const Router = createBrowserRouter(
                             path=':id'
                             element={
                                 <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
-                                    <page.SeeClient />
+                                    <SeeClient />
                                 </PrivateRoute>
                             }
                         />
@@ -252,7 +266,7 @@ const Router = createBrowserRouter(
                             path='add'
                             element={
                                 <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
-                                    <page.AddClient />
+                                    <AddClient />
                                 </PrivateRoute>
                             }
                         />
@@ -261,7 +275,7 @@ const Router = createBrowserRouter(
                             path='update/:id'
                             element={
                                 <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
-                                    <page.UpdateClient />
+                                    <UpdateClient />
                                 </PrivateRoute>
                             }
                         />
@@ -269,13 +283,12 @@ const Router = createBrowserRouter(
 
                     <Route
                         path='content'
-
                     >
                         <Route
                             index={true}
                             element={
                                 <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
-                                    <page.AdminContent />
+                                    <AdminContent />
                                 </PrivateRoute>
                             }
                         />
@@ -284,7 +297,7 @@ const Router = createBrowserRouter(
                             path='update/:id'
                             element={
                                 <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
-                                    <page.UpdateContent />
+                                    <UpdateContent />
                                 </PrivateRoute>
                             }
                         />
@@ -294,7 +307,7 @@ const Router = createBrowserRouter(
                         path='account'
                         element={
                             <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
-                                <page.AccountPage />
+                                <AccountPage />
                             </PrivateRoute>
                         }
                     />
@@ -303,7 +316,7 @@ const Router = createBrowserRouter(
                         path='settings'
                         element={
                             <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
-                                <page.SettingsPage />
+                                <SettingsPage />
                             </PrivateRoute>
                         }
                     />
