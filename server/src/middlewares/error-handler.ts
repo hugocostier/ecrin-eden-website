@@ -2,24 +2,33 @@ import { Request, Response } from 'express'
 import { QueryFailedError } from 'typeorm'
 import { CustomAPIError } from '../errors/custom-errors.js'
 
-const errorHandlerMiddleware = (err: Error, req: Request, res: Response) => {
+/**
+ * Middleware to handle errors
+ * 
+ * @name errorHandlerMiddleware
+ * @param {Error} err - error object
+ * @param {Request} req - request object
+ * @param {Response} res - response object
+ * @returns {Response<any, Record<string, any>>} A response with an error message
+ */
+const errorHandlerMiddleware = (err: Error, req: Request, res: Response): void => {
     console.error(err)
     
     if (err instanceof QueryFailedError) {
-        return res.status(400).json({
+        res.status(400).json({
             msg: 'Invalid data provided', 
             success: false
         })
     }
 
     if (err instanceof CustomAPIError) {
-        return res.status(err.statusCode).json({
+        res.status(err.statusCode).json({
             msg: err.message, 
             success: false 
         })
     }
 
-    return res.status(500).json({
+    res.status(500).json({
         msg: 'Something went wrong, please try again later.', 
         success: false
     })
