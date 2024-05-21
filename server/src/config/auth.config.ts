@@ -2,8 +2,9 @@ import dotenv from 'dotenv'
 import passport from 'passport'
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 import { Strategy as LocalStrategy } from 'passport-local'
-import { User } from '../entities/User.js'
+import User from '../entities/User.entity.js'
 import { AuthRepository } from '../repositories/auth.repository.js'
+import { AuthService } from '../services/auth.service.js'
 dotenv.config()
 
 function generateRandomPassword(length: number): string | undefined {
@@ -20,7 +21,8 @@ function generateRandomPassword(length: number): string | undefined {
 
 passport.use(
     new LocalStrategy(async (username, password, done) => {
-        const { user, message } = await AuthRepository.authenticateUser(username, password)
+        const authService: AuthService = new AuthService()
+        const { user, message } = await authService.login(username, password)
 
         if (!user) {
             return done(null, false, { message })
