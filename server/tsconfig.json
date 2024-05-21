@@ -1,13 +1,22 @@
 {
-  "extends": "@tsconfig/node20/tsconfig.json", 
-  "compilerOptions": {
-    "emitDecoratorMetadata": true, 
-    "experimentalDecorators": true,
-    "sourceMap": true, 
-    "strictPropertyInitialization": true, 
-    "rootDir": "./src", 
-    "outDir": "./dist",
-  }, 
-  "include": ["src/**/*.ts", "src/**/*.json"],
-  "exclude": ["node_modules"]
+    "extends": "@tsconfig/node20/tsconfig.json",
+    "compilerOptions": {
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "sourceMap": false,
+        "strictPropertyInitialization": true,
+        "rootDir": "./src",
+        "outDir": "./dist",
+        "resolveJsonModule": true,
+        "removeComments": true,
+        "types": ["node", "jest"],
+        "esModuleInterop": true
+    },
+    "typedocOptions": {
+        "entryPoints": ["./src"],
+        "entryPointStrategy": "expand", 
+        "out": "docs"
+    },
+    "include": ["src/**/*.ts", "src/**/*.json"],
+    "exclude": ["node_modules", "dist", "coverage", "docs", "src/__test__"]
 }
