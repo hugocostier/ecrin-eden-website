@@ -2,14 +2,17 @@ import { Request, Response } from 'express'
 import nodemailer from 'nodemailer'
 import Mail from 'nodemailer/lib/mailer'
 import SMTPTransport from 'nodemailer/lib/smtp-transport/index.js'
+import { CustomAPIError } from '../errors/custom-errors.js'
+import BaseController from './base.controller.js'
 
 /**
  * Controller for sending emails 
  * 
  * @class EmailController
+ * @extends BaseController
  * @property {nodemailer.Transporter<SMTPTransport.SentMessageInfo>} _transporter - The transporter used to send emails
  */
-export default class EmailController {
+export default class EmailController extends BaseController {
     private _transporter: nodemailer.Transporter<SMTPTransport.SentMessageInfo> = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -128,34 +131,25 @@ export default class EmailController {
      * @param {Response} res - The response object
      * @returns {Promise<void>} A promise that resolves when the email is sent
      */
-    public async sendContactForm(req: Request, res: Response): Promise<void> {
-        const { firstName, lastName, phone, email, message } = req.body
+    public sendContactForm = async (req: Request, res: Response): Promise<void> => {
+        await this.handleRequest(req, res, async () => {
+            const { firstName, lastName, phone, email, message } = req.body
 
-        const mailOptions: Mail.Options = {
-            from: process.env.GMAIL_EMAIL,
-            to: process.env.PERSONAL_EMAIL, 
-            subject: `${firstName} ${lastName} essaye de te contacter !`,
-            text: `
-                Prénom : ${firstName} \n 
-                Nom : ${lastName} \n 
-                Téléphone : ${phone} \n 
-                Adresse email : ${email} \n 
-                Message : ${message}
-            `
-        }
+            const mailOptions: Mail.Options = {
+                from: process.env.GMAIL_EMAIL,
+                to: process.env.PERSONAL_EMAIL, 
+                subject: `${firstName} ${lastName} essaye de te contacter !`,
+                text: `
+                    Prénom : ${firstName} \n 
+                    Nom : ${lastName} \n 
+                    Téléphone : ${phone} \n 
+                    Adresse email : ${email} \n 
+                    Message : ${message}
+                `
+            }
 
-        await this.sendEmailWithTransporter(mailOptions)
-            .then((info) => {
-                res.status(200).json({
-                    message: 'Message sent successfully'
-                })
-            })
-            .catch((error) => {
-                res.status(500).json({
-                    error: error, 
-                    message: 'Error while sending the email'
-                })
-            })
+            await this.sendEmailWithTransporter(mailOptions)
+        }, 'Message sent successfully')
     }
 
 
@@ -312,6 +306,35 @@ export default class EmailController {
                 res.status(500).json({
                     error: error, 
                     message: 'Error while sending the email'
+                })
+            })
+    }
+
+    public async verifyCAPTCHA(req: Request, res: Response): Promise<void> {
+        const { captcha } = req.body
+
+        const secretKey = process.env.RECAPTCHA_SECRET_KEY
+        const url = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${captcha}`
+
+        await fetch(url, {
+            method: 'POST'
+        })
+            .then(response => response.json())
+            .then((data: any) => {
+                if (data.success) {
+                    res.status(200).json({
+                        success: true, 
+                        msg: 'CAPTCHA verification successful', 
+                        data: data
+                    })
+                } else {
+                    throw new CustomAPIError('CAPTCHA verification failed', 400)
+                }
+            })
+            .catch((error) => {
+                res.status(error.statusCode).json({
+                    success: false, 
+                    error: error.message
                 })
             })
     }

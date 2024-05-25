@@ -7,4 +7,6 @@ const emailController: EmailController = new EmailController()
 
 router.post('/send-contact-form', emailController.sendContactForm)
 
+router.post('/verify-captcha', emailController.verifyCAPTCHA)
+
 export default router
