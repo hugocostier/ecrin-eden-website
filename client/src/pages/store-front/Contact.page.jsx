@@ -1,54 +1,56 @@
-import { useState } from 'react'
+import { useRef } from 'react'
+import ReCAPTCHA from 'react-google-recaptcha'
+import { useForm } from 'react-hook-form'
 import { useLoaderData } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import StyledComponents from 'styled-components'
 import { Loading, PageTitle } from '../../components'
+import { FormError } from '../../components/FormError'
+import { verifyCaptcha } from '../../data/recaptcha.fetch'
+import { sendForm } from '../../data/store-front/contact.fetch'
 import { useLoader } from '../../hooks/useLoader.hook'
 
 export const ContactPage = () => {
     const { contactContent } = useLoaderData()
     const loading = useLoader(contactContent)
 
+    const { register, handleSubmit, reset, formState: { errors } } = useForm()
+    const recaptcha = useRef()
+
+    const sendContactForm = async (data) => {
+        const captcha = recaptcha.current.getValue()
+
+        if (!captcha) {
+            toast.error('Veuillez cocher la case "Je ne suis pas un robot"')
+            return
+        }
+
+        toast.promise(verifyCaptcha(captcha), {
+            pending: 'Vérification...',
+            success: 'Captcha vérifié !',
+            error: 'Erreur lors de la vérification du captcha'
+        }, { containerId: 'notification' })
+            .then(() => {
+                toast.promise(sendForm(data), {
+                    pending: 'Envoi...',
+                    success: 'Message envoyé !',
+                    error: 'Erreur lors de l\'envoi du message'
+                }, { containerId: 'notification' })
+                    .then(() => {
+                        reset()
+                        recaptcha.current.reset()
+                    })
+                    .catch(error => {
+                        console.error('Error sending contact form:', error)
+                    })
+            })
+            .catch(error => {
+                console.error('Error verifying captcha:', error)
+            })
+    }
+
     const removeDot = (string) => {
         return string.replace(/\./g, '')
-    }
-
-    const checkInput = (input) => {
-        if (input.value === '') {
-            input.classList.add('incorrect')
-        } else {
-            input.classList.remove('incorrect')
-        }
-    }
-
-    const [lastName, setLastName] = useState('')
-    const [firstName, setFirstName] = useState('')
-    const [phone, setPhone] = useState('')
-    const [email, setEmail] = useState('')
-    const [message, setMessage] = useState('')
-
-    const sendContactForm = async (e) => {
-        e.preventDefault()
-
-        const formData = new FormData()
-        formData.append('lastName', lastName)
-        formData.append('firstName', firstName)
-        formData.append('phone', phone)
-        formData.append('email', email)
-        formData.append('message', message)
-
-        const res = await fetch('http://localhost:3000/api/v1/form/send-contact-form', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: formData
-        })
-
-        if (res.status === 200) {
-            alert('Votre message a bien été envoyé')
-        } else {
-            alert('Une erreur est survenue, veuillez réessayer plus tard')
-        }
     }
 
     return (
@@ -87,58 +89,54 @@ export const ContactPage = () => {
                                     <h3>Salon Écrin d&apos;Eden</h3>
                                 </div>
 
-                                <form action=''>
+                                <form onSubmit={handleSubmit(sendContactForm)}>
                                     <legend>Écrivez-nous</legend>
+
                                     <input
                                         type="text"
                                         name="last-name"
                                         placeholder='Nom*'
-                                        required
-                                        onChange={(e) => setLastName(e.target.value)}
-                                        onBlur={(e) => checkInput(e.target)}
+                                        {...register('lastName', { required: 'Veuillez saisir votre nom' })}
                                     />
+                                    <FormError error={errors.lastName} />
 
                                     <input
                                         type="text"
                                         name="first-name"
                                         placeholder='Prénom*'
-                                        required
-                                        onChange={(e) => setFirstName(e.target.value)}
-                                        onBlur={(e) => checkInput(e.target)}
+                                        {...register('firstName', { required: 'Veuillez saisir votre prénom' })}
                                     />
+                                    <FormError error={errors.firstName} />
 
                                     <input
                                         type="email"
                                         name="email"
                                         placeholder='Email*'
-                                        required
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        onBlur={(e) => checkInput(e.target)}
+                                        {...register('email', { required: 'Veuillez saisir votre email', pattern: { value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/, message: 'Email invalide' } })}
                                     />
+                                    <FormError error={errors.email} />
 
                                     <input
                                         type="tel"
                                         name="phone"
-                                        pattern="[0-9]{2}[0-9]{2}[0-9]{2}[0-9]{2}[0-9]{2}"
-                                        maxLength="10"
                                         placeholder='Téléphone'
-                                        onChange={(e) => setPhone(e.target.value)}
+                                        {...register('phone', { pattern: { value: /[0-9]{10}/, message: 'Numéro de téléphone invalide' } })}
                                     />
+                                    <FormError error={errors.phone} />
 
                                     <textarea
                                         name="message"
                                         placeholder='Écrivez votre message ici...'
-                                        required
-                                        onChange={(e) => setMessage(e.target.value)}
-                                        onBlur={(e) => checkInput(e.target)}
+                                        {...register('message', { required: 'Veuillez saisir votre message' })}
                                     ></textarea>
+                                    <FormError error={errors.message} />
 
                                     <input
                                         type="submit"
                                         value="Envoyer"
                                         className="contact-submit"
-                                        onClick={sendContactForm}
                                     />
+                                    <ReCAPTCHA className='recaptcha' ref={recaptcha} sitekey={import.meta.env.VITE_APP_SITE_KEY} />
                                 </form>
                             </ContactForm>
 
@@ -212,6 +210,9 @@ const ContactForm = StyledComponents.section`
     }
 
     form {
+        max-width: calc(100vw - 8%); 
+        overflow: hidden;
+
         legend {
             margin: 0 auto 20px auto;
             font-size: 1.25rem;
@@ -224,7 +225,7 @@ const ContactForm = StyledComponents.section`
             border: none;
             border-bottom: 1px solid var(--grey-400);
             box-shadow: var(--shadow-2);
-            margin-bottom: 20px;
+            margin-bottom: 4px;
         }
 
         input:hover,
@@ -235,16 +236,6 @@ const ContactForm = StyledComponents.section`
         input:focus,
         textarea:focus {
             outline: none;
-        }
-
-        input[type='email']:invalid,
-        input[type='tel']:invalid {
-            color: var(--red-dark);
-        }
-
-        input[type='email']:valid,
-        input[type='tel']:valid {
-            color: var(--black);
         }
 
         input[type='submit'] {
@@ -261,8 +252,10 @@ const ContactForm = StyledComponents.section`
             background-color: var(--primary-500);
         }
 
-        .incorrect {
-            border-color: var(--red);
+        .recaptcha {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
         }
     }
 
