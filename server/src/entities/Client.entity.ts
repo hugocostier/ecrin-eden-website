@@ -1,4 +1,4 @@
-import { IsDate, IsDateString, IsMobilePhone, IsNotEmpty, IsOptional, IsPhoneNumber, IsPostalCode, IsString, Length } from 'class-validator'
+import { IsDateString, IsMobilePhone, IsNotEmpty, IsOptional, IsPostalCode, IsString, Length, ValidateIf } from 'class-validator'
 import {
     BaseEntity,
     Column,
@@ -83,6 +83,7 @@ export default class Client extends BaseEntity implements IClient {
 
     @Column({ nullable: true, type: 'varchar', length: 10 })
     @IsOptional() 
+    @ValidateIf(o => o.phone_number !== '')
     @IsString({ message: ValidationMessages.getMessage('Phone number', 'type', 'string') })
     @IsMobilePhone('fr-FR', {}, { message: ValidationMessages.getMessage('Phone number', 'isPhoneNumber') })
     @Length(10, 10, { message: ValidationMessages.getMessage('Phone number', 'definedLength', 10) })
@@ -95,6 +96,7 @@ export default class Client extends BaseEntity implements IClient {
         }
     })
     @IsOptional() 
+    @ValidateIf(o => o.birth_date !== '')
     @IsDateString({ strict: true }, { message: ValidationMessages.getMessage('Birth date', 'date', 'yyyy-MM-dd') })
         birth_date?: string
 
@@ -106,6 +108,7 @@ export default class Client extends BaseEntity implements IClient {
 
     @Column({ nullable: true, type: 'varchar', length: 5 })
     @IsOptional() 
+    @ValidateIf(o => o.postal_code !== '')
     @IsString({ message: ValidationMessages.getMessage('Postal code', 'type', 'string') })
     @IsPostalCode('FR', { message: ValidationMessages.getMessage('Postal code', 'isPostalCode') })
     @Length(5, 5, { message: ValidationMessages.getMessage('Postal code', 'definedLength', 5) })
