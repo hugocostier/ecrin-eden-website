@@ -29,15 +29,13 @@ export const AdminDashboard = () => {
         <StyledDashboard>
             <section className='page-header'>
                 <h2>Bonjour {client.firstName},</h2>
-                {count !== null && count > 0 ?
-                    (
-                        <p>Tu as {count} rendez-vous aujourd&apos;hui.</p>
-                    )
-                    : count === null ? (
-                        <p>Tu n&apos;as pas de rendez-vous aujourd&apos;hui.</p>
-                    ) : (
-                        <p>Loading...</p>
-                    )}
+                {count !== null && count > 0 ? (
+                    <p>Tu as {count} rendez-vous aujourd&apos;hui.</p>
+                ) : (count !== null && count === 0) ? (
+                    <p>Tu n&apos;as pas de rendez-vous aujourd&apos;hui.</p>
+                ) : (
+                    <p>Loading...</p>
+                )}
             </section>
 
             <Calendar />
