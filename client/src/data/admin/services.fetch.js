@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000/api/v1/services'
+const API_URL = `${import.meta.env.VITE_APP_API_URL}/services`
 
 export const fetchServices = () => {
     return new Promise((resolve, reject) => {

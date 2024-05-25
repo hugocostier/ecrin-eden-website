@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000/api/v1/preferences'
+const API_URL = `${import.meta.env.VITE_APP_API_URL}/preferences`
 
 export const fetchClientPreferences = (id) => {
     const url = `${API_URL}/${id}`

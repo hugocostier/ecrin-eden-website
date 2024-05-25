@@ -7,7 +7,6 @@ import burger from '../../assets/images/svg/burger.svg'
 import close from '../../assets/images/svg/close.svg'
 import { useAuth } from '../../hooks/useAuth.hook'
 import { useClientInfo } from '../../hooks/useClientInfo.hook'
-import { SERVER_URL } from '../../utils/serverUrl.util'
 
 const pages = [
     {
@@ -78,7 +77,7 @@ export const Navbar = () => {
                                             animationDelay: '0.1s'
                                         }}
                                     >
-                                        <img id='user-picture' src={client.profilePicture ? `${SERVER_URL}/${client.profilePicture}` : defaultPicture} alt='profile' />
+                                        <img id='user-picture' src={client.profilePicture ? `${import.meta.env.VITE_APP_SERVER_URL}/${client.profilePicture}` : defaultPicture} alt='profile' />
                                         <span>{client.firstName} {client.lastName}</span>
                                     </Link>
                                     <button

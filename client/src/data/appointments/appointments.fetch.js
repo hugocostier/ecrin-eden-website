@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000/api/v1'
+const API_URL = `${import.meta.env.VITE_APP_API_URL}/appointments`
 
 export const fetchAllAppointments = (options) => {
     const { show, rangeStart, rangeEnd, day } = options
@@ -13,7 +13,7 @@ export const fetchAllAppointments = (options) => {
     }
 
     return new Promise((resolve, reject) => {
-        fetch(`${API_URL}/appointments`, {
+        fetch(`${API_URL}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ export const fetchAppointments = (options) => {
     }
 
     return new Promise((resolve, reject) => {
-        fetch(`${API_URL}/appointments/client/${clientId}`, {
+        fetch(`${API_URL}/client/${clientId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ export const fetchAppointments = (options) => {
 
 export const fetchAppointment = (appointmentID) => {
     return new Promise((resolve, reject) => {
-        fetch(`${API_URL}/appointments/${appointmentID}`, {
+        fetch(`${API_URL}/${appointmentID}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -112,7 +112,7 @@ export const countUserAppointments = (options) => {
     }
 
     return new Promise((resolve, reject) => {
-        fetch(`${API_URL}/appointments/count/${clientId}`, {
+        fetch(`${API_URL}/count/${clientId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -143,7 +143,7 @@ export const countAllAppointments = (date) => {
     }
 
     return new Promise((resolve, reject) => {
-        fetch(`${API_URL}/appointments/count`, {
+        fetch(`${API_URL}/count`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -180,7 +180,7 @@ export const updateAppointment = (appointmentID, data) => {
     }
 
     return new Promise((resolve, reject) => {
-        fetch(`${API_URL}/appointments/${appointmentID}`, {
+        fetch(`${API_URL}/${appointmentID}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
