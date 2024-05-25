@@ -1,31 +1,37 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import StyledComponents from 'styled-components'
 import defaultPicture from '../../../../assets/images/default-profile-picture.png'
+import { FormError } from '../../../../components/FormError'
 import { addClient } from "../../../../data/admin/clients.fetch"
 
 export const AddClient = () => {
     const navigate = useNavigate()
     const [previewImage, setPreviewImage] = useState('')
 
-    const [input, setInput] = useState({
-        lastName: '',
-        firstName: '',
-        phone: '',
-        birthDate: '',
-        address: '',
-        postalCode: '',
-        city: '',
-        email: '',
-        profilePicture: '',
-        sharedNotes: '',
-        privateNotes: '',
+    const { register, handleSubmit, reset, watch, formState: { errors } } = useForm({
+        defaultValues: {
+            lastName: '',
+            firstName: '',
+            phone: '',
+            birthDate: '',
+            address: '',
+            postalCode: '',
+            city: '',
+            email: '',
+            profilePicture: '',
+            sharedNotes: '',
+            privateNotes: '',
+        }
     })
 
-    const handleChange = (e) => {
-        if (e.target.name === 'profilePicture') {
-            const file = e.target.files[0]
+    const profilePicture = watch('profilePicture')
+
+    useEffect(() => {
+        if (profilePicture && profilePicture instanceof FileList && profilePicture.length > 0) {
+            const file = profilePicture[0]
 
             if (file) {
                 const reader = new FileReader()
@@ -35,44 +41,18 @@ export const AddClient = () => {
                 }
 
                 reader.readAsDataURL(file)
-
-                setInput({
-                    ...input,
-                    profilePicture: file,
-                })
             }
         }
-        else {
-            setInput({
-                ...input,
-                [e.target.name]: e.target.value,
-            })
-        }
-    }
+    }, [profilePicture])
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-
-        toast.promise(addClient(input), {
+    const sendForm = async (data) => {
+        toast.promise(addClient(data), {
             pending: 'Ajout...',
             success: 'Client ajouté !',
             error: 'Erreur lors de l\'ajout du client'
         }, { containerId: 'notification' })
             .then(() => {
-                setInput({
-                    lastName: '',
-                    firstName: '',
-                    phone: '',
-                    birthDate: '',
-                    address: '',
-                    postalCode: '',
-                    city: '',
-                    email: '',
-                    profilePicture: '',
-                    sharedNotes: '',
-                    privateNotes: '',
-                })
-
+                reset()
                 const currentPath = window.location.pathname
                 navigate(currentPath.replace('/add', ''))
             })
@@ -85,127 +65,147 @@ export const AddClient = () => {
         <ClientAdd>
             <h2>Nouveau client</h2>
 
-            <StyledForm>
+            <StyledForm onSubmit={handleSubmit(sendForm)}>
                 <legend className='form-legend'>Informations personnelles</legend>
-                <input
-                    type="text"
-                    name="lastName"
-                    id="last-name"
-                    required
-                    value={input.lastName}
-                    onChange={handleChange}
-                    placeholder='Nom'
-                />
+                <div className='input-container' name='lastName'>
+                    <input
+                        type='text'
+                        name='lastName'
+                        id='last-name'
+                        placeholder='Nom*'
+                        {...register('lastName', { required: 'Veuillez entrer le nom du client', pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer un nom valide' } })}
+                    />
+                    <FormError error={errors.lastName} />
+                </div>
 
-                <input
-                    type="text"
-                    name="firstName"
-                    id="first-name"
-                    required
-                    value={input.firstName}
-                    onChange={handleChange}
-                    placeholder='Prénom'
-                />
+                <div className='input-container' name='firstName'>
+                    <input
+                        type='text'
+                        name='firstName'
+                        id='first-name'
+                        placeholder='Prénom*'
+                        {...register('firstName', { required: 'Veuillez entrer le prénom du client', pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer un prénom valide' } })}
+                    />
+                    <FormError error={errors.firstName} />
+                </div>
 
-                <input
-                    type="tel"
-                    name="phone"
-                    id="phone"
-                    value={input.phone}
-                    onChange={handleChange}
-                    placeholder='Numéro de téléphone'
-                />
+                <div className='input-container' name='phone'>
+                    <input
+                        type='tel'
+                        name='phone'
+                        id='phone'
+                        placeholder='Numéro de téléphone (ex: 0601020304)'
+                        {...register('phone', { pattern: { value: /^[0-9]{10}$/, message: 'Veuillez entrer un numéro de téléphone valide' } })}
+                    />
+                    <FormError error={errors.phone} />
+                </div>
 
-                <input
-                    type="date"
-                    name="birthDate"
-                    id="birth-date"
-                    value={input.birthDate}
-                    onChange={handleChange}
-                    placeholder='Date de naissance'
-                />
+                <div className='input-container' name='birthDate'>
+                    <input
+                        type='date'
+                        name='birthDate'
+                        id='birth-date'
+                        placeholder='Date de naissance'
+                        {...register('birthDate', { validate: value => value ? new Date(value) <= new Date() || 'Veuillez entrer une date de naissance valide' : true })}
+                    />
+                    <FormError error={errors.birthDate} />
+                </div>
 
-                <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    value={input.email}
-                    onChange={handleChange}
-                    placeholder='Email'
-                />
+                <div className='input-container' name='email'>
+                    <input
+                        type='email'
+                        name='email'
+                        id='email'
+                        placeholder='Email* (ex: adresse@mail.fr)'
+                        {...register('email', { pattern: { value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/, message: 'Veuillez entrer un email valide' } })}
+                    />
+                    <FormError error={errors.email} />
+                </div>
 
-                <input
-                    type="text"
-                    name="address"
-                    id="address"
-                    value={input.address}
-                    onChange={handleChange}
-                    placeholder='Adresse'
-                />
+                <div className='input-container' name='address'>
+                    <input
+                        type='text'
+                        name='address'
+                        id='address'
+                        placeholder='Adresse'
+                        {...register('address')}
+                    />
+                    <FormError error={errors.address} />
+                </div>
 
-                <input
-                    type="text"
-                    name="postalCode"
-                    id="postal-code"
-                    value={input.postalCode}
-                    onChange={handleChange}
-                    placeholder='Code postal'
-                />
+                <div className='input-container' name='postalCode'>
+                    <input
+                        type='text'
+                        name='postalCode'
+                        id='postal-code'
+                        placeholder='Code postal (ex: 75000)'
+                        {...register('postalCode', { pattern: { value: /^[0-9]{5}$/, message: 'Veuillez entrer un code postal valide' } })}
+                    />
+                    <FormError error={errors.postalCode} />
+                </div>
 
-                <input
-                    type="text"
-                    name="city"
-                    id="city"
-                    value={input.city}
-                    onChange={handleChange}
-                    placeholder='Ville'
-                />
+                <div className='input-container' name='city'>
+                    <input
+                        type='text'
+                        name='city'
+                        id='city'
+                        placeholder='Ville'
+                        {...register('city', { pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer une ville valide' } })}
+                    />
+                    <FormError error={errors.city} />
+                </div>
 
-                <label
-                    htmlFor="profile-picture"
-                    id='profile-picture-container'
-                >
-                    <div className='img-upload'>
-                        <img
-                            src={previewImage || defaultPicture}
-                            alt='profile-picture'
-                            style={{ cursor: 'pointer' }}
-                        />
-                    </div>
-                </label>
-                <input
-                    type="file"
-                    name="profilePicture"
-                    id="profile-picture"
-                    accept='image/*'
-                    onChange={handleChange}
-                    style={{ display: 'none' }}
-                />
+                <div className='input-container' name='profilePicture'>
+                    <label
+                        htmlFor='profile-picture'
+                        id='profile-picture-container'
+                    >
+                        <div className='img-upload'>
+                            <img
+                                src={previewImage || defaultPicture}
+                                alt='profile-picture'
+                                style={{ cursor: 'pointer' }}
+                            />
+                        </div>
+                    </label>
+                    <input
+                        type='file'
+                        name='profilePicture'
+                        id='profile-picture'
+                        accept='image/*'
+                        style={{ display: 'none' }}
+                        {...register('profilePicture', { validate: value => value.length > 0 ? value[0].size <= 8388608 <= 8388608 || 'La taille de l\'image ne doit pas dépasser 8 Mo' : true })}
+                    />
+                    <FormError error={errors.profilePicture} />
+                </div>
 
                 <legend className='form-legend'>Notes partagées avec le client</legend>
-                <textarea
-                    name="sharedNotes"
-                    id="shared-notes"
-                    value={input.sharedNotes}
-                    onChange={handleChange}
-                    placeholder='Informations partagées avec le client'
-                    rows={8}
-                />
+                <div className='input-container' name='sharedNotes'>
+                    <textarea
+                        name='sharedNotes'
+                        id='shared-notes'
+                        placeholder='Informations partagées avec le client'
+                        rows={8}
+                        {...register('sharedNotes')}
+                    />
+                    <FormError error={errors.sharedNotes} />
+                </div>
 
                 <legend className='form-legend'>Notes personnelles</legend>
-                <textarea
-                    name="privateNotes"
-                    id="private-notes"
-                    value={input.privateNotes}
-                    onChange={handleChange}
-                    placeholder='Notes du praticien'
-                    rows={5}
-                />
+                <div className='input-container' name='privateNotes'>
+                    <textarea
+                        name="privateNotes"
+                        id="private-notes"
+                        placeholder='Notes du praticien'
+                        rows={5}
+                        {...register('privateNotes')}
+                    />
+                    <FormError error={errors.privateNotes} />
+                </div>
 
                 <button
                     type="submit"
                     id='save'
-                    onClick={handleSubmit}
                 >
                     Enregistrer
                 </button>
@@ -224,7 +224,6 @@ const ClientAdd = StyledComponents.main`
 const StyledForm = StyledComponents.form`
     display: grid; 
     grid-template-columns: 1fr;
-    row-gap: 0.5rem;
     max-width: 1000px;
     margin: 0 auto;
     margin-bottom: 2rem;
@@ -236,9 +235,16 @@ const StyledForm = StyledComponents.form`
         margin-top: 1rem;
     }
 
+    .input-container {
+        &[name='profilePicture'] {
+            grid-row: 2 / 6;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+    }
+
     label {
         &#profile-picture-container {
-            grid-row: 2 / 6; 
             display: grid;
             border-radius: 50%;
             
@@ -261,7 +267,6 @@ const StyledForm = StyledComponents.form`
     }
 
     input {
-        margin-top: 0.5rem;
         padding: 0.5rem;
         width: 100%;
 
@@ -271,13 +276,12 @@ const StyledForm = StyledComponents.form`
     }
 
     textarea {
-        margin-top: 0.5rem;
+        width: 100%;
         padding: 0.5rem;
         resize: none;
     }
 
     button {
-        margin-top: 1rem;
         padding: 0.5rem;
     }
 
@@ -293,12 +297,11 @@ const StyledForm = StyledComponents.form`
         legend {
             text-align: left;
             grid-column: 1 / 3;
+            margin-bottom: 1rem; 
         }
         
         label {
-            &#profile-picture-container {
-                grid-column: 2 / 3;
-                
+            &#profile-picture-container {                
                 .img-upload {
                     width: 200px;
                     height: 200px;
@@ -306,29 +309,31 @@ const StyledForm = StyledComponents.form`
             }
         }
 
-        input {   
-            &#last-name, &#first-name, &#phone, &#postal-code {
-                grid-column: 1 / 2; 
-            }
-
-            &#address, &#email {
-                grid-column: 1 / 3;
-            }
-
-            &#city {
+        .input-container {
+            &[name='profilePicture'] {
                 grid-column: 2 / 3;
             }
-        }
 
-        textarea {            
-            &#shared-notes, &#private-notes{
-                grid-column: 1 / 3; 
+            &[name='lastName'], &[name='firstName'], &[name='phone'], &[name='postal-code'] {
+                grid-column: 1 / 2;
+            }
+
+            &[name='address'], &[name='email'] {
+                grid-column: 1 / 3;
+            }
+
+            &[name='city'] {
+                grid-column: 2 / 3;
+            }
+
+            &[name='sharedNotes'], &[name='privateNotes'] {
+                grid-column: 1 / 3;
             }
         }
 
-        button {    
-            &#edit {
-                grid-column: 1 / 3;
+        button { 
+            &#save {
+                grid-column: 1 / 3; 
             }
         }
 

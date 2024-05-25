@@ -1,127 +1,96 @@
 import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import StyledComponents from 'styled-components'
 import defaultPicture from '../../assets/images/default-profile-picture.png'
-import { fetchClient, updateClient } from "../../data/admin/clients.fetch"
+import { FormError } from '../../components/FormError'
+import { fetchClient, updateClient } from '../../data/admin/clients.fetch'
 import { useClientInfo } from '../../hooks/useClientInfo.hook'
-import { SERVER_URL } from '../../utils/serverUrl.util'
 
 export const AccountPage = () => {
     const navigate = useNavigate()
     const client = useClientInfo()
 
-    const [isEditable, setIsEditable] = useState(false)
-    const [previewImage, setPreviewImage] = useState('')
-    const [account, setAccount] = useState({})
-
-    const [input, setInput] = useState({
-        lastName: '',
-        firstName: '',
-        phone: '',
-        birthDate: '',
-        address: '',
-        postalCode: '',
-        city: '',
-        email: '',
-        profilePicture: '',
-        sharedInfo: '',
+    const { register, handleSubmit, reset, watch, formState: { errors } } = useForm({
+        defaultValues: {
+            lastName: '',
+            firstName: '',
+            phone: '',
+            birthDate: '',
+            address: '',
+            postalCode: '',
+            city: '',
+            email: '',
+            profilePicture: '',
+            sharedInfo: '',
+        }
     })
 
+    const [isEditable, setIsEditable] = useState(false)
+    const [previewImage, setPreviewImage] = useState('')
+
     useEffect(() => {
+        if (!client.id) return
+
         fetchClient(client.id)
             .then(fetchedClient => {
-                setAccount(fetchedClient)
-                setInput({
-                    lastName: fetchedClient.last_name ? fetchedClient.last_name : '',
-                    firstName: fetchedClient.first_name ? fetchedClient.first_name : '',
-                    phone: fetchedClient.phone_number ? fetchedClient.phone_number : '',
+                const data = {
+                    lastName: fetchedClient.last_name || '',
+                    firstName: fetchedClient.first_name || '',
+                    phone: fetchedClient.phone_number || '',
                     birthDate: fetchedClient.birth_date ? fetchedClient.birth_date.split('T')[0] : '',
-                    address: fetchedClient.address ? fetchedClient.address : '',
-                    postalCode: fetchedClient.postal_code ? fetchedClient.postal_code : '',
-                    city: fetchedClient.city ? fetchedClient.city : '',
-                    email: fetchedClient.user_email ? fetchedClient.user_email : '',
-                    profilePicture: fetchedClient.profile_picture ? fetchedClient.profile_picture : '',
-                    sharedNotes: fetchedClient.shared_notes ? fetchedClient.shared_notes : '',
-                    privateNotes: fetchedClient.private_notes ? fetchedClient.private_notes : '',
-                })
+                    address: fetchedClient.address || '',
+                    postalCode: fetchedClient.postal_code || '',
+                    city: fetchedClient.city || '',
+                    email: fetchedClient.user?.email || '',
+                    profilePicture: fetchedClient.profile_picture || '',
+                    sharedNotes: fetchedClient.shared_notes || '',
+                }
+                reset(data)
+                setPreviewImage(fetchedClient.profile_picture ? `${import.meta.env.VITE_APP_SERVER_URL}/${fetchedClient.profile_picture}` : defaultPicture)
             })
             .catch(error => {
                 console.error('Error fetching client:', error)
             })
 
         return () => {
-            setAccount({})
+            reset()
         }
-    }, [client.id])
-
-    const handleChange = (e) => {
-        if (e.target.name === 'profilePicture') {
-            const file = e.target.files[0]
-
-            if (file) {
-                const reader = new FileReader()
-
-                reader.onloadend = () => {
-                    setPreviewImage(reader.result)
-                }
-
-                reader.readAsDataURL(file)
-
-                setInput({
-                    ...input,
-                    profilePicture: file,
-                })
-            }
-        }
-        else {
-            setInput({
-                ...input,
-                [e.target.name]: e.target.value,
-            })
-        }
-    }
+    }, [client.id, reset])
 
     const handleCancel = () => {
-        setInput({
-            firstName: account.first_name,
-            lastName: account.last_name,
-            phone: account.phone_number ? account.phone_number : '',
-            birthDate: account.birth_date ? account.birth_date.split('T')[0] : '',
-            address: account.address ? account.address : '',
-            postalCode: account.postal_code ? account.postal_code : '',
-            city: account.city ? account.city : '',
-            email: account.user_email ? account.user_email : '',
-            profilePicture: account.profile_picture ? account.profile_picture : '',
-            sharedNotes: account.shared_notes ? account.shared_notes : '',
-            privateNotes: account.private_notes ? account.private_notes : '',
-        })
-
-        setIsEditable(false)
+        fetchClient(client.id)
+            .then(fetchedClient => {
+                const data = {
+                    lastName: fetchedClient.last_name || '',
+                    firstName: fetchedClient.first_name || '',
+                    phone: fetchedClient.phone_number || '',
+                    birthDate: fetchedClient.birth_date ? fetchedClient.birth_date.split('T')[0] : '',
+                    address: fetchedClient.address || '',
+                    postalCode: fetchedClient.postal_code || '',
+                    city: fetchedClient.city || '',
+                    email: fetchedClient.user?.email || '',
+                    profilePicture: fetchedClient.profile_picture || '',
+                    sharedNotes: fetchedClient.shared_notes || '',
+                }
+                reset(data)
+                setPreviewImage(fetchedClient.profile_picture ? `${import.meta.env.VITE_APP_SERVER_URL}/${fetchedClient.profile_picture}` : '')
+                setIsEditable(false)
+            })
+            .catch(error => {
+                console.error('Error fetching client:', error)
+            })
     }
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-
-        toast.promise(updateClient(client.id, input), {
+    const sendForm = async (data) => {
+        toast.promise(updateClient(client.id, data), {
             pending: 'Modification...',
             success: 'Informations personnelles modifiées !',
             error: 'Erreur lors de la modification de vos informations personnelles'
         }, { containerId: 'notification' })
             .then(() => {
-                setInput({
-                    lastName: '',
-                    firstName: '',
-                    phone: '',
-                    birthDate: '',
-                    address: '',
-                    postalCode: '',
-                    city: '',
-                    email: '',
-                    profilePicture: '',
-                    sharedNotes: '',
-                    privateNotes: '',
-                })
+                reset()
 
                 const currentPath = window.location.pathname
                 navigate(currentPath.replace('/account', ''))
@@ -131,150 +100,173 @@ export const AccountPage = () => {
             })
     }
 
+    const profilePicture = watch('profilePicture')
+
+    useEffect(() => {
+        if (profilePicture && profilePicture.length > 0 && profilePicture instanceof FileList) {
+            const file = profilePicture[0]
+
+            if (file) {
+                const reader = new FileReader()
+
+                reader.onloadend = () => {
+                    setPreviewImage(reader.result)
+                }
+
+                reader.readAsDataURL(file)
+            }
+        }
+    }, [profilePicture])
+
     return (
         <Account>
             <h2>Mon compte</h2>
 
-            <AccountForm>
+            <AccountForm onSubmit={handleSubmit(sendForm)}>
                 <legend className='form-legend'>Informations personnelles</legend>
-                <input
-                    type="text"
-                    name="lastName"
-                    id="last-name"
-                    required
-                    value={input.lastName}
-                    onChange={handleChange}
-                    disabled={!isEditable}
-                    placeholder='Nom'
-                />
+                <div className='input-container' name='lastName'>
+                    <input
+                        type='text'
+                        name='lastName'
+                        id='last-name'
+                        placeholder='Nom*'
+                        {...register('lastName', { required: 'Veuillez entrer votre nom', pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer un nom valide' }, disabled: !isEditable })}
+                    />
+                    <FormError error={errors.lastName} />
+                </div>
 
-                <input
-                    type="text"
-                    name="firstName"
-                    id="first-name"
-                    required
-                    value={input.firstName}
-                    onChange={handleChange}
-                    disabled={!isEditable}
-                    placeholder='Prénom'
-                />
+                <div className='input-container' name='firstName'>
+                    <input
+                        type='text'
+                        name='firstName'
+                        id='first-name'
+                        placeholder='Prénom*'
+                        {...register('firstName', { required: 'Veuillez entrer votre prénom', pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer un prénom valide' }, disabled: !isEditable })}
+                    />
+                    <FormError error={errors.firstName} />
+                </div>
 
-                <input
-                    type="tel"
-                    name="phone"
-                    id="phone"
-                    value={input.phone}
-                    onChange={handleChange}
-                    disabled={!isEditable}
-                    placeholder='Numéro de téléphone'
-                />
+                <div className='input-container' name='phone'>
+                    <input
+                        type='tel'
+                        name='phone'
+                        id='phone'
+                        placeholder='Numéro de téléphone (ex: 0601020304)'
+                        {...register('phone', { pattern: { value: /^[0-9]{10}$/, message: 'Veuillez entrer un numéro de téléphone valide' }, disabled: !isEditable })}
+                    />
+                    <FormError error={errors.phone} />
+                </div>
 
-                <input
-                    type="date"
-                    name="birthDate"
-                    id="birth-date"
-                    value={input.birthDate}
-                    onChange={handleChange}
-                    disabled={!isEditable}
-                    placeholder='Date de naissance'
-                />
+                <div className='input-container' name='birthDate'>
+                    <input
+                        type='date'
+                        name='birthDate'
+                        id='birth-date'
+                        placeholder='Date de naissance'
+                        {...register('birthDate', { disabled: !isEditable, validate: value => value ? new Date(value) <= new Date() || 'Veuillez entrer une date de naissance valide' : true })}
+                    />
+                    <FormError error={errors.birthDate} />
+                </div>
 
-                <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    required
-                    value={input.email}
-                    onChange={handleChange}
-                    disabled={!isEditable}
-                    placeholder='Email'
-                />
+                <div className='input-container' name='email'>
+                    <input
+                        type='email'
+                        name='email'
+                        id='email'
+                        placeholder='Email* (ex: adresse@mail.fr)'
+                        {...register('email', { required: 'Veuillez entrer votre email', pattern: { value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/, message: 'Veuillez entrer un email valide' }, disabled: !isEditable })}
+                    />
+                    <FormError error={errors.email} />
+                </div>
 
-                <input
-                    type="text"
-                    name="address"
-                    id="address"
-                    value={input.address}
-                    onChange={handleChange}
-                    disabled={!isEditable}
-                    placeholder='Adresse'
-                />
+                <div className='input-container' name='address'>
+                    <input
+                        type='text'
+                        name='address'
+                        id='address'
+                        placeholder='Adresse'
+                        {...register('address', { disabled: !isEditable })}
+                    />
+                    <FormError error={errors.address} />
+                </div>
 
-                <input
-                    type="text"
-                    name="postalCode"
-                    id="postal-code"
-                    value={input.postalCode}
-                    onChange={handleChange}
-                    disabled={!isEditable}
-                    placeholder='Code postal'
-                />
+                <div className='input-container' name='postalCode'>
+                    <input
+                        type='text'
+                        name='postalCode'
+                        id='postal-code'
+                        placeholder='Code postal (ex: 75000)'
+                        {...register('postalCode', { pattern: { value: /^[0-9]{5}$/, message: 'Veuillez entrer un code postal valide' }, disabled: !isEditable })}
+                    />
+                    <FormError error={errors.postalCode} />
+                </div>
 
-                <input
-                    type="text"
-                    name="city"
-                    id="city"
-                    value={input.city}
-                    onChange={handleChange}
-                    disabled={!isEditable}
-                    placeholder='Ville'
-                />
+                <div className='input-container' name='city'>
+                    <input
+                        type='text'
+                        name='city'
+                        id='city'
+                        placeholder='Ville'
+                        {...register('city', { pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer une ville valide' }, disabled: !isEditable })}
+                    />
+                    <FormError error={errors.city} />
+                </div>
 
-                <label
-                    htmlFor="profile-picture"
-                    id='profile-picture-container'
-                >
-                    <div className='img-upload'>
-                        <img
-                            src={previewImage || (input.profilePicture ? `${SERVER_URL}/${input.profilePicture}` : defaultPicture)}
-                            alt='profile-picture'
-                            style={{ cursor: isEditable ? 'pointer' : 'default' }}
-                        />
-                    </div>
-                </label>
-                <input
-                    type="file"
-                    name="profilePicture"
-                    id="profile-picture"
-                    accept='image/*'
-                    onChange={handleChange}
-                    disabled={!isEditable}
-                    style={{ display: 'none' }}
-                />
+                <div className='input-container' name='profilePicture'>
+                    <label
+                        htmlFor='profile-picture'
+                        id='profile-picture-container'
+                    >
+                        <div className='img-upload'>
+                            <img
+                                src={previewImage || defaultPicture}
+                                alt='profile-picture'
+                                style={{ cursor: isEditable ? 'pointer' : 'default' }}
+                            />
+                        </div>
+                    </label>
+                    <input
+                        type='file'
+                        name='profilePicture'
+                        id='profile-picture'
+                        accept='image/*'
+                        style={{ display: 'none' }}
+                        {...register('profilePicture', { disabled: !isEditable, validate: value => value.length > 0 ? value[0].size <= 8388608 || 'La taille de l\'image ne doit pas dépasser 8 Mo' : true })}
+                    />
+                    <FormError error={errors.profilePicture} />
+                </div>
 
-                <textarea
-                    name="sharedNotes"
-                    id="shared-notes"
-                    value={input.sharedNotes}
-                    onChange={handleChange}
-                    disabled={!isEditable}
-                    placeholder='Informations partagées avec le client'
-                    rows={8}
-                />
+                <div className='input-container' name='sharedNotes'>
+                    <textarea
+                        name='sharedNotes'
+                        id='shared-notes'
+                        placeholder='Informations partagées avec le client'
+                        rows={8}
+                        {...register('sharedNotes', { disabled: !isEditable })}
+                    />
+                    <FormError error={errors.sharedNotes} />
+                </div>
 
-                {!isEditable && (
+                {!isEditable ? (
                     <button
-                        type="button"
-                        id="edit"
+                        type='button'
+                        id='edit'
                         onClick={() => setIsEditable(true)}
                     >
                         Modifier
                     </button>
-                )}
-
-                {isEditable && (
+                ) : (
                     <div id='button-container'>
                         <button
-                            type="button"
+                            type='button'
                             id='cancel'
                             onClick={handleCancel}
                         >
                             Annuler
                         </button>
                         <button
-                            type="submit"
+                            type='submit'
                             id='save'
-                            onClick={handleSubmit}
                         >
                             Enregistrer
                         </button>
@@ -295,7 +287,6 @@ const Account = StyledComponents.main`
 const AccountForm = StyledComponents.form`
     display: grid; 
     grid-template-columns: 1fr;
-    row-gap: 0.5rem;
     max-width: 1000px;
     margin: 0 auto;
     margin-bottom: 2rem;
@@ -306,10 +297,17 @@ const AccountForm = StyledComponents.form`
         font-weight: bold;
         margin-top: 1rem;
     }
+
+    .input-container {
+        &[name='profilePicture'] {
+            grid-row: 2 / 6;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+    }
     
     label {
         &#profile-picture-container {
-            grid-row: 2 / 6; 
             display: grid;
             border-radius: 50%;
               
@@ -332,7 +330,6 @@ const AccountForm = StyledComponents.form`
     }
 
     input {
-        margin-top: 0.5rem;
         padding: 0.5rem;
         width: 100%;
 
@@ -342,13 +339,12 @@ const AccountForm = StyledComponents.form`
     }
 
     textarea {
-        margin-top: 0.5rem;
+        width: 100%;
         padding: 0.5rem;
         resize: none;
     }
 
     button {
-        margin-top: 1rem;
         padding: 0.5rem;
     }
 
@@ -364,12 +360,11 @@ const AccountForm = StyledComponents.form`
         legend {
             text-align: left;
             grid-column: 1 / 3;
+            margin-bottom: 1rem; 
         }
         
         label {    
-            &#profile-picture-container {
-                grid-column: 2 / 3;
-                  
+            &#profile-picture-container {                  
                 .img-upload {
                     width: 200px;
                     height: 200px;
@@ -377,23 +372,17 @@ const AccountForm = StyledComponents.form`
             }
         }
 
-        input {   
-            &#last-name, &#first-name, &#phone, &#postal-code {
-                grid-column: 1 / 2; 
+        .input-container {
+            &[name='lastName'], &[name='firstName'], &[name='phone'], &[name='postal-code'] {
+                grid-column: 1 / 2;
             }
-    
-            &#address, &#email {
-                grid-column: 1 / 3;
-            }
-    
-            &#city {
+            
+            &[name='profilePicture'], &[name='city'] {
                 grid-column: 2 / 3;
             }
-        }
 
-        textarea {            
-            &#shared-notes {
-                grid-column: 1 / 3; 
+            &[name='address'], &[name='email'], &[name='sharedNotes'] {
+                grid-column: 1 / 3;
             }
         }
 

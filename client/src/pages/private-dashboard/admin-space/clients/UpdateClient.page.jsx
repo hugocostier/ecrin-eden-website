@@ -1,61 +1,64 @@
 import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import StyledComponents from 'styled-components'
 import defaultPicture from '../../../../assets/images/default-profile-picture.png'
+import { FormError } from '../../../../components/FormError'
 import { fetchClient, updateClient } from "../../../../data/admin/clients.fetch"
 import { fetchClientPreferences, updateClientPreferences } from '../../../../data/admin/preferences.fetch'
-import { SERVER_URL } from '../../../../utils/serverUrl.util'
 
 export const UpdateClient = () => {
     const navigate = useNavigate()
     const { id: clientId } = useParams()
 
+    const { register, handleSubmit, reset, watch, formState: { errors } } = useForm({
+        defaultValues: {
+            lastName: '',
+            firstName: '',
+            phone: '',
+            birthDate: '',
+            address: '',
+            postalCode: '',
+            city: '',
+            email: '',
+            profilePicture: '',
+            sharedNotes: '',
+            privateNotes: '',
+            question1: '',
+            question2: '',
+            question3: '',
+            question4: '',
+            question5: '',
+        }
+    })
+
     const [isEditable, setIsEditable] = useState(false)
     const [hasAccount, setHasAccount] = useState(false)
     const [previewImage, setPreviewImage] = useState('')
-    const [client, setClient] = useState({})
-    const [preferences, setPreferences] = useState({})
-
-    const [input, setInput] = useState({
-        lastName: '',
-        firstName: '',
-        phone: '',
-        birthDate: '',
-        address: '',
-        postalCode: '',
-        city: '',
-        email: '',
-        profilePicture: '',
-        sharedNotes: '',
-        privateNotes: '',
-        question1: '',
-        question2: '',
-        question3: '',
-        question4: '',
-        question5: '',
-    })
 
     useEffect(() => {
+        if (!clientId) return
+
         fetchClient(clientId)
             .then(fetchedClient => {
-                setClient(fetchedClient)
-                setInput(i => ({
-                    ...i,
-                    lastName: fetchedClient.last_name ? fetchedClient.last_name : '',
-                    firstName: fetchedClient.first_name ? fetchedClient.first_name : '',
-                    phone: fetchedClient.phone_number ? fetchedClient.phone_number : '',
+                const data = {
+                    lastName: fetchedClient.last_name || '',
+                    firstName: fetchedClient.first_name || '',
+                    phone: fetchedClient.phone_number || '',
                     birthDate: fetchedClient.birth_date ? fetchedClient.birth_date.split('T')[0] : '',
-                    address: fetchedClient.address ? fetchedClient.address : '',
-                    postalCode: fetchedClient.postal_code ? fetchedClient.postal_code : '',
-                    city: fetchedClient.city ? fetchedClient.city : '',
-                    email: fetchedClient.user_email ? fetchedClient.user_email : '',
-                    profilePicture: fetchedClient.profile_picture ? fetchedClient.profile_picture : '',
-                    sharedNotes: fetchedClient.shared_notes ? fetchedClient.shared_notes : '',
-                    privateNotes: fetchedClient.private_notes ? fetchedClient.private_notes : '',
-                }))
+                    address: fetchedClient.address || '',
+                    postalCode: fetchedClient.postal_code || '',
+                    city: fetchedClient.city || '',
+                    email: fetchedClient.user?.email || '',
+                    profilePicture: fetchedClient.profile_picture || '',
+                    sharedNotes: fetchedClient.shared_notes || '',
+                    privateNotes: fetchedClient.private_notes || '',
+                }
+                reset(data)
+                setPreviewImage(fetchedClient.profile_picture ? `${import.meta.env.VITE_APP_SERVER_URL}/${fetchedClient.profile_picture}` : defaultPicture)
 
-                if (fetchedClient.user_id) {
+                if (fetchedClient.user?.id) {
                     setHasAccount(true)
                 }
             })
@@ -65,29 +68,97 @@ export const UpdateClient = () => {
 
         fetchClientPreferences(clientId)
             .then(preferences => {
-                setPreferences(preferences)
-                setInput(i => ({
-                    ...i,
-                    question1: preferences.question_1 ? preferences.question_1 : '',
-                    question2: preferences.question_2 ? preferences.question_2 : '',
-                    question3: preferences.question_3 ? preferences.question_3 : '',
-                    question4: preferences.question_4 ? preferences.question_4 : '',
-                    question5: preferences.question_5 ? preferences.question_5 : '',
-                }))
+                const data = {
+                    question1: preferences.question_1 || '',
+                    question2: preferences.question_2 || '',
+                    question3: preferences.question_3 || '',
+                    question4: preferences.question_4 || '',
+                    question5: preferences.question_5 || '',
+                }
+                reset(data)
             })
             .catch(error => {
                 console.error('Error fetching client preferences:', error)
             })
 
         return () => {
-            setClient({})
-            setPreferences({})
+            reset()
         }
-    }, [clientId])
+    }, [clientId, reset])
 
-    const handleChange = (e) => {
-        if (e.target.name === 'profilePicture') {
-            const file = e.target.files[0]
+    const handleCancel = () => {
+        fetchClient(clientId)
+            .then(fetchedClient => {
+                const data = {
+                    lastName: fetchedClient.last_name || '',
+                    firstName: fetchedClient.first_name || '',
+                    phone: fetchedClient.phone_number || '',
+                    birthDate: fetchedClient.birth_date ? fetchedClient.birth_date.split('T')[0] : '',
+                    address: fetchedClient.address || '',
+                    postalCode: fetchedClient.postal_code || '',
+                    city: fetchedClient.city || '',
+                    email: fetchedClient.user?.email || '',
+                    profilePicture: fetchedClient.profile_picture || '',
+                    sharedNotes: fetchedClient.shared_notes || '',
+                    privateNotes: fetchedClient.private_notes || '',
+                }
+                reset(data)
+                setPreviewImage(fetchedClient.profile_picture ? `${import.meta.env.VITE_APP_SERVER_URL}/${fetchedClient.profile_picture}` : '')
+            })
+            .catch(error => {
+                console.error('Error fetching client:', error)
+            })
+
+        fetchClientPreferences(clientId)
+            .then(preferences => {
+                const data = {
+                    question1: preferences.question_1 || '',
+                    question2: preferences.question_2 || '',
+                    question3: preferences.question_3 || '',
+                    question4: preferences.question_4 || '',
+                    question5: preferences.question_5 || '',
+                }
+                reset(data)
+                setIsEditable(false)
+            })
+            .catch(error => {
+                console.error('Error fetching client preferences:', error)
+            })
+    }
+
+    const sendForm = async (data) => {
+        toast.promise(updateClient(clientId, data), {
+            pending: 'Modification...',
+            success: 'Client modifié !',
+            error: 'Erreur lors de la modification du client'
+        }, { containerId: 'notification' })
+            .then(() => {
+                console.log('Client updated')
+            })
+            .catch(error => {
+                console.error('Error updating client:', error)
+            })
+
+        toast.promise(updateClientPreferences(clientId, data), {
+            pending: 'Modification des préférences...',
+            success: 'Préférences modifiées !',
+            error: 'Erreur lors de la modification des préférences'
+        }, { containerId: 'notification' })
+            .then(() => {
+                reset()
+                setIsEditable(false)
+                navigate(-1)
+            })
+            .catch(error => {
+                console.error('Error updating client preferences:', error)
+            })
+    }
+
+    const profilePicture = watch('profilePicture')
+
+    useEffect(() => {
+        if (profilePicture && profilePicture.length > 0 && profilePicture instanceof FileList) {
+            const file = profilePicture[0]
 
             if (file) {
                 const reader = new FileReader()
@@ -97,320 +168,255 @@ export const UpdateClient = () => {
                 }
 
                 reader.readAsDataURL(file)
-
-                setInput({
-                    ...input,
-                    profilePicture: file,
-                })
             }
         }
-        else {
-            setInput((prevInput) => ({
-                ...prevInput,
-                [e.target.name]: e.target.value,
-            }))
-        }
-    }
-
-    const handleCancel = () => {
-        setInput({
-            firstName: client.first_name,
-            lastName: client.last_name,
-            phone: client.phone_number ? client.phone_number : '',
-            birthDate: client.birth_date ? client.birth_date.split('T')[0] : '',
-            address: client.address ? client.address : '',
-            postalCode: client.postal_code ? client.postal_code : '',
-            city: client.city ? client.city : '',
-            email: client.user_email ? client.user_email : '',
-            profilePicture: client.profile_picture ? client.profile_picture : '',
-            sharedNotes: client.shared_notes ? client.shared_notes : '',
-            privateNotes: client.private_notes ? client.private_notes : '',
-            question_1: preferences.question_1 ? preferences.question_1 : '',
-            question_2: preferences.question_2 ? preferences.question_2 : '',
-            question_3: preferences.question_3 ? preferences.question_3 : '',
-            question_4: preferences.question_4 ? preferences.question_4 : '',
-            question_5: preferences.question_5 ? preferences.question_5 : '',
-        })
-
-        setIsEditable(false)
-    }
-
-    const handleSubmit = (e) => {
-        e.preventDefault()
-
-        toast.promise(() => {
-            updateClient(clientId, input)
-            updateClientPreferences(clientId, input)
-        }, {
-            pending: 'Modification...',
-            success: 'Client modifié !',
-            error: 'Erreur lors de la modification du client'
-        }, { containerId: 'notification' })
-            .then(() => {
-                setInput({
-                    lastName: '',
-                    firstName: '',
-                    phone: '',
-                    birthDate: '',
-                    address: '',
-                    postalCode: '',
-                    city: '',
-                    email: '',
-                    profilePicture: '',
-                    sharedNotes: '',
-                    privateNotes: '',
-                    question1: '',
-                    question2: '',
-                    question3: '',
-                    question4: '',
-                    question5: '',
-                })
-
-                navigate(-1)
-            })
-            .catch(error => {
-                console.error('Error updating client:', error)
-            })
-    }
+    }, [profilePicture])
 
     return (
         <ClientRecord>
             <h2>Fiche client</h2>
 
-            <StyledForm>
+            <StyledForm onSubmit={handleSubmit(sendForm)}>
                 <legend className='form-legend'>Informations personnelles</legend>
-                <input
-                    type="text"
-                    name="lastName"
-                    id="last-name"
-                    required
-                    value={input.lastName}
-                    onChange={handleChange}
-                    disabled={hasAccount ? true : !isEditable}
-                    placeholder='Nom'
-                    autoComplete='off'
-                />
+                <div className='input-container' name='lastName'>
+                    <input
+                        type='text'
+                        name='lastName'
+                        id='last-name'
+                        placeholder='Nom*'
+                        {...register('lastName', { required: 'Veuillez entrer votre nom', pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer un nom valide' }, disabled: hasAccount ? true : !isEditable })}
+                    />
+                    <FormError error={errors.lastName} />
+                </div>
 
-                <input
-                    type="text"
-                    name="firstName"
-                    id="first-name"
-                    required
-                    value={input.firstName}
-                    onChange={handleChange}
-                    disabled={hasAccount ? true : !isEditable}
-                    placeholder='Prénom'
-                    autoComplete='off'
-                />
+                <div className='input-container' name='firstName'>
+                    <input
+                        type='text'
+                        name='firstName'
+                        id='first-name'
+                        placeholder='Prénom*'
+                        {...register('firstName', { required: 'Veuillez entrer votre prénom', pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer un prénom valide' }, disabled: hasAccount ? true : !isEditable })}
+                    />
+                    <FormError error={errors.firstName} />
+                </div>
 
-                <input
-                    type="tel"
-                    name="phone"
-                    id="phone"
-                    value={input.phone}
-                    onChange={handleChange}
-                    disabled={hasAccount ? true : !isEditable}
-                    placeholder='Numéro de téléphone'
-                    autoComplete='off'
-                />
+                <div className='input-container' name='phone'>
+                    <input
+                        type='tel'
+                        name='phone'
+                        id='phone'
+                        placeholder='Numéro de téléphone (ex: 0601020304)'
+                        {...register('phone', { pattern: { value: /^[0-9]{10}$/, message: 'Veuillez entrer un numéro de téléphone valide' }, disabled: hasAccount ? true : !isEditable })}
+                    />
+                    <FormError error={errors.phone} />
+                </div>
 
-                <input
-                    type="date"
-                    name="birthDate"
-                    id="birth-date"
-                    value={input.birthDate}
-                    onChange={handleChange}
-                    disabled={hasAccount ? true : !isEditable}
-                    placeholder='Date de naissance'
-                    autoComplete='off'
-                />
+                <div className='input-container' name='birthDate'>
+                    <input
+                        type='date'
+                        name='birthDate'
+                        id='birth-date'
+                        placeholder='Date de naissance'
+                        {...register('birthDate', { disabled: hasAccount ? true : !isEditable, validate: value => value ? new Date(value) <= new Date() || 'Veuillez entrer une date de naissance valide' : true })}
+                    />
+                    <FormError error={errors.birthDate} />
+                </div>
 
-                <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    required
-                    value={input.email}
-                    onChange={handleChange}
-                    disabled={hasAccount ? true : !isEditable}
-                    placeholder='Email'
-                    autoComplete='off'
-                />
+                <div className='input-container' name='email'>
+                    <input
+                        type='email'
+                        name='email'
+                        id='email'
+                        placeholder='Email* (ex: adresse@mail.fr)'
+                        {...register('email', { required: 'Veuillez entrer votre email', pattern: { value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/, message: 'Veuillez entrer un email valide' }, disabled: hasAccount ? true : !isEditable })}
+                    />
+                    <FormError error={errors.email} />
+                </div>
 
-                <input
-                    type="text"
-                    name="address"
-                    id="address"
-                    value={input.address}
-                    onChange={handleChange}
-                    disabled={hasAccount ? true : !isEditable}
-                    placeholder='Adresse'
-                    autoComplete='off'
-                />
+                <div className='input-container' name='address'>
+                    <input
+                        type='text'
+                        name='address'
+                        id='address'
+                        placeholder='Adresse'
+                        {...register('address', { disabled: hasAccount ? true : !isEditable })}
+                    />
+                    <FormError error={errors.address} />
+                </div>
 
-                <input
-                    type="text"
-                    name="postalCode"
-                    id="postal-code"
-                    value={input.postalCode}
-                    onChange={handleChange}
-                    disabled={hasAccount ? true : !isEditable}
-                    placeholder='Code postal'
-                    autoComplete='off'
-                />
+                <div className='input-container' name='postalCode'>
+                    <input
+                        type='text'
+                        name='postalCode'
+                        id='postal-code'
+                        placeholder='Code postal (ex: 75000)'
+                        {...register('postalCode', { pattern: { value: /^[0-9]{5}$/, message: 'Veuillez entrer un code postal valide' }, disabled: hasAccount ? true : !isEditable })}
+                    />
+                    <FormError error={errors.postalCode} />
+                </div>
 
-                <input
-                    type="text"
-                    name="city"
-                    id="city"
-                    value={input.city}
-                    onChange={handleChange}
-                    disabled={hasAccount ? true : !isEditable}
-                    placeholder='Ville'
-                    autoComplete='off'
-                />
+                <div className='input-container' name='city'>
+                    <input
+                        type='text'
+                        name='city'
+                        id='city'
+                        placeholder='Ville'
+                        {...register('city', { pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer une ville valide' }, disabled: hasAccount ? true : !isEditable })}
+                    />
+                    <FormError error={errors.city} />
+                </div>
 
-                <label
-                    htmlFor="profile-picture"
-                    id='profile-picture-container'
-                >
-                    <div className='img-upload'>
-                        <img
-                            src={previewImage || (input.profilePicture ? `${SERVER_URL}/${input.profilePicture}` : defaultPicture)}
-                            alt='profile-picture'
-                            style={{ cursor: isEditable ? 'pointer' : 'default' }}
-                        />
-                    </div>
-                </label>
-                <input
-                    type="file"
-                    name="profilePicture"
-                    id="profile-picture"
-                    accept='image/*'
-                    onChange={handleChange}
-                    disabled={hasAccount ? true : !isEditable}
-                    style={{ display: 'none' }}
-                />
+                <div className='input-container' name='profilePicture'>
+                    <label
+                        htmlFor='profile-picture'
+                        id='profile-picture-container'
+                    >
+                        <div className='img-upload'>
+                            <img
+                                src={previewImage || defaultPicture}
+                                alt='profile-picture'
+                                style={{ cursor: isEditable ? 'pointer' : 'default' }}
+                            />
+                        </div>
+                    </label>
+                    <input
+                        type='file'
+                        name='profilePicture'
+                        id='profile-picture'
+                        accept='image/*'
+                        style={{ display: 'none' }}
+                        {...register('profilePicture', { disabled: hasAccount ? true : !isEditable, validate: value => value.length > 0 ? value[0].size <= 8388608 || 'La taille de l\'image ne doit pas dépasser 8 Mo' : true })}
+                    />
+                </div>
 
 
                 <legend className='form-legend'>Préférences</legend>
-                <label htmlFor="question-1" className='user_preferences'>Êtes-vous frileux&#x28;se&#x29; ?</label>
-                <select
-                    name="question1"
-                    id="question-1"
-                    value={input.question1}
-                    onChange={handleChange}
-                    disabled={hasAccount ? true : !isEditable}
-                >
-                    <option
-                        value="non"
+                <div className='input-container' name='question1'>
+                    <label htmlFor="question-1" className='user_preferences'>Êtes-vous frileux&#x28;se&#x29; ?</label>
+                    <select
+                        name="question1"
+                        id="question-1"
+                        {...register('question1', { disabled: hasAccount ? true : !isEditable })}
                     >
-                        Non
-                    </option>
-                    <option
-                        value="parfois"
-                    >
-                        Parfois
-                    </option>
-                    <option
-                        value="oui"
-                    >
-                        Oui
-                    </option>
-                    <option
-                        value="ne sais pas"
-                    >
-                        Je ne sais pas
-                    </option>
-                </select>
+                        <option value="">Choisissez une réponse</option>
+                        <option
+                            value="non"
+                        >
+                            Non
+                        </option>
+                        <option
+                            value="parfois"
+                        >
+                            Parfois
+                        </option>
+                        <option
+                            value="oui"
+                        >
+                            Oui
+                        </option>
+                        <option
+                            value="ne sais pas"
+                        >
+                            Je ne sais pas
+                        </option>
+                    </select>
+                    <FormError error={errors.question1} />
+                </div>
 
-                <label htmlFor="question-2" className='user_preferences'>Quelles sont les zones où vous préférez recevoir des massages ?</label>
-                <input
-                    type="text"
-                    name="question2"
-                    id="question-2"
-                    value={input.question2}
-                    onChange={handleChange}
-                    disabled={hasAccount ? true : !isEditable}
-                    placeholder="Votre réponse..."
-                />
+                <div className='input-container' name='question2'>
+                    <label htmlFor="question-2" className='user_preferences'>Quelles sont les zones où vous préférez recevoir des massages ?</label>
+                    <input
+                        type="text"
+                        name="question2"
+                        id="question-2"
+                        placeholder="Votre réponse..."
+                        {...register('question2', { disabled: hasAccount ? true : !isEditable })}
+                    />
+                    <FormError error={errors.question2} />
+                </div>
 
-                <label htmlFor="question-3" className='user_preferences'>Quelles sont les zones où vous n&apos;appréciez pas trop être massé ?</label>
-                <input
-                    type="text"
-                    name="question3"
-                    id="question-3"
-                    value={input.question3}
-                    onChange={handleChange}
-                    disabled={hasAccount ? true : !isEditable}
-                    placeholder="Votre réponse..."
-                />
+                <div className='input-container' name='question3'>
+                    <label htmlFor="question-3" className='user_preferences'>Quelles sont les zones où vous n&apos;appréciez pas trop être massé ?</label>
+                    <input
+                        type="text"
+                        name="question3"
+                        id="question-3"
+                        placeholder="Votre réponse..."
+                        {...register('question3', { disabled: hasAccount ? true : !isEditable })}
+                    />
+                    <FormError error={errors.question3} />
+                </div>
 
-                <label htmlFor="question-4" className='user_preferences'>Quel type de pression aimez-vous ?</label>
-                <select
-                    name="question4"
-                    id="question-4"
-                    value={input.question4}
-                    onChange={handleChange}
-                    disabled={hasAccount ? true : !isEditable}
-                >
-                    <option
-                        value="faible"
+                <div className='input-container' name='question4'>
+                    <label htmlFor="question-4" className='user_preferences'>Quel type de pression aimez-vous ?</label>
+                    <select
+                        name="question4"
+                        id="question-4"
+                        disabled={hasAccount ? true : !isEditable}
+                        {...register('question4', { disabled: hasAccount ? true : !isEditable })}
                     >
-                        Faible
-                    </option>
-                    <option
-                        value="modérée"
-                    >
-                        Modérée
-                    </option>
-                    <option
-                        value="forte"
-                    >
-                        Forte
-                    </option>
-                    <option
-                        value="ne sais pas"
-                    >
-                        Je ne sais pas
-                    </option>
-                </select>
+                        <option value="">Choisissez une réponse</option>
+                        <option
+                            value="faible"
+                        >
+                            Faible
+                        </option>
+                        <option
+                            value="modérée"
+                        >
+                            Modérée
+                        </option>
+                        <option
+                            value="forte"
+                        >
+                            Forte
+                        </option>
+                        <option
+                            value="ne sais pas"
+                        >
+                            Je ne sais pas
+                        </option>
+                    </select>
+                    <FormError error={errors.question4} />
+                </div>
 
-                <label htmlFor="question-5" className='user_preferences'>Avez vous des éléments particuliers à signaler ?</label>
-                <textarea
-                    name="question5"
-                    id="question-5"
-                    value={input.question5 ? input.question5 : undefined}
-                    onChange={handleChange}
-                    disabled={hasAccount ? true : !isEditable}
-                    placeholder="Votre réponse..."
-                    rows={6}
-                />
+                <div className='input-container' name='question5'>
+                    <label htmlFor="question-5" className='user_preferences'>Avez vous des éléments particuliers à signaler ?</label>
+                    <textarea
+                        name="question5"
+                        id="question-5"
+                        placeholder="Votre réponse..."
+                        rows={6}
+                        {...register('question5', { disabled: hasAccount ? true : !isEditable })}
+                    />
+                    <FormError error={errors.question5} />
+                </div>
 
-                <legend className='form-legend'>Notes partagées avec le praticien</legend>
-                <textarea
-                    name="sharedNotes"
-                    id="shared-notes"
-                    value={input.sharedNotes}
-                    onChange={handleChange}
-                    disabled={!isEditable}
-                    placeholder='Informations partagées avec le client'
-                    rows={8}
-                />
+                <legend className='form-legend'>Notes partagées avec le client</legend>
+                <div className='input-container' name='sharedNotes'>
+                    <textarea
+                        name='sharedNotes'
+                        id='shared-notes'
+                        placeholder='Informations partagées avec le client'
+                        rows={8}
+                        {...register('sharedNotes', { disabled: !isEditable })}
+                    />
+                    <FormError error={errors.sharedNotes} />
+                </div>
 
                 <legend className='form-legend'>Notes personnelles</legend>
-                <textarea
-                    name="privateNotes"
-                    id="private-notes"
-                    value={input.privateNotes}
-                    onChange={handleChange}
-                    disabled={!isEditable}
-                    placeholder='Notes du praticien'
-                    rows={5}
-                />
+                <div className='input-container' name='privateNotes'>
+                    <textarea
+                        name='privateNotes'
+                        id='private-notes'
+                        placeholder='Notes du praticien'
+                        rows={5}
+                        {...register('privateNotes', { disabled: !isEditable })}
+                    />
+                    <FormError error={errors.privateNotes} />
+                </div>
 
-
-                {!isEditable && (
+                {!isEditable ? (
                     <button
                         type="button"
                         id="edit"
@@ -418,9 +424,7 @@ export const UpdateClient = () => {
                     >
                         Modifier
                     </button>
-                )}
-
-                {isEditable && (
+                ) : (
                     <div id='button-container'>
                         <button
                             type="button"
@@ -432,7 +436,6 @@ export const UpdateClient = () => {
                         <button
                             type="submit"
                             id='save'
-                            onClick={handleSubmit}
                         >
                             Enregistrer
                         </button>
@@ -453,7 +456,6 @@ const ClientRecord = StyledComponents.main`
 const StyledForm = StyledComponents.form`
     display: grid; 
     grid-template-columns: 1fr;
-    row-gap: 0.5rem;
     max-width: 1000px;
     margin: 0 auto;
     margin-bottom: 2rem;
@@ -464,10 +466,17 @@ const StyledForm = StyledComponents.form`
         font-weight: bold;
         margin-top: 1rem;
     }
+
+    .input-container {
+        &[name='profilePicture'] {
+            grid-row: 2 / 6;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+    }
     
     label {
         &#profile-picture-container {
-            grid-row: 2 / 6; 
             display: grid;
             border-radius: 50%;
               
@@ -490,7 +499,6 @@ const StyledForm = StyledComponents.form`
     }
 
     input, select {
-        margin-top: 0.5rem;
         padding: 0.5rem;
         width: 100%;
 
@@ -500,13 +508,12 @@ const StyledForm = StyledComponents.form`
     }
 
     textarea {
-        margin-top: 0.5rem;
+        width: 100%;
         padding: 0.5rem;
         resize: none;
     }
 
     button {
-        margin-top: 1rem;
         padding: 0.5rem;
     }
 
@@ -526,6 +533,7 @@ const StyledForm = StyledComponents.form`
         legend {
             text-align: left;
             grid-column: 1 / 3;
+            margin-bottom: 1rem; 
         }
         
         label {
@@ -533,9 +541,7 @@ const StyledForm = StyledComponents.form`
                 grid-column: 1 / 3;
             }
     
-            &#profile-picture-container {
-                grid-column: 2 / 3;
-                  
+            &#profile-picture-container {                  
                 .img-upload {
                     width: 200px;
                     height: 200px;
@@ -543,30 +549,29 @@ const StyledForm = StyledComponents.form`
             }
         }
 
-        input, select {   
-            &#last-name, &#first-name, &#phone, &#postal-code {
-                grid-column: 1 / 2; 
-            }
-    
-            &#address, &#email {
-                grid-column: 1 / 3;
-            }
-    
-            &#city {
+        .input-container {
+            &[name='profilePicture'] {
                 grid-column: 2 / 3;
             }
-    
-            &#question-1, 
-            &#question-2, 
-            &#question-3, 
-            &#question-4 {
-                grid-column: 1 / 3;     
-            }
-        }
 
-        textarea {            
-            &#shared-notes, &#private-notes, &#question-5 {
-                grid-column: 1 / 3; 
+            &[name='lastName'], &[name='firstName'], &[name='phone'], &[name='postal-code'] {
+                grid-column: 1 / 2;
+            }
+
+            &[name='address'], &[name='email'] {
+                grid-column: 1 / 3;
+            }
+
+            &[name='city'] {
+                grid-column: 2 / 3;
+            }
+
+            &[name='sharedNotes'], &[name='privateNotes'], &[name='question5'] {
+                grid-column: 1 / 3;
+            }
+
+            &[name='question1'], &[name='question2'], &[name='question3'], &[name='question4'] {
+                grid-column: 1 / 3;
             }
         }
 
