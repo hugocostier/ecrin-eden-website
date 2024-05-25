@@ -5,7 +5,7 @@ import StyledComponents from 'styled-components'
 import { fetchClientPreferences, updateClientPreferences } from '../../../data/admin/preferences.fetch'
 import { useClientInfo } from '../../../hooks/useClientInfo.hook'
 
-export const MyPreferences = () => {
+export const UserPreferences = () => {
     const navigate = useNavigate()
     const client = useClientInfo()
     const [isEditable, setIsEditable] = useState(false)

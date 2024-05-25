@@ -6,7 +6,7 @@ import { FilterAppointments } from '../../../../components/private-dashboard/app
 import { fetchAppointments, updateAppointment } from '../../../../data/appointments/appointments.fetch'
 import { useClientInfo } from '../../../../hooks/useClientInfo.hook'
 
-export const MyAppointments = () => {
+export const UserAppointments = () => {
     const client = useClientInfo()
     const [appointments, setAppointments] = useState([])
     const [searchParams, setSearchParams] = useSearchParams({

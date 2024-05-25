@@ -6,7 +6,7 @@ import { countUserAppointments } from '../../../data'
 import { useClientInfo } from '../../../hooks/useClientInfo.hook'
 import { calculateWeekBounds } from '../../../utils/calculateWeekBounds.util'
 
-export const MyDashboard = () => {
+export const UserDashboard = () => {
     const client = useClientInfo()
     const [count, setCount] = useState(null)
 
