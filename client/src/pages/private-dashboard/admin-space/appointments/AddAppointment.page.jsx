@@ -5,6 +5,7 @@ import StyledComponents from 'styled-components'
 import { fetchClients } from "../../../../data/admin/clients.fetch"
 import { fetchServices } from "../../../../data/admin/services.fetch"
 import { /*addAppointment,*/ fetchAllAppointments } from '../../../../data/appointments/appointments.fetch'
+import { setAvailableTimes } from '../../../../utils/calculateAvailableTimes.util'
 
 export const AddAppointment = () => {
     const navigate = useNavigate()
@@ -44,8 +45,27 @@ export const AddAppointment = () => {
         return () => {
             setClients([])
             setServices([])
+            setAppointments([])
         }
     }, [])
+
+    const selectedService = services.find(service => service.id == searchParams.get('service'))
+
+    useEffect(() => {
+        const selectedService = services.find(service => service.id == searchParams.get('service'))
+        const selectedDate = searchParams.get('date')
+
+        if (selectedService && selectedDate) {
+            fetchAppointments(selectedDate)
+                .then(() =>
+                    setTimes(setAvailableTimes(selectedDate, appointments.data, selectedService))
+                )
+        }
+
+        return () => {
+            setTimes([])
+        }
+    }, [searchParams, services, appointments])
 
     const handleChange = (e) => {
         setSearchParams(prev => {
@@ -55,183 +75,17 @@ export const AddAppointment = () => {
     }
 
     const fetchAppointments = (date) => {
-        fetchAllAppointments({ day: date })
-            .then(appointments => {
-                setAppointments(appointments)
-            })
-            .catch(error => {
-                console.error('Error fetching appointments:', error)
-            })
-
-        return () => {
-            setAppointments([])
-        }
-    }
-
-    console.log('appointments:', appointments)
-
-    const setAvailableTimes = (date) => {
-        const openHours = {
-            monday: { start: 'closed', end: 'closed' },
-            tuesday: { start: 'closed', end: 'closed' },
-            wednesday: { start: '17:00', end: '19:00' },
-            thursday: { start: '17:00', end: '19:00' },
-            friday: { start: '17:00', end: '19:00' },
-            saturday: { start: '10:00', end: '19:00' },
-            sunday: { start: 'closed', end: 'closed' },
-        }
-
-        const availableTimes = []
-
-        const selectedDayName = new Date(date).toLocaleDateString('en-EN', { weekday: 'long' }).toLowerCase()
-
-        const start = openHours[selectedDayName].start
-        const end = openHours[selectedDayName].end
-
-        if (start === 'closed' || end === 'closed') {
-            return availableTimes
-        }
-
-        const startTime = new Date(`01/01/2000 ${start}`)
-        const endTime = new Date(`01/01/2000 ${end}`)
-        const endTimePlusOneHour = new Date(`01/01/2000 ${end}`)
-        endTimePlusOneHour.setHours(endTimePlusOneHour.getHours() + 1)
-
-        const currentTime = startTime
-
-        while (currentTime <= endTime) {
-            const time = currentTime.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
-
-            if (currentTime >= startTime && currentTime <= endTimePlusOneHour) {
-                availableTimes.push(time)
-            }
-
-            currentTime.setTime(currentTime.getTime() + 600000)
-        }
-
-        return availableTimes
-    }
-
-
-    const findAvailableTimes = (date) => {
-        const openHours = {
-            monday: { start: 'closed', end: 'closed' },
-            tuesday: { start: 'closed', end: 'closed' },
-            wednesday: { start: '17:00', end: '19:00' },
-            thursday: { start: '17:00', end: '19:00' },
-            friday: { start: '17:00', end: '19:00' },
-            saturday: { start: '10:00', end: '19:00' },
-            sunday: { start: 'closed', end: 'closed' },
-        }
-
-        const availableTimes = []
-        const unavailableTimes = []
-
-        const selectedDayName = new Date(date).toLocaleDateString('en-EN', { weekday: 'long' }).toLowerCase()
-
-        const appointmentsForDay = appointments.find(appointment => appointment.date === date)
-
-        // For each appointment, check if the time is available, if it is check the duration of the service and add that period to the unavailable times
-        for (const appointment of appointmentsForDay) {
-            const appointmentTime = new Date(`01/01/2000 ${appointment.time}`)
-            const appointmentTimePlusDuration = new Date(`01/01/2000 ${appointment.time}`)
-            appointmentTimePlusDuration.setMinutes(appointmentTimePlusDuration.getMinutes() + appointment.duration)
-
-            if (appointmentTime >= openHours[selectedDayName].start && appointmentTime < openHours[selectedDayName].end) {
-                unavailableTimes.push(appointmentTime.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }))
-            }
-        }
-
-        // For each unavailable time, check if the current time is in that period, if it is, add the duration of the service to the current time
-        for (const unavailableTime of unavailableTimes) {
-            const unavailableTimeStart = new Date(`01/01/2000 ${unavailableTime}`)
-            const unavailableTimeEnd = new Date(`01/01/2000 ${unavailableTime}`)
-            unavailableTimeEnd.setMinutes(unavailableTimeEnd.getMinutes() + duration)
-
-            if (currentTime >= unavailableTimeStart && currentTime < unavailableTimeEnd) {
-                currentTime.setTime(currentTime.getTime() + (duration * 60000))
-            }
-        }
-
-        // If the current time is not in the unavailable times and the selected service duration fits in the current time, add the current time to the available times
-        while (currentTime < endTime) {
-            const time = currentTime.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
-
-            if (currentTime >= startTime && currentTime < endTimePlusOneHour && !appointments.some(appointment => appointment.time === time && appointment.date === date)) {
-                availableTimes.push(time)
-            }
-
-            currentTime.setTime(currentTime.getTime() + (duration * 60000))
-        }
-
-        console.log('availableTimes:', availableTimes)
-        console.log('unavailableTimes:', unavailableTimes)
-        return availableTimes
-    }
-
-
-    const calculateAvailableTimes = () => {
-        if (!searchParams.get('date')) {
-            return []
-        }
-
-        const openHours = {
-            monday: { start: 'closed', end: 'closed' },
-            tuesday: { start: 'closed', end: 'closed' },
-            wednesday: { start: '17:00', end: '19:00' },
-            thursday: { start: '17:00', end: '19:00' },
-            friday: { start: '17:00', end: '19:00' },
-            saturday: { start: '10:00', end: '19:00' },
-            sunday: { start: 'closed', end: 'closed' },
-        }
-
-        const availableTimes = []
-
-        const selectedDayName = new Date(searchParams.get('date')).toLocaleDateString('en-EN', { weekday: 'long' }).toLowerCase()
-        console.log('selectedDayName:', selectedDayName)
-
-        const selectedService = services.find(service => service.id == searchParams.get('service'))
-        console.log('selectedService:', selectedService)
-        const duration = selectedService ? selectedService.duration : 0
-        console.log('duration:', duration)
-
-        const start = openHours[selectedDayName].start
-        console.log('start:', start)
-        const end = openHours[selectedDayName].end
-        console.log('end:', end)
-
-        if (start === 'closed' || end === 'closed') {
-            console.log('closed')
-            return availableTimes
-        }
-
-        const startTime = new Date(`01/01/2000 ${start}`)
-        console.log('startTime:', startTime)
-        const endTime = new Date(`01/01/2000 ${end}`)
-        console.log('endTime:', endTime)
-        const endTimePlusOneHour = new Date(`01/01/2000 ${end}`)
-        endTimePlusOneHour.setHours(endTimePlusOneHour.getHours() + 1)
-        console.log('endTimePlusOneHour:', endTimePlusOneHour)
-
-        const currentTime = startTime
-        console.log('currentTime:', currentTime)
-
-        while (currentTime < endTime) {
-            const time = currentTime.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
-            console.log('time:', time)
-
-            if (currentTime >= startTime && currentTime < endTimePlusOneHour && !appointments.some(appointment => appointment.time === time && appointment.date === searchParams.get('date'))) {
-                availableTimes.push(time)
-                console.log('pushed:', availableTimes)
-            }
-
-            currentTime.setTime(currentTime.getTime() + (duration * 60000))
-            console.log(currentTime.getTime() + (duration * 60000))
-            console.log('currentTime:', currentTime)
-        }
-
-        console.log('availableTimes:', availableTimes)
-        return availableTimes
+        return new Promise((resolve, reject) => {
+            fetchAllAppointments({ day: date })
+                .then(appointments => {
+                    setAppointments(appointments)
+                    resolve()
+                })
+                .catch(error => {
+                    console.error('Error fetching appointments:', error)
+                    reject()
+                })
+        })
     }
 
     // console.log('input:', input)
@@ -267,8 +121,6 @@ export const AddAppointment = () => {
     //         })
     // }
 
-    const selectedService = services.find(service => service.id == searchParams.get('service'))
-
     return (
         <AppointmentAdd>
             <h2>Ajouter un rendez-vous</h2>
@@ -282,6 +134,7 @@ export const AddAppointment = () => {
                     value={searchParams.get('client')}
                     onChange={handleChange}
                 >
+                    <option value="">Choisir un client dans la liste déroulante...</option>
                     {clients.map(client => (
                         <option
                             key={client.id}
@@ -299,14 +152,7 @@ export const AddAppointment = () => {
                     id="date"
                     required
                     value={searchParams.get('date')}
-                    onChange={
-                        (e) => {
-                            handleChange(e)
-                            fetchAppointments(e.target.value)
-                            // calculateAvailableTimes()
-                            setTimes(setAvailableTimes(e.target.value))
-                        }
-                    }
+                    onChange={handleChange}
                 />
 
                 <label htmlFor="time">Heure :</label>
@@ -393,14 +239,15 @@ export const AddAppointment = () => {
                     </option>
                 </select>
 
-                <legend>Informations du service</legend>
-                <label htmlFor="service">Service :</label>
+                <legend>Informations de la prestation</legend>
+                <label htmlFor="service">Prestation :</label>
                 <select
                     name="service"
                     id="service"
                     value={searchParams.get('service')}
                     onChange={handleChange}
                 >
+                    <option value="">Choisir une prestation dans la liste déroulante...</option>
                     {services.map(service => (
                         <option
                             key={service.id}
