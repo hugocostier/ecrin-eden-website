@@ -166,10 +166,6 @@ class ExpressApp {
      */
     private setupRoutes(): void {
         this.app.use('/api/v1', apiRoutes) 
-
-        this.app.get('*', (req: Request, res: Response) => {
-            res.sendFile(path.resolve(__dirname, '../../client', 'index.html'))
-        })
     }
 
     /**
