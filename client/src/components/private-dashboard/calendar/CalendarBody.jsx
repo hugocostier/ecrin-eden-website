@@ -9,7 +9,7 @@ import { renderDay, renderMonth, renderWeek } from '../../../utils/renderCalenda
 import { Days } from './Days'
 import { Week } from './Week'
 
-export const CalendarBody = ({ currentDate, currentView }) => {
+export const CalendarBody = ({ currentDate, currentView, setSearchParams }) => {
     const client = useClientInfo()
     const [appointments, setAppointments] = useState([])
     const isAdmin = useAuth().user.role === 'admin'
@@ -101,7 +101,7 @@ export const CalendarBody = ({ currentDate, currentView }) => {
         return () => {
             setAppointments([])
         }
-    }, [currentDate, currentView, isAdmin, client.id])
+    }, [currentView, currentDate, isAdmin, client.id])
 
     return (
         <StyledCalendarBody className={currentView}>
@@ -109,20 +109,20 @@ export const CalendarBody = ({ currentDate, currentView }) => {
             {currentView === 'month' ? (
                 <>
                     <Week />
-                    <Days render={renderMonth(currentDate, appointments)} />
+                    <Days render={renderMonth(currentDate, appointments, isAdmin, setSearchParams)} />
                 </>
             )
                 // If current view is 'week', render the week 
                 : currentView === 'week' ? (
                     <>
                         <Week />
-                        <Days render={renderWeek(currentDate, appointments)} />
+                        <Days render={renderWeek(currentDate, appointments, isAdmin, setSearchParams)} />
                     </>
                 )
                     // If current view is 'day', render the day 
                     : currentView === 'day' ? (
                         <>
-                            <Days render={renderDay(currentDate, appointments)} />
+                            <Days render={renderDay(currentDate, appointments, isAdmin)} />
                         </>
                     )
                         : null
@@ -133,7 +133,8 @@ export const CalendarBody = ({ currentDate, currentView }) => {
 
 CalendarBody.propTypes = {
     currentDate: PropTypes.object.isRequired,
-    currentView: PropTypes.string.isRequired
+    currentView: PropTypes.string.isRequired,
+    setSearchParams: PropTypes.func.isRequired
 }
 
 const StyledCalendarBody = StyledComponents.table`
@@ -145,6 +146,22 @@ const StyledCalendarBody = StyledComponents.table`
     tbody, thead {
         th {
             width: calc(100% / 7); 
+        }
+    }
+
+    tbody {
+        tr {
+            &.day-view {
+                height: 55px;
+            }
+
+            &.week-view {
+                height: 570px;
+            }
+
+            &.month-view {
+                height: 95px;
+            }
         }
     }
 `
