@@ -91,6 +91,12 @@
     --green-light: #d1e7dd;
     --green-dark: #0f5132;
 
+    /* Appointment status */
+    --confirmed: #28a745;
+    --pending: #ffc107;
+    --cancelled: #dc3545;
+    --completed: #007bff;
+
     /* -- Fonts -- */
     --heading-font: 'Caudex', sans-serif;
     --body-font: 'FuturaLT', sans-serif;
