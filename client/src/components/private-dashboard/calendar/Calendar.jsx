@@ -1,21 +1,40 @@
-import { useState } from 'react';
+// import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import StyledComponents from 'styled-components';
 import { calculateWeekBounds } from '../../../utils/calculateWeekBounds.util';
 import { CalendarBody } from './CalendarBody';
 import { CalendarHeader } from './CalendarHeader';
 
 export const Calendar = () => {
-    const [currentView, setCurrentView] = useState('day');
+    const week = calculateWeekBounds(new Date())
 
-    const [currentDate, setCurrentDate] = useState({
+    const [searchParams, setSearchParams] = useSearchParams({
+        view: 'day',
+        date: new Date().toISOString().split('T')[0],
         day: new Date().getDate(),
-        week: calculateWeekBounds(new Date()),
+        week_first_day: week.firstDay?.toISOString().split('T')[0],
+        week_last_day: week.lastDay?.toISOString().split('T')[0],
         month: new Date().getMonth(),
         year: new Date().getFullYear()
     })
 
+    const view = searchParams.get('view')
+
+    const date = {
+        day: searchParams.get('day'),
+        week: {
+            firstDay: searchParams.get('week_first_day'),
+            lastDay: searchParams.get('week_last_day')
+        },
+        month: searchParams.get('month'),
+        year: searchParams.get('year'),
+    }
+
     const switchView = (view) => {
-        setCurrentView(view);
+        setSearchParams(prev => {
+            prev.set('view', view)
+            return prev
+        }, { replace: true })
     }
 
     const updateDate = (view, direction) => {
@@ -35,7 +54,7 @@ export const Calendar = () => {
     }
 
     const updateMonth = (direction) => {
-        const newDate = new Date(currentDate.year, currentDate.month, 1);
+        const newDate = new Date(date.year, date.month, 1)
 
         if (direction === 'next') {
             newDate.setMonth(newDate.getMonth() + 1);
@@ -46,18 +65,21 @@ export const Calendar = () => {
             newDate.setFullYear(new Date().getFullYear());
         }
 
-        setCurrentDate({
-            ...currentDate,
-            month: newDate.getMonth(),
-            year: newDate.getFullYear(),
-            day: newDate.getDate(),
-            week: calculateWeekBounds(newDate)
-        })
+        const week = calculateWeekBounds(newDate)
+
+        setSearchParams(prev => {
+            prev.set('month', newDate.getMonth())
+            prev.set('year', newDate.getFullYear())
+            prev.set('day', newDate.getDate())
+            prev.set('week_first_day', week.firstDay?.toISOString().split('T')[0])
+            prev.set('week_last_day', week.lastDay?.toISOString().split('T')[0])
+            return prev
+        }, { replace: true })
     }
 
     const updateWeek = (direction) => {
-        const newDate = new Date(currentDate.year, currentDate.month, currentDate.day)
-        const monthLength = new Date(currentDate.year, currentDate.month + 1, 0).getDate()
+        const newDate = new Date(date.year, date.month, date.day)
+        const monthLength = new Date(date.year, date.month + 1, 0).getDate()
 
         if (direction === 'next') {
             if (newDate.getDate() + 7 > monthLength) {
@@ -84,18 +106,21 @@ export const Calendar = () => {
             newDate.setFullYear(new Date().getFullYear());
         }
 
-        setCurrentDate({
-            ...currentDate,
-            day: newDate.getDate(),
-            week: calculateWeekBounds(newDate),
-            month: newDate.getMonth(),
-            year: newDate.getFullYear()
-        })
+        const week = calculateWeekBounds(newDate)
+
+        setSearchParams(prev => {
+            prev.set('day', newDate.getDate())
+            prev.set('week_first_day', week.firstDay?.toISOString().split('T')[0])
+            prev.set('week_last_day', week.lastDay?.toISOString().split('T')[0])
+            prev.set('month', newDate.getMonth())
+            prev.set('year', newDate.getFullYear())
+            return prev
+        }, { replace: true })
     }
 
     const updateDay = (direction) => {
-        const newDay = new Date(currentDate.year, currentDate.month, currentDate.day)
-        const monthLength = new Date(currentDate.year, currentDate.month + 1, 0).getDate()
+        const newDay = new Date(date.year, date.month, date.day)
+        const monthLength = new Date(date.year, date.month + 1, 0).getDate()
 
         if (direction === 'next') {
             if (newDay.getDate() + 1 > monthLength) {
@@ -106,7 +131,7 @@ export const Calendar = () => {
             }
         } else if (direction === 'prev') {
             if (newDay.getDate() === 1) {
-                const prevMonthLastDay = new Date(currentDate.year, currentDate.month, 0).getDate()
+                const prevMonthLastDay = new Date(date.year, date.month, 0).getDate()
                 newDay.setMonth(newDay.getMonth() - 1)
                 newDay.setDate(prevMonthLastDay)
             } else {
@@ -118,19 +143,22 @@ export const Calendar = () => {
             newDay.setFullYear(new Date().getFullYear());
         }
 
-        setCurrentDate({
-            ...currentDate,
-            day: newDay.getDate(),
-            month: newDay.getMonth(),
-            year: newDay.getFullYear(),
-            week: calculateWeekBounds(newDay)
-        })
+        const week = calculateWeekBounds(newDay)
+
+        setSearchParams(prev => {
+            prev.set('day', newDay.getDate())
+            prev.set('week_first_day', week.firstDay?.toISOString().split('T')[0])
+            prev.set('week_last_day', week.lastDay?.toISOString().split('T')[0])
+            prev.set('month', newDay.getMonth())
+            prev.set('year', newDay.getFullYear())
+            return prev
+        }, { replace: true })
     }
 
     return (
         <StyledCalendar className='calendar-container'>
-            <CalendarHeader currentDate={currentDate} currentView={currentView} prevNextFunction={updateDate} changeView={switchView} />
-            <CalendarBody currentDate={currentDate} currentView={currentView} />
+            <CalendarHeader currentDate={date} currentView={view} prevNextFunction={updateDate} changeView={switchView} />
+            <CalendarBody currentDate={date} currentView={view} setSearchParams={setSearchParams} />
         </StyledCalendar>
     )
 }
@@ -139,5 +167,6 @@ const StyledCalendar = StyledComponents.section`
     background: var(--grey-300); 
     border-radius: 10px;
 
-    height: max-content;
+    height: 750px;
+    max-height: 750px; 
 `
