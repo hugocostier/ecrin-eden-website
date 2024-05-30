@@ -6,24 +6,24 @@ import { countAllAppointments } from '../../../data'
 import { useClientInfo } from '../../../hooks/useClientInfo.hook'
 
 export const AdminDashboard = () => {
-    const client = useClientInfo();
-    const [count, setCount] = useState(null);
+    const client = useClientInfo()
+    const [count, setCount] = useState(null)
 
     useEffect(() => {
         if (client.id) {
             countAllAppointments(new Date().toISOString().split('T')[0])
                 .then(count => {
-                    setCount(count.data);
+                    setCount(count.data)
                 })
                 .catch(error => {
-                    console.error('Error fetching data:', error);
-                });
+                    console.error('Error fetching data:', error)
+                })
         }
 
         return () => {
-            setCount(null);
+            setCount(null)
         }
-    }, [client.id]); // Fetch data whenever client.id changes
+    }, [client.id]) // Fetch data whenever client.id changes
 
     return (
         <StyledDashboard>
@@ -50,8 +50,7 @@ export const AdminDashboard = () => {
 const StyledDashboard = StyledComponents.main`
     display: grid; 
     grid-template-columns: 1fr; 
-    gap: 20px;
-    padding: 20px;     
+    gap: 20px;   
     overflow-y: auto;
 
     .page-header {
@@ -71,7 +70,7 @@ const StyledDashboard = StyledComponents.main`
 
     @media screen and (min-width: 1024px) {
         grid-template-columns: 3fr 1fr; 
-        grid-template-rows: 200px max-content;
+        grid-template-rows: 150px max-content;
 
         .page-header {
             grid-column: 1 / 3; 
