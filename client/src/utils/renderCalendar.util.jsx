@@ -1,4 +1,33 @@
-export const renderMonth = (date, appointments) => {
+import { Link } from "react-router-dom"
+
+const getBackgroundColor = (status) => {
+    switch (status) {
+        case 'pending':
+            return { background: 'var(--pending)' }
+        case 'confirmed':
+            return { background: 'var(--confirmed)' }
+        case 'cancelled':
+            return { background: 'var(--cancelled)' }
+        case 'completed':
+            return { background: 'var(--completed)' }
+        default:
+            return { background: 'var(--grey-500)' }
+    }
+}
+
+const getAppointmentLink = (appointment, userRole) => {
+    const linkPath = userRole
+        ? `/admin/appointments/${appointment.id}`
+        : `/user/appointments/${appointment.id}`
+
+    return (
+        <Link to={linkPath} className="appointment-link">
+            {appointment.time.slice(0, 5)}
+        </Link>
+    )
+}
+
+export const renderMonth = (date, appointments, userRole, setSearchParams) => {
     const daysInPreviousMonth = new Date(date.year, date.month, 0).getDate()
     const daysInMonth = new Date(date.year, date.month + 1, 0).getDate()
     const firstDay = new Date(date.year, date.month, 0).getDay()
@@ -30,12 +59,28 @@ export const renderMonth = (date, appointments) => {
                     return new Date(appointment.date).getDate() === currentDay
                 })
 
+                const dayOfWeek = new Date(date.year, date.month, currentDay).getDate()
+
                 if (appointmentsForDay.length > 2) {
                     week.push(
-                        <td key={j} >
+                        <td
+                            key={j}
+                            onClick={() => {
+                                setSearchParams(prev => {
+                                    prev.set('day', dayOfWeek)
+                                    return prev
+                                })
+                            }}
+                        >
                             <div className={`day-number ${currentDay === today.getDate() && date.month === today.getMonth() && date.year === today.getFullYear() ? 'today' : ''}`}>{currentDay}</div>
                             {appointmentsForDay.slice(0, 1).map((appointment, index) => (
-                                <div className='appointment-info' key={index}>{appointment.status}</div>
+                                <div
+                                    className='appointment-info'
+                                    key={index}
+                                    style={getBackgroundColor(appointment.status)}
+                                >
+                                    {getAppointmentLink(appointment, userRole)}
+                                </div>
                             ))}
                             <div className='more-appointments'>{appointmentsForDay.length - 1} de plus...</div>
                         </td>
@@ -43,10 +88,24 @@ export const renderMonth = (date, appointments) => {
                 } else {
                     // Push the current day and increment it
                     week.push(
-                        <td key={j} >
+                        <td
+                            key={j}
+                            onClick={() => {
+                                setSearchParams(prev => {
+                                    prev.set('day', dayOfWeek)
+                                    return prev
+                                })
+                            }}
+                        >
                             <div className={`day-number ${currentDay === today.getDate() && date.month === today.getMonth() && date.year === today.getFullYear() ? 'today' : ''}`}>{currentDay}</div>
                             {appointmentsForDay.map((appointment, index) => (
-                                <div className='appointment-info' key={index}>{appointment.status}</div>
+                                <div
+                                    className='appointment-info'
+                                    key={index}
+                                    style={getBackgroundColor(appointment.status)}
+                                >
+                                    {getAppointmentLink(appointment, userRole)}
+                                </div>
                             ))}
                         </td>
                     )
@@ -69,13 +128,13 @@ export const renderMonth = (date, appointments) => {
             }
         }
 
-        calendar.push(<tr key={i}>{week}</tr>)
+        calendar.push(<tr key={i} className='month-view'>{week}</tr>)
     }
 
     return calendar
 }
 
-export const renderWeek = (date, appointments) => {
+export const renderWeek = (date, appointments, userRole, setSearchParams) => {
     const firstDayOfWeek = new Date(date.week.firstDay)
     const today = new Date()
 
@@ -87,7 +146,7 @@ export const renderWeek = (date, appointments) => {
 
     for (let j = 0; j < 7; j++) {
         const dayOfWeek = currentDay.getDate()
-        const isInMonth = currentDay.getMonth() === date.month
+        const isInMonth = currentDay.getMonth() == date.month
 
         let appointmentsForDay = []
         if (isInMonth) {
@@ -95,15 +154,30 @@ export const renderWeek = (date, appointments) => {
         }
 
         week.push(
-            <td key={`${j}`} className={!isInMonth ? 'inactive' : ''}>
+            <td
+                key={j}
+                className={!isInMonth ? 'inactive' : ''}
+                onClick={() => {
+                    if (isInMonth) {
+                        setSearchParams(prev => {
+                            prev.set('day', dayOfWeek)
+                            return prev
+                        })
+                    }
+                }}
+            >
                 {isInMonth && (
                     <>
                         <div className={`day-number ${dayOfWeek === today.getDate() && date.month === today.getMonth() && date.year === today.getFullYear() ? 'today' : ''}`}>
                             {dayOfWeek}
                         </div>
                         {appointmentsForDay.map((appointment, index) => (
-                            <div className="appointment-info" key={index}>
-                                {appointment.status}
+                            <div
+                                className="appointment-info"
+                                key={index}
+                                style={getBackgroundColor(appointment.status)}
+                            >
+                                {getAppointmentLink(appointment, userRole)}
                             </div>
                         ))}
                     </>
@@ -114,14 +188,14 @@ export const renderWeek = (date, appointments) => {
         currentDay.setDate(dayOfWeek + 1)
     }
 
-    calendar.push(<tr key='week1'>{week}</tr>)
+    calendar.push(<tr key='week1' className='week-view'>{week}</tr>)
 
     return calendar
 }
 
-export const renderDay = (date, appointments) => {
+export const renderDay = (date, appointments, userRole) => {
     const workingHours = {
-        start: 9,
+        start: 10,
         end: 20
     }
 
@@ -141,11 +215,18 @@ export const renderDay = (date, appointments) => {
         })
 
         hours.push(
-            <tr key={i}>
-                <td>{hour}:00</td>
+            <tr key={i} className='day-view'>
+                <td className='day-time'>{hour}:00</td>
                 <td className='appointment-info'>
                     {appointmentsForHour.map((appointment, index) => (
-                        <div key={index}>{appointment.status}</div>
+                        <Link
+                            to={userRole ? `/admin/appointments/${appointment.id}` : `/user/appointments/${appointment.id}`}
+                            key={index}
+                            style={getBackgroundColor(appointment.status)}
+                            className='appointment-link'
+                        >
+                            {appointment.time.slice(0, 5)} - {appointment.service?.name} - {appointment.status}
+                        </Link>
                     ))}
                 </td>
             </tr>
