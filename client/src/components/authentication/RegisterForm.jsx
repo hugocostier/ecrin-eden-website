@@ -96,7 +96,7 @@ export const RegisterForm = () => {
                     onChange={handleInput}
                     onBlur={(e) => checkInput(e.target)}
                 />
-                <button>S&apos;inscrire</button>
+                <button id='register'>S&apos;inscrire</button>
             </form>
         </FormContainer>
     )

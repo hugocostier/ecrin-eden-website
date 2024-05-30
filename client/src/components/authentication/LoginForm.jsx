@@ -138,7 +138,7 @@ export const LoginForm = () => {
                 >
                     Mot de passe oublié ?
                 </div>
-                <button>Se connecter</button>
+                <button id='login'>Se connecter</button>
             </form>
         </FormContainer>
     )
@@ -221,12 +221,20 @@ export const FormContainer = StyledComponents.section`
                 margin-left: 10px;
             }
         }
+
+        #forgot-password, #login {
+            cursor: pointer; 
+        }
     }
 
     &.register-container {
         left: 0;
         opacity: 0;
         z-index: 1;
+
+        #register {
+            cursor: pointer;
+        }
     }
 
     @media screen and (max-width: 1023px) {
