@@ -154,7 +154,7 @@ export const UpdateAppointment = () => {
                         Confirmé
                     </option>
                     <option
-                        value="canceled"
+                        value="cancelled"
                     >
                         Annulé
                     </option>

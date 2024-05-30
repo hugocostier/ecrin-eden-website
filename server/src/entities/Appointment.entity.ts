@@ -21,7 +21,7 @@ import Service from './Service.entity.js'
 enum AppointmentStatus {
     PENDING = 'pending',
     CONFIRMED = 'confirmed',
-    CANCELLED = 'canceled',
+    CANCELLED = 'cancelled',
     COMPLETED = 'completed'
 }
 
