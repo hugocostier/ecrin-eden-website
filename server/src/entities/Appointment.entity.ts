@@ -72,7 +72,7 @@ export default class Appointment extends BaseEntity implements IAppointment {
 
     @Column({ type: 'time' })
     @IsNotEmpty({ message: ValidationMessages.getMessage('Time', 'isDefined') })
-    @IsDateString({ strict: false }, { message: ValidationMessages.getMessage('Time', 'date', 'HH:mm:ss') })
+    @IsString({ message: ValidationMessages.getMessage('Time', 'type', 'string') + ValidationMessages.getMessage('Time', 'dateFormat', 'HH:mm')})
         time!: string
 
     @Column({ type: 'boolean' })
