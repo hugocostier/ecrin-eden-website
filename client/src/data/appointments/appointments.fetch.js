@@ -204,3 +204,47 @@ export const updateAppointment = (appointmentID, data) => {
             })
     })
 }
+
+export const addAppointment = (data) => {
+    const { clientID, serviceID, date, time, status, isAway } = data
+
+    const body = {
+        date,
+        time,
+        status,
+        is_away: isAway === 'true',
+        client: {
+            id: clientID,
+        },
+        service: {
+            id: serviceID,
+        },
+    }
+
+    console.log('body', body)
+
+    return new Promise((resolve, reject) => {
+        fetch(`${API_URL}/add`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify(body),
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('HTTP Error ! Status: ' + response.status)
+                }
+
+                return response.json()
+            })
+            .then((appointment) => {
+                resolve(appointment)
+            })
+            .catch((error) => {
+                console.error('Error adding appointment:', error)
+                reject({})
+            })
+    })
+}
