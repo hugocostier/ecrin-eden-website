@@ -34,15 +34,13 @@ export const UserDashboard = () => {
         <StyledDashboard>
             <section className='page-header'>
                 <h2>Bonjour {client.firstName},</h2>
-                {count !== null && count > 0 ?
-                    (
-                        <p>Tu as {count} rendez-vous cette semaine.</p>
-                    )
-                    : count === null ? (
-                        <p>Tu n&apos;as pas de rendez-vous cette semaine.</p>
-                    ) : (
-                        <p>Loading...</p>
-                    )}
+                {count !== null && count > 0 ? (
+                    <p>Tu as {count} rendez-vous cette semaine.</p>
+                ) : (count !== null && count === 0) ? (
+                    <p>Tu n&apos;as pas de rendez-vous cette semaine.</p>
+                ) : (
+                    <p>Loading...</p>
+                )}
             </section>
 
             <Calendar />
@@ -57,8 +55,7 @@ export const UserDashboard = () => {
 const StyledDashboard = StyledComponents.main`
     display: grid; 
     grid-template-columns: 1fr; 
-    gap: 20px;
-    padding: 20px;     
+    gap: 20px;  
     overflow-y: auto;
 
     .page-header {
@@ -78,7 +75,7 @@ const StyledDashboard = StyledComponents.main`
 
     @media screen and (min-width: 1024px) {
         grid-template-columns: 3fr 1fr; 
-        grid-template-rows: 200px max-content;
+        grid-template-rows: 150px max-content;
 
         .page-header {
             grid-column: 1 / 3; 
