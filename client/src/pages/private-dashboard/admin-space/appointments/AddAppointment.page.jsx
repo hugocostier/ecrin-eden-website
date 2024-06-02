@@ -1,21 +1,30 @@
 import { useEffect, useState } from 'react'
+// import { useForm } from 'react-hook-form'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import StyledComponents from 'styled-components'
-import { fetchClients } from "../../../../data/admin/clients.fetch"
-import { fetchServices } from "../../../../data/admin/services.fetch"
-import { /*addAppointment,*/ fetchAllAppointments } from '../../../../data/appointments/appointments.fetch'
-import { setAvailableTimes } from '../../../../utils/calculateAvailableTimes.util'
+import { fetchClients } from '../../../../data/admin/clients.fetch'
+import { fetchServices } from '../../../../data/admin/services.fetch'
+import { addAppointment } from '../../../../data/appointments/appointments.fetch'
+import { checkAvailability } from '../../../../utils/appointment.util'
 
 export const AddAppointment = () => {
     const navigate = useNavigate()
 
-    const [times, setTimes] = useState([])
+    // const { register, handleSubmit, reset, formState: { errors } } = useForm({
+    //     defaultValues: {
+    //         client: '',
+    //         service: '',
+    //         date: '',
+    //         time: '',
+    //         status: '',
+    //         isAway: false,
+    //     }
+    // })
 
-    const [disable, setDisable] = useState(true)
+    const [times, setTimes] = useState([])
     const [clients, setClients] = useState([])
     const [services, setServices] = useState([])
-    const [appointments, setAppointments] = useState([])
     const [searchParams, setSearchParams] = useSearchParams({
         client: '',
         service: '',
@@ -24,6 +33,8 @@ export const AddAppointment = () => {
         status: '',
         isAway: false,
     })
+    const selectedDate = searchParams.get('date')
+    const selectedService = services.find(service => service.id == searchParams.get('service'))
 
     useEffect(() => {
         fetchClients()
@@ -45,27 +56,24 @@ export const AddAppointment = () => {
         return () => {
             setClients([])
             setServices([])
-            setAppointments([])
         }
     }, [])
 
-    const selectedService = services.find(service => service.id == searchParams.get('service'))
-
     useEffect(() => {
-        const selectedService = services.find(service => service.id == searchParams.get('service'))
-        const selectedDate = searchParams.get('date')
-
         if (selectedService && selectedDate) {
-            fetchAppointments(selectedDate)
-                .then(() =>
-                    setTimes(setAvailableTimes(selectedDate, appointments.data, selectedService))
-                )
+            checkAvailability(selectedService, selectedDate)
+                .then(availableTimes => {
+                    setTimes(availableTimes)
+                })
+                .catch(error => {
+                    console.error('Error checking availability:', error)
+                })
         }
 
         return () => {
             setTimes([])
         }
-    }, [searchParams, services, appointments])
+    }, [selectedDate, selectedService, services])
 
     const handleChange = (e) => {
         setSearchParams(prev => {
@@ -74,187 +82,57 @@ export const AddAppointment = () => {
         }, { replace: true })
     }
 
-    const fetchAppointments = (date) => {
-        return new Promise((resolve, reject) => {
-            fetchAllAppointments({ day: date })
-                .then(appointments => {
-                    setAppointments(appointments)
-                    resolve()
+    const handleSubmit = (e) => {
+        e.preventDefault()
+
+        const input = {
+            clientID: searchParams.get('client'),
+            serviceID: searchParams.get('service'),
+            date: searchParams.get('date'),
+            time: searchParams.get('time'),
+            status: searchParams.get('status'),
+            isAway: searchParams.get('isAway'),
+        }
+
+        toast.promise(addAppointment(input), {
+            pending: 'Ajout...',
+            success: 'Rendez-vous ajouté !',
+            error: 'Erreur lors de l\'ajout du rendez-vous'
+        }, { containerId: 'notification' })
+            .then(() => {
+                setSearchParams({
+                    client: '',
+                    service: '',
+                    date: '',
+                    time: '',
+                    status: '',
+                    isAway: false,
                 })
-                .catch(error => {
-                    console.error('Error fetching appointments:', error)
-                    reject()
-                })
-        })
+
+                const currentPath = window.location.pathname
+                navigate(currentPath.replace('/add', ''))
+            })
+            .catch(error => {
+                console.error('Error adding appointment:', error)
+            })
     }
-
-    // console.log('input:', input)
-    // const handleSubmit = (e) => {
-    //     e.preventDefault()
-
-    //     toast.promise(addClient(input), {
-    //         pending: 'Ajout...',
-    //         success: 'Rendez-vous ajouté !',
-    //         error: 'Erreur lors de l\'ajout du rendez-vous'
-    //     }, { containerId: 'notification' })
-    //         .then(() => {
-    //             setInput({
-    //                 date: '',
-    //                 time: '',
-    //                 status: '',
-    //                 isAway: false,
-    //                 privateNotes: '',
-
-    //                 serviceID: '',
-    //                 clientID: '',
-
-    //                 duration: '',
-    //                 price: '',
-    //                 name: '',
-    //             })
-
-    //             const currentPath = window.location.pathname
-    //             navigate(currentPath.replace('/add', ''))
-    //         })
-    //         .catch(error => {
-    //             console.error('Error adding appointment:', error)
-    //         })
-    // }
 
     return (
         <AppointmentAdd>
             <h2>Ajouter un rendez-vous</h2>
 
             <StyledForm>
-                <legend>Informations du rendez-vous</legend>
-                <label htmlFor="client">Client :</label>
-                <select
-                    name="client"
-                    id="client"
-                    value={searchParams.get('client')}
-                    onChange={handleChange}
-                >
-                    <option value="">Choisir un client dans la liste déroulante...</option>
-                    {clients.map(client => (
-                        <option
-                            key={client.id}
-                            value={client.id}
-                        >
-                            {client.first_name} {client.last_name}
-                        </option>
-                    ))}
-                </select>
-
-                <label htmlFor="date">Date :</label>
-                <input
-                    type="date"
-                    name="date"
-                    id="date"
-                    required
-                    value={searchParams.get('date')}
-                    onChange={handleChange}
-                />
-
-                <label htmlFor="time">Heure :</label>
-                {/* <input
-                    type="time"
-                    name="time"
-                    id="time"
-                    required
-                    value={searchParams.get('time')}
-                    onChange={handleChange}
-                    // disabled={disable}
-                /> */}
-                <select
-                    name="time"
-                    id="time"
-                    value={searchParams.get('time')}
-                    onChange={handleChange}
-                    required
-                >
-                    {times.length === 0 && (
-                        <option
-                            value=""
-                        >
-                            Aucun créneau disponible
-                        </option>
-                    )}
-                    {times.length !== 0 && times.map(time => (
-                        <option
-                            key={time}
-                            value={time}
-                        >
-                            {time}
-                        </option>
-                    ))}
-                    {/* {calculateAvailableTimes()} */}
-                </select>
-
-                <label htmlFor="is-away">Rendez-vous à domicile ?</label>
-                <select
-                    name="isAway"
-                    id="is-away"
-                    value={searchParams.get('isAway')}
-                    onChange={handleChange}
-                >
-                    <option
-                        value='true'
-                    >
-                        Oui
-                    </option>
-                    <option
-                        value='false'
-                    >
-                        Non
-                    </option>
-                </select>
-
-
-                <label htmlFor="status">Statut du rendez-vous :</label>
-                <select
-                    name="status"
-                    id="status"
-                    value={searchParams.get('status')}
-                    onChange={handleChange}
-                >
-                    <option
-                        value="pending"
-                    >
-                        En attente
-                    </option>
-                    <option
-                        value="confirmed"
-                    >
-                        Confirmé
-                    </option>
-                    <option
-                        value="canceled"
-                    >
-                        Annulé
-                    </option>
-                    <option
-                        value="completed"
-                    >
-                        Terminé
-                    </option>
-                </select>
-
                 <legend>Informations de la prestation</legend>
-                <label htmlFor="service">Prestation :</label>
+                <label htmlFor='service'>Prestation :</label>
                 <select
-                    name="service"
-                    id="service"
+                    name='service'
+                    id='service'
                     value={searchParams.get('service')}
                     onChange={handleChange}
                 >
-                    <option value="">Choisir une prestation dans la liste déroulante...</option>
+                    <option value=''>Choisir une prestation dans la liste déroulante...</option>
                     {services.map(service => (
-                        <option
-                            key={service.id}
-                            value={service.id}
-                        >
-                            {service.name}
-                        </option>
+                        <option key={service.id} value={service.id}>{service.name}</option>
                     ))}
                 </select>
 
@@ -266,14 +144,83 @@ export const AddAppointment = () => {
                 </p>
 
                 <p>Prix :</p>
-                <p>{selectedService && (
-                    `${selectedService.price} €`
-                )}</p>
+                <p>
+                    {selectedService && (
+                        `${selectedService.price} €`
+                    )}
+                </p>
+
+                <legend>Informations du rendez-vous</legend>
+                <label htmlFor='client'>Client :</label>
+                <select
+                    name='client'
+                    id='client'
+                    value={searchParams.get('client')}
+                    onChange={handleChange}
+                >
+                    <option value=''>Choisir un client dans la liste déroulante...</option>
+                    {clients.map(client => (
+                        <option key={client.id} value={client.id}>{client.first_name} {client.last_name}</option>
+                    ))}
+                </select>
+
+                <label htmlFor='date'>Date :</label>
+                <input
+                    type='date'
+                    name='date'
+                    id='date'
+                    required
+                    value={searchParams.get('date')}
+                    onChange={handleChange}
+                />
+
+                <label htmlFor='time'>Heure :</label>
+                <select
+                    name='time'
+                    id='time'
+                    value={searchParams.get('time')}
+                    onChange={handleChange}
+                    required
+                >
+                    <option value=''>Choisir une heure dans la liste déroulante...</option>
+                    {times.length === 0 && (
+                        <option value=''>Aucun créneau disponible</option>
+                    )}
+                    {times.length !== 0 && times.map(time => (
+                        <option key={time} value={time}>{time}</option>
+                    ))}
+                </select>
+
+                <label htmlFor='is-away'>Rendez-vous à domicile ?</label>
+                <select
+                    name='isAway'
+                    id='is-away'
+                    value={searchParams.get('isAway')}
+                    onChange={handleChange}
+                >
+                    <option value='true'>Oui</option>
+                    <option value='false'>Non</option>
+                </select>
+
+
+                <label htmlFor='status'>Statut du rendez-vous :</label>
+                <select
+                    name='status'
+                    id='status'
+                    value={searchParams.get('status')}
+                    onChange={handleChange}
+                >
+                    <option value=''>Choisir un statut dans la liste déroulante...</option>
+                    <option value='pending'>En attente</option>
+                    <option value='confirmed'>Confirmé</option>
+                    <option value='cancelled'>Annulé</option>
+                    <option value='completed'>Terminé</option>
+                </select>
 
                 <button
-                    type="submit"
+                    type='submit'
                     id='save'
-                // onClick={handleSubmit}
+                    onClick={handleSubmit}
                 >
                     Enregistrer
                 </button>
@@ -395,7 +342,7 @@ const StyledForm = StyledComponents.form`
         }
 
         button {    
-            &#edit {
+            &#save {
                 grid-column: 1 / 3;
             }
         }
