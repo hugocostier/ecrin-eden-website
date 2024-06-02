@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types'
 import { useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
 import StyledComponents from 'styled-components'
 import { fetchAllAppointments, fetchAppointments } from '../../../data'
 import { useAuth } from '../../../hooks/useAuth.hook'
@@ -24,11 +23,7 @@ export const CalendarBody = ({ currentDate, currentView, setSearchParams }) => {
             const todayFormatted = today.toLocaleDateString('fr-FR', options).split('/').reverse().join('-')
 
             if (isAdmin) {
-                toast.promise(fetchAllAppointments({ day: todayFormatted }), {
-                    pending: 'Chargement...',
-                    success: 'Rendez-vous récupérés !',
-                    error: 'Erreur lors de la récupération des rendez-vous'
-                }, { containerId: 'notification' })
+                fetchAllAppointments({ day: todayFormatted })
                     .then(fetchedAppointments => {
                         setAppointments(fetchedAppointments.data)
                     })
@@ -36,11 +31,7 @@ export const CalendarBody = ({ currentDate, currentView, setSearchParams }) => {
                         console.error('Error fetching events:', error)
                     })
             } else {
-                toast.promise(fetchAppointments({ day: todayFormatted, clientId: client.id }), {
-                    pending: 'Chargement...',
-                    success: 'Rendez-vous récupérés !',
-                    error: 'Erreur lors de la récupération des rendez-vous'
-                }, { containerId: 'notification' })
+                fetchAppointments({ day: todayFormatted, clientId: client.id })
                     .then(fetchedAppointments => {
                         setAppointments(fetchedAppointments.data)
                     })
@@ -72,11 +63,7 @@ export const CalendarBody = ({ currentDate, currentView, setSearchParams }) => {
             }
 
             if (isAdmin) {
-                toast.promise(fetchAllAppointments({ rangeStart: rangeStartFormatted, rangeEnd: rangeEndFormatted }), {
-                    pending: 'Chargement...',
-                    success: 'Rendez-vous récupérés !',
-                    error: 'Erreur lors de la récupération des rendez-vous'
-                }, { containerId: 'notification' })
+                fetchAllAppointments({ rangeStart: rangeStartFormatted, rangeEnd: rangeEndFormatted })
                     .then(fetchedAppointments => {
                         setAppointments(fetchedAppointments.data)
                     })
@@ -84,11 +71,7 @@ export const CalendarBody = ({ currentDate, currentView, setSearchParams }) => {
                         console.error('Error fetching events:', error)
                     })
             } else {
-                toast.promise(fetchAppointments({ rangeStart: rangeStartFormatted, rangeEnd: rangeEndFormatted, clientId: client.id }), {
-                    pending: 'Chargement...',
-                    success: 'Rendez-vous récupérés !',
-                    error: 'Erreur lors de la récupération des rendez-vous'
-                }, { containerId: 'notification' })
+                fetchAppointments({ rangeStart: rangeStartFormatted, rangeEnd: rangeEndFormatted, clientId: client.id })
                     .then(fetchedAppointments => {
                         setAppointments(fetchedAppointments.data)
                     })
