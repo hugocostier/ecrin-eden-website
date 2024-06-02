@@ -72,6 +72,11 @@ const ServiceContent = StyledComponents.section`
             text-align: justify;
             margin: 30px 8% 20px 8%;
 
+            a { 
+                color: inherit; 
+                text-decoration: none; 
+            }
+
             .title {
                 grid-column: 1 / 2;
                 grid-row: 1 / 2;

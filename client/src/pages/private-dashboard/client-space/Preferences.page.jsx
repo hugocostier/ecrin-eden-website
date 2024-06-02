@@ -230,7 +230,7 @@ const PreferencesForm = StyledComponents.form`
     margin-bottom: 2rem;
     
     label {
-
+        grid-column: 1 / 3;
     }
 
     input, select {
