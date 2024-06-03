@@ -1,8 +1,8 @@
-import { ConnectionOptions } from 'mysql2';
-import * as mysql from 'mysql2/promise';
-import 'reflect-metadata';
-import { DataSource, DataSourceOptions } from 'typeorm';
-import { importModels } from '../entities/entities.js';
+import { ConnectionOptions } from 'mysql2'
+import * as mysql from 'mysql2/promise'
+import 'reflect-metadata'
+import { DataSource, DataSourceOptions } from 'typeorm'
+import { importModels } from '../entities/entities.js'
 
 class DatabaseManager {
     public dataSource!: DataSource

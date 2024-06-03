@@ -16,8 +16,8 @@ import BaseService from './base.service.js'
 export class PreferencesService extends BaseService {
     private _customRepository: PreferencesRepository = new PreferencesRepository()
     private _preferencesRepository!: Repository<Preferences> & {
-        findPreferencesForClient(clientId: number): Promise<Preferences | null>;
-        updatePreferences(clientId: number, preferences: Partial<Preferences>): Promise<UpdateResult>;
+        findPreferencesForClient(clientId: number): Promise<Preferences | null>
+        updatePreferences(clientId: number, preferences: Partial<Preferences>): Promise<UpdateResult>
     }
 
     /**

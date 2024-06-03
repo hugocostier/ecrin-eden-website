@@ -1,5 +1,5 @@
-import { validate, ValidationError } from "class-validator"
-import { CustomAPIError } from "../errors/custom-errors.js"
+import { validate, ValidationError } from 'class-validator'
+import { CustomAPIError } from '../errors/custom-errors.js'
 
 /**
  * Base class for all services

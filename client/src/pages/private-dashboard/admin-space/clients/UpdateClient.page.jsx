@@ -5,7 +5,7 @@ import { toast } from 'react-toastify'
 import StyledComponents from 'styled-components'
 import defaultPicture from '../../../../assets/images/default-profile-picture.png'
 import { FormError } from '../../../../components/FormError'
-import { fetchClient, updateClient } from "../../../../data/admin/clients.fetch"
+import { fetchClient, updateClient } from '../../../../data/admin/clients.fetch'
 import { fetchClientPreferences, updateClientPreferences } from '../../../../data/admin/preferences.fetch'
 
 export const UpdateClient = () => {
@@ -292,30 +292,30 @@ export const UpdateClient = () => {
 
                 <legend className='form-legend'>Préférences</legend>
                 <div className='input-container' name='question1'>
-                    <label htmlFor="question-1" className='user_preferences'>Êtes-vous frileux&#x28;se&#x29; ?</label>
+                    <label htmlFor='question-1' className='user_preferences'>Êtes-vous frileux&#x28;se&#x29; ?</label>
                     <select
-                        name="question1"
-                        id="question-1"
+                        name='question1'
+                        id='question-1'
                         {...register('question1', { disabled: hasAccount ? true : !isEditable })}
                     >
-                        <option value="">Choisissez une réponse</option>
+                        <option value=''>Choisissez une réponse</option>
                         <option
-                            value="non"
+                            value='non'
                         >
                             Non
                         </option>
                         <option
-                            value="parfois"
+                            value='parfois'
                         >
                             Parfois
                         </option>
                         <option
-                            value="oui"
+                            value='oui'
                         >
                             Oui
                         </option>
                         <option
-                            value="ne sais pas"
+                            value='ne sais pas'
                         >
                             Je ne sais pas
                         </option>
@@ -324,55 +324,55 @@ export const UpdateClient = () => {
                 </div>
 
                 <div className='input-container' name='question2'>
-                    <label htmlFor="question-2" className='user_preferences'>Quelles sont les zones où vous préférez recevoir des massages ?</label>
+                    <label htmlFor='question-2' className='user_preferences'>Quelles sont les zones où vous préférez recevoir des massages ?</label>
                     <input
-                        type="text"
-                        name="question2"
-                        id="question-2"
-                        placeholder="Votre réponse..."
+                        type='text'
+                        name='question2'
+                        id='question-2'
+                        placeholder='Votre réponse...'
                         {...register('question2', { disabled: hasAccount ? true : !isEditable })}
                     />
                     <FormError error={errors.question2} />
                 </div>
 
                 <div className='input-container' name='question3'>
-                    <label htmlFor="question-3" className='user_preferences'>Quelles sont les zones où vous n&apos;appréciez pas trop être massé ?</label>
+                    <label htmlFor='question-3' className='user_preferences'>Quelles sont les zones où vous n&apos;appréciez pas trop être massé ?</label>
                     <input
-                        type="text"
-                        name="question3"
-                        id="question-3"
-                        placeholder="Votre réponse..."
+                        type='text'
+                        name='question3'
+                        id='question-3'
+                        placeholder='Votre réponse...'
                         {...register('question3', { disabled: hasAccount ? true : !isEditable })}
                     />
                     <FormError error={errors.question3} />
                 </div>
 
                 <div className='input-container' name='question4'>
-                    <label htmlFor="question-4" className='user_preferences'>Quel type de pression aimez-vous ?</label>
+                    <label htmlFor='question-4' className='user_preferences'>Quel type de pression aimez-vous ?</label>
                     <select
-                        name="question4"
-                        id="question-4"
+                        name='question4'
+                        id='question-4'
                         disabled={hasAccount ? true : !isEditable}
                         {...register('question4', { disabled: hasAccount ? true : !isEditable })}
                     >
-                        <option value="">Choisissez une réponse</option>
+                        <option value=''>Choisissez une réponse</option>
                         <option
-                            value="faible"
+                            value='faible'
                         >
                             Faible
                         </option>
                         <option
-                            value="modérée"
+                            value='modérée'
                         >
                             Modérée
                         </option>
                         <option
-                            value="forte"
+                            value='forte'
                         >
                             Forte
                         </option>
                         <option
-                            value="ne sais pas"
+                            value='ne sais pas'
                         >
                             Je ne sais pas
                         </option>
@@ -381,11 +381,12 @@ export const UpdateClient = () => {
                 </div>
 
                 <div className='input-container' name='question5'>
-                    <label htmlFor="question-5" className='user_preferences'>Avez vous des éléments particuliers à signaler ?</label>
+                    <label htmlFor='question-5' className='user_preferences'>Avez vous des éléments particuliers à signaler ?</label>
                     <textarea
-                        name="question5"
-                        id="question-5"
-                        placeholder="Votre réponse..."
+                        name='question5'
+                        id='question-5'
+                        placeholder='Votre réponse...'
+                        spellCheck='true'
                         rows={6}
                         {...register('question5', { disabled: hasAccount ? true : !isEditable })}
                     />
@@ -398,6 +399,7 @@ export const UpdateClient = () => {
                         name='sharedNotes'
                         id='shared-notes'
                         placeholder='Informations partagées avec le client'
+                        spellCheck='true'
                         rows={8}
                         {...register('sharedNotes', { disabled: !isEditable })}
                     />
@@ -410,6 +412,7 @@ export const UpdateClient = () => {
                         name='privateNotes'
                         id='private-notes'
                         placeholder='Notes du praticien'
+                        spellCheck='true'
                         rows={5}
                         {...register('privateNotes', { disabled: !isEditable })}
                     />
@@ -418,8 +421,8 @@ export const UpdateClient = () => {
 
                 {!isEditable ? (
                     <button
-                        type="button"
-                        id="edit"
+                        type='button'
+                        id='edit'
                         onClick={() => setIsEditable(true)}
                     >
                         Modifier
@@ -427,14 +430,14 @@ export const UpdateClient = () => {
                 ) : (
                     <div id='button-container'>
                         <button
-                            type="button"
+                            type='button'
                             id='cancel'
                             onClick={handleCancel}
                         >
                             Annuler
                         </button>
                         <button
-                            type="submit"
+                            type='submit'
                             id='save'
                         >
                             Enregistrer

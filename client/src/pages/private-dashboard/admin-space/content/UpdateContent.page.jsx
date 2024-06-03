@@ -114,13 +114,13 @@ export const UpdateContent = () => {
                         <fieldset>
                             <legend className='title-legend'>Titre principal</legend>
                             <input
-                                type="text"
+                                type='text'
                                 name='main-title'
                                 value={updatedContent.homeContent.header[0].title}
                                 onChange={handleChange}
                             />
                             <input
-                                type="text"
+                                type='text'
                                 name='main-subtitle'
                                 value={updatedContent.homeContent.header[0].subtitle}
                                 onChange={handleChange}
@@ -133,24 +133,25 @@ export const UpdateContent = () => {
                                 <div key={index}>
                                     <legend className='subtitle-legend'>Paragraphe n°{index + 1}</legend>
                                     <input
-                                        type="text"
+                                        type='text'
                                         name={`paragraph-title-${index}`}
                                         value={section.title}
                                         onChange={handleChange}
                                     />
                                     {index === 0 && (
                                         <input
-                                            type="text"
+                                            type='text'
                                             name={`paragraph-subtitle-${index}`}
                                             value={section.subtitle}
                                             onChange={handleChange}
                                         />
                                     )}
                                     <textarea
-                                        type="text"
+                                        type='text'
                                         name={`paragraph-text-${index}`}
                                         value={section.text}
                                         onChange={handleChange}
+                                        spellCheck='true'
                                         rows={6}
                                     />
                                 </div>
@@ -160,10 +161,11 @@ export const UpdateContent = () => {
                         <fieldset>
                             <legend className='title-legend'>Bas de page</legend>
                             <textarea
-                                type="text"
+                                type='text'
                                 name='footer-text'
                                 value={updatedContent.homeContent.footer[0].text}
                                 onChange={handleChange}
+                                spellCheck='true'
                                 rows={6}
                             />
                         </fieldset>
@@ -174,14 +176,15 @@ export const UpdateContent = () => {
                                 <div key={index}>
                                     <legend className='subtitle-legend'>Commentaire n°{index + 1}</legend>
                                     <textarea
-                                        type="text"
+                                        type='text'
                                         name={`comment-text-${index}`}
                                         value={review.text}
                                         onChange={handleChange}
+                                        spellCheck='true'
                                         rows={6}
                                     />
                                     <input
-                                        type="text"
+                                        type='text'
                                         name={`comment-author-${index}`}
                                         value={review.author}
                                         onChange={handleChange}
@@ -196,12 +199,12 @@ export const UpdateContent = () => {
                     <>
                         <legend className='title-legend'>Titre principal</legend>
                         <input
-                            type="text"
+                            type='text'
                             value={updatedContent.serviceContent.header[0].title}
                             onChange={handleChange}
                         />
                         <input
-                            type="text"
+                            type='text'
                             value={updatedContent.serviceContent.header[0].subtitle}
                             onChange={handleChange}
                         />
@@ -211,14 +214,15 @@ export const UpdateContent = () => {
                             <div key={index}>
                                 <legend className='subtitle-legend'>Paragraphe n°{index + 1}</legend>
                                 <input
-                                    type="text"
+                                    type='text'
                                     value={section.title}
                                     onChange={handleChange}
                                 />
                                 <textarea
-                                    type="text"
+                                    type='text'
                                     value={section.text}
                                     onChange={handleChange}
+                                    spellCheck='true'
                                     rows={6}
                                 />
                             </div>
@@ -229,19 +233,20 @@ export const UpdateContent = () => {
                             <div key={index}>
                                 <legend className='subtitle-legend'>Prestation n°{index + 1}</legend>
                                 <input
-                                    type="text"
+                                    type='text'
                                     value={service.title}
                                     onChange={handleChange}
                                 />
                                 <input
-                                    type="text"
+                                    type='text'
                                     value={service.time}
                                     onChange={handleChange}
                                 />
                                 <textarea
-                                    type="text"
+                                    type='text'
                                     value={service.text}
                                     onChange={handleChange}
+                                    spellCheck='true'
                                     rows={6}
                                 />
                             </div>
@@ -253,7 +258,7 @@ export const UpdateContent = () => {
                     <>
                         <legend className='title-legend'>Titre principal</legend>
                         <input
-                            type="text"
+                            type='text'
                             value={updatedContent.priceContent.header[0].title}
                             onChange={handleChange}
                         />
@@ -263,17 +268,17 @@ export const UpdateContent = () => {
                             <div key={index}>
                                 <legend className='subtitle-legend'>Prestation n°{index + 1}</legend>
                                 <input
-                                    type="text"
+                                    type='text'
                                     value={price.title}
                                     onChange={handleChange}
                                 />
                                 <input
-                                    type="text"
+                                    type='text'
                                     value={price.duration}
                                     onChange={handleChange}
                                 />
                                 <input
-                                    type="text"
+                                    type='text'
                                     value={price.price}
                                     onChange={handleChange}
                                 />
@@ -282,30 +287,30 @@ export const UpdateContent = () => {
 
                         <legend className='title-legend'>Informations complémentaires</legend>
                         <input
-                            type="text"
+                            type='text'
                             value={updatedContent.priceContent.more[0].title}
                             onChange={handleChange}
                         />
                         <input
-                            type="text"
+                            type='text'
                             value={updatedContent.priceContent.more[0].price}
                             onChange={handleChange}
                         />
                         <input
-                            type="text"
+                            type='text'
                             value={updatedContent.priceContent.more[1].text}
                             onChange={handleChange}
                         />
                         {updatedContent.priceContent.more[1].choices.map((item, index) => (
                             <input
-                                type="text"
+                                type='text'
                                 value={item}
                                 key={index}
                                 onChange={handleChange}
                             />
                         ))}
                         <input
-                            type="text"
+                            type='text'
                             value={updatedContent.priceContent.more[1].more}
                             onChange={handleChange}
                         />
@@ -316,16 +321,17 @@ export const UpdateContent = () => {
                     <>
                         <legend className='title-legend'>Titre principal</legend>
                         <input
-                            type="text"
+                            type='text'
                             value={updatedContent.giftCardContent.main[0].title}
                             onChange={handleChange}
                         />
 
                         <legend className='title-legend'>Corps de page</legend>
                         <textarea
-                            type="text"
+                            type='text'
                             value={updatedContent.giftCardContent.main[0].text}
                             onChange={handleChange}
+                            spellCheck='true'
                             rows={6}
                         />
                     </>
@@ -335,7 +341,7 @@ export const UpdateContent = () => {
                     <>
                         <legend className='title-legend'>Titre principal</legend>
                         <input
-                            type="text"
+                            type='text'
                             value={updatedContent.certificationContent.header[0].title}
                             onChange={handleChange}
                         />
@@ -345,14 +351,15 @@ export const UpdateContent = () => {
                             <div key={index}>
                                 <legend className='subtitle-legend'>Paragraphe n°{index + 1}</legend>
                                 <input
-                                    type="text"
+                                    type='text'
                                     value={section.title}
                                     onChange={handleChange}
                                 />
                                 <textarea
-                                    type="text"
+                                    type='text'
                                     value={section.text}
                                     onChange={handleChange}
+                                    spellCheck='true'
                                     rows={6}
                                 />
                             </div>
@@ -364,39 +371,39 @@ export const UpdateContent = () => {
                     <>
                         <legend className='title-legend'>Titre principal</legend>
                         <input
-                            type="text"
+                            type='text'
                             value={updatedContent.contactContent.header[0].title}
                             onChange={handleChange}
                         />
 
                         <legend className='title-legend'>Informations de contact</legend>
                         <input
-                            type="text"
+                            type='text'
                             value={updatedContent.contactContent.header[0].name}
                             onChange={handleChange}
                         />
                         <input
-                            type="text"
+                            type='text'
                             value={updatedContent.contactContent.header[0].address}
                             onChange={handleChange}
                         />
                         <input
-                            type="text"
+                            type='text'
                             value={updatedContent.contactContent.header[0].zip}
                             onChange={handleChange}
                         />
                         <input
-                            type="text"
+                            type='text'
                             value={updatedContent.contactContent.header[0].city}
                             onChange={handleChange}
                         />
                         <input
-                            type="text"
+                            type='text'
                             value={updatedContent.contactContent.header[0].phone}
                             onChange={handleChange}
                         />
                         <input
-                            type="text"
+                            type='text'
                             value={updatedContent.contactContent.header[0].email}
                             onChange={handleChange}
                         />
@@ -415,9 +422,9 @@ export const UpdateContent = () => {
             <ContentForm>
                 {renderInputs()}
 
-                <div id="button-container">
-                    <button type="reset">Annuler</button>
-                    <button type="submit" onClick={handleSubmit}>Enregistrer</button>
+                <div id='button-container'>
+                    <button type='reset'>Annuler</button>
+                    <button type='submit' onClick={handleSubmit}>Enregistrer</button>
                 </div>
             </ContentForm>
         </UpdateContentPage>

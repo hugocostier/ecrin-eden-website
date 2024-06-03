@@ -1,15 +1,14 @@
-// import { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import StyledComponents from 'styled-components';
-import { calculateWeekBounds } from '../../../utils/calculateWeekBounds.util';
-import { CalendarBody } from './CalendarBody';
-import { CalendarHeader } from './CalendarHeader';
+import { useSearchParams } from 'react-router-dom'
+import StyledComponents from 'styled-components'
+import { calculateWeekBounds } from '../../../utils/calculateWeekBounds.util'
+import { CalendarBody } from './CalendarBody'
+import { CalendarHeader } from './CalendarHeader'
 
 export const Calendar = () => {
     const week = calculateWeekBounds(new Date())
 
     const [searchParams, setSearchParams] = useSearchParams({
-        view: 'day',
+        view: 'month',
         date: new Date().toISOString().split('T')[0],
         day: new Date().getDate(),
         week_first_day: week.firstDay?.toISOString().split('T')[0],
@@ -40,13 +39,13 @@ export const Calendar = () => {
     const updateDate = (view, direction) => {
         switch (view) {
             case 'month':
-                updateMonth(direction);
+                updateMonth(direction)
                 break
             case 'week':
-                updateWeek(direction);
+                updateWeek(direction)
                 break
             case 'day':
-                updateDay(direction);
+                updateDay(direction)
                 break
             default:
                 break
@@ -57,12 +56,12 @@ export const Calendar = () => {
         const newDate = new Date(date.year, date.month, 1)
 
         if (direction === 'next') {
-            newDate.setMonth(newDate.getMonth() + 1);
+            newDate.setMonth(newDate.getMonth() + 1)
         } else if (direction === 'prev') {
-            newDate.setMonth(newDate.getMonth() - 1);
+            newDate.setMonth(newDate.getMonth() - 1)
         } else {
-            newDate.setMonth(new Date().getMonth());
-            newDate.setFullYear(new Date().getFullYear());
+            newDate.setMonth(new Date().getMonth())
+            newDate.setFullYear(new Date().getFullYear())
         }
 
         const week = calculateWeekBounds(newDate)
@@ -87,7 +86,7 @@ export const Calendar = () => {
                 newDate.setDate(diff)
                 newDate.setMonth(newDate.getMonth() + 1)
             } else {
-                newDate.setDate(newDate.getDate() + 7);
+                newDate.setDate(newDate.getDate() + 7)
             }
         } else if (direction === 'prev') {
             if (newDate.getDate() - 7 < 1) {
@@ -98,12 +97,12 @@ export const Calendar = () => {
                 newDate.setDate(lastDayOfPrevMonth - diff + 1)
                 newDate.setFullYear(prevMonth.getFullYear())
             } else {
-                newDate.setDate(newDate.getDate() - 7);
+                newDate.setDate(newDate.getDate() - 7)
             }
         } else {
-            newDate.setDate(new Date().getDate());
-            newDate.setMonth(new Date().getMonth());
-            newDate.setFullYear(new Date().getFullYear());
+            newDate.setDate(new Date().getDate())
+            newDate.setMonth(new Date().getMonth())
+            newDate.setFullYear(new Date().getFullYear())
         }
 
         const week = calculateWeekBounds(newDate)
@@ -127,7 +126,7 @@ export const Calendar = () => {
                 newDay.setDate(1)
                 newDay.setMonth(newDay.getMonth() + 1)
             } else {
-                newDay.setDate(newDay.getDate() + 1);
+                newDay.setDate(newDay.getDate() + 1)
             }
         } else if (direction === 'prev') {
             if (newDay.getDate() === 1) {
@@ -135,12 +134,12 @@ export const Calendar = () => {
                 newDay.setMonth(newDay.getMonth() - 1)
                 newDay.setDate(prevMonthLastDay)
             } else {
-                newDay.setDate(newDay.getDate() - 1);
+                newDay.setDate(newDay.getDate() - 1)
             }
         } else {
-            newDay.setDate(new Date().getDate());
-            newDay.setMonth(new Date().getMonth());
-            newDay.setFullYear(new Date().getFullYear());
+            newDay.setDate(new Date().getDate())
+            newDay.setMonth(new Date().getMonth())
+            newDay.setFullYear(new Date().getFullYear())
         }
 
         const week = calculateWeekBounds(newDay)

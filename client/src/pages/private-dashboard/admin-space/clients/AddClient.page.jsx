@@ -5,7 +5,7 @@ import { toast } from 'react-toastify'
 import StyledComponents from 'styled-components'
 import defaultPicture from '../../../../assets/images/default-profile-picture.png'
 import { FormError } from '../../../../components/FormError'
-import { addClient } from "../../../../data/admin/clients.fetch"
+import { addClient } from '../../../../data/admin/clients.fetch'
 
 export const AddClient = () => {
     const navigate = useNavigate()
@@ -185,6 +185,7 @@ export const AddClient = () => {
                         name='sharedNotes'
                         id='shared-notes'
                         placeholder='Informations partagées avec le client'
+                        spellCheck='true'
                         rows={8}
                         {...register('sharedNotes')}
                     />
@@ -194,9 +195,10 @@ export const AddClient = () => {
                 <legend className='form-legend'>Notes personnelles</legend>
                 <div className='input-container' name='privateNotes'>
                     <textarea
-                        name="privateNotes"
-                        id="private-notes"
+                        name='privateNotes'
+                        id='private-notes'
                         placeholder='Notes du praticien'
+                        spellCheck='true'
                         rows={5}
                         {...register('privateNotes')}
                     />
@@ -204,7 +206,7 @@ export const AddClient = () => {
                 </div>
 
                 <button
-                    type="submit"
+                    type='submit'
                     id='save'
                 >
                     Enregistrer

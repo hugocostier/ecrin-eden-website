@@ -25,12 +25,12 @@ export const CertificationPage = () => {
                         <CertificationContent className='certification-main'>
                             {certificationContent.main.map((main, index) => (
                                 <div className={`card card-${index + 1}`} key={index + 1}>
-                                    <div className="card-content">
+                                    <div className='card-content'>
                                         <h3>{main.title}</h3>
                                         <p>{main.text}</p>
                                     </div>
 
-                                    <div className="card-image">
+                                    <div className='card-image'>
                                         {main.images && main.images.map((image, index) => (
                                             <img key={index + 1} src={image} alt={`Card ${index + 1}`} />
                                         ))}

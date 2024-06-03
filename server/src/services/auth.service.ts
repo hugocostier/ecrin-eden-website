@@ -26,7 +26,7 @@ export class AuthService extends BaseService {
     private _otpService: OTPService = new OTPService() 
     private _userService: UserService = new UserService() 
     private _authRepository!: Repository<User> & {
-        isUserAlreadyRegistered(email: string): Promise<boolean>;
+        isUserAlreadyRegistered(email: string): Promise<boolean>
         registerUser(email: string, password: string, token: string, client: Client): Promise<{ id: number, email: string }>
         authenticateUser(email: string, password: string): Promise<{ user: Partial<User> | false, message: string }>
         resetPassword(email: string, otp: number, password: string, salt?: string): Promise<UpdateResult>

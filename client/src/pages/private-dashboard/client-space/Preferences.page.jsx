@@ -88,103 +88,104 @@ export const UserPreferences = () => {
         <Preference>
             <h2>Mes préférences</h2>
             <PreferencesForm>
-                <label htmlFor="question-1">Êtes-vous frileux&#x28;se&#x29; ?</label>
+                <label htmlFor='question-1'>Êtes-vous frileux&#x28;se&#x29; ?</label>
                 <select
-                    name="question1"
-                    id="question-1"
+                    name='question1'
+                    id='question-1'
                     value={input.question1}
                     disabled={!isEditable}
                     onChange={handleChange}
                 >
                     <option
-                        value="non"
+                        value='non'
                     >
                         Non
                     </option>
                     <option
-                        value="parfois"
+                        value='parfois'
                     >
                         Parfois
                     </option>
                     <option
-                        value="oui"
+                        value='oui'
                     >
                         Oui
                     </option>
                     <option
-                        value="ne sais pas"
+                        value='ne sais pas'
                     >
                         Je ne sais pas
                     </option>
                 </select>
 
-                <label htmlFor="question-2">Quelles sont les zones où vous préférez recevoir des massages ?</label>
+                <label htmlFor='question-2'>Quelles sont les zones où vous préférez recevoir des massages ?</label>
                 <input
-                    type="text"
-                    name="question2"
-                    id="question-2"
+                    type='text'
+                    name='question2'
+                    id='question-2'
                     value={input.question2}
                     onChange={handleChange}
                     disabled={!isEditable}
                     placeholder='Votre réponse...'
                 />
 
-                <label htmlFor="question-3">Quelles sont les zones où vous n&apos;appréciez pas trop être massé ?</label>
+                <label htmlFor='question-3'>Quelles sont les zones où vous n&apos;appréciez pas trop être massé ?</label>
                 <input
-                    type="text"
-                    name="question3"
-                    id="question-3"
+                    type='text'
+                    name='question3'
+                    id='question-3'
                     value={input.question3}
                     onChange={handleChange}
                     disabled={!isEditable}
                     placeholder='Votre réponse...'
                 />
 
-                <label htmlFor="question-4">Quel type de pression aimez-vous ?</label>
+                <label htmlFor='question-4'>Quel type de pression aimez-vous ?</label>
                 <select
-                    name="question4"
-                    id="question-4"
+                    name='question4'
+                    id='question-4'
                     value={input.question4}
                     disabled={!isEditable}
                     onChange={handleChange}
                 >
                     <option
-                        value="faible"
+                        value='faible'
                     >
                         Faible
                     </option>
                     <option
-                        value="modérée"
+                        value='modérée'
                     >
                         Modérée
                     </option>
                     <option
-                        value="forte"
+                        value='forte'
                     >
                         Forte
                     </option>
                     <option
-                        value="ne sais pas"
+                        value='ne sais pas'
                     >
                         Je ne sais pas
                     </option>
                 </select>
 
-                <label htmlFor="question-5">Avez vous des éléments particuliers à signaler ?</label>
+                <label htmlFor='question-5'>Avez vous des éléments particuliers à signaler ?</label>
                 <textarea
-                    name="question5"
-                    id="question-5"
+                    name='question5'
+                    id='question-5'
                     value={input.question5}
                     onChange={handleChange}
                     disabled={!isEditable}
                     placeholder='Votre réponse...'
+                    spellCheck='true'
                     rows={6}
                 />
 
                 {!isEditable && (
                     <button
-                        type="button"
-                        id="edit"
+                        type='button'
+                        id='edit'
                         onClick={() => setIsEditable(true)}
                     >
                         Modifier
@@ -194,14 +195,14 @@ export const UserPreferences = () => {
                 {isEditable && (
                     <div id='button-container'>
                         <button
-                            type="button"
+                            type='button'
                             id='cancel'
                             onClick={handleCancel}
                         >
                             Annuler
                         </button>
                         <button
-                            type="submit"
+                            type='submit'
                             id='save'
                             onClick={handleSubmit}
                         >

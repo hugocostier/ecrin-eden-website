@@ -1,12 +1,12 @@
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faApple, faFacebookF, faGoogle } from '@fortawesome/free-brands-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import StyledComponents from 'styled-components';
-import { RecoveryContext } from '../../context/passwordRecovery.context';
-import { useAuth } from '../../hooks/useAuth.hook';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faApple, faFacebookF, faGoogle } from '@fortawesome/free-brands-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useContext, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import StyledComponents from 'styled-components'
+import { RecoveryContext } from '../../context/passwordRecovery.context'
+import { useAuth } from '../../hooks/useAuth.hook'
 
 library.add(faFacebookF, faGoogle, faApple)
 
@@ -88,46 +88,46 @@ export const LoginForm = () => {
     }
 
     return (
-        <FormContainer className="form-container sign-in-container">
+        <FormContainer className='form-container sign-in-container'>
             <form onSubmit={handleLogin}>
                 <h2>Connexion</h2>
-                <div className="social-container">
-                    <a href="" className="social">
+                <div className='social-container'>
+                    <a href='' className='social'>
                         <FontAwesomeIcon icon='fa-brands fa-facebook-f' />
                     </a>
-                    <a href="" className="social">
+                    <a href='' className='social'>
                         <FontAwesomeIcon icon='fa-brands fa-google' />
                     </a>
-                    <a href="" className="social">
+                    <a href='' className='social'>
                         <FontAwesomeIcon icon='fa-brands fa-apple' />
                     </a>
                 </div>
                 <span>ou utilise ton compte</span>
                 <input
-                    type="email"
-                    name="username"
-                    placeholder="Email"
+                    type='email'
+                    name='username'
+                    placeholder='Email'
                     required
                     autoComplete='username'
                     onChange={handleInput}
                     onBlur={(e) => checkInput(e.target)}
                 />
                 <input
-                    type="password"
-                    name="password"
-                    placeholder="Mot de passe"
+                    type='password'
+                    name='password'
+                    placeholder='Mot de passe'
                     required
                     autoComplete='current-password'
                     onChange={handleInput}
                     onBlur={(e) => checkInput(e.target)}
                 />
-                <div className="remember-me">
+                <div className='remember-me'>
                     <input
-                        type="checkbox"
-                        id="remember-me"
+                        type='checkbox'
+                        id='remember-me'
                         onChange={() => setRememberMe(!rememberMe)}
                     />
-                    <label htmlFor="remember-me">Se souvenir de moi</label>
+                    <label htmlFor='remember-me'>Se souvenir de moi</label>
                 </div>
                 <div
                     id='forgot-password'

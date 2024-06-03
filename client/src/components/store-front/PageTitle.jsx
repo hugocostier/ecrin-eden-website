@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
-import StyledComponents, { keyframes } from 'styled-components';
+import PropTypes from 'prop-types'
+import StyledComponents, { keyframes } from 'styled-components'
 
 export const PageTitle = ({ content, pageName }) => {
     return (
@@ -7,7 +7,7 @@ export const PageTitle = ({ content, pageName }) => {
             <PageTitleSection className={`${pageName}-title`}>
                 <h2>{content.header[0].title}</h2>
                 {content.header[0].images.map((images, index) => (
-                    <div className="image" key={index} >
+                    <div className='image' key={index} >
                         <img src={images} alt={`${pageName} ${index + 1}`} />
                     </div>
                 ))}
@@ -19,7 +19,7 @@ export const PageTitle = ({ content, pageName }) => {
 PageTitle.propTypes = {
     content: PropTypes.object.isRequired,
     pageName: PropTypes.string.isRequired
-};
+}
 
 const slideRight = keyframes`
     0% {

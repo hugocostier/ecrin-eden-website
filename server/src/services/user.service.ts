@@ -19,9 +19,9 @@ export class UserService extends BaseService {
     private _customUserRepository: UserRepository = new UserRepository()
     private _clientService: ClientService = new ClientService() 
     private _userRepository!: Repository<User> & {
-        findById(id: number): Promise<User | null>;
-        findByEmail(email: string): Promise<{ email: string, role: string } | null>;
-        findUserWithClient(id: number): Promise<User | null>;
+        findById(id: number): Promise<User | null>
+        findByEmail(email: string): Promise<{ email: string, role: string } | null>
+        findUserWithClient(id: number): Promise<User | null>
     }
 
     /**

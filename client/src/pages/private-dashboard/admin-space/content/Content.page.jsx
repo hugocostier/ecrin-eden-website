@@ -1,4 +1,4 @@
-import { Link, useSearchParams } from "react-router-dom"
+import { Link, useSearchParams } from 'react-router-dom'
 import StyledComponents from 'styled-components'
 
 const STOREFRONT_URL = 'http://localhost:5173'
@@ -76,7 +76,7 @@ export const AdminContent = () => {
 
             <Link
                 to={`/admin/content/update/${selectedPage.id}`}
-                className="edit-content"
+                className='edit-content'
             >
                 Modifier
             </Link>

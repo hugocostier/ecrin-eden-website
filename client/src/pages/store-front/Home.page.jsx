@@ -1,6 +1,6 @@
 import { Link, useLoaderData } from 'react-router-dom'
 import StyledComponents from 'styled-components'
-import { Loading } from "../../components"
+import { Loading } from '../../components'
 import { useLoader } from '../../hooks/useLoader.hook'
 
 export const HomePage = () => {

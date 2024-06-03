@@ -92,32 +92,32 @@ export const UpdateAppointment = () => {
                 <p>Client :</p>
                 <p>{appointment.client ? `${appointment.client.first_name} ${appointment.client.last_name}` : ''}</p>
 
-                <label htmlFor="date">Date :</label>
+                <label htmlFor='date'>Date :</label>
                 <input
-                    type="date"
-                    name="date"
-                    id="date"
+                    type='date'
+                    name='date'
+                    id='date'
                     required
                     value={input.date}
                     onChange={handleChange}
                     disabled={!isEditable}
                 />
 
-                <label htmlFor="time">Heure :</label>
+                <label htmlFor='time'>Heure :</label>
                 <input
-                    type="time"
-                    name="time"
-                    id="time"
+                    type='time'
+                    name='time'
+                    id='time'
                     required
                     value={input.time}
                     onChange={handleChange}
                     disabled={!isEditable}
                 />
 
-                <label htmlFor="is-away">Rendez-vous à domicile ?</label>
+                <label htmlFor='is-away'>Rendez-vous à domicile ?</label>
                 <select
-                    name="isAway"
-                    id="is-away"
+                    name='isAway'
+                    id='is-away'
                     value={input.isAway}
                     onChange={handleChange}
                     disabled={!isEditable}
@@ -135,31 +135,31 @@ export const UpdateAppointment = () => {
                 </select>
 
 
-                <label htmlFor="status">Statut du rendez-vous :</label>
+                <label htmlFor='status'>Statut du rendez-vous :</label>
                 <select
-                    name="status"
-                    id="status"
+                    name='status'
+                    id='status'
                     value={input.status}
                     onChange={handleChange}
                     disabled={!isEditable}
                 >
                     <option
-                        value="pending"
+                        value='pending'
                     >
                         En attente
                     </option>
                     <option
-                        value="confirmed"
+                        value='confirmed'
                     >
                         Confirmé
                     </option>
                     <option
-                        value="cancelled"
+                        value='cancelled'
                     >
                         Annulé
                     </option>
                     <option
-                        value="completed"
+                        value='completed'
                     >
                         Terminé
                     </option>
@@ -168,20 +168,21 @@ export const UpdateAppointment = () => {
 
                 <legend className='form-legend'>Notes personnelles</legend>
                 <textarea
-                    name="privateNotes"
-                    id="private-notes"
+                    name='privateNotes'
+                    id='private-notes'
                     value={input.privateNotes}
                     onChange={handleChange}
                     disabled={!isEditable}
                     placeholder='Notes du praticien'
+                    spellCheck='true'
                     rows={5}
                 />
 
 
                 {!isEditable && (
                     <button
-                        type="button"
-                        id="edit"
+                        type='button'
+                        id='edit'
                         onClick={() => setIsEditable(true)}
                     >
                         Modifier
@@ -191,14 +192,14 @@ export const UpdateAppointment = () => {
                 {isEditable && (
                     <div id='button-container'>
                         <button
-                            type="button"
+                            type='button'
                             id='cancel'
                             onClick={handleCancel}
                         >
                             Annuler
                         </button>
                         <button
-                            type="submit"
+                            type='submit'
                             id='save'
                             onClick={handleSubmit}
                         >

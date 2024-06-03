@@ -1,7 +1,7 @@
-import StyledComponents from 'styled-components';
-import defaultPicture from "../../../assets/images/default-profile-picture.png";
-import { useAuth } from '../../../hooks/useAuth.hook';
-import { useClientInfo } from '../../../hooks/useClientInfo.hook';
+import StyledComponents from 'styled-components'
+import defaultPicture from '../../../assets/images/default-profile-picture.png'
+import { useAuth } from '../../../hooks/useAuth.hook'
+import { useClientInfo } from '../../../hooks/useClientInfo.hook'
 
 export const NavHeader = () => {
     const auth = useAuth()
@@ -9,7 +9,7 @@ export const NavHeader = () => {
 
     return (
         <StyledNavHeader>
-            <div className="profile-picture">
+            <div className='profile-picture'>
                 <img src={client.profilePicture ? `${import.meta.env.VITE_APP_SERVER_URL}/${client.profilePicture}` : defaultPicture} alt='profile' />
             </div>
 

@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
-import StyledComponents from 'styled-components';
-import { filterAppointments } from '../../../utils/filterAppointments.util';
+import PropTypes from 'prop-types'
+import StyledComponents from 'styled-components'
+import { filterAppointments } from '../../../utils/filterAppointments.util'
 
 export const FilterAppointments = ({ appointments, filter, show, setSearchParams }) => {
     return (

@@ -241,6 +241,7 @@ export const AccountPage = () => {
                         name='sharedNotes'
                         id='shared-notes'
                         placeholder='Informations partagées avec le client'
+                        spellCheck='true'
                         rows={8}
                         {...register('sharedNotes', { disabled: !isEditable })}
                     />

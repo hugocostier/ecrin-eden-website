@@ -18,7 +18,7 @@ export const PricesPage = () => {
                         <PageTitle content={priceContent} pageName='price'></PageTitle>
 
                         <PriceContent className='price-main'>
-                            <PriceCard className="price-cards">
+                            <PriceCard className='price-cards'>
                                 <h3>Tarifs</h3>
                                 {priceContent.main.map((main, index) => (
                                     <div className='card' key={index + 1}>
@@ -46,7 +46,7 @@ export const PricesPage = () => {
                                 </div>
                             </PriceMore>
 
-                            <PriceImage className="price-image">
+                            <PriceImage className='price-image'>
                                 <img src={priceContent.image} alt={priceContent.alt} />
                             </PriceImage>
                         </PriceContent>

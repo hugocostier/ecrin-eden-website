@@ -16,7 +16,7 @@ import BaseService from './base.service.js'
 export class ServiceService extends BaseService {
     private _customRepository: ServiceRepository = new ServiceRepository()
     private _serviceRepository!: Repository<Service> & {
-        findById(id: number): Promise<Service | null>;
+        findById(id: number): Promise<Service | null>
     }
 
     /**

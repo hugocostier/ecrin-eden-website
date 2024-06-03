@@ -15,14 +15,14 @@ export const GiftCardsPage = () => {
             ) : (
                 giftCardContent ? (
                     <>
-                        <GiftCard className="gift-card">
+                        <GiftCard className='gift-card'>
                             <div className='gift-card-content'>
                                 <h2>{giftCardContent.main[0].title}</h2>
                                 {giftCardContent.main[0].text.map((text, index) => (
                                     <p key={index}>{text}</p>
                                 ))}
                             </div>
-                            <div className="gift-card-image">
+                            <div className='gift-card-image'>
                                 <img src={giftCardContent.main[0].image} alt={'giftCard 1'} />
                             </div>
                         </GiftCard>

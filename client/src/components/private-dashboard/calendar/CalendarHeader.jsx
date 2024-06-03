@@ -1,5 +1,75 @@
-import PropTypes from 'prop-types';
-import StyledComponents from 'styled-components';
+import PropTypes from 'prop-types'
+import StyledComponents from 'styled-components'
+
+export const CalendarHeader = ({ currentDate, currentView, prevNextFunction, changeView }) => {
+    const months = [
+        'Janvier',
+        'Février',
+        'Mars',
+        'Avril',
+        'Mai',
+        'Juin',
+        'Juillet',
+        'Août',
+        'Septembre',
+        'Octobre',
+        'Novembre',
+        'Décembre'
+    ]
+
+    return (
+        <StyledCalendarHeader>
+            <div className='view-container'>
+                <div>
+                    <p
+                        onClick={() => changeView('day')}
+                        className={currentView === 'day' ? 'active' : ''}
+                    >
+                        Day
+                    </p>
+                    <p
+                        onClick={() => changeView('week')}
+                        className={currentView === 'week' ? 'active' : ''}
+                    >
+                        Week
+                    </p>
+                    <p
+                        onClick={() => changeView('month')}
+                        className={currentView === 'month' ? 'active' : ''}
+                    >
+                        Month
+                    </p>
+                </div>
+            </div>
+
+            <div className='month-container'>
+                {currentView === 'day' ? (
+                    <p className='current-date'>{currentDate.day} {months[currentDate.month]} {currentDate.year}</p>
+                ) : (
+                    <p className='current-date'>{months[currentDate.month]} {currentDate.year}</p>
+                )}
+                <div className='icons'>
+                    <span onClick={() => prevNextFunction(currentView, 'prev')} className='direction-arrow'>
+                        <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'><path d='M10.8284 12.0007L15.7782 16.9504L14.364 18.3646L8 12.0007L14.364 5.63672L15.7782 7.05093L10.8284 12.0007Z'></path></svg>
+                    </span>
+                    <p onClick={() => prevNextFunction(currentView, 'today')}>
+                        Aujourd&apos;hui
+                    </p>
+                    <span onClick={() => prevNextFunction(currentView, 'next')} className='direction-arrow'>
+                        <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'><path d='M13.1717 12.0007L8.22192 7.05093L9.63614 5.63672L16.0001 12.0007L9.63614 18.3646L8.22192 16.9504L13.1717 12.0007Z'></path></svg>
+                    </span>
+                </div>
+            </div>
+        </StyledCalendarHeader>
+    )
+}
+
+CalendarHeader.propTypes = {
+    currentDate: PropTypes.object.isRequired,
+    currentView: PropTypes.string.isRequired,
+    prevNextFunction: PropTypes.func.isRequired,
+    changeView: PropTypes.func.isRequired,
+}
 
 const StyledCalendarHeader = StyledComponents.div`
     .view-container {
@@ -76,73 +146,3 @@ const StyledCalendarHeader = StyledComponents.div`
         }
     }
 `
-
-export const CalendarHeader = ({ currentDate, currentView, prevNextFunction, changeView }) => {
-    const months = [
-        'Janvier',
-        'Février',
-        'Mars',
-        'Avril',
-        'Mai',
-        'Juin',
-        'Juillet',
-        'Août',
-        'Septembre',
-        'Octobre',
-        'Novembre',
-        'Décembre'
-    ]
-
-    return (
-        <StyledCalendarHeader>
-            <div className='view-container'>
-                <div>
-                    <p
-                        onClick={() => changeView('day')}
-                        className={currentView === 'day' ? 'active' : ''}
-                    >
-                        Day
-                    </p>
-                    <p
-                        onClick={() => changeView('week')}
-                        className={currentView === 'week' ? 'active' : ''}
-                    >
-                        Week
-                    </p>
-                    <p
-                        onClick={() => changeView('month')}
-                        className={currentView === 'month' ? 'active' : ''}
-                    >
-                        Month
-                    </p>
-                </div>
-            </div>
-
-            <div className='month-container'>
-                {currentView === 'day' ? (
-                    <p className='current-date'>{currentDate.day} {months[currentDate.month]} {currentDate.year}</p>
-                ) : (
-                    <p className='current-date'>{months[currentDate.month]} {currentDate.year}</p>
-                )}
-                <div className='icons'>
-                    <span onClick={() => prevNextFunction(currentView, 'prev')} className='direction-arrow'>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10.8284 12.0007L15.7782 16.9504L14.364 18.3646L8 12.0007L14.364 5.63672L15.7782 7.05093L10.8284 12.0007Z"></path></svg>
-                    </span>
-                    <p onClick={() => prevNextFunction(currentView, 'today')}>
-                        Aujourd&apos;hui
-                    </p>
-                    <span onClick={() => prevNextFunction(currentView, 'next')} className='direction-arrow'>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M13.1717 12.0007L8.22192 7.05093L9.63614 5.63672L16.0001 12.0007L9.63614 18.3646L8.22192 16.9504L13.1717 12.0007Z"></path></svg>
-                    </span>
-                </div>
-            </div>
-        </StyledCalendarHeader>
-    )
-}
-
-CalendarHeader.propTypes = {
-    currentDate: PropTypes.object.isRequired,
-    currentView: PropTypes.string.isRequired,
-    prevNextFunction: PropTypes.func.isRequired,
-    changeView: PropTypes.func.isRequired,
-}

@@ -20,11 +20,11 @@ export class ClientService extends BaseService {
     private _customClientRepository: ClientRepository = new ClientRepository()
     private _preferencesService: PreferencesService = new PreferencesService()
     private _clientRepository!: Repository<Client> & { 
-        findById(id: number): Promise<Client | null>; 
-        findByName(first_name: string, last_name: string): Promise<Client | null>; 
-        findByUser(user_id: number): Promise<Client | null>; 
-        getClientWithUser(id: number): Promise<Client | null>;
-        getPersonalInfo(id: number): Promise<Client | null>; 
+        findById(id: number): Promise<Client | null>
+        findByName(first_name: string, last_name: string): Promise<Client | null>
+        findByUser(user_id: number): Promise<Client | null>
+        getClientWithUser(id: number): Promise<Client | null>
+        getPersonalInfo(id: number): Promise<Client | null>
     }
 
     /**

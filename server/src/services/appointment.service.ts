@@ -16,21 +16,21 @@ import BaseService from './base.service.js'
 class AppointmentService extends BaseService {
     private _customRepository = new AppointmentRepository()
     private _appointmentRepository!: Repository<Appointment> & {
-        findAll(): Promise<Appointment[]>;
-        findById(id: number): Promise<Appointment | null>;
-        findByDay(day: Date): Promise<Appointment[]>;
-        findByDateRange(rangeStart: Date, rangeEnd: Date): Promise<Appointment[]>;
-        findUpcoming(): Promise<Appointment[]>;
-        findPast(): Promise<Appointment[]>;
-        findByClient(clientId: number): Promise<Appointment[]>;
-        findByClientForDay(clientId: number, day: Date): Promise<Appointment[]>;
-        findByDateRangeForClient(rangeStart: Date, rangeEnd: Date, clientId: number): Promise<Appointment[]>;
-        findUpcomingByClient(clientId: number): Promise<Appointment[]>;
-        findPastByClient(clientId: number): Promise<Appointment[]>;
-        findByService(serviceId: number): Promise<Appointment[]>;
-        findUpcomingByService(serviceId: number): Promise<Appointment[]>;
-        countForDay(date: Date): Promise<number>;
-        countForWeek(startDate: Date, endDate: Date, clientId: number): Promise<number>;
+        findAll(): Promise<Appointment[]>
+        findById(id: number): Promise<Appointment | null>
+        findByDay(day: Date): Promise<Appointment[]>
+        findByDateRange(rangeStart: Date, rangeEnd: Date): Promise<Appointment[]>
+        findUpcoming(): Promise<Appointment[]>
+        findPast(): Promise<Appointment[]>
+        findByClient(clientId: number): Promise<Appointment[]>
+        findByClientForDay(clientId: number, day: Date): Promise<Appointment[]>
+        findByDateRangeForClient(rangeStart: Date, rangeEnd: Date, clientId: number): Promise<Appointment[]>
+        findUpcomingByClient(clientId: number): Promise<Appointment[]>
+        findPastByClient(clientId: number): Promise<Appointment[]>
+        findByService(serviceId: number): Promise<Appointment[]>
+        findUpcomingByService(serviceId: number): Promise<Appointment[]>
+        countForDay(date: Date): Promise<number>
+        countForWeek(startDate: Date, endDate: Date, clientId: number): Promise<number>
     }
 
     /**

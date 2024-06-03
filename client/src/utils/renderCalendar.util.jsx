@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link } from 'react-router-dom'
 
 const getBackgroundColor = (status) => {
     switch (status) {
@@ -21,7 +21,7 @@ const getAppointmentLink = (appointment, userRole) => {
         : `/user/appointments/${appointment.id}`
 
     return (
-        <Link to={linkPath} className="appointment-link">
+        <Link to={linkPath} className='appointment-link'>
             {appointment.time.slice(0, 5)}
         </Link>
     )
@@ -36,7 +36,7 @@ export const renderMonth = (date, appointments, userRole, setSearchParams) => {
     const calendar = []
 
     for (let i = 0; i < 6; i++) {
-        const week = [];
+        const week = []
 
         for (let j = 0; j < 7; j++) {
             let dayOfMonth = ''
@@ -67,6 +67,7 @@ export const renderMonth = (date, appointments, userRole, setSearchParams) => {
                             key={j}
                             onClick={() => {
                                 setSearchParams(prev => {
+                                    // prev.set('view', 'day')
                                     prev.set('day', dayOfWeek)
                                     return prev
                                 })
@@ -92,6 +93,7 @@ export const renderMonth = (date, appointments, userRole, setSearchParams) => {
                             key={j}
                             onClick={() => {
                                 setSearchParams(prev => {
+                                    // prev.set('view', 'day')
                                     prev.set('day', dayOfWeek)
                                     return prev
                                 })
@@ -160,6 +162,7 @@ export const renderWeek = (date, appointments, userRole, setSearchParams) => {
                 onClick={() => {
                     if (isInMonth) {
                         setSearchParams(prev => {
+                            // prev.set('view', 'day')
                             prev.set('day', dayOfWeek)
                             return prev
                         })
@@ -173,7 +176,7 @@ export const renderWeek = (date, appointments, userRole, setSearchParams) => {
                         </div>
                         {appointmentsForDay.map((appointment, index) => (
                             <div
-                                className="appointment-info"
+                                className='appointment-info'
                                 key={index}
                                 style={getBackgroundColor(appointment.status)}
                             >

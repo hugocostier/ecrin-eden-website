@@ -39,7 +39,7 @@ class ExpressApp {
     public app: Express 
     public dbManager: DatabaseManager 
 
-    private server: any; 
+    private server: any
 
     constructor(dataSourceOptions: DataSourceOptions) {
         this.app = express() 

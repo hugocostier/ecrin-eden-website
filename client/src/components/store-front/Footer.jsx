@@ -2,7 +2,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faFacebookF, faInstagram, faLinkedinIn, faXTwitter } from '@fortawesome/free-brands-svg-icons'
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Link } from "react-router-dom"
+import { Link } from 'react-router-dom'
 import StyledComponents from 'styled-components'
 import logo from '../../assets/images/logo-black.png'
 
@@ -44,8 +44,8 @@ export const Footer = () => {
                         <Link to={'/appointment'}>Prendre rendez-vous</Link>
                     </button>
 
-                    <div className="footer-info">
-                        <div className="column navigation">
+                    <div className='footer-info'>
+                        <div className='column navigation'>
                             <h4>Navigation</h4>
                             <div className='nav-links'>
                                 {pages.map((page, index) => (
@@ -76,17 +76,17 @@ export const Footer = () => {
                         <div className='column socials'>
                             <h4>Réseaux sociaux</h4>
                             <p>Suivez-moi sur les réseaux sociaux pour suivre les dernières actualités.</p>
-                            <div className="socials-links">
-                                <a href="https://www.instagram.com/">
+                            <div className='socials-links'>
+                                <a href='https://www.instagram.com/'>
                                     <FontAwesomeIcon icon='fa-brands fa-instagram' />
                                 </a>
-                                <a href="https://www.facebook.com/">
+                                <a href='https://www.facebook.com/'>
                                     <FontAwesomeIcon icon='fa-brands fa-facebook-f' />
                                 </a>
-                                <a href="https://www.twitter.com/">
+                                <a href='https://www.twitter.com/'>
                                     <FontAwesomeIcon icon='fa-brands fa-x-twitter' />
                                 </a>
-                                <a href="https://www.linkedin.com/">
+                                <a href='https://www.linkedin.com/'>
                                     <FontAwesomeIcon icon='fa-brands fa-linkedin-in' />
                                 </a>
                             </div>
@@ -100,7 +100,7 @@ export const Footer = () => {
                                         behavior: 'smooth'
                                     })
                                 }}>
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="26" height="26" fill="currentColor" transform='rotate(-90)'><path d="m23.25 13.35-9.9 9.9-.7-.7 9-9H3.1v-1h18.59l-9-9 .7-.7 9.9 9.9a.48.48 0 0 1-.04.6Z"></path></svg>
+                                <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='26' height='26' fill='currentColor' transform='rotate(-90)'><path d='m23.25 13.35-9.9 9.9-.7-.7 9-9H3.1v-1h18.59l-9-9 .7-.7 9.9 9.9a.48.48 0 0 1-.04.6Z'></path></svg>
 
                             </button>
                         </div>
@@ -108,9 +108,9 @@ export const Footer = () => {
                         <img src={logo} alt='logo' className='logo' />
                     </div>
                 </FooterTop>
-                <FooterBottom className="footer-bottom">
-                    <p className="copyright">© 2024 Écrin d&apos;Eden</p>
-                    <div className="legal">
+                <FooterBottom className='footer-bottom'>
+                    <p className='copyright'>© 2024 Écrin d&apos;Eden</p>
+                    <div className='legal'>
                         <Link to={'/contact'}>Contact</Link>
                         <Link to={'/legal-notice'}>Mentions légales</Link>
                         <Link to={'/privacy-policy'}>Politique de confidentialité</Link>

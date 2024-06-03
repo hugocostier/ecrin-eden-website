@@ -1,5 +1,5 @@
-import { Request, Response } from 'express';
-import { CustomAPIError } from '../errors/custom-errors.js';
+import { Request, Response } from 'express'
+import { CustomAPIError } from '../errors/custom-errors.js'
 
 /**
  * Base class for all controllers

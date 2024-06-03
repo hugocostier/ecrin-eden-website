@@ -1,9 +1,9 @@
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faApple, faFacebookF, faGoogle } from '@fortawesome/free-brands-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
-import { useAuth } from '../../hooks/useAuth.hook';
-import { FormContainer } from './LoginForm';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faApple, faFacebookF, faGoogle } from '@fortawesome/free-brands-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useState } from 'react'
+import { useAuth } from '../../hooks/useAuth.hook'
+import { FormContainer } from './LoginForm'
 
 library.add(faFacebookF, faGoogle, faApple)
 
@@ -45,52 +45,52 @@ export const RegisterForm = () => {
     }
 
     return (
-        <FormContainer className="form-container register-container">
+        <FormContainer className='form-container register-container'>
             <form onSubmit={handleRegister}>
                 <h2>Inscription</h2>
-                <div className="social-container">
-                    <a href="" className="social">
+                <div className='social-container'>
+                    <a href='' className='social'>
                         <FontAwesomeIcon icon='fa-brands fa-facebook-f' />
                     </a>
-                    <a href="" className="social">
+                    <a href='' className='social'>
                         <FontAwesomeIcon icon='fa-brands fa-google' />
                     </a>
-                    <a href="" className="social">
+                    <a href='' className='social'>
                         <FontAwesomeIcon icon='fa-brands fa-apple' />
                     </a>
                 </div>
                 <span>ou utilise ton email pour l&apos;inscription</span>
                 <input
-                    type="text"
+                    type='text'
                     name='last_name'
-                    placeholder="Nom"
+                    placeholder='Nom'
                     required
                     autoComplete='family-name'
                     onChange={handleInput}
                     onBlur={(e) => checkInput(e.target)}
                 />
                 <input
-                    type="text"
+                    type='text'
                     name='first_name'
-                    placeholder="Prénom"
+                    placeholder='Prénom'
                     required
                     autoComplete='given-name'
                     onChange={handleInput}
                     onBlur={(e) => checkInput(e.target)}
                 />
                 <input
-                    type="email"
+                    type='email'
                     name='email'
-                    placeholder="Email"
+                    placeholder='Email'
                     required
                     autoComplete='email'
                     onChange={handleInput}
                     onBlur={(e) => checkInput(e.target)}
                 />
                 <input
-                    type="password"
+                    type='password'
                     name='password'
-                    placeholder="Mot de passe"
+                    placeholder='Mot de passe'
                     required
                     autoComplete='new-password'
                     onChange={handleInput}
