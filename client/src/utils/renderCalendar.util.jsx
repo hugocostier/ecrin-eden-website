@@ -67,7 +67,7 @@ export const renderMonth = (date, appointments, userRole, setSearchParams) => {
                             key={j}
                             onClick={() => {
                                 setSearchParams(prev => {
-                                    // prev.set('view', 'day')
+                                    prev.set('view', 'day')
                                     prev.set('day', dayOfWeek)
                                     return prev
                                 })
@@ -93,7 +93,7 @@ export const renderMonth = (date, appointments, userRole, setSearchParams) => {
                             key={j}
                             onClick={() => {
                                 setSearchParams(prev => {
-                                    // prev.set('view', 'day')
+                                    prev.set('view', 'day')
                                     prev.set('day', dayOfWeek)
                                     return prev
                                 })
@@ -162,7 +162,7 @@ export const renderWeek = (date, appointments, userRole, setSearchParams) => {
                 onClick={() => {
                     if (isInMonth) {
                         setSearchParams(prev => {
-                            // prev.set('view', 'day')
+                            prev.set('view', 'day')
                             prev.set('day', dayOfWeek)
                             return prev
                         })
@@ -205,7 +205,7 @@ export const renderDay = (date, appointments, userRole) => {
     const hours = []
 
     const appointmentsForDay = appointments.filter(appointment => {
-        return new Date(appointment.date).getDate() === date.day
+        return new Date(appointment.date).getDate() === parseInt(date.day)
     })
 
     for (let i = workingHours.start; i <= workingHours.end; i++) {
