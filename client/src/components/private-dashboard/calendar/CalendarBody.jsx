@@ -136,6 +136,10 @@ const StyledCalendarBody = StyledComponents.table`
         tr {
             &.day-view {
                 height: 55px;
+
+                .appointment-link {
+                    font-size: 0.8rem; 
+                }
             }
 
             &.week-view {
