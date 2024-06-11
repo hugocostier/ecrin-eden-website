@@ -35,11 +35,19 @@ export const updateClientPreferences = (id, data) => {
     const url = `${API_URL}/${id}`
 
     const formData = new FormData()
-    formData.append('question_1', data.question1)
-    formData.append('question_2', data.question2)
-    formData.append('question_3', data.question3)
-    formData.append('question_4', data.question4)
-    formData.append('question_5', data.question5)
+    const fields = [
+        { key: 'question_1', value: data.question1 !== '' ? data.question1 : undefined },
+        { key: 'question_2', value: data.question2 !== '' ? data.question2 : undefined },
+        { key: 'question_3', value: data.question3 !== '' ? data.question3 : undefined },
+        { key: 'question_4', value: data.question4 !== '' ? data.question4 : undefined },
+        { key: 'question_5', value: data.question5 !== '' ? data.question5 : undefined },
+    ]
+
+    fields.forEach((field) => {
+        if (field.value !== undefined) {
+            formData.append(field.key, field.value)
+        }
+    })
 
     return new Promise((resolve, reject) => {
         fetch(url, {

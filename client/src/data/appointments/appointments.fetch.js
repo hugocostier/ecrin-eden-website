@@ -169,15 +169,21 @@ export const countAllAppointments = (date) => {
 }
 
 export const updateAppointment = (appointmentID, data) => {
-    const { date, time, status, isAway, privateNotes } = data
+    const formData = new FormData()
+    const fields = [
+        { key: 'service', value: { id: data.serviceID } },
+        { key: 'date', value: data.date },
+        { key: 'time', value: data.time },
+        { key: 'status', value: data.status || 'pending' },
+        { key: 'is_away', value: data.isAway === 'true' ? true : false },
+        { key: 'private_notes', value: data.privateNotes ? data.privateNotes : undefined },
+    ]
 
-    const body = {
-        ...(date && { date }),
-        ...(time && { time }),
-        ...(status && { status }),
-        ...(isAway === 'true' ? { is_away: true } : { is_away: false }),
-        ...(privateNotes && { private_notes: privateNotes }),
-    }
+    fields.forEach((field) => {
+        if (field.value !== undefined) {
+            data.append(field.key, field.value)
+        }
+    })
 
     return new Promise((resolve, reject) => {
         fetch(`${API_URL}/${appointmentID}`, {
@@ -186,7 +192,7 @@ export const updateAppointment = (appointmentID, data) => {
                 'Content-Type': 'application/json',
             },
             credentials: 'include',
-            body: JSON.stringify(body),
+            body: JSON.stringify(formData),
         })
             .then((response) => {
                 if (!response.ok) {
@@ -206,22 +212,21 @@ export const updateAppointment = (appointmentID, data) => {
 }
 
 export const addAppointment = (data) => {
-    const { clientID, serviceID, date, time, status, isAway } = data
+    const formData = new FormData()
+    const fields = [
+        { key: 'client', value: { id: data.clientID } },
+        { key: 'service', value: { id: data.serviceID } },
+        { key: 'date', value: data.date },
+        { key: 'time', value: data.time },
+        { key: 'status', value: data.status || 'pending' },
+        { key: 'is_away', value: data.isAway === 'true' ? true : false },
+    ]
 
-    const body = {
-        date,
-        time,
-        status,
-        is_away: isAway === 'true',
-        client: {
-            id: clientID,
-        },
-        service: {
-            id: serviceID,
-        },
-    }
-
-    console.log('body', body)
+    fields.forEach((field) => {
+        if (field.value !== undefined) {
+            data.append(field.key, field.value)
+        }
+    })
 
     return new Promise((resolve, reject) => {
         fetch(`${API_URL}/add`, {
@@ -230,7 +235,7 @@ export const addAppointment = (data) => {
                 'Content-Type': 'application/json',
             },
             credentials: 'include',
-            body: JSON.stringify(body),
+            body: JSON.stringify(formData),
         })
             .then((response) => {
                 if (!response.ok) {
