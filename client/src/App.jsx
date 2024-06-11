@@ -28,6 +28,7 @@ const ResetPassword = lazyLoad('../../src/pages/ResetPassword.page', 'ResetPassw
 // USER DASHBOARD PAGES
 const UserDashboard = lazyLoad('../../src/pages/private-dashboard/client-space/Dashboard.page', 'UserDashboard')
 const UserAppointments = lazyLoad('../../src/pages/private-dashboard/client-space/appointments/Appointments.page', 'UserAppointments')
+const UserSeeAppointment = lazyLoad('../../src/pages/private-dashboard/client-space/appointments/SeeAppointment.page', 'SeeAppointment')
 const UserUpdateAppointment = lazyLoad('../../src/pages/private-dashboard/client-space/appointments/UpdateAppointment.page', 'UpdateAppointment')
 const UserPreferences = lazyLoad('../../src/pages/private-dashboard/client-space/Preferences.page', 'UserPreferences')
 
@@ -146,6 +147,16 @@ const Router = createBrowserRouter(
                                 </PrivateRoute>
                             }
                         />
+
+                        <Route
+                            path=':id'
+                            element={
+                                <PrivateRoute isAllowed={['user']} redirectPath='/login' >
+                                    <UserSeeAppointment />
+                                </PrivateRoute>
+                            }
+                        />
+
 
                         <Route
                             path='update/:id'
