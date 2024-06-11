@@ -1,34 +1,46 @@
 import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import StyledComponents from 'styled-components'
+import { FormError } from '../../../../components/FormError'
+import { fetchServices } from '../../../../data/admin/services.fetch'
 import { fetchAppointment, updateAppointment } from '../../../../data/appointments/appointments.fetch'
+import { checkAvailability } from '../../../../utils/appointment/appointment.util'
+import { capitalize } from '../../../../utils/capitalize.util'
 
 export const UpdateAppointment = () => {
     const { id: appointmentID } = useParams()
     const navigate = useNavigate()
 
+    const { register, handleSubmit, watch, reset, formState: { errors } } = useForm()
+
+    const [times, setTimes] = useState([])
+    const [services, setServices] = useState([])
     const [isEditable, setIsEditable] = useState(false)
     const [appointment, setAppointment] = useState([])
-
-    const [input, setInput] = useState({
-        date: '',
-        time: '',
-        status: '',
-        isAway: false,
-        privateNotes: '',
-    })
+    const selectedDate = watch('date')
+    const selectedService = services.find(service => service.id == watch('service'))
 
     useEffect(() => {
+        fetchServices()
+            .then(services => {
+                setServices(services)
+            })
+            .catch(error => {
+                console.error('Error fetching services:', error)
+            })
+
         fetchAppointment(appointmentID)
             .then(fetchedAppointment => {
                 setAppointment(fetchedAppointment.data)
-                setInput({
+                reset({
+                    service: fetchedAppointment.data.service.id,
                     date: fetchedAppointment.data.date,
                     time: fetchedAppointment.data.time,
                     status: fetchedAppointment.data.status,
                     isAway: fetchedAppointment.data.is_away,
-                    privateNotes: fetchedAppointment.data.private_notes ? fetchedAppointment.data.private_notes : '',
+                    privateNotes: fetchedAppointment.data.private_notes,
                 })
             })
             .catch(error => {
@@ -37,30 +49,49 @@ export const UpdateAppointment = () => {
 
         return () => {
             setAppointment([])
+            setServices([])
         }
-    }, [appointmentID])
+    }, [appointmentID, reset])
 
-    const handleChange = (e) => {
-        setInput({
-            ...input,
-            [e.target.name]: e.target.value,
-        })
-    }
+    useEffect(() => {
+        if (selectedService && selectedDate) {
+            checkAvailability(selectedService, selectedDate)
+                .then(availableTimes => {
+                    setTimes(availableTimes)
+                })
+                .catch(error => {
+                    console.error('Error checking availability:', error)
+                })
+        }
+
+        return () => {
+            setTimes([])
+        }
+    }, [selectedService, selectedDate])
 
     const handleCancel = () => {
-        setInput({
+        reset({
+            service: appointment.service.id,
             date: appointment.date,
             time: appointment.time,
             status: appointment.status,
             isAway: appointment.is_away,
-            privateNotes: appointment.private_notes ? appointment.private_notes : '',
+            privateNotes: appointment.private_notes,
         })
 
         setIsEditable(false)
     }
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
+    const sendForm = async (data) => {
+        const input = {
+            clientID: appointment.client.id,
+            serviceID: data.service,
+            date: data.date,
+            time: data.time,
+            status: data.status,
+            isAway: data.isAway,
+            privateNotes: data.privateNotes,
+        }
 
         toast.promise(updateAppointment(appointmentID, input), {
             pending: 'Modification...',
@@ -68,15 +99,9 @@ export const UpdateAppointment = () => {
             error: 'Erreur lors de la modification du rendez- vous'
         }, { containerId: 'notification' })
             .then(() => {
-                setInput({
-                    date: '',
-                    time: '',
-                    status: '',
-                    isAway: false,
-                    privateNotes: '',
-                })
-
-                navigate(-1)
+                reset()
+                const currentPath = window.location.pathname
+                navigate(currentPath.replace(`/update/${appointment.id}`, `/${appointment.id}`))
             })
             .catch(error => {
                 console.error('Error updating appointment:', error)
@@ -84,102 +109,112 @@ export const UpdateAppointment = () => {
     }
 
     return (
-        <main>
+        <UpdateAppointmentPage>
             <h2>Modifier le rendez-vous</h2>
 
-            <StyledForm>
+            <StyledForm onSubmit={handleSubmit(sendForm)}>
                 <legend>Informations du rendez-vous</legend>
-                <p>Client :</p>
-                <p>{appointment.client ? `${appointment.client.first_name} ${appointment.client.last_name}` : ''}</p>
+                <div className='input-container' name='client'>
+                    <p>Client :</p>
+                    <p>{appointment.client ? `${capitalize(appointment.client.first_name)} ${capitalize(appointment.client.last_name)}` : ''}</p>
+                </div>
+
+                <label htmlFor='service'>Prestation :</label>
+                <div className='input-container' name='service'>
+                    <select
+                        name='service'
+                        id='service'
+                        {...register('service', { required: 'Veuillez choisir une prestation', disabled: !isEditable })}
+                    >
+                        {services.map(service => (
+                            <option key={service.id} value={service.id}>{service.name}</option>
+                        ))}
+                    </select>
+                    <FormError error={errors.service} />
+                </div>
+
+                <div className='input-container' name='duration'>
+                    <p>Durée :</p>
+                    <p>
+                        {selectedService && (
+                            `${selectedService.duration} minutes`
+                        ) || (`${appointment.service?.duration} minutes` || '')}
+                    </p>
+                </div>
 
                 <label htmlFor='date'>Date :</label>
-                <input
-                    type='date'
-                    name='date'
-                    id='date'
-                    required
-                    value={input.date}
-                    onChange={handleChange}
-                    disabled={!isEditable}
-                />
+                <div className='input-container' name='date'>
+                    <input
+                        type='date'
+                        name='date'
+                        id='date'
+                        {...register('date', { required: 'Veuillez choisir une date', disabled: !isEditable })}
+                    />
+                    <FormError error={errors.date} />
+                </div>
 
                 <label htmlFor='time'>Heure :</label>
-                <input
-                    type='time'
-                    name='time'
-                    id='time'
-                    required
-                    value={input.time}
-                    onChange={handleChange}
-                    disabled={!isEditable}
-                />
+                <div className='input-container' name='time'>
+                    <select
+                        name='time'
+                        id='time'
+                        {...register('time', { required: 'Veuillez choisir une heure', disabled: !isEditable })}
+                    >
+                        {times.length === 0 && (
+                            <option value=''>Aucun créneau disponible</option>
+                        )}
+                        {times.length !== 0 && times.map(time => (
+                            <option key={time} value={time}>{time}</option>
+                        ))}
+                    </select>
+                    <FormError error={errors.time} />
+                </div>
 
                 <label htmlFor='is-away'>Rendez-vous à domicile ?</label>
-                <select
-                    name='isAway'
-                    id='is-away'
-                    value={input.isAway}
-                    onChange={handleChange}
-                    disabled={!isEditable}
-                >
-                    <option
-                        value='true'
+                <div className='input-container' name='isAway'>
+                    <select
+                        name='isAway'
+                        id='is-away'
+                        {...register('isAway', { disabled: !isEditable })}
                     >
-                        Oui
-                    </option>
-                    <option
-                        value='false'
-                    >
-                        Non
-                    </option>
-                </select>
+                        <option value='true'>Oui</option>
+                        <option value='false'>Non</option>
+                    </select>
+                    <FormError error={errors.isAway} />
+                </div>
 
 
                 <label htmlFor='status'>Statut du rendez-vous :</label>
-                <select
-                    name='status'
-                    id='status'
-                    value={input.status}
-                    onChange={handleChange}
-                    disabled={!isEditable}
-                >
-                    <option
-                        value='pending'
+                <div className='input-container' name='status'>
+                    <select
+                        name='status'
+                        id='status'
+                        {...register('status', { disabled: !isEditable })}
                     >
-                        En attente
-                    </option>
-                    <option
-                        value='confirmed'
-                    >
-                        Confirmé
-                    </option>
-                    <option
-                        value='cancelled'
-                    >
-                        Annulé
-                    </option>
-                    <option
-                        value='completed'
-                    >
-                        Terminé
-                    </option>
-                </select>
+                        <option value='pending'>En attente</option>
+                        <option value='confirmed'>Confirmé</option>
+                        <option value='cancelled'>Annulé</option>
+                        <option value='completed'>Terminé</option>
+                    </select>
+                    <FormError error={errors.status} />
+                </div>
 
 
                 <legend className='form-legend'>Notes personnelles</legend>
-                <textarea
-                    name='privateNotes'
-                    id='private-notes'
-                    value={input.privateNotes}
-                    onChange={handleChange}
-                    disabled={!isEditable}
-                    placeholder='Notes du praticien'
-                    spellCheck='true'
-                    rows={5}
-                />
+                <div className='input-container' name='shared-notes'>
+                    <textarea
+                        name='privateNotes'
+                        id='private-notes'
+                        placeholder='Notes du praticien'
+                        spellCheck='true'
+                        rows={5}
+                        {...register('privateNotes', { disabled: !isEditable })}
+                    />
+                    <FormError error={errors.privateNotes} />
+                </div>
 
 
-                {!isEditable && (
+                {!isEditable ? (
                     <button
                         type='button'
                         id='edit'
@@ -187,9 +222,7 @@ export const UpdateAppointment = () => {
                     >
                         Modifier
                     </button>
-                )}
-
-                {isEditable && (
+                ) : (
                     <div id='button-container'>
                         <button
                             type='button'
@@ -201,21 +234,26 @@ export const UpdateAppointment = () => {
                         <button
                             type='submit'
                             id='save'
-                            onClick={handleSubmit}
                         >
                             Enregistrer
                         </button>
                     </div>
                 )}
             </StyledForm>
-        </main>
+        </UpdateAppointmentPage >
     )
 }
+
+const UpdateAppointmentPage = StyledComponents.main`
+    h2 {
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+`
 
 const StyledForm = StyledComponents.form`
     display: grid; 
     grid-template-columns: 1fr;
-    row-gap: 0.5rem;
     max-width: 1000px;
     margin: 0 auto;
     margin-bottom: 2rem;
@@ -225,46 +263,18 @@ const StyledForm = StyledComponents.form`
         font-size: 1.5rem;
         font-weight: bold;
         margin-top: 1rem;
+        margin-bottom: 1rem;
     }
     
-    label {
-        &#profile-picture-container {
-            grid-row: 2 / 6; 
-            display: grid;
-            border-radius: 50%;
-              
-            .img-upload {
-                width: 150px;
-                height: 150px;
-                overflow: hidden;
-                border-radius: 50%;
-                justify-self: center;
-                align-self: center;
-                
-                img {
-                    max-width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                    object-position: 50% 50%; 
-                }
-            }  
+    .input-container {
+        input, select, textarea {
+            padding: 0.5rem;
+            width: 100%;
         }
-    }
 
-    input, select {
-        margin-top: 0.5rem;
-        padding: 0.5rem;
-        width: 100%;
-
-        &:not(#email, [type='file']) {
-            text-transform: capitalize;
+        textarea { 
+            resize: none; 
         }
-    }
-
-    textarea {
-        margin-top: 0.5rem;
-        padding: 0.5rem;
-        resize: none;
     }
 
     button {
@@ -277,69 +287,40 @@ const StyledForm = StyledComponents.form`
         grid-template-columns: 1fr 1fr;
     }
 
-    #question-1, #question-2, #question-3, #question-4, #question-5 {
-        margin-top: 0; 
-    }
-
     @media screen and (min-width: 640px) {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         column-gap: 1rem;
 
         legend {
             text-align: left;
-            grid-column: 1 / 3;
-        }
-        
-        label {
-            &.user_preferences {
-                grid-column: 1 / 3;
-            }
-    
-            &#profile-picture-container {
-                grid-column: 2 / 3;
-                  
-                .img-upload {
-                    width: 200px;
-                    height: 200px;
-                }  
-            }
+            grid-column: 1 / 4;
         }
 
-        input, select {   
-            &#last-name, &#first-name, &#phone, &#postal-code {
-                grid-column: 1 / 2; 
-            }
-    
-            &#address, &#email {
-                grid-column: 1 / 3;
-            }
-    
-            &#city {
-                grid-column: 2 / 3;
-            }
-    
-            &#question-1, 
-            &#question-2, 
-            &#question-3, 
-            &#question-4 {
-                grid-column: 1 / 3;     
-            }
+        .input-container:not([name='client'], [name='duration']) {
+            grid-column: 1 / 4;
+        }
+
+        .input-container[name='client'], 
+        .input-container[name='duration'] {
+            grid-column: 1 / 4;
+            display: flex; 
+            gap: 1rem; 
         }
 
         textarea {            
-            &#shared-notes, &#private-notes, &#question-5 {
-                grid-column: 1 / 3; 
+            &#private-notes {
+                grid-column: 1 / 4; 
             }
         }
 
         button {    
             &#edit {
-                grid-column: 1 / 3;
+                grid-column: 1 / 4;
             }
         }
 
         #button-container {
-            grid-column: 1 / 3;
+            grid-column: 1 / 4;
         }
     }
 `

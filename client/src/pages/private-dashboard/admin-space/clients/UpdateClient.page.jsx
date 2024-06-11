@@ -12,26 +12,7 @@ export const UpdateClient = () => {
     const navigate = useNavigate()
     const { id: clientId } = useParams()
 
-    const { register, handleSubmit, reset, watch, formState: { errors } } = useForm({
-        defaultValues: {
-            lastName: '',
-            firstName: '',
-            phone: '',
-            birthDate: '',
-            address: '',
-            postalCode: '',
-            city: '',
-            email: '',
-            profilePicture: '',
-            sharedNotes: '',
-            privateNotes: '',
-            question1: '',
-            question2: '',
-            question3: '',
-            question4: '',
-            question5: '',
-        }
-    })
+    const { register, handleSubmit, reset, watch, formState: { errors } } = useForm()
 
     const [isEditable, setIsEditable] = useState(false)
     const [hasAccount, setHasAccount] = useState(false)
@@ -184,6 +165,7 @@ export const UpdateClient = () => {
                         name='lastName'
                         id='last-name'
                         placeholder='Nom*'
+                        autoComplete='off'
                         {...register('lastName', { required: 'Veuillez entrer votre nom', pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer un nom valide' }, disabled: hasAccount ? true : !isEditable })}
                     />
                     <FormError error={errors.lastName} />
@@ -195,6 +177,7 @@ export const UpdateClient = () => {
                         name='firstName'
                         id='first-name'
                         placeholder='Prénom*'
+                        autoComplete='off'
                         {...register('firstName', { required: 'Veuillez entrer votre prénom', pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer un prénom valide' }, disabled: hasAccount ? true : !isEditable })}
                     />
                     <FormError error={errors.firstName} />
@@ -206,6 +189,7 @@ export const UpdateClient = () => {
                         name='phone'
                         id='phone'
                         placeholder='Numéro de téléphone (ex: 0601020304)'
+                        autoComplete='off'
                         {...register('phone', { pattern: { value: /^[0-9]{10}$/, message: 'Veuillez entrer un numéro de téléphone valide' }, disabled: hasAccount ? true : !isEditable })}
                     />
                     <FormError error={errors.phone} />
@@ -217,6 +201,7 @@ export const UpdateClient = () => {
                         name='birthDate'
                         id='birth-date'
                         placeholder='Date de naissance'
+                        autoComplete='off'
                         {...register('birthDate', { disabled: hasAccount ? true : !isEditable, validate: value => value ? new Date(value) <= new Date() || 'Veuillez entrer une date de naissance valide' : true })}
                     />
                     <FormError error={errors.birthDate} />
@@ -227,8 +212,9 @@ export const UpdateClient = () => {
                         type='email'
                         name='email'
                         id='email'
-                        placeholder='Email* (ex: adresse@mail.fr)'
-                        {...register('email', { required: 'Veuillez entrer votre email', pattern: { value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/, message: 'Veuillez entrer un email valide' }, disabled: hasAccount ? true : !isEditable })}
+                        placeholder='Email (ex: adresse@mail.fr)'
+                        autoComplete='off'
+                        {...register('email', { pattern: { value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/, message: 'Veuillez entrer un email valide' }, disabled: hasAccount ? true : !isEditable })}
                     />
                     <FormError error={errors.email} />
                 </div>
@@ -239,6 +225,7 @@ export const UpdateClient = () => {
                         name='address'
                         id='address'
                         placeholder='Adresse'
+                        autoComplete='off'
                         {...register('address', { disabled: hasAccount ? true : !isEditable })}
                     />
                     <FormError error={errors.address} />
@@ -250,6 +237,7 @@ export const UpdateClient = () => {
                         name='postalCode'
                         id='postal-code'
                         placeholder='Code postal (ex: 75000)'
+                        autoComplete='off'
                         {...register('postalCode', { pattern: { value: /^[0-9]{5}$/, message: 'Veuillez entrer un code postal valide' }, disabled: hasAccount ? true : !isEditable })}
                     />
                     <FormError error={errors.postalCode} />
@@ -261,6 +249,7 @@ export const UpdateClient = () => {
                         name='city'
                         id='city'
                         placeholder='Ville'
+                        autoComplete='off'
                         {...register('city', { pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer une ville valide' }, disabled: hasAccount ? true : !isEditable })}
                     />
                     <FormError error={errors.city} />

@@ -1,40 +1,25 @@
 import { useEffect, useState } from 'react'
-// import { useForm } from 'react-hook-form'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import StyledComponents from 'styled-components'
+import { FormError } from '../../../../components/FormError'
 import { fetchClients } from '../../../../data/admin/clients.fetch'
 import { fetchServices } from '../../../../data/admin/services.fetch'
 import { addAppointment } from '../../../../data/appointments/appointments.fetch'
-import { checkAvailability } from '../../../../utils/appointment.util'
+import { checkAvailability } from '../../../../utils/appointment/appointment.util'
+import { capitalize } from '../../../../utils/capitalize.util'
 
 export const AddAppointment = () => {
     const navigate = useNavigate()
 
-    // const { register, handleSubmit, reset, formState: { errors } } = useForm({
-    //     defaultValues: {
-    //         client: '',
-    //         service: '',
-    //         date: '',
-    //         time: '',
-    //         status: '',
-    //         isAway: false,
-    //     }
-    // })
+    const { register, handleSubmit, watch, reset, formState: { errors } } = useForm()
 
     const [times, setTimes] = useState([])
     const [clients, setClients] = useState([])
     const [services, setServices] = useState([])
-    const [searchParams, setSearchParams] = useSearchParams({
-        client: '',
-        service: '',
-        date: '',
-        time: '',
-        status: '',
-        isAway: false,
-    })
-    const selectedDate = searchParams.get('date')
-    const selectedService = services.find(service => service.id == searchParams.get('service'))
+    const selectedDate = watch('date')
+    const selectedService = services.find(service => service.id == watch('service'))
 
     useEffect(() => {
         fetchClients()
@@ -73,25 +58,16 @@ export const AddAppointment = () => {
         return () => {
             setTimes([])
         }
-    }, [selectedDate, selectedService, services])
+    }, [selectedDate, selectedService])
 
-    const handleChange = (e) => {
-        setSearchParams(prev => {
-            prev.set(e.target.name, e.target.value)
-            return prev
-        }, { replace: true })
-    }
-
-    const handleSubmit = (e) => {
-        e.preventDefault()
-
+    const sendForm = async (data) => {
         const input = {
-            clientID: searchParams.get('client'),
-            serviceID: searchParams.get('service'),
-            date: searchParams.get('date'),
-            time: searchParams.get('time'),
-            status: searchParams.get('status'),
-            isAway: searchParams.get('isAway'),
+            clientID: data.client,
+            serviceID: data.service,
+            date: data.date,
+            time: data.time,
+            status: data.status,
+            isAway: data.isAway,
         }
 
         toast.promise(addAppointment(input), {
@@ -100,15 +76,7 @@ export const AddAppointment = () => {
             error: 'Erreur lors de l\'ajout du rendez-vous'
         }, { containerId: 'notification' })
             .then(() => {
-                setSearchParams({
-                    client: '',
-                    service: '',
-                    date: '',
-                    time: '',
-                    status: '',
-                    isAway: false,
-                })
-
+                reset()
                 const currentPath = window.location.pathname
                 navigate(currentPath.replace('/add', ''))
             })
@@ -121,106 +89,120 @@ export const AddAppointment = () => {
         <AppointmentAdd>
             <h2>Ajouter un rendez-vous</h2>
 
-            <StyledForm>
+            <StyledForm onSubmit={handleSubmit(sendForm)}>
                 <legend>Informations de la prestation</legend>
                 <label htmlFor='service'>Prestation :</label>
-                <select
-                    name='service'
-                    id='service'
-                    value={searchParams.get('service')}
-                    onChange={handleChange}
-                >
-                    <option value=''>Choisir une prestation dans la liste déroulante...</option>
-                    {services.map(service => (
-                        <option key={service.id} value={service.id}>{service.name}</option>
-                    ))}
-                </select>
+                <div className='input-container' name='service'>
+                    <select
+                        name='service'
+                        id='service'
+                        {...register('service', { required: 'Veuillez choisir une prestation' })}
+                    >
+                        <option value=''>Choisir une prestation dans la liste déroulante...</option>
+                        {services.map(service => (
+                            <option key={service.id} value={service.id}>{service.name}</option>
+                        ))}
+                    </select>
+                    <FormError error={errors.service} />
+                </div>
 
-                <p>Durée :</p>
-                <p>
-                    {selectedService && (
-                        `${selectedService.duration} minutes`
-                    )}
-                </p>
+                <div className='service-info-container'>
+                    <div className='input-container' name='duration'>
+                        <p>Durée :</p>
+                        <p>
+                            {selectedService && (
+                                `${selectedService.duration} minutes`
+                            ) || 'Aucune durée disponible'}
+                        </p>
+                    </div>
 
-                <p>Prix :</p>
-                <p>
-                    {selectedService && (
-                        `${selectedService.price} €`
-                    )}
-                </p>
+                    <div className='input-container' name='price'>
+                        <p>Prix :</p>
+                        <p>
+                            {selectedService && (
+                                `${selectedService.price} €`
+                            ) || 'Aucun prix disponible'}
+                        </p>
+                    </div>
+                </div>
 
                 <legend>Informations du rendez-vous</legend>
                 <label htmlFor='client'>Client :</label>
-                <select
-                    name='client'
-                    id='client'
-                    value={searchParams.get('client')}
-                    onChange={handleChange}
-                >
-                    <option value=''>Choisir un client dans la liste déroulante...</option>
-                    {clients.map(client => (
-                        <option key={client.id} value={client.id}>{client.first_name} {client.last_name}</option>
-                    ))}
-                </select>
+                <div className='input-container' name='client'>
+                    <select
+                        name='client'
+                        id='client'
+                        {...register('client', { required: 'Veuillez choisir un client' })}
+                    >
+                        <option value=''>Choisir un client dans la liste déroulante...</option>
+                        {clients.map(client => (
+                            <option key={client.id} value={client.id}>{capitalize(client.first_name)} {capitalize(client.last_name)}</option>
+                        ))}
+                    </select>
+                    <FormError error={errors.client} />
+                </div>
 
                 <label htmlFor='date'>Date :</label>
-                <input
-                    type='date'
-                    name='date'
-                    id='date'
-                    required
-                    value={searchParams.get('date')}
-                    onChange={handleChange}
-                />
+                <div className='input-container' name='date'>
+                    <input
+                        type='date'
+                        name='date'
+                        id='date'
+                        {...register('date', { required: 'Veuillez choisir une date' })}
+                    />
+                    <FormError error={errors.date} />
+                </div>
 
                 <label htmlFor='time'>Heure :</label>
-                <select
-                    name='time'
-                    id='time'
-                    value={searchParams.get('time')}
-                    onChange={handleChange}
-                    required
-                >
-                    <option value=''>Choisir une heure dans la liste déroulante...</option>
-                    {times.length === 0 && (
-                        <option value=''>Aucun créneau disponible</option>
-                    )}
-                    {times.length !== 0 && times.map(time => (
-                        <option key={time} value={time}>{time}</option>
-                    ))}
-                </select>
+                <div className='input-container' name='time'>
+                    <select
+                        name='time'
+                        id='time'
+                        {...register('time', { required: 'Veuillez choisir une heure' })}
+                    >
+                        <option value=''>Choisir une heure dans la liste déroulante...</option>
+                        {times.length === 0 && (
+                            <option value=''>Aucun créneau disponible</option>
+                        )}
+                        {times.length !== 0 && times.map(time => (
+                            <option key={time} value={time}>{time}</option>
+                        ))}
+                    </select>
+                    <FormError error={errors.time} />
+                </div>
 
                 <label htmlFor='is-away'>Rendez-vous à domicile ?</label>
-                <select
-                    name='isAway'
-                    id='is-away'
-                    value={searchParams.get('isAway')}
-                    onChange={handleChange}
-                >
-                    <option value='true'>Oui</option>
-                    <option value='false'>Non</option>
-                </select>
-
+                <div className='input-container' name='isAway'>
+                    <select
+                        name='isAway'
+                        id='is-away'
+                        {...register('isAway')}
+                    >
+                        <option value='false'>Non</option>
+                        <option value='true'>Oui</option>
+                    </select>
+                    <FormError error={errors.isAway} />
+                </div>
 
                 <label htmlFor='status'>Statut du rendez-vous :</label>
-                <select
-                    name='status'
-                    id='status'
-                    value={searchParams.get('status')}
-                    onChange={handleChange}
-                >
-                    <option value=''>Choisir un statut dans la liste déroulante...</option>
-                    <option value='pending'>En attente</option>
-                    <option value='confirmed'>Confirmé</option>
-                    <option value='cancelled'>Annulé</option>
-                    <option value='completed'>Terminé</option>
-                </select>
+                <div className='input-container' name='status'>
+                    <select
+                        name='status'
+                        id='status'
+                        {...register('status')}
+                    >
+                        <option value=''>Choisir un statut dans la liste déroulante...</option>
+                        <option value='pending'>En attente</option>
+                        <option value='confirmed'>Confirmé</option>
+                        <option value='cancelled'>Annulé</option>
+                        <option value='completed'>Terminé</option>
+                    </select>
+                    <FormError error={errors.status} />
+                </div>
 
                 <button
                     type='submit'
                     id='save'
-                    onClick={handleSubmit}
                 >
                     Enregistrer
                 </button>
@@ -239,7 +221,6 @@ const AppointmentAdd = StyledComponents.main`
 const StyledForm = StyledComponents.form`
     display: grid; 
     grid-template-columns: 1fr;
-    row-gap: 0.5rem;
     max-width: 1000px;
     margin: 0 auto;
     margin-bottom: 2rem;
@@ -249,46 +230,21 @@ const StyledForm = StyledComponents.form`
         font-size: 1.5rem;
         font-weight: bold;
         margin-top: 1rem;
+        margin-bottom: 1rem;
     }
 
-    label {
-        &#profile-picture-container {
-            grid-row: 2 / 6; 
-            display: grid;
-            border-radius: 50%;
-            
-            .img-upload {
-                width: 150px;
-                height: 150px;
-                overflow: hidden;
-                border-radius: 50%;
-                justify-self: center;
-                align-self: center;
-                
-                img {
-                    max-width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                    object-position: 50% 50%; 
-                }
-            }  
+    .service-info-container {
+        .input-container {
+            display: flex; 
+            gap: 1rem; 
         }
     }
-
-    input {
-        margin-top: 0.5rem;
-        padding: 0.5rem;
-        width: 100%;
-
-        &:not(#email, [type='file']) {
-            text-transform: capitalize;
+    
+    .input-container {
+        input, select {
+            padding: 0.5rem;
+            width: 100%;
         }
-    }
-
-    textarea {
-        margin-top: 0.5rem;
-        padding: 0.5rem;
-        resize: none;
     }
 
     button {
@@ -296,59 +252,39 @@ const StyledForm = StyledComponents.form`
         padding: 0.5rem;
     }
 
-    #button-container {
-        display: grid; 
-        grid-template-columns: 1fr 1fr;
-    }
-
     @media screen and (min-width: 640px) {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         column-gap: 1rem;
 
         legend {
             text-align: left;
-            grid-column: 1 / 3;
-        }
-        
-        label {
-            &#profile-picture-container {
-                grid-column: 2 / 3;
-                
-                .img-upload {
-                    width: 200px;
-                    height: 200px;
-                }  
-            }
+            grid-column: 1 / 4;
         }
 
-        input {   
-            &#last-name, &#first-name, &#phone, &#postal-code {
-                grid-column: 1 / 2; 
-            }
-
-            &#address, &#email {
-                grid-column: 1 / 3;
-            }
-
-            &#city {
-                grid-column: 2 / 3;
-            }
+        .input-container:not([name='duration'], [name='price']) {
+            grid-column: 2 / 4; 
         }
 
-        textarea {            
-            &#shared-notes, &#private-notes{
-                grid-column: 1 / 3; 
+        .service-info-container {
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            grid-column: 1 / 4;
+
+            .input-container {
+                &:is[name='duration'] {
+                    grid-column: 1 / 2;
+                }
+
+                &:is[name='price'] {
+                    grid-column: 2 / 3;
+                }
             }
         }
 
         button {    
             &#save {
-                grid-column: 1 / 3;
+                grid-column: 1 / 4;
             }
-        }
-
-        #button-container {
-            grid-column: 1 / 3;
         }
     }
 `
