@@ -32,6 +32,26 @@ export default class ContentManager {
     }
 
     /**
+     * Deep merges two objects.
+     * 
+     * @method deepMerge
+     * @memberof ContentManager
+     * @param {any} target - The target object.
+     * @param {any} source - The source object.
+     * @returns {any} - The merged object.
+     */
+    public deepMerge = (target: any, source: any): any => {
+        for (const key in source) {
+            if (source[key] instanceof Object && key in target) {
+                Object.assign(source[key], this.deepMerge(target[key], source[key]))
+            }
+        }
+                
+        Object.assign(target || {}, source)
+        return target
+    }
+
+    /**
      * Returns the content for a specified page.
      * 
      * @method getContentForPage
@@ -98,36 +118,31 @@ export default class ContentManager {
             throw new Error(error)
         }
     }
-    
+           
     /**
      * Updates the content for a specified page section.
      * 
-     * @method updateContentForPage
+     * @method updatePageContent
      * @memberof ContentManager
      * @param {string} pageName - The name of the page.
-     * @param {string} sectionName - The name of the section.
-     * @param {string} contentID - The ID of the content.
      * @param {any} newContent - The new content to update.
      * @throws {Error} - If an error occurs while reading the content file.
      * @returns {any} - The updated content for the page section.
      */
-    public updateContentForPage(pageName: string, sectionName: string, contentID: string, newContent: any): any {
+    public updatePageContent(pageName: string, newContent: any): any {
         try {
             const content: any = this._readContentFile()
             const pageContent: any = content[pageName]
-    
-            if (pageContent && pageContent[sectionName] && pageContent[sectionName][contentID]) {
-                pageContent[sectionName][contentID] = { ...pageContent[sectionName][contentID], ...newContent }
-    
+
+            if (pageContent) {
+                content[pageName] = this.deepMerge(pageContent, newContent)
                 fs.writeFileSync(this._contentFilePath, JSON.stringify(content, null, 2), 'utf8')
-                this._cachedContent = content 
-    
-                console.log('Content updated successfully')
+                this._cachedContent = content
             } else {
-                console.error('No content with id: ', contentID + 1)
-                throw new Error('No content with id: ' + contentID)
+                console.error('No page with name: ', pageName)
+                throw new Error('No page with name: ' + pageName)
             }
-    
+
             return pageContent
         } catch (error: any) {
             console.error('Error updating content : ', error.message)
