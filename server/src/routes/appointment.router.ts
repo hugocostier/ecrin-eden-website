@@ -8,27 +8,27 @@ const appointmentController: AppointmentController = new AppointmentController()
 const authController: AuthController = new AuthController() 
 
 router.route('/')
-    .post(authController.isAdmin, appointmentController.getAppointments)
+    .post(appointmentController.getAppointments)
 
 router.route('/add')
     .post(appointmentController.addAppointment)
 
 router.route('/:id')
-    .get(authController.isLoggedIn, authController.isAuthorized, appointmentController.getAppointmentById)
-    .patch(authController.isLoggedIn, authController.isAuthorized, appointmentController.updateAppointment)
-    .delete(authController.isLoggedIn, authController.isAuthorized, appointmentController.deleteAppointment)
+    .get(authController.isLoggedIn, appointmentController.getAppointmentById)
+    .patch(authController.isLoggedIn, appointmentController.updateAppointment)
+    .delete(authController.isLoggedIn, appointmentController.deleteAppointment)
 
 router.route('/client/:id') 
-    .post(authController.isLoggedIn, authController.isAuthorized, appointmentController.getAppointmentsByClient)
+    .post(authController.isLoggedIn, appointmentController.getAppointmentsByClient)
 
 router.route('/service/:id')
-    .get(authController.isLoggedIn, authController.isAuthorized, appointmentController.getAppointmentsByService)
+    .get(authController.isAdmin, appointmentController.getAppointmentsByService)
 
 router.route('/count')
-    .post(authController.isLoggedIn, authController.isAuthorized, appointmentController.countAppointmentsForDay)
+    .post(authController.isAdmin, appointmentController.countAppointmentsForDay)
 
 router.route('/count/:id')
-    .post(authController.isLoggedIn, authController.isAuthorized, appointmentController.countAppointmentsForWeekAndClient)
+    .post(authController.isLoggedIn, appointmentController.countAppointmentsForWeekAndClient)
 
 
 export default router 

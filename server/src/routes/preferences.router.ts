@@ -8,7 +8,7 @@ const preferencesController: PreferencesController = new PreferencesController()
 const authController: AuthController = new AuthController()
 
 router.route('/:id')
-    .get(authController.isLoggedIn, authController.isAuthorized, preferencesController.getPreferencesForClient)
-    .patch(authController.isLoggedIn, authController.isAuthorized, preferencesController.updatePreferences)
+    .get(authController.isLoggedIn, preferencesController.getPreferencesForClient)
+    .patch(authController.isLoggedIn, preferencesController.updatePreferences)
 
 export default router 

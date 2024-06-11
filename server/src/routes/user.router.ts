@@ -11,9 +11,9 @@ router.route('/')
     .get(authController.isAdmin, userController.getAllUsers)
 
 router.route('/:id')
-    .get(authController.isLoggedIn, authController.isAuthorized, userController.getUser)
-    .patch(authController.isLoggedIn, authController.isAuthorized, userController.updateUser)
-    .delete(authController.isLoggedIn, authController.isAuthorized, userController.deleteUser)
+    .get(authController.isLoggedIn, userController.getUser)
+    .patch(authController.isLoggedIn, userController.updateUser)
+    .delete(authController.isLoggedIn, userController.deleteUser)
 
 router.route('/email/:email')
     .get(authController.isAdmin, userController.getUserByEmail)

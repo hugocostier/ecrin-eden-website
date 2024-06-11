@@ -12,15 +12,15 @@ router.route('/')
     .post(authController.isAdmin, clientController.addClient)
 
 router.route('/:id')
-    .get(authController.isLoggedIn, authController.isAuthorized, clientController.getClient)
-    .patch(authController.isLoggedIn, authController.isAuthorized, clientController.updateClient)
+    .get(authController.isLoggedIn, clientController.getClient)
+    .patch(authController.isLoggedIn, clientController.updateClient)
     .delete(authController.isAdmin, clientController.deleteClient)
 
 router.route('/user/:id') 
-    .get(clientController.getClientByUser)
+    .get(authController.isLoggedIn, clientController.getClientByUser)
 
 router.route('/client/:id/personal-info')
-    .get(authController.isLoggedIn, authController.isAuthorized, clientController.getClientPersonalInfo)
-    .delete(authController.isLoggedIn, authController.isAuthorized, clientController.deleteClientPersonalInfo)
+    .get(authController.isLoggedIn, clientController.getClientPersonalInfo)
+    .delete(authController.isLoggedIn, clientController.deleteClientPersonalInfo)
 
 export default router 

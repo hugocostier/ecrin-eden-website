@@ -9,12 +9,12 @@ const authController: AuthController = new AuthController()
 
 router.route('/:page')
     .get(contentController.getContent)
+    .patch(authController.isAdmin, contentController.updateContent)
 
 router.route('/:page/:section')
     .post(authController.isAdmin, contentController.addContent)
 
 router.route('/:page/:section/:id')
-    .patch(authController.isAdmin, contentController.updateContent)
     .delete(authController.isAdmin, contentController.deleteContent)
 
 export default router 
