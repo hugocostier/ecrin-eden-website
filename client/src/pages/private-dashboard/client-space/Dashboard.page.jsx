@@ -4,7 +4,7 @@ import image from '../../../assets/images/dashboard.jpg'
 import { Calendar } from '../../../components/private-dashboard/calendar/Calendar'
 import { countUserAppointments } from '../../../data'
 import { useClientInfo } from '../../../hooks/useClientInfo.hook'
-import { calculateWeekBounds } from '../../../utils/calculateWeekBounds.util'
+import { calculateWeekBounds } from '../../../utils/appointment/calculateWeekBounds.util'
 
 export const UserDashboard = () => {
     const client = useClientInfo()
