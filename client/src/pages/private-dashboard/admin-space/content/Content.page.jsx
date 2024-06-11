@@ -1,45 +1,13 @@
 import { Link, useSearchParams } from 'react-router-dom'
 import StyledComponents from 'styled-components'
+import { storeFrontPages } from '../../../../utils/store-front-content/storeFrontPages.util'
 
-const STOREFRONT_URL = 'http://localhost:5173'
-
-const storeFrontPages = [
-    {
-        id: 1,
-        name: 'Accueil',
-        link: '/'
-    },
-    {
-        id: 2,
-        name: 'Prestations',
-        link: '/services'
-    },
-    {
-        id: 3,
-        name: 'Tarifs',
-        link: '/prices'
-    },
-    {
-        id: 4,
-        name: 'Cartes cadeau',
-        link: '/gift-cards'
-    },
-    {
-        id: 5,
-        name: 'FFMBE',
-        link: '/certification'
-    },
-    {
-        id: 6,
-        name: 'Contact',
-        link: '/contact'
-    }
-]
+const STOREFRONT_URL = import.meta.env.VITE_APP_CLIENT_URL
 
 export const AdminContent = () => {
     const [searchParams, setSearchParams] = useSearchParams({ page: 'accueil' })
     const selectedPageName = searchParams.get('page')
-    const selectedPage = storeFrontPages.find(page => (page.name).toLowerCase() === selectedPageName)
+    const selectedPage = storeFrontPages.find(page => (page.displayedName).toLowerCase() === selectedPageName)
 
     return (
         <ContentPage>
@@ -56,10 +24,10 @@ export const AdminContent = () => {
                         {storeFrontPages.map((page, index) => (
                             <tr key={index}>
                                 <td
-                                    onClick={() => setSearchParams({ page: (page.name).toLowerCase() })}
-                                    className={selectedPageName === (page.name).toLowerCase() ? 'selected' : ''}
+                                    onClick={() => setSearchParams({ page: (page.displayedName).toLowerCase() })}
+                                    className={selectedPageName === (page.displayedName).toLowerCase() ? 'selected' : ''}
                                 >
-                                    {page.name}
+                                    {page.displayedName}
                                 </td>
                             </tr>
                         ))}
@@ -103,7 +71,7 @@ const ContentPage = StyledComponents.main`
         line-height: 1; 
         margin-top: 1rem;
         margin-left: 10%;
-        padding: 0.5rem 1rem;
+        padding: 0.75rem 1rem;
         width: 80%;
         cursor: pointer;
 
