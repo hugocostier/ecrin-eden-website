@@ -11,7 +11,11 @@
       {
         "title": "Écrin d'Eden",
         "subtitle": "Partenaire de votre bien-être,",
-        "text": "Vous offre un moment privilégié, dans un espace calme, cocooning, chaleureux, propice au lâcher-prise. \nVous y trouverez un accompagnement personnalisé pour une détente globale, tant au niveau du corps que de l'esprit, grâce à différentes techniques de massage. \nA votre arrivée, un entretien individuel permettre un recueil de données qui seront utilisées pour façonner un soin sur mesure, unique, adapté à vos besoins, vos attentes et réalités du moment, et aboutira à un total lâcher-prise. Votre écrin d'Eden vous attend pour une pause bien méritée loin du stress quotidien.",
+        "text": [
+          "Vous offre un moment privilégié, dans un espace calme, cocooning, chaleureux, propice au lâcher-prise.",
+          "Vous y trouverez un accompagnement personnalisé pour une détente globale, tant au niveau du corps que de l'esprit, grâce à différentes techniques de massage.",
+          "A votre arrivée, un entretien individuel permettre un recueil de données qui seront utilisées pour façonner un soin sur mesure, unique, adapté à vos besoins, vos attentes et réalités du moment, et aboutira à un total lâcher-prise. Votre écrin d'Eden vous attend pour une pause bien méritée loin du stress quotidien."
+        ],
         "image": [
           "/src/assets/images/home/image1.jpeg",
           "/src/assets/images/home/image2.jpeg",
@@ -20,7 +24,10 @@
       },
       {
         "title": "Praticienne certifiée en Massage Bien-Être®",
-        "text": "Infirmière diplômée d'État, c'est ma passion pour les massages qui m'a conduit à choisir la célèbre école européenne du Toucher-massage®, institut Joël Savatowski, pour y suivre une formation certifiante spécialisée. Ce cursus riche m'a permis de maîtriser différentes techniques de massage. \nMes 25 ans d'expérience dans les soins, m'ont appris à m'adapter aux besoins de chacun, alliant empathie, sensibilité, qualité d'écoute. Ces expériences me permettent de vous proposer des massages personnalisés, au plus près de vos attentes et de vos besoins.",
+        "text": [
+          "Infirmière diplômée d'État, c'est ma passion pour les massages qui m'a conduit à choisir la célèbre école européenne du Toucher-massage®, institut Joël Savatowski, pour y suivre une formation certifiante spécialisée. Ce cursus riche m'a permis de maîtriser différentes techniques de massage.",
+          "Mes 25 ans d'expérience dans les soins, m'ont appris à m'adapter aux besoins de chacun, alliant empathie, sensibilité, qualité d'écoute. Ces expériences me permettent de vous proposer des massages personnalisés, au plus près de vos attentes et de vos besoins."
+        ],
         "image": "/src/assets/images/home/image4.jpeg"
       }
     ],
@@ -31,7 +38,10 @@
     ],
     "footer": [
       {
-        "text": "Toute utilisation du terme massage sur ce site fait référence aux massages bien-être. Les prestations n'ont aucun but thérapeutique et en raison de leur nature, ne s'apparentent en rien, ni dans les contenus, ni dans les objectifs, à la pratique de la masso-kinésithérapie, ainsi qu'à toute pratique médicale. \nMes massages n'ont aucune finalité érotique, tantrique ou sexuelle, et sont réalisés dans le respect de la personne et de la praticienne."
+        "text": [
+          "Toute utilisation du terme massage sur ce site fait référence aux massages bien-être. Les prestations n'ont aucun but thérapeutique et en raison de leur nature, ne s'apparentent en rien, ni dans les contenus, ni dans les objectifs, à la pratique de la masso-kinésithérapie, ainsi qu'à toute pratique médicale.",
+          "Mes massages n'ont aucune finalité érotique, tantrique ou sexuelle, et sont réalisés dans le respect de la personne et de la praticienne."
+        ]
       }
     ],
     "reviews": [
@@ -199,8 +209,14 @@
     ],
     "main": [
       {
-        "title": "En confiance, \nFaire le choix d'un praticien agrée",
-        "text": "Avec la création de la Fédération Française de Massages Bien-Être en 2004, tous les acteurs de la profession (praticiens, centre de formation...) oeuvrent à son encadrement par leurs engagements, leurs compétences et leur professionnalisme. \nLes praticiens agréés F.F.M.B.E adoptent un code de déontologie, offrant une protection aux usages contre les dérives dans ce domaine. \nLa F.F.M.B.E a été sollicitée pour créer une charte de qualité des professionnels du bien-être afin de lutter contre la prostitution et le proxénétisme des salons dits \"de massages\". \nPraticienne agrée F.F.M.B.E, je suis également membre du réseau France Massage, qui vous garantit les services d'un professionnel de confiance, formé selon les normes de la Fédération Française de Massages Bien-Être. Je m'engage donc à respecter les codes de déontologie du massage.",
+        "title": "En confiance, Faire le choix d'un praticien agrée",
+        "text": [
+          "Avec la création de la Fédération Française de Massages Bien-Être en 2004, tous les acteurs de la profession (praticiens, centre de formation...) oeuvrent à son encadrement par leurs engagements, leurs compétences et leur professionnalisme.",
+          "Les praticiens agréés F.F.M.B.E adoptent un code de déontologie, offrant une protection aux usages contre les dérives dans ce domaine.",
+          "La F.F.M.B.E a été sollicitée pour créer une charte de qualité des professionnels du bien-être afin de lutter contre la prostitution et le proxénétisme des salons dits \"de massages\".",
+          "Soin complet, de l'ensemble du corps, des pieds à la tête ; grand relaxant, il est adapté à vos besoins et vos envies. C'est vous qui le personnalisez.",
+          "Praticienne agrée F.F.M.B.E, je suis également membre du réseau France Massage, qui vous garantit les services d'un professionnel de confiance, formé selon les normes de la Fédération Française de Massages Bien-Être. Je m'engage donc à respecter les codes de déontologie du massage."
+        ],
         "images": [
           "/src/assets/images/certifications/image1.jpeg",
           "/src/assets/images/certifications/image2.jpeg"
@@ -208,7 +224,14 @@
       },
       {
         "title": "Le Massage Bien-Être®",
-        "text": "Le praticien en massage bien-être intervient dans de nombreux contextes et environnements. \nIl adapte ses interventions et agence les espaces en fonction des techniques utilisées. \nIl propose des séances de relaxation basées sur des approches bien-être non thérapeutiques et les techniques de relaxation. \nIl cherche à stimuler la circulation des énergies pour permettre de ses libérer de tensions et de se sentir mieux en travaillant également sur le lâcher-prise. \nC'est un professionnel des techniques de relaxation et de bien-être pour procurer une détente corporelle et une relaxation afin d'obtenir un état de bien-être général. \nLes séances proposées visent à améliorer le bien-être, en utilisant différentes approches et techniques dont les techniques de relaxation californiennes, suédoises, hawaïennes, indiennes, balinaises, orientales... des techniques définies par une gestuelle très précise.",
+        "text": [
+          "Le praticien en massage bien-être intervient dans de nombreux contextes et environnements.",
+          "Il adapte ses interventions et agence les espaces en fonction des techniques utilisées.",
+          "Il propose des séances de relaxation basées sur des approches bien-être non thérapeutiques et les techniques de relaxation.",
+          "Il cherche à stimuler la circulation des énergies pour permettre de ses libérer de tensions et de se sentir mieux en travaillant également sur le lâcher-prise.",
+          "C'est un professionnel des techniques de relaxation et de bien-être pour procurer une détente corporelle et une relaxation afin d'obtenir un état de bien-être général.",
+          "Les séances proposées visent à améliorer le bien-être, en utilisant différentes approches et techniques dont les techniques de relaxation californiennes, suédoises, hawaïennes, indiennes, balinaises, orientales... des techniques définies par une gestuelle très précise."
+        ],
         "images": [
           "/src/assets/images/certifications/image3.jpeg",
           "/src/assets/images/certifications/image4.jpeg",
@@ -221,16 +244,16 @@
     "header": [
       {
         "title": "Contactez-moi",
-        "images": [
-          "/src/assets/images/contact/hero1.jpeg",
-          "/src/assets/images/contact/hero2.jpeg"
-        ],
         "name": "Salon Écrin d'Eden",
         "address": "302 Route des Tronquisses",
         "zip": "30960",
         "city": "Les Mages",
         "phone": "07.62.06.77.82",
-        "email": "contact@ecrin-eden.com"
+        "email": "contact@ecrin-eden.com",
+        "images": [
+          "/src/assets/images/contact/hero1.jpeg",
+          "/src/assets/images/contact/hero2.jpeg"
+        ]
       }
     ]
   }
