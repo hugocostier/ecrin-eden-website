@@ -1,14 +1,15 @@
-import { NextFunction, Request, Response } from 'express'
+import { Request, Response } from 'express'
 import { createCustomError } from '../errors/custom-errors.js'
-import asyncHandler from '../middlewares/async.js'
 import ContentManager from '../utils/content.manager.js'
+import BaseController from './base.controller.js'
 
 /**
  * Controller for content
  * 
  * @class ContentController
+ * @extends BaseController
  */
-export default class ContentController {
+export default class ContentController extends BaseController {
     private _contentManager: ContentManager = new ContentManager() 
 
     /**
@@ -18,18 +19,19 @@ export default class ContentController {
      * @memberof ContentController
      * @param {Request} req - Request object
      * @param {Response} res - Response object
-     * @param {NextFunction} next - Next function
      * @returns {Promise<void>} A promise that resolves when the content is returned.
      */
-    public getContent = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-        const { page: pageName } = req.params 
-        const content: any = this._contentManager.getContentForPage(pageName)
-    
-        if (!content) {
-            return next(createCustomError(`No content for page: ${pageName}`, 404))
-        }
-        res.status(200).json({ content })
-    })
+    public getContent = async (req: Request, res: Response): Promise<void> => {
+        await this.handleRequest(req, res, async () => {
+            const { page: pageName } = req.params 
+            const content: any = this._contentManager.getContentForPage(pageName)
+        
+            if (!content) {
+                throw createCustomError(`No content for page: ${pageName}`, 404)
+            }
+            return content
+        })
+    }
     
     /**
      * Add content for a page
@@ -38,18 +40,19 @@ export default class ContentController {
      * @memberof ContentController
      * @param {Request} req - Request object
      * @param {Response} res - Response object
-     * @param {NextFunction} next - Next function
      * @returns {Promise<void>} A promise that resolves when the content is added.
      */
-    public addContent = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-        const { page: pageName, section: sectionName } = req.params
-        const content: any = this._contentManager.addContentForPage(pageName, sectionName, req.body) 
-    
-        if (!content) {
-            return next(createCustomError(`No content for page: ${pageName}`, 404)) 
-        }
-        res.status(201).json({ msg: 'Content added', content })
-    })
+    public addContent = async (req: Request, res: Response): Promise<void> => {
+        await this.handleRequest(req, res, async () => {
+            const { page: pageName, section: sectionName } = req.params
+            const content: any = this._contentManager.addContentForPage(pageName, sectionName, req.body)
+        
+            if (!content) {
+                throw createCustomError(`No content for page: ${pageName}`, 404)
+            }
+            return content
+        }, 'Content added successfully')
+    }
     
     /**
      * Update content
@@ -58,18 +61,19 @@ export default class ContentController {
      * @memberof ContentController
      * @param {Request} req - Request object
      * @param {Response} res - Response object
-     * @param {NextFunction} next - Next function
      * @returns {Promise<void>} A promise that resolves when the content is updated.
      */
-    public updateContent = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-        const { page: pageName, section: sectionName, id: contentID } = req.params
-        const content: any = this._contentManager.updateContentForPage(pageName, sectionName, contentID, req.body)
-    
-        if (!content) {
-            return next(createCustomError(`No content with id: ${contentID}`, 404))
-        }
-        res.status(200).json({ msg: `Content ${contentID} updated`, content })
-    })
+    public updateContent = async (req: Request, res: Response): Promise<void> => {
+        await this.handleRequest(req, res, async () => {
+            const { page: pageName } = req.params
+            const content: any = this._contentManager.updatePageContent(pageName, req.body)
+        
+            if (!content) {
+                throw createCustomError(`No content for page: ${pageName}`, 404)
+            }
+            return content
+        }, 'Content updated successfully')
+    }
     
     /**
      * Delete content 
@@ -78,16 +82,17 @@ export default class ContentController {
      * @memberof ContentController
      * @param {Request} req - Request object
      * @param {Response} res - Response object
-     * @param {NextFunction} next - Next function
      * @returns {Promise<void>} A promise that resolves when the content is deleted.
      */
-    public deleteContent = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-        const { page: pageName, section: sectionName, id: contentID } = req.params
-        const content: any = this._contentManager.deleteContentForPage(pageName, sectionName, contentID) 
-    
-        if (!content) {
-            return next(createCustomError(`No content with id: ${contentID}`, 404))
-        }
-        res.status(200).json({ msg: `Content ${contentID} deleted`, content })
-    })
+    public deleteContent = async (req: Request, res: Response): Promise<void> => {
+        await this.handleRequest(req, res, async () => {
+            const { page: pageName, section: sectionName, id: contentID } = req.params
+            const content: any = this._contentManager.deleteContentForPage(pageName, sectionName, contentID)
+        
+            if (!content) {
+                throw createCustomError(`No content with id: ${contentID}`, 404)
+            }
+            return content
+        }, 'Content deleted successfully')
+    }
 }
