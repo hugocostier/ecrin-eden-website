@@ -11,26 +11,26 @@ import BaseService from './base.service.js'
  * @class AppointmentService
  * @extends BaseService
  * @property {AppointmentRepository} _customRepository - The custom repository for appointments.
- * @property {Repository<Appointment> & { findAll(): Promise<Appointment[]>; findById(id: number): Promise<Appointment | null>; findByDay(day: Date): Promise<Appointment[]>; findByDateRange(rangeStart: Date, rangeEnd: Date): Promise<Appointment[]>; findUpcoming(): Promise<Appointment[]>; findPast(): Promise<Appointment[]>; findByClient(clientId: number): Promise<Appointment[]>; findByClientForDay(clientId: number, day: Date): Promise<Appointment[]>; findByDateRangeForClient(rangeStart: Date, rangeEnd: Date, clientId: number): Promise<Appointment[]>; findUpcomingByClient(clientId: number): Promise<Appointment[]>; findPastByClient(clientId: number): Promise<Appointment[]>; findByService(serviceId: number): Promise<Appointment[]>; findUpcomingByService(serviceId: number): Promise<Appointment[]>; countForDay(date: Date): Promise<number>; countForWeek(startDate: Date, endDate: Date, clientId: number): Promise<number>; }} _appointmentRepository - The extended repository for appointments.
+ * @property {Repository<Appointment> & { findAll(): Promise<Appointment[]>; findById(id: number): Promise<Appointment | null>; findByDay(day: string): Promise<Appointment[]>; findByDateRange(rangeStart: string, rangeEnd: string): Promise<Appointment[]>; findUpcoming(): Promise<Appointment[]>; findPast(): Promise<Appointment[]>; findByClient(clientId: number): Promise<Appointment[]>; findByClientForDay(clientId: number, day: string): Promise<Appointment[]>; findByDateRangeForClient(rangeStart: string, rangeEnd: string, clientId: number): Promise<Appointment[]>; findUpcomingByClient(clientId: number): Promise<Appointment[]>; findPastByClient(clientId: number): Promise<Appointment[]>; findByService(serviceId: number): Promise<Appointment[]>; findUpcomingByService(serviceId: number): Promise<Appointment[]>; countForDay(date: string): Promise<number>; countForWeek(startDate: string, endDate: string, clientId: number): Promise<number>; }} _appointmentRepository - The extended repository for appointments.
  **/
 class AppointmentService extends BaseService {
     private _customRepository = new AppointmentRepository()
     private _appointmentRepository!: Repository<Appointment> & {
         findAll(): Promise<Appointment[]>
         findById(id: number): Promise<Appointment | null>
-        findByDay(day: Date): Promise<Appointment[]>
-        findByDateRange(rangeStart: Date, rangeEnd: Date): Promise<Appointment[]>
+        findByDay(day: string): Promise<Appointment[]>
+        findByDateRange(rangeStart: string, rangeEnd: string): Promise<Appointment[]>
         findUpcoming(): Promise<Appointment[]>
         findPast(): Promise<Appointment[]>
         findByClient(clientId: number): Promise<Appointment[]>
-        findByClientForDay(clientId: number, day: Date): Promise<Appointment[]>
-        findByDateRangeForClient(rangeStart: Date, rangeEnd: Date, clientId: number): Promise<Appointment[]>
+        findByClientForDay(clientId: number, day: string): Promise<Appointment[]>
+        findByDateRangeForClient(rangeStart: string, rangeEnd: string, clientId: number): Promise<Appointment[]>
         findUpcomingByClient(clientId: number): Promise<Appointment[]>
         findPastByClient(clientId: number): Promise<Appointment[]>
         findByService(serviceId: number): Promise<Appointment[]>
         findUpcomingByService(serviceId: number): Promise<Appointment[]>
-        countForDay(date: Date): Promise<number>
-        countForWeek(startDate: Date, endDate: Date, clientId: number): Promise<number>
+        countForDay(date: string): Promise<number>
+        countForWeek(startDate: string, endDate: string, clientId: number): Promise<number>
     }
 
     /**
@@ -93,11 +93,11 @@ class AppointmentService extends BaseService {
      * @param {boolean} showAll - If true, returns all appointments.
      * @param {string} rangeStart - The start date of the range of appointments to retrieve.
      * @param {string} rangeEnd - The end date of the range of appointments to retrieve.
-     * @param {Date} day - The date of the appointments to retrieve.
+     * @param {string} day - The date of the appointments to retrieve.
      * @throws {CustomAPIError} If there the date or date range is invalid or if there is an error getting appointments.
      * @returns {Promise<Appointment[]>} The appointments that match the provided criteria.
      */
-    public async getAppointments(showHistory?: boolean, showAll?: boolean, rangeStart?: string, rangeEnd?: string, day?: Date): Promise<Appointment[]> {
+    public async getAppointments(showHistory?: boolean, showAll?: boolean, rangeStart?: string, rangeEnd?: string, day?: string): Promise<Appointment[]> {
         if (!this._appointmentRepository) {
             await this.extendServiceRepository()
         }
@@ -122,7 +122,7 @@ class AppointmentService extends BaseService {
                     throw new CustomAPIError(`Invalid date range ${rangeStart} - ${rangeEnd}`, 400)
                 }
 
-                return await this._appointmentRepository.findByDateRange(rangeStartDate, rangeEndDate) 
+                return await this._appointmentRepository.findByDateRange(rangeStart, rangeEnd) 
             } 
             // Return all past appointments
             else if (showHistory) {
@@ -157,11 +157,11 @@ class AppointmentService extends BaseService {
      * @param {boolean} showAll - If true, returns all appointments for the client.
      * @param {string} rangeStart - The start date of the range of appointments to retrieve.
      * @param {string} rangeEnd - The end date of the range of appointments to retrieve.
-     * @param {Date} day - The date of the appointments to retrieve.
+     * @param {string} day - The date of the appointments to retrieve.
      * @throws {CustomAPIError} If there the date or date range is invalid or if there is an error getting appointments for the client.
      * @returns {Promise<Appointment[]>} The appointments that match the provided criteria.
      */
-    public async getAppointmentsByClient(clientId: string, showHistory?: boolean, showAll?: boolean, rangeStart?: string, rangeEnd?: string, day?: Date): Promise<Appointment[]> {
+    public async getAppointmentsByClient(clientId: string, showHistory?: boolean, showAll?: boolean, rangeStart?: string, rangeEnd?: string, day?: string): Promise<Appointment[]> {
         if (!this._appointmentRepository) {
             await this.extendServiceRepository()
         }
@@ -186,7 +186,7 @@ class AppointmentService extends BaseService {
                     throw new CustomAPIError(`Invalid date range ${rangeStart} - ${rangeEnd}`, 400)
                 }
 
-                return await this._appointmentRepository.findByDateRangeForClient(rangeStartDate, rangeEndDate, parseInt(clientId)) 
+                return await this._appointmentRepository.findByDateRangeForClient(rangeStart, rangeEnd, parseInt(clientId)) 
             } 
             // Return all past appointments
             else if (showHistory) {
@@ -263,7 +263,7 @@ class AppointmentService extends BaseService {
                 throw new CustomAPIError(`Invalid date ${date}`, 400)
             }
 
-            return await this._appointmentRepository.countForDay(validDate)
+            return await this._appointmentRepository.countForDay(date)
                 .catch((error: any) => {
                     console.error('Error counting appointments for day: ', error)
                     throw new CustomAPIError(`Cannot count appointments for ${date}`, 404)
@@ -298,7 +298,7 @@ class AppointmentService extends BaseService {
                 throw new CustomAPIError(`Invalid date range ${startDate} - ${endDate}`, 400)
             }
 
-            return await this._appointmentRepository.countForWeek(start, end, parseInt(clientId))
+            return await this._appointmentRepository.countForWeek(startDate, endDate, parseInt(clientId))
                 .catch((error: any) => {
                     console.error('Error counting appointments for week and client: ', error)
                     throw new CustomAPIError(`Cannot count appointments for client with id ${clientId} between ${startDate} and ${endDate}`, 404)

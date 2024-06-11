@@ -1,4 +1,4 @@
-import { IsBoolean, IsDate, IsDateString, IsEnum, IsNotEmpty, IsNotEmptyObject, IsOptional, IsString, Length } from 'class-validator'
+import { IsBoolean, IsDateString, IsEnum, IsNotEmpty, IsOptional, IsString, Length } from 'class-validator'
 import {
     BaseEntity,
     Column,
@@ -50,8 +50,8 @@ export interface IAppointment {
  * @extends BaseEntity
  * @implements IAppointment
  * @property {number} id - The id of the appointment
- * @property {Date} date - The date of the appointment
- * @property {Date} time - The time of the appointment
+ * @property {string} date - The date of the appointment
+ * @property {string} time - The time of the appointment
  * @property {boolean} is_away - Whether the appointment is away
  * @property {string} status - The status of the appointment
  * @property {string} private_notes - The private notes of the appointment

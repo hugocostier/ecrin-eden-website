@@ -59,12 +59,14 @@ export class AppointmentRepository extends BaseRepository {
                         'appointment.status',
                         'appointment.is_away',
                         'appointment.private_notes',
+                        'client.id', 
                         'client.last_name',
                         'client.first_name',
                         'client.phone_number',
                         'client.address',
                         'client.city',
                         'client.postal_code',
+                        'service.id', 
                         'service.name',
                         'service.price',
                         'service.duration'
@@ -92,6 +94,7 @@ export class AppointmentRepository extends BaseRepository {
                         'appointment.status',
                         'appointment.is_away',
                         'appointment.private_notes',
+                        'client.id', 
                         'client.last_name',
                         'client.first_name',
                         'service.name',
@@ -106,10 +109,10 @@ export class AppointmentRepository extends BaseRepository {
              * @async
              * @method findByDay
              * @memberof appointmentRepository
-             * @param {Date} date - The date for which to retrieve appointments.
+             * @param {string} date - The date for which to retrieve appointments.
              * @returns {Promise<Appointment[]>} An array of appointment data objects containing the appointment, and service details.
              */
-            async findByDay(date: Date): Promise<Appointment[]> {
+            async findByDay(date: string): Promise<Appointment[]> {
                 return this.createQueryBuilder('appointment')
                     .leftJoin('appointment.service', 'service')
                     .select([
@@ -145,6 +148,7 @@ export class AppointmentRepository extends BaseRepository {
                         'appointment.status',
                         'appointment.is_away',
                         'appointment.private_notes',
+                        'client.id', 
                         'client.last_name',
                         'client.first_name',
                         'service.name',
@@ -173,6 +177,7 @@ export class AppointmentRepository extends BaseRepository {
                     'appointment.status',
                     'appointment.is_away',
                     'appointment.private_notes',
+                    'client.id', 
                     'client.last_name',
                     'client.first_name',
                     'service.name',
@@ -216,10 +221,10 @@ export class AppointmentRepository extends BaseRepository {
              * @method findByClientForDay
              * @memberof appointmentRepository
              * @param {number} clientId - The ID of the client for which to retrieve appointments.
-             * @param {Date} date - The date for which to retrieve appointments.
+             * @param {string} date - The date for which to retrieve appointments.
              * @returns {Promise<Appointment[]>} An array of appointments for the client on the given date.
              */
-            async findByClientForDay(clientId: number, date: Date): Promise<Appointment[]> {
+            async findByClientForDay(clientId: number, date: string): Promise<Appointment[]> {
                 return await this.find({ where: { client: { id: clientId }, date } })
             },
 
@@ -285,11 +290,11 @@ export class AppointmentRepository extends BaseRepository {
              * @async
              * @method findByDateRange
              * @memberof appointmentRepository
-             * @param {Date} startDate - The start date of the range for which to retrieve appointments.
-             * @param {Date} endDate - The end date of the range for which to retrieve appointments.
+             * @param {string} startDate - The start date of the range for which to retrieve appointments.
+             * @param {string} endDate - The end date of the range for which to retrieve appointments.
              * @returns {Promise<Appointment[]>} An array of appointments within the given date range.
              */
-            async findByDateRange(startDate: Date, endDate: Date): Promise<Appointment[]> {
+            async findByDateRange(startDate: string, endDate: string): Promise<Appointment[]> {
                 return await this.find({ where: { date: Between(startDate, endDate) } })
             }, 
 
@@ -299,12 +304,12 @@ export class AppointmentRepository extends BaseRepository {
              * @async
              * @method findByDateRangeForClient
              * @memberof appointmentRepository
-             * @param {Date} startDate - The start date of the range for which to retrieve appointments.
-             * @param {Date} endDate - The end date of the range for which to retrieve appointments.
+             * @param {string} startDate - The start date of the range for which to retrieve appointments.
+             * @param {string} endDate - The end date of the range for which to retrieve appointments.
              * @param {number} clientId - The ID of the client for which to retrieve appointments.
              * @returns {Promise<Appointment[]>} An array of appointments within the given date range for the client.
              */
-            async findByDateRangeForClient(startDate: Date, endDate: Date, clientId: number): Promise<Appointment[]> {
+            async findByDateRangeForClient(startDate: string, endDate: string, clientId: number): Promise<Appointment[]> {
                 return await this.find({ where: { date: Between(startDate, endDate), client: { id: clientId } } })
             },
 
@@ -331,7 +336,7 @@ export class AppointmentRepository extends BaseRepository {
              * @returns {Promise<Appointment[]>} An array of upcoming appointments for the given service.
              */
             async findUpcomingByService(serviceId: number): Promise<Appointment[]> {
-                return await this.find({ where: { service: { id: serviceId }, date: MoreThanOrEqual(new Date()) } })
+                return await this.find({ where: { service: { id: serviceId }, date: MoreThanOrEqual(new Date().toISOString().split('T')[0]) } })
             },
 
             /**
@@ -340,10 +345,10 @@ export class AppointmentRepository extends BaseRepository {
              * @async
              * @method countForDay
              * @memberof appointmentRepository
-             * @param {Date} date - The date for which to count appointments.
+             * @param {string} date - The date for which to count appointments.
              * @returns {Promise<number>} The number of appointments on the given date.
              */
-            async countForDay(date: Date): Promise<number> {
+            async countForDay(date: string): Promise<number> {
                 return await this.count({ where: { date } })
             }, 
 
@@ -353,11 +358,11 @@ export class AppointmentRepository extends BaseRepository {
              * @async
              * @method countForDateRange
              * @memberof appointmentRepository
-             * @param {Date} startDate - The start date of the range for which to count appointments.
-             * @param {Date} endDate - The end date of the range for which to count appointments.
+             * @param {string} startDate - The start date of the range for which to count appointments.
+             * @param {string} endDate - The end date of the range for which to count appointments.
              * @returns {Promise<number>} The number of appointments within the given date range.
              */
-            async countForWeek(startDate: Date, endDate: Date, clientId: number): Promise<number> {
+            async countForWeek(startDate: string, endDate: string, clientId: number): Promise<number> {
                 return await this.count({ where: { date: Between(startDate, endDate), client: { id: clientId} } })
             }
         })
