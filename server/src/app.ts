@@ -1,6 +1,6 @@
 // ############## IMPORTS ###############
 // Express
-import express, { Express, Request, Response } from 'express'
+import express, { Express } from 'express'
 
 // Database 
 import { DataSourceOptions } from 'typeorm'
@@ -13,6 +13,7 @@ import passport from 'passport'
 import passportConfig from './config/auth.config.js'
 
 // Other 
+import cookieParser from 'cookie-parser'
 import cors, { CorsOptions } from 'cors'
 import 'express-async-errors'
 import morgan from 'morgan'
@@ -116,6 +117,9 @@ class ExpressApp {
         // JSON parser
         this.app.use(express.json())
         this.app.use(express.urlencoded({ extended: true }))
+
+        // Cookie parser 
+        this.app.use(cookieParser())
 
         // Multer 
         this.app.use(multer.single('profile_picture'))
