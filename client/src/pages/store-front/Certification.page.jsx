@@ -27,7 +27,7 @@ export const CertificationPage = () => {
                                 <div className={`card card-${index + 1}`} key={index + 1}>
                                     <div className='card-content'>
                                         <h3>{main.title}</h3>
-                                        <p>{main.text}</p>
+                                        <p>{main.text.map((text) => (`${text} `))}</p>
                                     </div>
 
                                     <div className='card-image'>
