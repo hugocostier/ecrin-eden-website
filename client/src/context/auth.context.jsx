@@ -39,7 +39,6 @@ export const AuthProvider = () => {
                     }
 
                     if (!res.user) {
-                        // reject({ message: 'Email or password incorrect' })
                         throw new Error('Email or password incorrect')
                     }
 
@@ -203,6 +202,8 @@ export const AuthProvider = () => {
 
         if (userStorage && expiration) {
             if (currentTime > expiration) {
+                localStorage.removeItem('user')
+                localStorage.removeItem('expiration')
                 logOut()
             } else {
                 setUser(JSON.parse(userStorage))
