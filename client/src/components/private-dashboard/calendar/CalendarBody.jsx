@@ -4,7 +4,7 @@ import StyledComponents from 'styled-components'
 import { fetchAllAppointments, fetchAppointments } from '../../../data'
 import { useAuth } from '../../../hooks/useAuth.hook'
 import { useClientInfo } from '../../../hooks/useClientInfo.hook'
-import { renderDay, renderMonth, renderWeek } from '../../../utils/renderCalendar.util'
+import { renderDay, renderMonth, renderWeek } from '../../../utils/calendar/renderCalendar.util'
 import { Days } from './Days'
 import { Week } from './Week'
 

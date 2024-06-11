@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
+import { getStatusName } from '../appointment/getStatusName.util'
 
-const getBackgroundColor = (status) => {
+export const getBackgroundColor = (status) => {
     switch (status) {
         case 'pending':
             return { background: 'var(--pending)' }
@@ -228,7 +229,7 @@ export const renderDay = (date, appointments, userRole) => {
                             style={getBackgroundColor(appointment.status)}
                             className='appointment-link'
                         >
-                            {appointment.time.slice(0, 5)} - {appointment.service?.name} - {appointment.status}
+                            {appointment.time.slice(0, 5)} - {appointment.service?.name} - {getStatusName(appointment.status)}
                         </Link>
                     ))}
                 </td>

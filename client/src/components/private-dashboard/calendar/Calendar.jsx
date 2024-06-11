@@ -1,6 +1,6 @@
 import { useSearchParams } from 'react-router-dom'
 import StyledComponents from 'styled-components'
-import { calculateWeekBounds } from '../../../utils/calculateWeekBounds.util'
+import { calculateWeekBounds } from '../../../utils/appointment/calculateWeekBounds.util'
 import { CalendarBody } from './CalendarBody'
 import { CalendarHeader } from './CalendarHeader'
 
