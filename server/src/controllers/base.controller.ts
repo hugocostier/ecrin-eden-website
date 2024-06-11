@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { CustomAPIError } from '../errors/custom-errors.js'
+import { isAuthorized } from '../utils/isAuthorized.util.js'
 
 /**
  * Base class for all controllers
@@ -49,6 +50,11 @@ export default abstract class BaseController {
         try {
             const result: any = await serviceCall()
 
+            if (result.client && !isAuthorized(req, res, result?.client?.id)) {
+                res.status(401).json({ error: 'Not authorized' })
+                return 
+            }
+
             res.status(statusCode || 200).json({
                 success: true,
                 msg: message || 'Request successful',
@@ -58,11 +64,11 @@ export default abstract class BaseController {
             console.error('Error handling request: ', error)
 
             const statusCode: number = error instanceof CustomAPIError ? error.statusCode : 500
-            const message: string = error instanceof CustomAPIError ? error.message : 'Internal server error'
+            const errorMessage: string = error instanceof CustomAPIError ? error.message : 'Internal server error'
 
             res.status(statusCode).json({
                 success: false,
-                msg: message,
+                msg: errorMessage,
                 error: error.message,
             })
         }
