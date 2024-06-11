@@ -13,12 +13,12 @@ export const giftCardLoader = async () => {
         // If data is not cached, fetch it from the API
         const data = await fetchApi('content/gift-cards')
 
-        if (data && data.content) {
+        if (data && data.data) {
             // Cache the data in local storage
             // localStorage.setItem('cachedGiftCardContent', JSON.stringify(data.content))
 
             // And return it
-            return { giftCardContent: data.content }
+            return { giftCardContent: data.data }
         }
     } catch (error) {
         console.error('Error fetching gift-card data :', error)

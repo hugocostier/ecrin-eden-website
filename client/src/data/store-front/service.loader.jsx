@@ -13,12 +13,12 @@ export const serviceLoader = async () => {
         // If data is not cached, fetch it from the API
         const data = await fetchApi('content/services')
 
-        if (data && data.content) {
+        if (data && data.data) {
             // Cache the data in local storage
             // localStorage.setItem('cachedServiceContent', JSON.stringify(data.content))
 
             // And return it
-            return { serviceContent: data.content }
+            return { serviceContent: data.data }
         }
     } catch (error) {
         console.error('Error fetching service data :', error)

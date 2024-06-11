@@ -13,12 +13,12 @@ export const certificationLoader = async () => {
         // If data is not cached, fetch it from the API
         const data = await fetchApi('content/certifications')
 
-        if (data && data.content) {
+        if (data && data.data) {
             // Cache the data in local storage
             // localStorage.setItem('cachedCertificationContent', JSON.stringify(data.content))
 
             // And return it
-            return { certificationContent: data.content }
+            return { certificationContent: data.data }
         }
     } catch (error) {
         console.error('Error fetching certification data :', error)
