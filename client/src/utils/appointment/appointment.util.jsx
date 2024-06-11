@@ -1,4 +1,4 @@
-import { fetchAllAppointments } from '../data/appointments/appointments.fetch'
+import { fetchAllAppointments } from '../../data/appointments/appointments.fetch'
 
 export const checkAvailability = async (service, date) => {
     const serviceDuration = parseInt(service.duration)
