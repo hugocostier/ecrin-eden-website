@@ -96,6 +96,7 @@ export const ContactPage = () => {
                                         type='text'
                                         name='last-name'
                                         placeholder='Nom*'
+                                        autoComplete='family-name'
                                         {...register('lastName', { required: 'Veuillez saisir votre nom' })}
                                     />
                                     <FormError error={errors.lastName} />
@@ -104,6 +105,7 @@ export const ContactPage = () => {
                                         type='text'
                                         name='first-name'
                                         placeholder='Prénom*'
+                                        autoComplete='given-name'
                                         {...register('firstName', { required: 'Veuillez saisir votre prénom' })}
                                     />
                                     <FormError error={errors.firstName} />
@@ -112,6 +114,7 @@ export const ContactPage = () => {
                                         type='email'
                                         name='email'
                                         placeholder='Email*'
+                                        autoComplete='email'
                                         {...register('email', { required: 'Veuillez saisir votre email', pattern: { value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/, message: 'Email invalide' } })}
                                     />
                                     <FormError error={errors.email} />
@@ -120,6 +123,7 @@ export const ContactPage = () => {
                                         type='tel'
                                         name='phone'
                                         placeholder='Téléphone'
+                                        autoComplete='tel'
                                         {...register('phone', { pattern: { value: /[0-9]{10}/, message: 'Numéro de téléphone invalide' } })}
                                     />
                                     <FormError error={errors.phone} />

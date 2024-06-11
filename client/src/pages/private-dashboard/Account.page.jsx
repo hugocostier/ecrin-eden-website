@@ -130,6 +130,7 @@ export const AccountPage = () => {
                         name='lastName'
                         id='last-name'
                         placeholder='Nom*'
+                        autoComplete='family-name'
                         {...register('lastName', { required: 'Veuillez entrer votre nom', pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer un nom valide' }, disabled: !isEditable })}
                     />
                     <FormError error={errors.lastName} />
@@ -141,6 +142,7 @@ export const AccountPage = () => {
                         name='firstName'
                         id='first-name'
                         placeholder='Prénom*'
+                        autoComplete='given-name'
                         {...register('firstName', { required: 'Veuillez entrer votre prénom', pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer un prénom valide' }, disabled: !isEditable })}
                     />
                     <FormError error={errors.firstName} />
@@ -152,6 +154,7 @@ export const AccountPage = () => {
                         name='phone'
                         id='phone'
                         placeholder='Numéro de téléphone (ex: 0601020304)'
+                        autoComplete='tel'
                         {...register('phone', { pattern: { value: /^[0-9]{10}$/, message: 'Veuillez entrer un numéro de téléphone valide' }, disabled: !isEditable })}
                     />
                     <FormError error={errors.phone} />
@@ -163,6 +166,7 @@ export const AccountPage = () => {
                         name='birthDate'
                         id='birth-date'
                         placeholder='Date de naissance'
+                        autoComplete='bday'
                         {...register('birthDate', { disabled: !isEditable, validate: value => value ? new Date(value) <= new Date() || 'Veuillez entrer une date de naissance valide' : true })}
                     />
                     <FormError error={errors.birthDate} />
@@ -174,6 +178,7 @@ export const AccountPage = () => {
                         name='email'
                         id='email'
                         placeholder='Email* (ex: adresse@mail.fr)'
+                        autoComplete='email'
                         {...register('email', { required: 'Veuillez entrer votre email', pattern: { value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/, message: 'Veuillez entrer un email valide' }, disabled: !isEditable })}
                     />
                     <FormError error={errors.email} />
@@ -185,6 +190,7 @@ export const AccountPage = () => {
                         name='address'
                         id='address'
                         placeholder='Adresse'
+                        autoComplete='street-address'
                         {...register('address', { disabled: !isEditable })}
                     />
                     <FormError error={errors.address} />
@@ -196,6 +202,7 @@ export const AccountPage = () => {
                         name='postalCode'
                         id='postal-code'
                         placeholder='Code postal (ex: 75000)'
+                        autoComplete='postal-code'
                         {...register('postalCode', { pattern: { value: /^[0-9]{5}$/, message: 'Veuillez entrer un code postal valide' }, disabled: !isEditable })}
                     />
                     <FormError error={errors.postalCode} />
@@ -207,6 +214,7 @@ export const AccountPage = () => {
                         name='city'
                         id='city'
                         placeholder='Ville'
+                        autoComplete='address-level2'
                         {...register('city', { pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer une ville valide' }, disabled: !isEditable })}
                     />
                     <FormError error={errors.city} />

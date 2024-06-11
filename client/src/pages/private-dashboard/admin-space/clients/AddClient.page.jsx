@@ -73,6 +73,7 @@ export const AddClient = () => {
                         name='lastName'
                         id='last-name'
                         placeholder='Nom*'
+                        autoComplete='off'
                         {...register('lastName', { required: 'Veuillez entrer le nom du client', pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer un nom valide' } })}
                     />
                     <FormError error={errors.lastName} />
@@ -84,6 +85,7 @@ export const AddClient = () => {
                         name='firstName'
                         id='first-name'
                         placeholder='Prénom*'
+                        autoComplete='off'
                         {...register('firstName', { required: 'Veuillez entrer le prénom du client', pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer un prénom valide' } })}
                     />
                     <FormError error={errors.firstName} />
@@ -95,6 +97,7 @@ export const AddClient = () => {
                         name='phone'
                         id='phone'
                         placeholder='Numéro de téléphone (ex: 0601020304)'
+                        autoComplete='off'
                         {...register('phone', { pattern: { value: /^[0-9]{10}$/, message: 'Veuillez entrer un numéro de téléphone valide' } })}
                     />
                     <FormError error={errors.phone} />
@@ -106,6 +109,7 @@ export const AddClient = () => {
                         name='birthDate'
                         id='birth-date'
                         placeholder='Date de naissance'
+                        autoComplete='off'
                         {...register('birthDate', { validate: value => value ? new Date(value) <= new Date() || 'Veuillez entrer une date de naissance valide' : true })}
                     />
                     <FormError error={errors.birthDate} />
@@ -117,6 +121,7 @@ export const AddClient = () => {
                         name='email'
                         id='email'
                         placeholder='Email* (ex: adresse@mail.fr)'
+                        autoComplete='off'
                         {...register('email', { pattern: { value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/, message: 'Veuillez entrer un email valide' } })}
                     />
                     <FormError error={errors.email} />
@@ -128,6 +133,7 @@ export const AddClient = () => {
                         name='address'
                         id='address'
                         placeholder='Adresse'
+                        autoComplete='off'
                         {...register('address')}
                     />
                     <FormError error={errors.address} />
@@ -139,6 +145,7 @@ export const AddClient = () => {
                         name='postalCode'
                         id='postal-code'
                         placeholder='Code postal (ex: 75000)'
+                        autoComplete='off'
                         {...register('postalCode', { pattern: { value: /^[0-9]{5}$/, message: 'Veuillez entrer un code postal valide' } })}
                     />
                     <FormError error={errors.postalCode} />
@@ -150,6 +157,7 @@ export const AddClient = () => {
                         name='city'
                         id='city'
                         placeholder='Ville'
+                        autoComplete='off'
                         {...register('city', { pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer une ville valide' } })}
                     />
                     <FormError error={errors.city} />
