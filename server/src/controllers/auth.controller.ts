@@ -161,7 +161,6 @@ export default class AuthController extends BaseController {
     /**
      * Checks if the user is an admin
      * 
-     * @async
      * @method isAdmin
      * @memberof AuthController
      * @param {Request} req - The request object
@@ -176,32 +175,6 @@ export default class AuthController extends BaseController {
             return next()
         }
 
-        return res.status(401).json({ error: 'Not authorized' })
-    }
-
-    /**
-     * Checks if the user is authorized to access a ressource
-     * 
-     * @async
-     * @method isAuthorized
-     * @memberof AuthController
-     * @param {Request} req - The request object
-     * @param {Response} res - The response object
-     * @param {NextFunction} next - The next function
-     * @returns {void | Response<any, Record<string, any>>} A response object with a status code and a message or the next function if the user is authorized
-     */
-    public isAuthorized = (req: Request, res: Response, next: NextFunction): void | Response<any, Record<string, any>> => {
-        // Get the user from the request
-        const user: User = req.user as User
-
-        // Get the id of the ressource owner
-        const ressourceId: number = parseInt(req.params.id)
-
-        // Compare the ids
-        if (user.client?.id === ressourceId || user.role === 'admin') {
-            return next()
-        }
-        
         return res.status(401).json({ error: 'Not authorized' })
     }
 
