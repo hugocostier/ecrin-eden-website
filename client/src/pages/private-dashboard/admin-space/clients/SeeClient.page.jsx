@@ -5,7 +5,9 @@ import StyledComponents from 'styled-components'
 import { FilterAppointments } from '../../../../components/private-dashboard/appointments/FilterAppointments'
 import { fetchAppointments } from '../../../../data'
 import { fetchClient } from '../../../../data/admin/clients.fetch'
-import { filterAppointments } from '../../../../utils/filterAppointments.util'
+import { filterAppointments } from '../../../../utils/appointment/filterAppointments.util'
+import { getStatusName } from '../../../../utils/appointment/getStatusName.util'
+import { getBackgroundColor } from '../../../../utils/calendar/renderCalendar.util'
 
 export const SeeClient = () => {
     const { id: clientId } = useParams()
@@ -84,7 +86,7 @@ export const SeeClient = () => {
                                     <tr key={appointment.id}>
                                         <td>{appointment.date}</td>
                                         <td>{appointment.time.slice(0, 5)}</td>
-                                        <td>{appointment.status}</td>
+                                        <td style={getBackgroundColor(appointment.status)}>{getStatusName(appointment.status)}</td>
                                         <td>{appointment.is_away ? 'A domicile' : 'Au salon'}</td>
                                         <td>{appointment.service.name}</td>
                                         <td>{appointment.service.duration}</td>
