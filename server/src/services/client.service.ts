@@ -152,7 +152,7 @@ export class ClientService extends BaseService {
                     console.error('Error getting client by name: ', error)
                     throw new CustomAPIError('Error getting client by name', 500)
                 }) 
-    
+            
             if (!client) {
                 throw new CustomAPIError(`No client found with name ${first_name} ${last_name}`, 404)
             }
@@ -228,6 +228,35 @@ export class ClientService extends BaseService {
             }
     
             return personalInfo
+        } catch (error: any) {
+            throw error 
+        }        
+    }
+
+    /**
+     * Check if a client exists by name
+     * 
+     * @async
+     * @method isExistingClient
+     * @memberof ClientService
+     * @param {string} first_name - The first name of the client
+     * @param {string} last_name - The last name of the client
+     * @throws {CustomAPIError} If there is an error checking if the client exists
+     * @returns {Promise<boolean>} A promise that resolves with a boolean indicating if the client exists
+     */
+    public async isExistingClient(first_name: string, last_name: string): Promise<boolean> {
+        if (!this._clientRepository) {
+            await this.extendClientRepository()
+        }
+
+        try {
+            const client: Client | null = await this._clientRepository.findByName(first_name, last_name)
+                .catch((error: any) => {
+                    console.error('Error getting client by name: ', error)
+                    throw new CustomAPIError('Error getting client by name', 500)
+                }) 
+    
+            return !!client
         } catch (error: any) {
             throw error 
         }        
