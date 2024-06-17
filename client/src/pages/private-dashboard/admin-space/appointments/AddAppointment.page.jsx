@@ -7,7 +7,7 @@ import { FormError } from '../../../../components/FormError'
 import { fetchClients } from '../../../../data/admin/clients.fetch'
 import { fetchServices } from '../../../../data/admin/services.fetch'
 import { addAppointment } from '../../../../data/appointments/appointments.fetch'
-import { checkAvailability } from '../../../../utils/appointment/appointment.util'
+import { checkAvailability } from '../../../../utils/appointment/appointmentAvailability.util'
 import { capitalize } from '../../../../utils/capitalize.util'
 
 export const AddAppointment = () => {
@@ -62,8 +62,8 @@ export const AddAppointment = () => {
 
     const sendForm = async (data) => {
         const input = {
-            clientID: data.client,
-            serviceID: data.service,
+            client: data.client,
+            service: data.service,
             date: data.date,
             time: data.time,
             status: data.status,
@@ -245,11 +245,16 @@ const StyledForm = StyledComponents.form`
             padding: 0.5rem;
             width: 100%;
         }
+
+        select, input[type='date'] {
+            cursor: pointer;
+        }
     }
 
     button {
         margin-top: 1rem;
         padding: 0.5rem;
+        cursor: pointer;
     }
 
     @media screen and (min-width: 640px) {

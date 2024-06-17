@@ -6,7 +6,7 @@ import StyledComponents from 'styled-components'
 import { FormError } from '../../../../components/FormError'
 import { fetchServices } from '../../../../data/admin/services.fetch'
 import { fetchAppointment, updateAppointment } from '../../../../data/appointments/appointments.fetch'
-import { checkAvailability } from '../../../../utils/appointment/appointment.util'
+import { checkAvailability } from '../../../../utils/appointment/appointmentAvailability.util'
 import { capitalize } from '../../../../utils/capitalize.util'
 
 export const UpdateAppointment = () => {
@@ -84,8 +84,8 @@ export const UpdateAppointment = () => {
 
     const sendForm = async (data) => {
         const input = {
-            clientID: appointment.client.id,
-            serviceID: data.service,
+            client: appointment.client.id,
+            service: data.service,
             date: data.date,
             time: data.time,
             status: data.status,
@@ -272,6 +272,10 @@ const StyledForm = StyledComponents.form`
             width: 100%;
         }
 
+        select, input[type='date'] {
+            cursor: pointer;
+        }
+
         textarea { 
             resize: none; 
         }
@@ -280,6 +284,7 @@ const StyledForm = StyledComponents.form`
     button {
         margin-top: 1rem;
         padding: 0.5rem;
+        cursor: pointer;
     }
 
     #button-container {

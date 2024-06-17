@@ -6,7 +6,7 @@ import StyledComponents from 'styled-components'
 import { FormError } from '../../../../components/FormError'
 import { fetchServices } from '../../../../data/admin/services.fetch'
 import { fetchAppointment, updateAppointment } from '../../../../data/appointments/appointments.fetch'
-import { checkAvailability } from '../../../../utils/appointment/appointment.util'
+import { checkAvailability } from '../../../../utils/appointment/appointmentAvailability.util'
 import { capitalize } from '../../../../utils/capitalize.util'
 
 export const UpdateAppointment = () => {
@@ -180,7 +180,8 @@ export const UpdateAppointment = () => {
                     <button
                         type='button'
                         id='edit'
-                        onClick={() => setIsEditable(true)}
+                        onClick={() => appointment.status !== 'cancelled' ? setIsEditable(true) : null}
+                        style={appointment.status === 'cancelled' ? { cursor: 'not-allowed' } : null}
                     >
                         Modifier
                     </button>
@@ -227,6 +228,10 @@ const StyledForm = StyledComponents.form`
             width: 100%;
         }
 
+        select, input[type='date'] {
+            cursor: pointer; 
+        }
+
         textarea { 
             resize: none; 
         }
@@ -235,6 +240,7 @@ const StyledForm = StyledComponents.form`
     button {
         margin-top: 1rem;
         padding: 0.5rem;
+        cursor: pointer;
     }
 
     #button-container {
