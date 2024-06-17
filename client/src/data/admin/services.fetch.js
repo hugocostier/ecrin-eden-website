@@ -1,5 +1,34 @@
 const API_URL = `${import.meta.env.VITE_APP_API_URL}/services`
 
+export const fetchService = (id) => {
+    return new Promise((resolve, reject) => {
+        fetch(`${API_URL}/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+        })
+            .then(async (response) => {
+                if (!response.ok) {
+                    throw new Error('HTTP Error ! Status: ' + response.status)
+                }
+
+                return response.json()
+            })
+            .then((res) => {
+                if (!res.data) {
+                    reject({ message: 'Service not found' })
+                }
+
+                resolve(res.data)
+            })
+            .catch((err) => {
+                reject(err)
+            })
+    })
+}
+
 export const fetchServices = () => {
     return new Promise((resolve, reject) => {
         fetch(API_URL, {
