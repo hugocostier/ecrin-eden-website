@@ -4,6 +4,7 @@ import image from '../../../assets/images/dashboard.jpg'
 import { Calendar } from '../../../components/private-dashboard/calendar/Calendar'
 import { countAllAppointments } from '../../../data'
 import { useClientInfo } from '../../../hooks/useClientInfo.hook'
+import { formatDate } from '../../../utils/formatDate'
 
 export const AdminDashboard = () => {
     const client = useClientInfo()
@@ -11,7 +12,7 @@ export const AdminDashboard = () => {
 
     useEffect(() => {
         if (client.id) {
-            countAllAppointments(new Date().toISOString().split('T')[0])
+            countAllAppointments(formatDate(new Date().toLocaleDateString('fr-FR')))
                 .then(count => {
                     setCount(count.data)
                 })
