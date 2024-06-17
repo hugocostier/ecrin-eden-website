@@ -1,7 +1,7 @@
 import { lazy } from 'react'
 
 export const lazyLoad = (path, namedExport) => {
-    return lazy(() => {
+    return lazy(async () => {
         const promise = import(/* @vite-ignore */ path)
 
         if (namedExport === null) {
