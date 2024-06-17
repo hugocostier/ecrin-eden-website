@@ -162,9 +162,6 @@ body,
     display: flex;
     flex-direction: column;
     z-index: auto;
-
-    /* justify-content: center;
-    align-items: center; */
 }
 
 p {
