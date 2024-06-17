@@ -1,5 +1,6 @@
 import { Between, MoreThanOrEqual } from 'typeorm'
 import Appointment from '../entities/Appointment.entity.js'
+import { formatDate } from '../utils/formatDate.js'
 import BaseRepository from './base.repository.js'
 
 /**
@@ -154,7 +155,7 @@ export class AppointmentRepository extends BaseRepository {
                         'service.name',
                         'service.duration'
                     ])
-                    .where('appointment.date >= :date', { date: new Date().toISOString().split('T')[0] })
+                    .where('appointment.date >= :date', { date: formatDate(new Date().toLocaleDateString('fr-FR')) })
                     .getMany()
             },
 
@@ -183,7 +184,7 @@ export class AppointmentRepository extends BaseRepository {
                     'service.name',
                     'service.duration'
                 ])
-                .where('appointment.date < :date', { date: new Date().toISOString().split('T')[0] })
+                .where('appointment.date < :date', { date: formatDate(new Date().toLocaleDateString('fr-FR')) })
                 .getMany()
             },
 
@@ -252,7 +253,7 @@ export class AppointmentRepository extends BaseRepository {
                         'service.duration'
                     ])
                     .where('client.id = :id', { id: clientId })
-                    .andWhere('appointment.date >= :date', { date: new Date().toISOString().split('T')[0] }) 
+                    .andWhere('appointment.date >= :date', { date: formatDate(new Date().toLocaleDateString('fr-FR')) }) 
                     .getMany()
             },
 
@@ -280,7 +281,7 @@ export class AppointmentRepository extends BaseRepository {
                         'service.duration'
                     ])
                     .where('client.id = :id', { id: clientId })
-                    .andWhere('appointment.date < :date', { date: new Date().toISOString().split('T')[0] })
+                    .andWhere('appointment.date < :date', { date: formatDate(new Date().toLocaleDateString('fr-FR')) })
                     .getMany()
             },
 
@@ -336,7 +337,7 @@ export class AppointmentRepository extends BaseRepository {
              * @returns {Promise<Appointment[]>} An array of upcoming appointments for the given service.
              */
             async findUpcomingByService(serviceId: number): Promise<Appointment[]> {
-                return await this.find({ where: { service: { id: serviceId }, date: MoreThanOrEqual(new Date().toISOString().split('T')[0]) } })
+                return await this.find({ where: { service: { id: serviceId }, date: MoreThanOrEqual(formatDate(new Date().toLocaleDateString('fr-FR'))) } })
             },
 
             /**
