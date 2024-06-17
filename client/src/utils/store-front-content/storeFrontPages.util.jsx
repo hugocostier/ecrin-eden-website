@@ -32,7 +32,7 @@ export const storeFrontPages = [
     {
         id: 5,
         displayedName: 'FFMBE',
-        name: 'certification',
+        name: 'certifications',
         link: '/certification',
         loader: certificationLoader
     },
