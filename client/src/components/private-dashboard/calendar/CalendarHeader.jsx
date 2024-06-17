@@ -88,6 +88,7 @@ const StyledCalendarHeader = StyledComponents.div`
                 border-radius: 9px;
                 text-align: center;
                 margin: 0;
+                cursor: pointer;
 
                 &.active {
                     background-color: var(--grey-500);
@@ -137,11 +138,13 @@ const StyledCalendarHeader = StyledComponents.div`
             p {
                 border-radius: 10px; 
                 padding: 0 10px;
+                cursor: pointer;
             }
 
             .direction-arrow {
                 border-radius: 50%;
                 width: 40px;
+                cursor: pointer;
             }
         }
     }

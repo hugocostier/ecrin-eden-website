@@ -223,6 +223,10 @@ const PreferencesForm = StyledComponents.form`
             width: 100%;
         }
 
+        select {
+            cursor: pointer; 
+        }
+
         textarea {
             resize: none;
         }
@@ -230,6 +234,7 @@ const PreferencesForm = StyledComponents.form`
 
     button {
         padding: 0.5rem;
+        cursor: pointer; 
     }
 
     #button-container {

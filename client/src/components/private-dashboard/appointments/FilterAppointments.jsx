@@ -100,6 +100,7 @@ const FilterContainer = StyledComponents.section`
           
         select {
             margin-left: 1rem;
+            cursor: pointer;
         }
     }
 
@@ -113,6 +114,7 @@ const FilterContainer = StyledComponents.section`
             border-radius: 9px;
             text-align: center;
             margin: 0;
+            cursor: pointer;
 
             &.active {
                 background-color: var(--grey-500);

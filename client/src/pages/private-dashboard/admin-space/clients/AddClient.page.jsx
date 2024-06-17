@@ -283,6 +283,10 @@ const StyledForm = StyledComponents.form`
         &:not(#email, [type='file']) {
             text-transform: capitalize;
         }
+
+        &[type='date'] {
+            cursor: pointer;
+        }
     }
 
     textarea {
@@ -293,6 +297,7 @@ const StyledForm = StyledComponents.form`
 
     button {
         padding: 0.5rem;
+        cursor: pointer;
     }
 
     #button-container {

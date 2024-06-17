@@ -134,6 +134,7 @@ const ClientsTable = StyledComponents.table`
     border-collapse: collapse;
     border-radius: 10px; 
     margin-top: 20px;
+    user-select: none;
 
     thead {
         background-color: #f4f4f4;

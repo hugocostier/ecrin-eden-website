@@ -170,6 +170,7 @@ const ContentForm = StyledComponents.form`
 
     button {
         padding: 0.5rem;
+        cursor: pointer; 
         
         &#edit {
             grid-column: 1 / 3;
