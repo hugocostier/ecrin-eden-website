@@ -89,41 +89,31 @@
       {
         "title": "Massage Essentiel®",
         "time": "60' ou 75'",
-        "text": [
-          "Soin complet, de l'ensemble du corps, des pieds à la tête ; grand relaxant, il est adapté à vos besoins et vos envies. C'est vous qui le personnalisez."
-        ],
+        "text": "Soin complet, de l'ensemble du corps, des pieds à la tête ; grand relaxant, il est adapté à vos besoins et vos envies. C'est vous qui le personnalisez.",
         "image": "/src/assets/images/services/image1.jpeg"
       },
       {
         "title": "Massage Essentiel®",
         "time": "90'",
-        "text": [
-          "Est fait pour les amoureux du modelage qui veulent que ça ne s'arrête jamais. Un soin personnalisé pour prendre le temps de vous évader."
-        ],
+        "text": "Est fait pour les amoureux du modelage qui veulent que ça ne s'arrête jamais. Un soin personnalisé pour prendre le temps de vous évader.",
         "image": "/src/assets/images/services/image2.jpeg"
       },
       {
         "title": "Le Sur Mesure",
         "time": "30'",
-        "text": [
-          "Un petit moment de douceur à votre image. Idéal pour découvrir le monde du massage bien-être. Le Sur Mesure 30' vous permet de choisir 2 zones à masser, un focus sur ce que vous préférez."
-        ],
+        "text": "Un petit moment de douceur à votre image. Idéal pour découvrir le monde du massage bien-être. Le Sur Mesure 30' vous permet de choisir 2 zones à masser, un focus sur ce que vous préférez.",
         "image": "/src/assets/images/services/image3.jpeg"
       },
       {
         "title": "Le Massage Circulatoire",
         "time": "30'",
-        "text": [
-          "Il vise à stimuler la circulation sanguine et lymphatique dans le corps. En favorisant le flux sanguin et lymphatique, il contribue à l'élimination des toxines, à l'oxygénation des tissus, à la réduction de la rétention d'eau et à l'amélioration du système immunitaire. De plus, il peut aider à soulager les tensions musculaires, à réduire le stress et à favoriser une sensation générale de bien-être et de relaxation."
-        ],
+        "text": "Il vise à stimuler la circulation sanguine et lymphatique dans le corps. En favorisant le flux sanguin et lymphatique, il contribue à l'élimination des toxines, à l'oxygénation des tissus, à la réduction de la rétention d'eau et à l'amélioration du système immunitaire. De plus, il peut aider à soulager les tensions musculaires, à réduire le stress et à favoriser une sensation générale de bien-être et de relaxation.",
         "image": "/src/assets/images/services/image4.jpeg"
       },
       {
         "title": "Massage Essentiel®",
         "time": "Femme enceinte (60')",
-        "text": [
-          "Le massage prénatal permet d'aborder en toute sérénité les métamorphoses physiques et psychiques qui accompagnent la grossesse. Enveloppant et en position latérale, il permet à la future maman de se laisser bercer par la fluidité des mouvements, donnant au corps une sensation de légèreté et d'unité. La grossesse s'accompagne souvent de tensions musculaires, de sensations de jambes lourdes, de problèmes de sommeil, de nervosité, de stress… qui peuvent perturber cette période spéciale. Cette parenthèse bien être sera alors un précieux allié pour retrouver sérénité et vous offrir un doux moment de détente et de totale harmonie avec votre bébé."
-        ],
+        "text": "Le massage prénatal permet d'aborder en toute sérénité les métamorphoses physiques et psychiques qui accompagnent la grossesse. Enveloppant et en position latérale, il permet à la future maman de se laisser bercer par la fluidité des mouvements, donnant au corps une sensation de légèreté et d'unité. La grossesse s'accompagne souvent de tensions musculaires, de sensations de jambes lourdes, de problèmes de sommeil, de nervosité, de stress… qui peuvent perturber cette période spéciale. Cette parenthèse bien être sera alors un précieux allié pour retrouver sérénité et vous offrir un doux moment de détente et de totale harmonie avec votre bébé.",
         "image": "/src/assets/images/services/image5.jpeg"
       }
     ]
