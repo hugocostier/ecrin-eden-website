@@ -75,15 +75,17 @@ export const renderMonth = (date, appointments, userRole, setSearchParams) => {
                             }}
                         >
                             <div className={`day-number ${currentDay === today.getDate() && date.month === today.getMonth() && date.year === today.getFullYear() ? 'today' : ''}`}>{currentDay}</div>
-                            {appointmentsForDay.slice(0, 1).map((appointment, index) => (
-                                <div
-                                    className='appointment-info'
-                                    key={index}
-                                    style={getBackgroundColor(appointment.status)}
-                                >
-                                    {getAppointmentLink(appointment, userRole)}
-                                </div>
-                            ))}
+                            {appointmentsForDay.slice(0, 1).map((appointment, index) => {
+                                if (appointment.status !== 'cancelled') return (
+                                    <div
+                                        className='appointment-info'
+                                        key={index}
+                                        style={getBackgroundColor(appointment.status)}
+                                    >
+                                        {getAppointmentLink(appointment, userRole)}
+                                    </div>
+                                )
+                            })}
                             <div className='more-appointments'>{appointmentsForDay.length - 1} de plus...</div>
                         </td>
                     )
@@ -101,15 +103,17 @@ export const renderMonth = (date, appointments, userRole, setSearchParams) => {
                             }}
                         >
                             <div className={`day-number ${currentDay === today.getDate() && date.month === today.getMonth() && date.year === today.getFullYear() ? 'today' : ''}`}>{currentDay}</div>
-                            {appointmentsForDay.map((appointment, index) => (
-                                <div
-                                    className='appointment-info'
-                                    key={index}
-                                    style={getBackgroundColor(appointment.status)}
-                                >
-                                    {getAppointmentLink(appointment, userRole)}
-                                </div>
-                            ))}
+                            {appointmentsForDay.map((appointment, index) => {
+                                if (appointment.status !== 'cancelled') return (
+                                    <div
+                                        className='appointment-info'
+                                        key={index}
+                                        style={getBackgroundColor(appointment.status)}
+                                    >
+                                        {getAppointmentLink(appointment, userRole)}
+                                    </div>
+                                )
+                            })}
                         </td>
                     )
                 }
@@ -175,15 +179,17 @@ export const renderWeek = (date, appointments, userRole, setSearchParams) => {
                         <div className={`day-number ${dayOfWeek === today.getDate() && date.month === today.getMonth() && date.year === today.getFullYear() ? 'today' : ''}`}>
                             {dayOfWeek}
                         </div>
-                        {appointmentsForDay.map((appointment, index) => (
-                            <div
-                                className='appointment-info'
-                                key={index}
-                                style={getBackgroundColor(appointment.status)}
-                            >
-                                {getAppointmentLink(appointment, userRole)}
-                            </div>
-                        ))}
+                        {appointmentsForDay.map((appointment, index) => {
+                            if (appointment.status !== 'cancelled') return (
+                                <div
+                                    className='appointment-info'
+                                    key={index}
+                                    style={getBackgroundColor(appointment.status)}
+                                >
+                                    {getAppointmentLink(appointment, userRole)}
+                                </div>
+                            )
+                        })}
                     </>
                 )}
             </td>
@@ -222,16 +228,18 @@ export const renderDay = (date, appointments, userRole) => {
             <tr key={i} className='day-view'>
                 <td className='day-time'>{hour}:00</td>
                 <td className='appointment-info'>
-                    {appointmentsForHour.map((appointment, index) => (
-                        <Link
-                            to={userRole ? `/admin/appointments/${appointment.id}` : `/user/appointments/${appointment.id}`}
-                            key={index}
-                            style={getBackgroundColor(appointment.status)}
-                            className='appointment-link'
-                        >
-                            {appointment.time.slice(0, 5)} - {appointment.service?.name} - {getStatusName(appointment.status)}
-                        </Link>
-                    ))}
+                    {appointmentsForHour.map((appointment, index) => {
+                        if (appointment.status !== 'cancelled') return (
+                            <Link
+                                to={userRole ? `/admin/appointments/${appointment.id}` : `/user/appointments/${appointment.id}`}
+                                key={index}
+                                style={getBackgroundColor(appointment.status)}
+                                className='appointment-link'
+                            >
+                                {appointment.time.slice(0, 5)} - {appointment.service?.name} - {getStatusName(appointment.status)}
+                            </Link>
+                        )
+                    })}
                 </td>
             </tr>
         )
