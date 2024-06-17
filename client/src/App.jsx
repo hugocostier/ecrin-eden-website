@@ -18,7 +18,15 @@ const PricesPage = lazyLoad('../../src/pages/store-front/Prices.page', 'PricesPa
 const GiftCardsPage = lazyLoad('../../src/pages/store-front/GiftCards.page', 'GiftCardsPage')
 const CertificationPage = lazyLoad('../../src/pages/store-front/Certification.page', 'CertificationPage')
 const ContactPage = lazyLoad('../../src/pages/store-front/Contact.page', 'ContactPage')
+
+// APPOINTMENT RESERVATION PAGES
 const AppointmentPage = lazyLoad('../../src/pages/store-front/Appointment.page', 'AppointmentPage')
+import { ClientInformationPage } from './pages/store-front/appointment-reservation/ClientInfo.page'
+import { AppointmentConfirmationPage } from './pages/store-front/appointment-reservation/Confirmation.page'
+import { DateSelectionPage } from './pages/store-front/appointment-reservation/DateSelection.page'
+import { ServiceSelectionPage } from './pages/store-front/appointment-reservation/ServiceSelection.page'
+import { ThankYouPage } from './pages/store-front/appointment-reservation/ThankYou.page'
+import { TimeSelectionPage } from './pages/store-front/appointment-reservation/TimeSelection.page'
 
 // AUTHENTICATION PAGES
 const LoginRegisterPage = lazyLoad('../../src/pages/Login.page', 'LoginRegisterPage')
@@ -96,11 +104,62 @@ const Router = createBrowserRouter(
                         loader={contactLoader}
                     />
 
-                    <Route
-                        path='appointment'
-                        element={<AppointmentPage />}
-                    // loader={contactLoader}
-                    />
+                    <Route>
+                        <Route
+                            index={true}
+                            path='appointment/service'
+                            element={
+                                <AppointmentPage>
+                                    <ServiceSelectionPage />
+                                </AppointmentPage>
+                            }
+                        />
+
+                        <Route
+                            path='appointment/date'
+                            element={
+                                <AppointmentPage>
+                                    <DateSelectionPage />
+                                </AppointmentPage>
+                            }
+                        />
+
+                        <Route
+                            path='appointment/time'
+                            element={
+                                <AppointmentPage>
+                                    <TimeSelectionPage />
+                                </AppointmentPage>
+                            }
+                        />
+
+                        <Route
+                            path='appointment/info'
+                            element={
+                                <AppointmentPage>
+                                    <ClientInformationPage />
+                                </AppointmentPage>
+                            }
+                        />
+
+                        <Route
+                            path='appointment/confirm'
+                            element={
+                                <AppointmentPage>
+                                    <AppointmentConfirmationPage />
+                                </AppointmentPage>
+                            }
+                        />
+
+                        <Route
+                            path='appointment/thank-you'
+                            element={
+                                <AppointmentPage>
+                                    <ThankYouPage />
+                                </AppointmentPage>
+                            }
+                        />
+                    </Route>
                 </Route>
 
                 <Route element={<PasswordRecoveryProvider />}>
