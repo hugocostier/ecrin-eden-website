@@ -154,7 +154,7 @@ export const UpdateClient = () => {
         <ClientRecord>
             <h2>Fiche client</h2>
 
-            <StyledForm onSubmit={handleSubmit(sendForm)}>
+            <StyledForm onSubmit={handleSubmit(sendForm)} novalidate>
                 <legend className='form-legend'>Informations personnelles</legend>
                 <div className='input-container' name='lastName'>
                     <input

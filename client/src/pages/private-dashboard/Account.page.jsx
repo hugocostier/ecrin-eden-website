@@ -122,7 +122,7 @@ export const AccountPage = () => {
         <Account>
             <h2>Mon compte</h2>
 
-            <AccountForm onSubmit={handleSubmit(sendForm)}>
+            <AccountForm onSubmit={handleSubmit(sendForm)} noValidate>
                 <legend className='form-legend'>Informations personnelles</legend>
                 <div className='input-container' name='lastName'>
                     <input
@@ -342,8 +342,12 @@ const AccountForm = StyledComponents.form`
         padding: 0.5rem;
         width: 100%;
 
-        &:not(#email, [type='file']) {
+        &:not(#email, #address, [type='file']) {
             text-transform: capitalize;
+        }
+
+        &[type='date'] {
+            cursor: pointer; 
         }
     }
 
@@ -355,6 +359,7 @@ const AccountForm = StyledComponents.form`
 
     button {
         padding: 0.5rem;
+        cursor: pointer; 
     }
 
     #button-container {
