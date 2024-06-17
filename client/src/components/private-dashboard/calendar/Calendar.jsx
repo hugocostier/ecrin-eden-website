@@ -1,6 +1,7 @@
 import { useSearchParams } from 'react-router-dom'
 import StyledComponents from 'styled-components'
 import { calculateWeekBounds } from '../../../utils/appointment/calculateWeekBounds.util'
+import { formatDate } from '../../../utils/formatDate'
 import { CalendarBody } from './CalendarBody'
 import { CalendarHeader } from './CalendarHeader'
 
@@ -9,10 +10,10 @@ export const Calendar = () => {
 
     const [searchParams, setSearchParams] = useSearchParams({
         view: 'month',
-        date: new Date().toISOString().split('T')[0],
+        date: formatDate(new Date().toLocaleDateString('fr-FR')),
         day: new Date().getDate(),
-        week_first_day: week.firstDay?.toISOString().split('T')[0],
-        week_last_day: week.lastDay?.toISOString().split('T')[0],
+        week_first_day: formatDate(week.firstDay?.toLocaleDateString('fr-FR')),
+        week_last_day: formatDate(week.lastDay?.toLocaleDateString('fr-FR')),
         month: new Date().getMonth(),
         year: new Date().getFullYear()
     })
@@ -70,8 +71,8 @@ export const Calendar = () => {
             prev.set('month', newDate.getMonth())
             prev.set('year', newDate.getFullYear())
             prev.set('day', newDate.getDate())
-            prev.set('week_first_day', week.firstDay?.toISOString().split('T')[0])
-            prev.set('week_last_day', week.lastDay?.toISOString().split('T')[0])
+            prev.set('week_first_day', formatDate(week.firstDay?.toLocaleDateString('fr-FR')))
+            prev.set('week_last_day', formatDate(week.lastDay?.toLocaleDateString('fr-FR')))
             return prev
         }, { replace: true })
     }
@@ -109,8 +110,8 @@ export const Calendar = () => {
 
         setSearchParams(prev => {
             prev.set('day', newDate.getDate())
-            prev.set('week_first_day', week.firstDay?.toISOString().split('T')[0])
-            prev.set('week_last_day', week.lastDay?.toISOString().split('T')[0])
+            prev.set('week_first_day', formatDate(week.firstDay?.toLocaleDateString('fr-FR')))
+            prev.set('week_last_day', formatDate(week.lastDay?.toLocaleDateString('fr-FR')))
             prev.set('month', newDate.getMonth())
             prev.set('year', newDate.getFullYear())
             return prev
@@ -146,8 +147,8 @@ export const Calendar = () => {
 
         setSearchParams(prev => {
             prev.set('day', newDay.getDate())
-            prev.set('week_first_day', week.firstDay?.toISOString().split('T')[0])
-            prev.set('week_last_day', week.lastDay?.toISOString().split('T')[0])
+            prev.set('week_first_day', formatDate(week.firstDay?.toLocaleDateString('fr-FR')))
+            prev.set('week_last_day', formatDate(week.lastDay?.toLocaleDateString('fr-FR')))
             prev.set('month', newDay.getMonth())
             prev.set('year', newDay.getFullYear())
             return prev

@@ -5,6 +5,7 @@ import { Calendar } from '../../../components/private-dashboard/calendar/Calenda
 import { countUserAppointments } from '../../../data'
 import { useClientInfo } from '../../../hooks/useClientInfo.hook'
 import { calculateWeekBounds } from '../../../utils/appointment/calculateWeekBounds.util'
+import { formatDate } from '../../../utils/formatDate'
 
 export const UserDashboard = () => {
     const client = useClientInfo()
@@ -13,10 +14,10 @@ export const UserDashboard = () => {
     useEffect(() => {
         if (client.id) {
             const weekBounds = calculateWeekBounds(new Date())
-            const firstDayOfWeek = weekBounds.firstDay.toISOString().split('T')[0]
-            const lastDayOfWeek = weekBounds.lastDay.toISOString().split('T')[0]
+            const firstDayOfWeek = formatDate(weekBounds.firstDay.toLocaleDateString('fr-FR'))
+            const lastDayOfWeek = formatDate(weekBounds.lastDay.toLocaleDateString('fr-FR'))
 
-            countUserAppointments({ clientId: client.id, firstDayOfWeek, lastDayOfWeek, today: new Date().toISOString().split('T')[0] })
+            countUserAppointments({ clientId: client.id, firstDayOfWeek, lastDayOfWeek, today: formatDate(new Date().toLocaleDateString('fr-FR')) })
                 .then(count => {
                     setCount(count.data)
                 })
