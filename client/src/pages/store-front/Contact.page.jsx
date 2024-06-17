@@ -14,10 +14,19 @@ export const ContactPage = () => {
     const { contactContent } = useLoaderData()
     const loading = useLoader(contactContent)
 
-    const { register, handleSubmit, reset, formState: { errors } } = useForm()
-    const recaptcha = useRef()
+    const { register, handleSubmit, reset, setValue, setError, clearErrors, formState: { errors } } = useForm({
+        defaultValues: {
+            captcha: false
+        }
+    })
+    const recaptcha = useRef(null)
 
     const sendContactForm = async (data) => {
+        if (!data.captcha) {
+            setError('captcha', { type: 'manual', message: 'Veuillez cocher la case \'Je ne suis pas un robot\'' })
+            return
+        }
+
         const captcha = recaptcha.current.getValue()
 
         if (!captcha) {
@@ -89,7 +98,7 @@ export const ContactPage = () => {
                                     <h3>Salon Écrin d&apos;Eden</h3>
                                 </div>
 
-                                <form onSubmit={handleSubmit(sendContactForm)}>
+                                <form onSubmit={handleSubmit(sendContactForm)} noValidate>
                                     <legend>Écrivez-nous</legend>
 
                                     <input
@@ -97,7 +106,7 @@ export const ContactPage = () => {
                                         name='last-name'
                                         placeholder='Nom*'
                                         autoComplete='family-name'
-                                        {...register('lastName', { required: 'Veuillez saisir votre nom' })}
+                                        {...register('lastName', { required: 'Veuillez saisir votre nom', pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer un nom valide' } })}
                                     />
                                     <FormError error={errors.lastName} />
 
@@ -106,7 +115,7 @@ export const ContactPage = () => {
                                         name='first-name'
                                         placeholder='Prénom*'
                                         autoComplete='given-name'
-                                        {...register('firstName', { required: 'Veuillez saisir votre prénom' })}
+                                        {...register('firstName', { required: 'Veuillez saisir votre prénom', pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer un prénom valide' } })}
                                     />
                                     <FormError error={errors.firstName} />
 
@@ -115,7 +124,7 @@ export const ContactPage = () => {
                                         name='email'
                                         placeholder='Email*'
                                         autoComplete='email'
-                                        {...register('email', { required: 'Veuillez saisir votre email', pattern: { value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/, message: 'Email invalide' } })}
+                                        {...register('email', { required: 'Veuillez saisir votre email', pattern: { value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/, message: 'Veuillez entrer un email valide' } })}
                                     />
                                     <FormError error={errors.email} />
 
@@ -136,12 +145,27 @@ export const ContactPage = () => {
                                     ></textarea>
                                     <FormError error={errors.message} />
 
-                                    <input
+                                    <button
                                         type='submit'
-                                        value='Envoyer'
                                         className='contact-submit'
+                                    >
+                                        Envoyer
+                                    </button>
+
+                                    <ReCAPTCHA
+                                        className='recaptcha'
+                                        ref={recaptcha}
+                                        sitekey={import.meta.env.VITE_APP_SITE_KEY}
+                                        onChange={() => {
+                                            clearErrors('captcha')
+                                            setValue('captcha', true)
+                                        }}
+                                        onExpired={() => {
+                                            setError('captcha', { type: 'manual', message: 'Veuillez cocher la case \'Je ne suis pas un robot\'' })
+                                            setValue('captcha', false)
+                                        }}
                                     />
-                                    <ReCAPTCHA className='recaptcha' ref={recaptcha} sitekey={import.meta.env.VITE_APP_SITE_KEY} />
+                                    <FormError error={errors.captcha} id='error-recaptcha' />
                                 </form>
                             </ContactForm>
 
@@ -243,7 +267,7 @@ const ContactForm = StyledComponents.section`
             outline: none;
         }
 
-        input[type='submit'] {
+        .contact-submit {
             width: 100%;
             padding: 10px;
             background-color: var(--black);
@@ -253,7 +277,7 @@ const ContactForm = StyledComponents.section`
             cursor: pointer;
         }
 
-        input[type='submit']:hover {
+        .contact-submit:hover {
             background-color: var(--primary-500);
         }
 
@@ -261,6 +285,10 @@ const ContactForm = StyledComponents.section`
             display: flex;
             justify-content: center;
             margin-top: 20px;
+        }
+
+        #error-recaptcha {
+            justify-content: center;
         }
     }
 
