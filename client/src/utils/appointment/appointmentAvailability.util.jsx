@@ -65,10 +65,13 @@ const isTimeAvailable = (date, startTime, appointments, serviceDuration) => {
         // Calculate appointment end time
         const appointmentEnd = new Date(appointmentStart.getTime() + appointment.service.duration * 60000)
 
+        console.log('Appointment:', appointment)
         // Check if new appointment overlaps with existing appointment
-        if (
-            (newAppointmentStart >= appointmentStart && newAppointmentStart < appointmentEnd) ||
-            (newAppointmentEnd > appointmentStart && newAppointmentEnd <= appointmentEnd)
+        if (appointment.status !== 'cancelled' &&
+            (
+                (newAppointmentStart >= appointmentStart && newAppointmentStart < appointmentEnd) ||
+                (newAppointmentEnd > appointmentStart && newAppointmentEnd <= appointmentEnd)
+            )
         ) {
             return false
         }
