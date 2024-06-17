@@ -1,9 +1,11 @@
 import { Repository, UpdateResult } from 'typeorm'
 import { DeleteResult } from 'typeorm/browser'
 import Appointment from '../entities/Appointment.entity.js'
+import Client from '../entities/Client.entity.js'
 import { CustomAPIError } from '../errors/custom-errors.js'
 import { AppointmentRepository } from '../repositories/appointment.repository.js'
 import BaseService from './base.service.js'
+import { ClientService } from './client.service.js'
 
 /**
  * Service class for appointments.
@@ -15,6 +17,7 @@ import BaseService from './base.service.js'
  **/
 class AppointmentService extends BaseService {
     private _customRepository = new AppointmentRepository()
+    private _clientService = new ClientService()
     private _appointmentRepository!: Repository<Appointment> & {
         findAll(): Promise<Appointment[]>
         findById(id: number): Promise<Appointment | null>
@@ -309,7 +312,7 @@ class AppointmentService extends BaseService {
     }
 
     /**
-     * Adds an appointment.
+     * Adds an appointment and if the client does not exist, adds him as well.
      * 
      * @async
      * @method addAppointment
@@ -323,18 +326,43 @@ class AppointmentService extends BaseService {
             await this.extendServiceRepository()
         }
 
+        const clientData: Partial<Client> = appointmentData.client as Partial<Client>
+
         try {
-            await this.validateEntity(appointmentData, Appointment)
-            
-            if (!appointmentData.date ||  !appointmentData.service || !appointmentData.client) {
-                throw new CustomAPIError('Please provide the date, the service and the client', 400)
-            }
-            
-            return await this._appointmentRepository.save(appointmentData)
-                .catch((error: any) => {
-                    console.error('Error adding appointment: ', error)
-                    throw new CustomAPIError('Appointment could not be created', 500)
-                }) 
+            return await this._appointmentRepository.manager.transaction(async transactionalEntityManager => {
+                if (!clientData.id) {
+                    const clientExists: boolean = await this._clientService.isExistingClient(clientData.first_name as string, clientData.last_name as string)
+                    
+                    if (!clientExists) {
+                        await this.validateEntity(clientData, Client)
+
+                        const newClient: Client = await transactionalEntityManager.save(Client, clientData)
+                            .catch((error: any) => {
+                                console.error('Error adding client: ', error)
+                                throw new CustomAPIError('Client could not be created', 500)
+                            })
+
+                        clientData.id = newClient.id
+                    } else {
+                        const client: Client = await this._clientService.getClientByName(clientData.first_name as string, clientData.last_name as string)
+                        clientData.id = client.id
+                    }
+                    
+                    appointmentData.client = clientData as Client
+                }
+
+                await this.validateEntity(appointmentData, Appointment)
+                
+                if (!appointmentData.date ||  !appointmentData.service || !appointmentData.client) {
+                    throw new CustomAPIError('Please provide the date, the service and the client', 400)
+                }
+                
+                return await transactionalEntityManager.save(Appointment, appointmentData)
+                    .catch((error: any) => {
+                        console.error('Error adding appointment: ', error)
+                        throw new CustomAPIError('Appointment could not be created', 500)
+                    }) 
+            })
         } catch(error: any) {
             throw error 
         }
