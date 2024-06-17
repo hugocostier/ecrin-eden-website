@@ -113,9 +113,6 @@ export const UpdateClient = () => {
             success: 'Client modifié !',
             error: 'Erreur lors de la modification du client'
         }, { containerId: 'notification' })
-            .then(() => {
-                console.log('Client updated')
-            })
             .catch(error => {
                 console.error('Error updating client:', error)
             })
@@ -499,6 +496,10 @@ const StyledForm = StyledComponents.form`
         }
     }
 
+    select, input[type='date'] {
+        cursor: pointer;
+    }
+
     textarea {
         width: 100%;
         padding: 0.5rem;
@@ -507,6 +508,7 @@ const StyledForm = StyledComponents.form`
 
     button {
         padding: 0.5rem;
+        cursor: pointer;
     }
 
     #button-container {
