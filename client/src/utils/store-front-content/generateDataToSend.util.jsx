@@ -27,10 +27,6 @@ export const generateDataToSend = (pageId, data, content) => {
                     ...content.homeContent.reviews.map((review, index) => ({
                         'text': data[`review-${index}-text`] || review.text,
                         'author': data[`review-${index}-author`] || review.author,
-                    })),
-                    ...data['new-reviews'].map((newReview) => ({
-                        'text': newReview.text,
-                        'author': newReview.author,
                     }))
                 ],
             }
@@ -55,7 +51,7 @@ export const generateDataToSend = (pageId, data, content) => {
                     }
                 ],
                 'services': [
-                    ...content.servicesContent.services.map((service, index) => ({
+                    ...content.serviceContent.services.map((service, index) => ({
                         'title': data[`service-${index}-title`] || service.title,
                         'time': data[`service-${index}-time`] || service.time,
                         'text': data[`service-${index}-text`] || service.text,
