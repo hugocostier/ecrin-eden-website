@@ -41,7 +41,7 @@ export const Footer = () => {
             <FooterContainer>
                 <FooterTop className='footer-top'>
                     <button className='btn-appointment'>
-                        <Link to={'/appointment'}>Prendre rendez-vous</Link>
+                        <Link to={'/appointment/service'}>Prendre rendez-vous</Link>
                     </button>
 
                     <div className='footer-info'>
@@ -162,9 +162,10 @@ const FooterTop = StyledComponents.section`
         border-radius: 30px;
         width: 90%;
         margin: 0 auto 40px auto;
+        cursor: pointer;
 
         &:hover {
-            background: var(--tertiary-500);
+            opacity: 0.8;
         }
 
         &> a {
@@ -217,6 +218,12 @@ const FooterTop = StyledComponents.section`
     .nav-links {
         display: flex;
         flex-direction: column;
+
+        a {
+            &:hover {
+                text-decoration: underline;
+            }
+        }
     }
 
     .contact {
@@ -227,6 +234,10 @@ const FooterTop = StyledComponents.section`
         #footer-phone {
             font-size: inherit;
             line-height: inherit;
+
+            &:hover {
+                text-decoration: underline;
+            }
         }
     }
 
@@ -239,7 +250,7 @@ const FooterTop = StyledComponents.section`
         grid-column: 1/4;
         grid-row: 4/5;
 
-        & :is(p) {
+        &:is(p) {
             display: none;
         }
     }
@@ -260,6 +271,10 @@ const FooterTop = StyledComponents.section`
             place-items: center;
             border-radius: 50%;
             border: 1px solid var(--black);
+
+            &:hover {
+                opacity: 0.6;
+            }
         }
     }
 
@@ -278,6 +293,10 @@ const FooterTop = StyledComponents.section`
         border-radius: 50%;
         border: 1px solid var(--black);
         cursor: pointer;
+
+        &:hover {
+            opacity: 0.6;
+        }
     }
     
     .logo {
@@ -398,6 +417,14 @@ const FooterBottom = StyledComponents.section`
     .legal,
     .copyright {
         font-size: 14px;
+    }
+
+    .legal {
+        a {
+            &:hover {
+                text-decoration: underline;
+            }
+        }
     }
 
     .legal > a:not(:last-of-type) {
