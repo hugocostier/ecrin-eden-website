@@ -50,7 +50,7 @@ export default abstract class BaseController {
         try {
             const result: any = await serviceCall()
 
-            if (result.client && !isAuthorized(req, res, result?.client?.id)) {
+            if (result?.client && !isAuthorized(req, res, result?.client?.id)) {
                 res.status(401).json({ error: 'Not authorized' })
                 return 
             }
