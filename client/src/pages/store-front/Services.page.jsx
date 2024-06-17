@@ -37,11 +37,9 @@ export const ServicesPage = () => {
                                         <h3 className='title'>{service.title}</h3>
                                         <p className='time'>{service.time}</p>
                                         <div className='text'>
-                                            {service.text.map((text, index) => (
-                                                <p key={index}>{text}</p>
-                                            ))}
+                                            <p>{service.text}</p>
                                         </div>
-                                        <Link to={`/appointment?service=${service.title.toLowerCase()}`} className='btn-book'>
+                                        <Link to={'/appointment/service'} className='btn-book'>
                                             Réserver maintenant
                                         </Link>
                                     </div>
@@ -104,6 +102,10 @@ const ServiceContent = StyledComponents.section`
                 border-radius: 30px;
                 text-align: center;
                 padding: 6px 0;
+
+                &:hover {
+                    opacity: 0.6;
+                }
             }
         }
 
