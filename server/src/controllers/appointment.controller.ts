@@ -130,7 +130,7 @@ export default class AppointmentController extends BaseController {
      */
     public addAppointment = async (req: Request, res: Response): Promise<void> => {     
         await this.handleRequest(req, res, async () => {
-            const validRequestBody = this.filterRequestBody(req.body, Appointment)
+            const validRequestBody: Partial<Appointment> = this.filterRequestBody(req.body, Appointment)
 
             return await this._appointmentService.addAppointment(validRequestBody)
         }, 'Appointment created successfully', 201)
@@ -149,7 +149,7 @@ export default class AppointmentController extends BaseController {
         await this.handleRequest(req, res, async () => {
             const { id: appointmentId } = req.params
 
-            const validRequestBody = this.filterRequestBody(req.body, Appointment)
+            const validRequestBody: Partial<Appointment> = this.filterRequestBody(req.body, Appointment)
 
             return await this._appointmentService.updateAppointment(appointmentId, validRequestBody)
         }, 'Appointment updated successfully') 
