@@ -36,8 +36,7 @@ export const ClientInformationPage = () => {
                         placeholder='ex: Doe'
                         autoComplete='family-name'
                         className={errors.lastName ? 'error' : ''}
-                        onBlur={() => trigger('lastName')}
-                        {...register('lastName', { required: 'Veuillez entrer votre nom', pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer un nom valide' } })}
+                        {...register('lastName', { required: 'Veuillez entrer votre nom', pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer un nom valide' }, onChange: () => trigger('lastName') })}
                     />
                 </div>
 
@@ -53,8 +52,7 @@ export const ClientInformationPage = () => {
                         placeholder='ex: John'
                         autoComplete='given-name'
                         className={errors.firstName ? 'error' : ''}
-                        onBlur={() => trigger('firstName')}
-                        {...register('firstName', { required: 'Veuillez entrer votre prénom', pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer un prénom valide' } })}
+                        {...register('firstName', { required: 'Veuillez entrer votre prénom', pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer un prénom valide' }, onChange: () => trigger('firstName') })}
                     />
                 </div>
 
@@ -70,8 +68,7 @@ export const ClientInformationPage = () => {
                         placeholder='ex: 0601020304'
                         autoComplete='tel'
                         className={errors.phone ? 'error' : ''}
-                        onBlur={() => trigger('phone')}
-                        {...register('phone', { pattern: { value: /^[0-9]{10}$/, message: 'Veuillez entrer un numéro de téléphone valide' } })}
+                        {...register('phone', { pattern: { value: /^[0-9]{10}$/, message: 'Veuillez entrer un numéro de téléphone valide' }, onChange: () => trigger('phone') })}
                     />
                 </div>
 
@@ -87,8 +84,7 @@ export const ClientInformationPage = () => {
                         placeholder='ex: adresse@mail.fr'
                         autoComplete='email'
                         className={errors.email ? 'error' : ''}
-                        onBlur={() => trigger('email')}
-                        {...register('email', { required: 'Veuillez entrer votre email', pattern: { value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/, message: 'Veuillez entrer un email valide' } })}
+                        {...register('email', { required: 'Veuillez entrer votre email', pattern: { value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/, message: 'Veuillez entrer un email valide' }, onChange: () => trigger('email') })}
                     />
                 </div>
 
@@ -106,8 +102,7 @@ export const ClientInformationPage = () => {
                                 placeholder='ex : 1 rue de Rivoli'
                                 autoComplete='street-address'
                                 className={errors.address ? 'error' : ''}
-                                onBlur={() => trigger('address')}
-                                {...register('address', { required: 'Veuillez entrer votre adresse' })}
+                                {...register('address', { required: 'Veuillez entrer votre adresse', onChange: () => trigger('address') })}
                             />
                         </div>
 
@@ -123,8 +118,7 @@ export const ClientInformationPage = () => {
                                 placeholder='ex: 75000'
                                 autoComplete='postal-code'
                                 className={errors.postalCode ? 'error' : ''}
-                                onBlur={() => trigger('postalCode')}
-                                {...register('postalCode', { required: 'Veuillez entrer votre code postal', pattern: { value: /^[0-9]{5}$/, message: 'Veuillez entrer un code postal valide' } })}
+                                {...register('postalCode', { required: 'Veuillez entrer votre code postal', pattern: { value: /^[0-9]{5}$/, message: 'Veuillez entrer un code postal valide' }, onChange: () => trigger('postalCode') })}
                             />
                         </div>
 
@@ -140,8 +134,7 @@ export const ClientInformationPage = () => {
                                 placeholder='ex: Paris'
                                 autoComplete='address-level2'
                                 className={errors.city ? 'error' : ''}
-                                onBlur={() => trigger('city')}
-                                {...register('city', { required: 'Veuillez entrer votre ville', pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer une ville valide' } })}
+                                {...register('city', { required: 'Veuillez entrer votre ville', pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer une ville valide' }, onChange: () => trigger('city') })}
                             />
                         </div>
                     </>
