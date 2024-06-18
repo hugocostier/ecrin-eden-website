@@ -13,8 +13,13 @@ export const isAuthorized = (req: Request, res: Response, ownerId: number): bool
     // Get the user from the request
     const user: User = req.user as User
 
+    // Allow access to the add appointment route if the user is not authenticated
+    if (!req.isAuthenticated() && req.originalUrl === '/api/v1/appointments/add') {
+        return true 
+    }
+
     // Check if the user is authenticated and if the user is the owner of the ressource
-    if (req.isAuthenticated() && (user.client?.id === ownerId) || user.role === 'admin') {
+    if (req.isAuthenticated() && ((user.client?.id === ownerId) || user.role === 'admin')) {
         return true
     }
 
