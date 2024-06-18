@@ -156,8 +156,8 @@ export const AuthProvider = () => {
                     return response.json()
                 })
                 .then(res => {
-                    if (res.message && (res.status === 400 || res.status === 500)) {
-                        reject({ message: res.message })
+                    if (res.msg && (res.status === 400 || res.status === 500)) {
+                        reject({ message: res.msg })
                     }
 
                     if (!res.data) {
@@ -173,17 +173,17 @@ export const AuthProvider = () => {
         })
     }
 
-    const register = (data) => {
-        toast.promise(registerPromise(data), {
+    const register = (userData) => {
+        toast.promise(registerPromise(userData), {
             pending: 'Inscription...',
             success: 'Inscription réussie ! Vous pouvez maintenant vous connecter.',
             error: {
                 render({ data }) {
                     let errorMessage
 
-                    if (data.message === 'Email already exists') {
+                    if (data.message === `User with email ${userData.email} already exists`) {
                         errorMessage = 'Email déjà utilisé !'
-                    } else if (data.message === 'Client already exists') {
+                    } else if (data.message === 'An account with this name already exists') {
                         errorMessage = 'Un compte existe déjà avec ce nom et prénom. Veuillez vous connecter !'
                     } else {
                         errorMessage = 'Erreur lors de l\'inscription, veuillez réessayer ultérieurement !'
