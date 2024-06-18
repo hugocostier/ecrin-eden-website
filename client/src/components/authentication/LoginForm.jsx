@@ -1,12 +1,14 @@
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faApple, faFacebookF, faGoogle } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
+import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import StyledComponents from 'styled-components'
 import { RecoveryContext } from '../../context/passwordRecovery.context'
 import { useAuth } from '../../hooks/useAuth.hook'
+import { FormError } from '../FormError'
 
 library.add(faFacebookF, faGoogle, faApple)
 
@@ -14,9 +16,15 @@ export const LoginForm = () => {
     const auth = useAuth()
     const navigate = useNavigate()
 
+    const { register, handleSubmit, trigger, watch, formState: { errors } } = useForm()
+    const rememberMe = watch('remember_me')
+
     const { setEmail, email, setOtp, setAccessFromLogin } = useContext(RecoveryContext)
 
     const navigateToOTP = () => {
+        setEmail(watch('username'))
+        setAccessFromLogin(true)
+
         if (email) {
             const OTP = Math.floor(Math.random() * 9000 + 1000)
             setOtp(OTP)
@@ -44,52 +52,19 @@ export const LoginForm = () => {
         return toast.error('Saisissez votre email', { containerId: 'action-status' })
     }
 
-    const [rememberMe, setRememberMe] = useState(false)
-
-    const [input, setInput] = useState({
-        username: '',
-        password: ''
-    })
-
-    const handleLogin = (e) => {
-        e.preventDefault()
-
-        if (input.username !== '' && input.password !== '') {
-            auth.logIn({
-                username: input.username,
-                password: input.password,
-                remember_me: rememberMe
-            }, rememberMe)
-
-            return
+    const handleLogin = async (data) => {
+        const input = {
+            username: data.username,
+            password: data.password,
+            remember_me: rememberMe
         }
 
-        alert('Saisissez votre email et mot de passe')
-    }
-
-    const handleInput = (e) => {
-        const { name, value } = e.target
-        setInput((prev) => ({
-            ...prev,
-            [name]: value
-        }))
-
-        if (name === 'username') {
-            setEmail(value)
-        }
-    }
-
-    const checkInput = (input) => {
-        if (input.value === '') {
-            input.classList.add('incorrect')
-        } else {
-            input.classList.remove('incorrect')
-        }
+        auth.logIn(input, rememberMe)
     }
 
     return (
         <FormContainer className='form-container sign-in-container'>
-            <form onSubmit={handleLogin}>
+            <form onSubmit={handleSubmit(handleLogin)} noValidate>
                 <h2>Connexion</h2>
                 <div className='social-container'>
                     <a href='' className='social'>
@@ -107,34 +82,36 @@ export const LoginForm = () => {
                     type='email'
                     name='username'
                     placeholder='Email'
-                    required
                     autoComplete='username'
-                    onChange={handleInput}
-                    onBlur={(e) => checkInput(e.target)}
+                    {...register('username', {
+                        required: 'Veuillez entrer votre email',
+                        pattern: { value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/, message: 'Veuillez entrer un email valide' },
+                        onChange: () => trigger('username')
+                    })}
                 />
+                <FormError error={errors.username} />
                 <input
                     type='password'
                     name='password'
                     placeholder='Mot de passe'
-                    required
                     autoComplete='current-password'
-                    onChange={handleInput}
-                    onBlur={(e) => checkInput(e.target)}
+                    {...register('password', {
+                        required: 'Veuillez entrer votre mot de passe',
+                        onChange: () => trigger('password')
+                    })}
                 />
+                <FormError error={errors.password} />
                 <div className='remember-me'>
                     <input
                         type='checkbox'
                         id='remember-me'
-                        onChange={() => setRememberMe(!rememberMe)}
+                        {...register('remember_me')}
                     />
                     <label htmlFor='remember-me'>Se souvenir de moi</label>
                 </div>
                 <div
                     id='forgot-password'
-                    onClick={() => {
-                        setAccessFromLogin(true)
-                        navigateToOTP()
-                    }}
+                    onClick={() => navigateToOTP()}
                 >
                     Mot de passe oublié ?
                 </div>
@@ -165,7 +142,7 @@ export const FormContainer = StyledComponents.section`
             border: 1px solid transparent;
             border-radius: 5px;
             padding: 10px 15px;
-            margin: 6px 0;
+            margin-top: 6px;
             width: 100%;
         }
 
@@ -205,6 +182,18 @@ export const FormContainer = StyledComponents.section`
         left: 0;
         z-index: 2;
 
+        input {    
+            margin-bottom: 0; 
+
+            &:not(:first-of-type) {
+                margin-top: 0; 
+            }
+        }
+
+        .input-error-container {
+            margin: 0; 
+        }
+
         .remember-me {
             display: flex;
             justify-content: center;
@@ -233,7 +222,20 @@ export const FormContainer = StyledComponents.section`
         z-index: 1;
 
         #register {
+            margin: 0; 
             cursor: pointer;
+        }
+
+        input {    
+            margin-bottom: 0; 
+
+            &:not(:first-of-type) {
+                margin-top: 0; 
+            }
+        }
+
+        .input-error-container {
+            margin: 0; 
         }
     }
 
@@ -248,10 +250,6 @@ export const FormContainer = StyledComponents.section`
 
             .social-container {
                 margin: 2vh 0 1.5vh 0; 
-            }
-
-            input:not([type='checkbox']) {
-                margin: 1vh 0; 
             }
 
             button {
