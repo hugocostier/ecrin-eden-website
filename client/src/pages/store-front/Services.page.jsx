@@ -1,19 +1,13 @@
 import { Link, useLoaderData } from 'react-router-dom'
 import StyledComponents from 'styled-components'
-import { Loading, PageTitle } from '../../components'
-import { useLoader } from '../../hooks/useLoader.hook'
+import { PageTitle } from '../../components'
 
 export const ServicesPage = () => {
     const { serviceContent } = useLoaderData()
 
-    const loading = useLoader(serviceContent)
-
     return (
         <>
-            {loading ? (
-                <Loading />
-            ) : (
-                serviceContent ? (
+            {serviceContent && (
                     <>
                         <PageTitle content={serviceContent} pageName='service'></PageTitle>
 
@@ -55,8 +49,7 @@ export const ServicesPage = () => {
                             <h4>{serviceContent.header[0].subtitle}</h4>
                         </ServiceFooter>
                     </>
-                ) : null
-            )}
+                )}
         </>
     )
 }

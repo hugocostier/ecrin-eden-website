@@ -1,19 +1,12 @@
 import { useLoaderData } from 'react-router-dom'
 import StyledComponents from 'styled-components'
-import { Loading } from '../../components'
-import { useLoader } from '../../hooks/useLoader.hook'
 
 export const GiftCardsPage = () => {
     const { giftCardContent } = useLoaderData()
 
-    const loading = useLoader(giftCardContent)
-
     return (
         <>
-            {loading ? (
-                <Loading />
-            ) : (
-                giftCardContent ? (
+            {giftCardContent && (
                     <>
                         <GiftCard className='gift-card'>
                             <div className='gift-card-content'>
@@ -27,8 +20,7 @@ export const GiftCardsPage = () => {
                             </div>
                         </GiftCard>
                     </>
-                ) : null
-            )}
+                )}
         </>
     )
 }

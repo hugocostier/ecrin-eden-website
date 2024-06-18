@@ -1,57 +1,50 @@
 import { useLoaderData } from 'react-router-dom'
 import StyledComponents from 'styled-components'
-import { Loading, PageTitle } from '../../components'
-import { useLoader } from '../../hooks/useLoader.hook'
+import { PageTitle } from '../../components'
 
 export const PricesPage = () => {
     const { priceContent } = useLoaderData()
 
-    const loading = useLoader(priceContent)
-
     return (
         <>
-            {loading ? (
-                <Loading />
-            ) : (
-                priceContent ? (
-                    <>
-                        <PageTitle content={priceContent} pageName='price'></PageTitle>
+            {priceContent && (
+                <>
+                    <PageTitle content={priceContent} pageName='price'></PageTitle>
 
-                        <PriceContent className='price-main'>
-                            <PriceCard className='price-cards'>
-                                <h3>Tarifs</h3>
-                                {priceContent.main.map((main, index) => (
-                                    <div className='card' key={index + 1}>
-                                        <div>
-                                            <p>{main.title}</p>
-                                            <p>{main.duration}</p>
-                                        </div>
-                                        <p>{main.price}</p>
+                    <PriceContent className='price-main'>
+                        <PriceCard className='price-cards'>
+                            <h3>Tarifs</h3>
+                            {priceContent.main.map((main, index) => (
+                                <div className='card' key={index + 1}>
+                                    <div>
+                                        <p>{main.title}</p>
+                                        <p>{main.duration}</p>
                                     </div>
+                                    <p>{main.price}</p>
+                                </div>
+                            ))}
+                        </PriceCard>
+
+                        <PriceMore className='price-more'>
+                            <div>
+                                <h4>{priceContent.more[0].title}</h4>
+                                <p>{priceContent.more[0].price}</p>
+                            </div>
+
+                            <div>
+                                <p>{priceContent.more[1].text}</p>
+                                {priceContent.more[1].choices.map((choice, index) => (
+                                    <li key={index + 1}>{choice}</li>
                                 ))}
-                            </PriceCard>
+                                <p>{priceContent.more[1].more}</p>
+                            </div>
+                        </PriceMore>
 
-                            <PriceMore className='price-more'>
-                                <div>
-                                    <h4>{priceContent.more[0].title}</h4>
-                                    <p>{priceContent.more[0].price}</p>
-                                </div>
-
-                                <div>
-                                    <p>{priceContent.more[1].text}</p>
-                                    {priceContent.more[1].choices.map((choice, index) => (
-                                        <li key={index + 1}>{choice}</li>
-                                    ))}
-                                    <p>{priceContent.more[1].more}</p>
-                                </div>
-                            </PriceMore>
-
-                            <PriceImage className='price-image'>
-                                <img src={priceContent.image} alt={priceContent.alt} />
-                            </PriceImage>
-                        </PriceContent>
-                    </>
-                ) : null
+                        <PriceImage className='price-image'>
+                            <img src={priceContent.image} alt={priceContent.alt} />
+                        </PriceImage>
+                    </PriceContent>
+                </>
             )}
         </>
     )

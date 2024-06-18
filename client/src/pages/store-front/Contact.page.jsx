@@ -4,15 +4,13 @@ import { useForm } from 'react-hook-form'
 import { useLoaderData } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import StyledComponents from 'styled-components'
-import { Loading, PageTitle } from '../../components'
+import { PageTitle } from '../../components'
 import { FormError } from '../../components/FormError'
 import { verifyCaptcha } from '../../data/recaptcha.fetch'
 import { sendForm } from '../../data/store-front/contact.fetch'
-import { useLoader } from '../../hooks/useLoader.hook'
 
 export const ContactPage = () => {
     const { contactContent } = useLoaderData()
-    const loading = useLoader(contactContent)
 
     const { register, handleSubmit, reset, setValue, setError, clearErrors, formState: { errors } } = useForm({
         defaultValues: {
@@ -64,10 +62,7 @@ export const ContactPage = () => {
 
     return (
         <>
-            {loading ? (
-                <Loading />
-            ) : (
-                contactContent ? (
+            {contactContent && (
                     <>
                         <PageTitle content={contactContent} pageName='contact'></PageTitle>
 
@@ -174,8 +169,7 @@ export const ContactPage = () => {
                             </GoogleMaps>
                         </ContactContent>
                     </>
-                ) : null
-            )}
+                )}
         </>
     )
 }
