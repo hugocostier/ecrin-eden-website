@@ -74,7 +74,7 @@ export const renderMonth = (date, appointments, userRole, setSearchParams) => {
                                 })
                             }}
                         >
-                            <div className={`day-number ${currentDay === today.getDate() && date.month === today.getMonth() && date.year === today.getFullYear() ? 'today' : ''}`}>{currentDay}</div>
+                            <div className={`day-number ${currentDay === today.getDate() && date.month == today.getMonth() && date.year == today.getFullYear() ? 'today' : ''}`}>{currentDay}</div>
                             {appointmentsForDay.slice(0, 1).map((appointment, index) => {
                                 if (appointment.status !== 'cancelled') return (
                                     <div
@@ -102,7 +102,7 @@ export const renderMonth = (date, appointments, userRole, setSearchParams) => {
                                 })
                             }}
                         >
-                            <div className={`day-number ${currentDay === today.getDate() && date.month === today.getMonth() && date.year === today.getFullYear() ? 'today' : ''}`}>{currentDay}</div>
+                            <div className={`day-number ${currentDay === today.getDate() && date.month == today.getMonth() && date.year == today.getFullYear() ? 'today' : ''}`}>{currentDay}</div>
                             {appointmentsForDay.map((appointment, index) => {
                                 if (appointment.status !== 'cancelled') return (
                                     <div
@@ -176,7 +176,7 @@ export const renderWeek = (date, appointments, userRole, setSearchParams) => {
             >
                 {isInMonth && (
                     <>
-                        <div className={`day-number ${dayOfWeek === today.getDate() && date.month === today.getMonth() && date.year === today.getFullYear() ? 'today' : ''}`}>
+                        <div className={`day-number ${dayOfWeek === today.getDate() && date.month == today.getMonth() && date.year == today.getFullYear() ? 'today' : ''}`}>
                             {dayOfWeek}
                         </div>
                         {appointmentsForDay.map((appointment, index) => {
