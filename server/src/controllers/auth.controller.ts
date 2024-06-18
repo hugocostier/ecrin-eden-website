@@ -38,12 +38,17 @@ export default class AuthController extends BaseController {
             const token = crypto.randomBytes(32).toString('hex')
             console.log('Token: ', token)
 
-            await this._emailController.sendVerificationLink(email, token)
-                .catch((error: any) => {
-                    return res.status(500).json({ error: 'Error sending verification email' })
-                }) 
+            const registeredUser: { id: number, email: string } = await this._authService.register(email, password, first_name.toLowerCase(), last_name.toLowerCase(), token) 
+            .then(async (user) => {
+                await this._emailController.sendVerificationLink(email, token)
+                    .catch((error: any) => {
+                        return res.status(500).json({ error: 'Error sending verification email' })
+                    })
 
-            return await this._authService.register(email, password, first_name.toLowerCase(), last_name.toLowerCase(), token) 
+                return user
+            }) 
+
+            return registeredUser
         }, 'User registered successfully')
     }
 
