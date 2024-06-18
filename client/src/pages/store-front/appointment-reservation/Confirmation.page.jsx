@@ -35,7 +35,10 @@ export const AppointmentConfirmationPage = () => {
             <ConfirmationContainer>
                 <section className='review-container service-info'>
                     <div className='confirmation-item service-container'>
-                        <span>{serviceInfo.name} ({serviceInfo.duration} minutes)</span>
+                        {!service
+                            ? <span className='warning'>Choisissez un service</span>
+                            : <span>{serviceInfo.name} ({serviceInfo.duration} minutes)</span>
+                        }
                         <Link
                             to={`/appointment/service`}
                             className='update-link'
@@ -66,7 +69,7 @@ export const AppointmentConfirmationPage = () => {
                         {firstName && lastName && <span>{firstName} {lastName}</span>}
                         {phone && <span>{phone}</span>}
                         {email && <span>{email}</span>}
-                        <span>{isAway === 'true' ? (address && postalCode && city ? `${address}, ${postalCode} ${city}` : 'A domicile') : 'Au salon'}</span>
+                        <span>{isAway === 'true' ? (address && postalCode && city ? `${address}, ${postalCode} ${city}` : 'A domicile') : null}</span>
                         {!firstName || !lastName || !email ? <span className='warning'>Veuillez compléter vos informations personnelles</span> : null}
                         <Link
                             to={`/appointment/info`}
