@@ -54,6 +54,14 @@ export const ClientProvider = () => {
     useEffect(() => {
         if (auth.user) {
             getClientInfo()
+        } else {
+            setClientInfo({
+                firstName: '',
+                lastName: '',
+                profilePicture: '',
+                role: '',
+                id: ''
+            })
         }
     }, [getClientInfo, auth.user])
 
