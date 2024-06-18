@@ -8,11 +8,11 @@ const serviceController = new ServiceController()
 const authController: AuthController = new AuthController()
 
 router.route('/')
-    .get(authController.isLoggedIn, serviceController.getAllServices)
+    .get(serviceController.getAllServices)
     .post(authController.isAdmin, serviceController.addService)
 
 router.route('/:id')
-    .get(authController.isAdmin, serviceController.getService) 
+    .get(serviceController.getService) 
     .patch(authController.isAdmin, serviceController.updateService)
     .delete(authController.isAdmin, serviceController.deleteService)
 
