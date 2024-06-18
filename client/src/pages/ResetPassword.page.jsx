@@ -1,18 +1,25 @@
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
+import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
+import StyledComponents from 'styled-components'
+import { FormError } from '../components/FormError'
 import { RecoveryContext } from '../context/passwordRecovery.context'
 
 export const ResetPassword = () => {
     const navigate = useNavigate()
     const { email, otp } = useContext(RecoveryContext)
 
-    const [password, setPassword] = useState('')
+    const { register, handleSubmit, watch, trigger, setError, clearErrors, formState: { errors } } = useForm()
 
-    const handleInput = (e) => {
-        setPassword(e.target.value)
+    const passwordMatch = () => {
+        if (watch('password') !== watch('confirmPassword')) {
+            setError('confirmPassword', { message: 'Les mots de passe ne correspondent pas' })
+        } else {
+            clearErrors('confirmPassword')
+        }
     }
 
-    const resetPassword = () => {
+    const resetPassword = async (data) => {
         return new Promise((resolve, reject) => {
             fetch('http://localhost:3000/api/v1/auth/reset-password', {
                 method: 'POST',
@@ -22,7 +29,7 @@ export const ResetPassword = () => {
                 body: JSON.stringify({
                     email: email,
                     otp: otp,
-                    new_password: password
+                    new_password: data.password
                 })
             })
                 .then(res => res.json())
@@ -35,82 +42,146 @@ export const ResetPassword = () => {
     }
 
     return (
-        <div>
-            <section className='bg-gray-50 w-screen dark:bg-gray-900'>
-                <div className='flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0'>
-                    <div className='w-full p-6 bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md dark:bg-gray-800 dark:border-gray-700 sm:p-8'>
-                        <h2 className='mb-1 text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white'>
-                            Change Password
-                        </h2>
-                        <form className='mt-4 space-y-4 lg:mt-5 md:space-y-5'>
-                            <div>
-                                <label
-                                    htmlFor='password'
-                                    className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
-                                >
-                                    New Password
-                                </label>
-                                <input
-                                    type='password'
-                                    name='password'
-                                    id='password'
-                                    placeholder='••••••••'
-                                    className='bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
-                                    required=''
-                                    onChange={handleInput}
-                                ></input>
-                            </div>
-                            <div>
-                                <label
-                                    htmlFor='confirm-password'
-                                    className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
-                                >
-                                    Confirm password
-                                </label>
-                                <input
-                                    type='password'
-                                    name='confirm-password'
-                                    id='confirm-password'
-                                    placeholder='••••••••'
-                                    className='bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
-                                    required=''
-                                ></input>
-                            </div>
-                            <div className='flex items-start'>
-                                <div className='flex items-center h-5'>
-                                    <input
-                                        id='newsletter'
-                                        aria-describedby='newsletter'
-                                        type='checkbox'
-                                        className='w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800'
-                                        required=''
-                                    ></input>
-                                </div>
-                                <div className='ml-3 text-sm'>
-                                    <label
-                                        htmlFor='newsletter'
-                                        className='font-light text-gray-500 dark:text-gray-300'
-                                    >
-                                        I accept the{' '}
-                                        <a
-                                            className='font-medium text-primary-600 hover:underline dark:text-primary-500'
-                                            href='#'
-                                        >
-                                            Terms and Conditions
-                                        </a>
-                                    </label>
-                                </div>
-                            </div>
-                        </form>
-                        <button
-                            onClick={() => resetPassword()}
-                            className='w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800'
-                        >
-                            Reset password
-                        </button>
-                    </div>
+        <ResetPasswordPage>
+            <section className='reset-password-container'>
+                <div className='header-container'>
+                    <h2>
+                        Réinitialiser votre mot de passe
+                    </h2>
                 </div>
+                <ResetForm onSubmit={handleSubmit(resetPassword)}>
+                    <div className='input-container'>
+                        <label htmlFor='password'>
+                            Nouveau mot de passe
+                        </label>
+                        <input
+                            type='password'
+                            name='password'
+                            id='password'
+                            placeholder='ex: Exempl1!'
+                            autoComplete='none'
+                            {...register('password', {
+                                required: 'Veuillez saisir votre mot de passe',
+                                minLength: { value: 8, message: 'Minimum 8 caractères' },
+                                pattern: {
+                                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[a-zA-Z\d@$!%*?&]{8,}$/,
+                                    message: 'Au moins une majuscule, une minuscule, un chiffre et un caractère spécial'
+                                },
+                                onChange: () => trigger('password')
+                            })}
+                        ></input>
+                        <FormError error={errors.password} />
+                    </div>
+                    <div className='input-container'>
+                        <label htmlFor='confirm-password'>
+                            Confirmer le mot de passe
+                        </label>
+                        <input
+                            type='password'
+                            name='confirmPassword'
+                            id='confirm-password'
+                            placeholder='••••••••'
+                            autoComplete='none'
+                            {...register('confirmPassword', {
+                                required: 'Veuillez confirmer votre mot de passe',
+                                onChange: () => passwordMatch()
+                            })}
+                        ></input>
+                        <FormError error={errors.confirmPassword} />
+                    </div>
+                    <button
+                        type='submit'
+                        className='btn-reset-password'
+                    >
+                        Réinitialiser
+                    </button>
+                </ResetForm>
             </section>
-        </div>
+        </ResetPasswordPage >
     )
 }
+
+const ResetPasswordPage = StyledComponents.main`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+    .reset-password-container {
+        background-color: #ffffff;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        max-width: 600px;
+        width: 100%;
+        margin: 0 auto;
+        align-self: center;
+    }
+
+    .header-container {
+        h2 {
+            margin-bottom: 30px;
+        }
+
+        p {
+            color: var(--grey-500);
+            margin: 0; 
+        }
+    }
+
+    @media screen and (min-width: 1024px) {
+        .header-container {
+            h2 {
+                font-size: 3rem;
+            }
+        }
+    }
+`
+
+const ResetForm = StyledComponents.form`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .input-container {
+        display: flex;
+        flex-direction: column;
+        width: 60%;
+
+        label {
+            text-align: left;
+        }
+
+        input {
+            width: 100%;
+            height: 40px;
+            border: 1px solid var(--grey-500);
+            border-radius: 4px;
+            padding: 0 10px;
+            font-size: 1rem;
+            margin-bottom: 4px; 
+        }
+
+        .input-error-container {
+            margin: 0;
+        }
+    }
+    
+    .btn-reset-password {
+        background-color: var(--secondary-500);
+        color: var(--white);
+        border: none;
+        border-radius: 4px;
+        margin-top: 4px; 
+        margin-bottom: .75rem; 
+        padding: 10px 20px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+
+        &:hover {
+            background-color: var(--secondary-300);
+        }
+    }
+`
