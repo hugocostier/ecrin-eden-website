@@ -139,7 +139,7 @@ export default class AuthController extends BaseController {
      */
     public verifyUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         await this.handleRequest(req, res, async () => {
-            const { token, email } = req.params
+            const { token, email } = req.body
 
             return await this._authService.verifyUser(email, token)
         }, 'User verified successfully')
