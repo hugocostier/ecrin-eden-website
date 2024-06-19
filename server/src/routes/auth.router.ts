@@ -30,7 +30,7 @@ router.route('/register')
 
 // Verify user email
 router.route('/verify-email')
-    .patch(authController.verifyUser)
+    .post(authController.verifyUser)
 
 // Check if user is logged in
 router.route('/current-user')
