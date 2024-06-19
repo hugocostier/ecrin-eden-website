@@ -115,6 +115,7 @@ export const Footer = () => {
                         <Link to={'/legal-notice'}>Mentions légales</Link>
                         <Link to={'/privacy-policy'}>Politique de confidentialité</Link>
                         <Link to={'/cookies'}>Politique de cookies</Link>
+                        <Link to={'/terms-of-service'}>Conditions générales de vente</Link>
                     </div>
                 </FooterBottom>
             </FooterContainer>
