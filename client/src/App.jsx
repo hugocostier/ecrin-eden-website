@@ -6,9 +6,13 @@ import { PrivateLogin } from './components/authentication/PrivateLogin'
 import { AuthProvider } from './context/auth.context'
 import { ClientProvider } from './context/client.context'
 import { PasswordRecoveryProvider } from './context/passwordRecovery.context'
-import { certificationLoader, contactLoader, giftCardLoader, homeLoader, priceLoader, serviceLoader } from './data'
+import { certificationLoader } from './data/store-front/certification.loader'
+import { contactLoader } from './data/store-front/contact.loader'
+import { giftCardLoader } from './data/store-front/giftcard.loader'
+import { homeLoader } from './data/store-front/home.loader'
+import { priceLoader } from './data/store-front/price.loader'
+import { serviceLoader } from './data/store-front/service.loader'
 import { StoreRoot } from './layouts/store-front/root.layout'
-import * as page from './pages'
 import { lazyLoad } from './utils/lazyLoad.util'
 
 // STORE FRONT PAGES 
@@ -18,6 +22,10 @@ const PricesPage = lazyLoad('../../src/pages/store-front/Prices.page', 'PricesPa
 const GiftCardsPage = lazyLoad('../../src/pages/store-front/GiftCards.page', 'GiftCardsPage')
 const CertificationPage = lazyLoad('../../src/pages/store-front/Certification.page', 'CertificationPage')
 const ContactPage = lazyLoad('../../src/pages/store-front/Contact.page', 'ContactPage')
+const LegalNoticePage = lazyLoad('../../src/pages/store-front/LegalNotice.page', 'LegalNoticePage')
+const PrivacyPolicyPage = lazyLoad('../../src/pages/store-front/PrivacyPolicy.page', 'PrivacyPolicyPage')
+const CookiePolicyPage = lazyLoad('../../src/pages/store-front/CookiePolicy.page', 'CookiePolicyPage')
+const TermsOfServicePage = lazyLoad('../../src/pages/store-front/TermsOfService.page', 'TermsOfServicePage')
 
 // APPOINTMENT RESERVATION PAGES
 const AppointmentPage = lazyLoad('../../src/pages/store-front/Appointment.page', 'AppointmentPage')
@@ -29,9 +37,10 @@ import { ThankYouPage } from './pages/store-front/appointment-reservation/ThankY
 import { TimeSelectionPage } from './pages/store-front/appointment-reservation/TimeSelection.page'
 
 // AUTHENTICATION PAGES
-const LoginRegisterPage = lazyLoad('../../src/pages/Login.page', 'LoginRegisterPage')
-const RecoverPassword = lazyLoad('../../src/pages/RecoverPassword.page', 'RecoverPassword')
-const ResetPassword = lazyLoad('../../src/pages/ResetPassword.page', 'ResetPassword')
+const LoginRegisterPage = lazyLoad('../../src/pages/authentication/Login.page', 'LoginRegisterPage')
+const RecoverPassword = lazyLoad('../../src/pages/authentication/RecoverPassword.page', 'RecoverPassword')
+const ResetPassword = lazyLoad('../../src/pages/authentication/ResetPassword.page', 'ResetPassword')
+const VerifyEmailPage = lazyLoad('../../src/pages/authentication/VerifyEmail.page', 'VerifyEmailPage')
 
 // USER DASHBOARD PAGES
 const UserDashboard = lazyLoad('../../src/pages/private-dashboard/client-space/Dashboard.page', 'UserDashboard')
@@ -58,6 +67,7 @@ const PrivateRoot = lazyLoad('../../src/layouts/private-dashboard/root.layout', 
 const PrivateRoute = lazyLoad('../../src/components/private-dashboard/PrivateRoute', 'PrivateRoute')
 const AccountPage = lazyLoad('../../src/pages/private-dashboard/Account.page', 'AccountPage')
 const SettingsPage = lazyLoad('../../src/pages/private-dashboard/Settings.page', 'SettingsPage')
+const ErrorPage = lazyLoad('../../src/pages/Error.page', 'ErrorPage')
 
 const Router = createBrowserRouter(
     createRoutesFromElements(
@@ -66,7 +76,7 @@ const Router = createBrowserRouter(
                 <Route
                     path='/'
                     element={<StoreRoot />}
-                    errorElement={<page.ErrorPage />}
+                    errorElement={<ErrorPage />}
                 >
                     <Route
                         index={true}
@@ -160,12 +170,37 @@ const Router = createBrowserRouter(
                             }
                         />
                     </Route>
+
+                    <Route
+                        path='legal-notice'
+                        element={<LegalNoticePage />}
+                    />
+
+                    <Route
+                        path='privacy-policy'
+                        element={<PrivacyPolicyPage />}
+                    />
+
+                    <Route
+                        path='cookies'
+                        element={<CookiePolicyPage />}
+                    />
+
+                    <Route
+                        path='terms-of-service'
+                        element={<TermsOfServicePage />}
+                    />
                 </Route>
 
                 <Route element={<PasswordRecoveryProvider />}>
                     <Route
                         path='/login'
                         element={<LoginRegisterPage />}
+                    />
+
+                    <Route
+                        path='/login/verify-email'
+                        element={<VerifyEmailPage />}
                     />
 
                     <Route element={<PrivateLogin />} >
@@ -184,7 +219,7 @@ const Router = createBrowserRouter(
                 <Route
                     path='/user'
                     element={<PrivateRoot />}
-                    errorElement={<page.ErrorPage />}
+                    errorElement={<ErrorPage />}
                 >
                     <Route
                         index={true}
@@ -258,7 +293,7 @@ const Router = createBrowserRouter(
                 <Route
                     path='/admin'
                     element={<PrivateRoot />}
-                    errorElement={<page.ErrorPage />}
+                    errorElement={<ErrorPage />}
                 >
                     <Route
                         index={true}
