@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import StyledComponents from 'styled-components'
 import { RecoveryContext } from '../../context/passwordRecovery.context'
+import { forgetPassword } from '../../data/authentication.fetch'
 import { useAuth } from '../../hooks/useAuth.hook'
 import { FormError } from '../FormError'
 
@@ -21,7 +22,7 @@ export const LoginForm = () => {
 
     const { setEmail, email, setOtp, setAccessFromLogin } = useContext(RecoveryContext)
 
-    const navigateToOTP = () => {
+    const navigateToOTP = async () => {
         setEmail(watch('username'))
         setAccessFromLogin(true)
 
@@ -29,24 +30,10 @@ export const LoginForm = () => {
             const OTP = Math.floor(Math.random() * 9000 + 1000)
             setOtp(OTP)
 
-            return new Promise((resolve, reject) => {
-                fetch('http://localhost:3000/api/v1/auth/forgot-password', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        recipient_email: email,
-                        otp: OTP
-                    })
+            return await forgetPassword(email, OTP)
+                .then(() => {
+                    navigate('/recover-password')
                 })
-                    .then(res => res.json())
-                    .then(data => {
-                        resolve(data)
-                        navigate('/recover-password')
-                    })
-                    .catch(err => reject(err))
-            })
         }
 
         return toast.error('Saisissez votre email', { containerId: 'action-status' })
