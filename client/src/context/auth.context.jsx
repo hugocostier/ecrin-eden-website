@@ -74,6 +74,8 @@ export const AuthProvider = () => {
                         errorMessage = 'Email incorrect !'
                     } else if (data.message === 'Incorrect password') {
                         errorMessage = 'Mot de passe incorrect !'
+                    } else if (data.message === 'User not verified') {
+                        errorMessage = 'Veuillez d\'abord vérifier votre email grâce au lien qui vous a été envoyé !'
                     } else {
                         errorMessage = 'Erreur lors de la connexion, veuillez réessayer ultérieurement !'
                     }
@@ -176,7 +178,7 @@ export const AuthProvider = () => {
     const register = (userData) => {
         toast.promise(registerPromise(userData), {
             pending: 'Inscription...',
-            success: 'Inscription réussie ! Vous pouvez maintenant vous connecter.',
+            success: 'Inscription réussie ! Veuillez vérifier votre email grâce au lien qui vous a été envoyé avant de vous connecter.',
             error: {
                 render({ data }) {
                     let errorMessage
