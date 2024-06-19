@@ -3,8 +3,9 @@ import { useForm } from 'react-hook-form'
 import OtpInput from 'react-otp-input'
 import { useNavigate } from 'react-router-dom'
 import StyledComponents from 'styled-components'
-import { FormError } from '../components/FormError'
-import { RecoveryContext } from '../context/passwordRecovery.context'
+import { FormError } from '../../components/FormError'
+import { RecoveryContext } from '../../context/passwordRecovery.context'
+import { forgetPassword } from '../../data/authentication.fetch'
 
 export const RecoverPassword = () => {
     const navigate = useNavigate()
@@ -19,26 +20,12 @@ export const RecoverPassword = () => {
     const resendOTP = async () => {
         if (disable) return
 
-        return new Promise((resolve, reject) => {
-            fetch('http://localhost:3000/api/v1/auth/forgot-password', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    recipient_email: email,
-                    otp
-                })
+        return await forgetPassword(email, otp)
+            .then(() => {
+                setDisable(true)
+                alert('Un nouveau code a été envoyé à votre adresse email')
+                setTimerCount(60)
             })
-                .then(res => res.json())
-                .then(data => {
-                    setDisable(true)
-                    alert('Un nouveau code a été envoyé à votre adresse email')
-                    setTimerCount(60)
-                    resolve(data)
-                })
-                .catch(err => reject(err))
-        })
     }
 
     const verifyOTP = () => {

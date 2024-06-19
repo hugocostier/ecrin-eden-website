@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import StyledComponents from 'styled-components'
-import { LoginForm, OverlayPanel, RegisterForm } from '../components'
-import { useAuth } from '../hooks/useAuth.hook'
+import { LoginForm } from '../../components/authentication/LoginForm'
+import { OverlayPanel } from '../../components/authentication/OverlayPanel'
+import { RegisterForm } from '../../components/authentication/RegisterForm'
+import { useAuth } from '../../hooks/useAuth.hook'
 
 export const LoginRegisterPage = () => {
     const user = useAuth()

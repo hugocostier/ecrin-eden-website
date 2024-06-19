@@ -2,8 +2,8 @@ import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import StyledComponents from 'styled-components'
-import { FormError } from '../components/FormError'
-import { RecoveryContext } from '../context/passwordRecovery.context'
+import { FormError } from '../../components/FormError'
+import { RecoveryContext } from '../../context/passwordRecovery.context'
 
 export const ResetPassword = () => {
     const navigate = useNavigate()
