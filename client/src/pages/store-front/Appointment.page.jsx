@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types'
 import StyledComponents from 'styled-components'
 import bgSidebarMobile from '../../assets/images/appointment-reservation/bg-sidebar-mobile.svg'
-import { PageTitle } from '../../components'
 import { Provider } from '../../components/appointment-reservation/Provider'
 import { Sidebar } from '../../components/appointment-reservation/Sidebar'
+import { PageTitle } from '../../components/store-front/PageTitle'
 
 const appointmentContent = {
     header: [

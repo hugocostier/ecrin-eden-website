@@ -4,8 +4,8 @@ import { useForm } from 'react-hook-form'
 import { useLoaderData } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import StyledComponents from 'styled-components'
-import { PageTitle } from '../../components'
 import { FormError } from '../../components/FormError'
+import { PageTitle } from '../../components/store-front/PageTitle'
 import { verifyCaptcha } from '../../data/recaptcha.fetch'
 import { sendForm } from '../../data/store-front/contact.fetch'
 
@@ -63,113 +63,113 @@ export const ContactPage = () => {
     return (
         <>
             {contactContent && (
-                    <>
-                        <PageTitle content={contactContent} pageName='contact'></PageTitle>
+                <>
+                    <PageTitle content={contactContent} pageName='contact'></PageTitle>
 
-                        <ContactContent className='contact-main'>
-                            <ContactInfo className='contact-info'>
-                                <div className='schedule'>
-                                    <h4>Horaires</h4>
-                                    <p>
-                                        Mercredi - Vendredi : 17h - 19h<br />
-                                        Samedi : 10h - 19h
-                                    </p>
-                                </div>
+                    <ContactContent className='contact-main'>
+                        <ContactInfo className='contact-info'>
+                            <div className='schedule'>
+                                <h4>Horaires</h4>
+                                <p>
+                                    Mercredi - Vendredi : 17h - 19h<br />
+                                    Samedi : 10h - 19h
+                                </p>
+                            </div>
 
-                                <div className='address'>
-                                    <h4>Adresse</h4>
-                                    <p>
-                                        {contactContent.header[0].address}<br />
-                                        {contactContent.header[0].zip}, {contactContent.header[0].city}<br />
-                                        <a href={`tel:${removeDot(contactContent.header[0].phone)}`}>{contactContent.header[0].phone}</a><br />
-                                        <a href={`mailto:${contactContent.header[0].email}`}>{contactContent.header[0].email}</a><br />
-                                    </p>
-                                </div>
-                            </ContactInfo>
+                            <div className='address'>
+                                <h4>Adresse</h4>
+                                <p>
+                                    {contactContent.header[0].address}<br />
+                                    {contactContent.header[0].zip}, {contactContent.header[0].city}<br />
+                                    <a href={`tel:${removeDot(contactContent.header[0].phone)}`}>{contactContent.header[0].phone}</a><br />
+                                    <a href={`mailto:${contactContent.header[0].email}`}>{contactContent.header[0].email}</a><br />
+                                </p>
+                            </div>
+                        </ContactInfo>
 
-                            <ContactForm className='contact-form'>
-                                <div className='title'>
-                                    <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 298.185 352.082' width='50' height='50'><g><path d='M298.185 264.061l-149.093 88.021L0 264.061V88.021L149.092 0l149.093 88.021v176.04z'></path></g></svg>
-                                    <h3>Salon Écrin d&apos;Eden</h3>
-                                </div>
+                        <ContactForm className='contact-form'>
+                            <div className='title'>
+                                <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 298.185 352.082' width='50' height='50'><g><path d='M298.185 264.061l-149.093 88.021L0 264.061V88.021L149.092 0l149.093 88.021v176.04z'></path></g></svg>
+                                <h3>Salon Écrin d&apos;Eden</h3>
+                            </div>
 
-                                <form onSubmit={handleSubmit(sendContactForm)} noValidate>
-                                    <legend>Écrivez-nous</legend>
+                            <form onSubmit={handleSubmit(sendContactForm)} noValidate>
+                                <legend>Écrivez-nous</legend>
 
-                                    <input
-                                        type='text'
-                                        name='last-name'
-                                        placeholder='Nom*'
-                                        autoComplete='family-name'
-                                        {...register('lastName', { required: 'Veuillez saisir votre nom', pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer un nom valide' } })}
-                                    />
-                                    <FormError error={errors.lastName} />
+                                <input
+                                    type='text'
+                                    name='last-name'
+                                    placeholder='Nom*'
+                                    autoComplete='family-name'
+                                    {...register('lastName', { required: 'Veuillez saisir votre nom', pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer un nom valide' } })}
+                                />
+                                <FormError error={errors.lastName} />
 
-                                    <input
-                                        type='text'
-                                        name='first-name'
-                                        placeholder='Prénom*'
-                                        autoComplete='given-name'
-                                        {...register('firstName', { required: 'Veuillez saisir votre prénom', pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer un prénom valide' } })}
-                                    />
-                                    <FormError error={errors.firstName} />
+                                <input
+                                    type='text'
+                                    name='first-name'
+                                    placeholder='Prénom*'
+                                    autoComplete='given-name'
+                                    {...register('firstName', { required: 'Veuillez saisir votre prénom', pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer un prénom valide' } })}
+                                />
+                                <FormError error={errors.firstName} />
 
-                                    <input
-                                        type='email'
-                                        name='email'
-                                        placeholder='Email*'
-                                        autoComplete='email'
-                                        {...register('email', { required: 'Veuillez saisir votre email', pattern: { value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/, message: 'Veuillez entrer un email valide' } })}
-                                    />
-                                    <FormError error={errors.email} />
+                                <input
+                                    type='email'
+                                    name='email'
+                                    placeholder='Email*'
+                                    autoComplete='email'
+                                    {...register('email', { required: 'Veuillez saisir votre email', pattern: { value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/, message: 'Veuillez entrer un email valide' } })}
+                                />
+                                <FormError error={errors.email} />
 
-                                    <input
-                                        type='tel'
-                                        name='phone'
-                                        placeholder='Téléphone'
-                                        autoComplete='tel'
-                                        {...register('phone', { pattern: { value: /[0-9]{10}/, message: 'Numéro de téléphone invalide' } })}
-                                    />
-                                    <FormError error={errors.phone} />
+                                <input
+                                    type='tel'
+                                    name='phone'
+                                    placeholder='Téléphone'
+                                    autoComplete='tel'
+                                    {...register('phone', { pattern: { value: /[0-9]{10}/, message: 'Numéro de téléphone invalide' } })}
+                                />
+                                <FormError error={errors.phone} />
 
-                                    <textarea
-                                        name='message'
-                                        placeholder='Écrivez votre message ici...'
-                                        spellCheck='true'
-                                        {...register('message', { required: 'Veuillez saisir votre message' })}
-                                    ></textarea>
-                                    <FormError error={errors.message} />
+                                <textarea
+                                    name='message'
+                                    placeholder='Écrivez votre message ici...'
+                                    spellCheck='true'
+                                    {...register('message', { required: 'Veuillez saisir votre message' })}
+                                ></textarea>
+                                <FormError error={errors.message} />
 
-                                    <button
-                                        type='submit'
-                                        className='contact-submit'
-                                    >
-                                        Envoyer
-                                    </button>
+                                <button
+                                    type='submit'
+                                    className='contact-submit'
+                                >
+                                    Envoyer
+                                </button>
 
-                                    <ReCAPTCHA
-                                        className='recaptcha'
-                                        ref={recaptcha}
-                                        sitekey={import.meta.env.VITE_APP_SITE_KEY}
-                                        onChange={() => {
-                                            clearErrors('captcha')
-                                            setValue('captcha', true)
-                                        }}
-                                        onExpired={() => {
-                                            setError('captcha', { type: 'manual', message: 'Veuillez cocher la case \'Je ne suis pas un robot\'' })
-                                            setValue('captcha', false)
-                                        }}
-                                    />
-                                    <FormError error={errors.captcha} id='error-recaptcha' />
-                                </form>
-                            </ContactForm>
+                                <ReCAPTCHA
+                                    className='recaptcha'
+                                    ref={recaptcha}
+                                    sitekey={import.meta.env.VITE_APP_SITE_KEY}
+                                    onChange={() => {
+                                        clearErrors('captcha')
+                                        setValue('captcha', true)
+                                    }}
+                                    onExpired={() => {
+                                        setError('captcha', { type: 'manual', message: 'Veuillez cocher la case \'Je ne suis pas un robot\'' })
+                                        setValue('captcha', false)
+                                    }}
+                                />
+                                <FormError error={errors.captcha} id='error-recaptcha' />
+                            </form>
+                        </ContactForm>
 
-                            <GoogleMaps className='google-maps'>
-                                <iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d701.1594698066873!2d4.1745485248625185!3d44.22432565040747!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12b45bbebd052277%3A0xa1a154f9f13ed3b1!2s302%20Rte%20des%20Tronquisses%2C%2030960%20Les%20Mages!5e0!3m2!1sen!2sfr!4v1708537846604!5m2!1sen!2sfr' width='600' height='450' style={{ border: '0' }} allowFullScreen={false} loading='lazy' referrerPolicy='no-referrer-when-downgrade'></iframe>
-                            </GoogleMaps>
-                        </ContactContent>
-                    </>
-                )}
+                        <GoogleMaps className='google-maps'>
+                            <iframe src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d701.1594698066873!2d4.1745485248625185!3d44.22432565040747!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12b45bbebd052277%3A0xa1a154f9f13ed3b1!2s302%20Rte%20des%20Tronquisses%2C%2030960%20Les%20Mages!5e0!3m2!1sen!2sfr!4v1708537846604!5m2!1sen!2sfr' width='600' height='450' style={{ border: '0' }} allowFullScreen={false} loading='lazy' referrerPolicy='no-referrer-when-downgrade'></iframe>
+                        </GoogleMaps>
+                    </ContactContent>
+                </>
+            )}
         </>
     )
 }

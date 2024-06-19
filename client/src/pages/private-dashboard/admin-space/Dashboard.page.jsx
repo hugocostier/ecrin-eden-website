@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react'
 import StyledComponents from 'styled-components'
 import image from '../../../assets/images/dashboard.jpg'
 import { Calendar } from '../../../components/private-dashboard/calendar/Calendar'
-import { countAllAppointments } from '../../../data'
+import { countAllAppointments } from '../../../data/appointments/appointments.fetch'
 import { useClientInfo } from '../../../hooks/useClientInfo.hook'
+import { capitalize } from '../../../utils/capitalize.util'
 import { formatDate } from '../../../utils/formatDate'
 
 export const AdminDashboard = () => {
@@ -29,7 +30,7 @@ export const AdminDashboard = () => {
     return (
         <StyledDashboard>
             <section className='page-header'>
-                <h2>Bonjour {client.firstName},</h2>
+                <h2>Bonjour {capitalize(client.firstName)},</h2>
                 {count !== null && count > 0 ? (
                     <p>Tu as {count} rendez-vous aujourd&apos;hui.</p>
                 ) : (count !== null && count === 0) ? (

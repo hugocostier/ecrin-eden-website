@@ -1,6 +1,6 @@
 import { useLoaderData } from 'react-router-dom'
 import StyledComponents from 'styled-components'
-import { PageTitle } from '../../components'
+import { PageTitle } from '../../components/store-front/PageTitle'
 
 export const PricesPage = () => {
     const { priceContent } = useLoaderData()

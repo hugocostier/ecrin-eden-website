@@ -1,4 +1,9 @@
-import { certificationLoader, contactLoader, giftCardLoader, homeLoader, priceLoader, serviceLoader } from '../../data'
+import { certificationLoader } from '../../data/store-front/certification.loader'
+import { contactLoader } from '../../data/store-front/contact.loader'
+import { giftCardLoader } from '../../data/store-front/giftcard.loader'
+import { homeLoader } from '../../data/store-front/home.loader'
+import { priceLoader } from '../../data/store-front/price.loader'
+import { serviceLoader } from '../../data/store-front/service.loader'
 
 export const storeFrontPages = [
     {

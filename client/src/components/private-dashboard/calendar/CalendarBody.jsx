@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import { useEffect, useState } from 'react'
 import StyledComponents from 'styled-components'
-import { fetchAllAppointments, fetchAppointments } from '../../../data'
+import { fetchAllAppointments, fetchAppointments } from '../../../data/appointments/appointments.fetch'
 import { useAuth } from '../../../hooks/useAuth.hook'
 import { useClientInfo } from '../../../hooks/useClientInfo.hook'
 import { renderDay, renderMonth, renderWeek } from '../../../utils/calendar/renderCalendar.util'

@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import StyledComponents from 'styled-components'
-import { Header, Sidebar } from '../../components'
+import { Header } from '../../components/private-dashboard/Header'
+import { Sidebar } from '../../components/private-dashboard/sidebar/Sidebar'
+import { ScrollToTop } from '../../components/ScrollToTop'
 import { useAuth } from '../../hooks/useAuth.hook'
 
 const userMenu = [
@@ -120,6 +122,7 @@ export const PrivateRoot = () => {
 
     return (
         <StyledRoot>
+            <ScrollToTop />
             <Header />
             <Sidebar menuItems={items} />
             <Outlet />
