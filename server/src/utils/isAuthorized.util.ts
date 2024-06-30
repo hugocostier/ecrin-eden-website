@@ -14,7 +14,7 @@ export const isAuthorized = (req: Request, res: Response, ownerId: number): bool
     const user: User = req.user as User
 
     // Allow access to the add appointment route if the user is not authenticated
-    if (!req.isAuthenticated() && req.originalUrl === '/api/v1/appointments/add') {
+    if (req.originalUrl === '/api/v1/appointments/add') {
         return true 
     }
 
