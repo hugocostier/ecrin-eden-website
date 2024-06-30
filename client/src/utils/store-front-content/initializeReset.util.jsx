@@ -77,6 +77,7 @@ export const initializeReset = (content, pageId, reset) => {
                 'text-2': main.text[2],
                 'text-3': main.text[3],
                 'text-4': main.text[4],
+                'text-5': main.text[5],
                 'service-0-title': services[0].title,
                 'service-0-time': services[0].time,
                 'service-0-text': services[0].text,
@@ -187,7 +188,6 @@ export const initializeReset = (content, pageId, reset) => {
                 'main-1-text-2': main[1].text[2],
                 'main-1-text-3': main[1].text[3],
                 'main-1-text-4': main[1].text[4],
-                'main-1-text-5': main[1].text[5],
             })
 
             break
@@ -217,3 +217,117 @@ export const initializeReset = (content, pageId, reset) => {
             break
     }
 }
+
+// export const initializeReset = (content, pageId, reset) => {
+//     const extractContent = (source, fields) => {
+//         let result = {}
+//         fields.forEach(field => {
+//             result[field] = source[field]
+//         })
+//         console.log(result)
+//         return result
+//     }
+
+//     const mapContent = (source, fields) => {
+//         return source.map(item => extractContent(item, fields))
+//     }
+
+//     const formatMain = (main) => {
+//         let formattedMain = {}
+//         main.forEach((section, index) => {
+//             formattedMain[`main-${index}-title`] = section.title
+//             section.text.forEach((text, textIndex) => {
+//                 formattedMain[`main-${index}-text-${textIndex}`] = text
+//             })
+//         })
+//         return formattedMain
+//     }
+
+//     let resetData = {}
+//     let headerFields, mainFields, footerFields, reviewFields, serviceFields, moreFields, contactFields
+
+//     switch (pageId) {
+//         case '1':
+//             headerFields = ['title', 'subtitle']
+//             mainFields = ['title', 'subtitle', 'text']
+//             footerFields = ['text']
+//             reviewFields = ['text', 'author']
+
+//             resetData = {
+//                 ...extractContent(content.homeContent.header[0], headerFields),
+//                 ...formatMain(mapContent(content.homeContent.main, mainFields)),
+//                 ...extractContent(content.homeContent.footer[0], footerFields),
+//                 ...mapContent(content.homeContent.reviews, reviewFields).reduce((acc, review, index) => {
+//                     acc[`review-${index}-text`] = review.text
+//                     acc[`review-${index}-author`] = review.author
+//                     return acc
+//                 }, {})
+//             }
+//             break
+
+//         case '2':
+//             headerFields = ['title', 'subtitle']
+//             mainFields = ['title', 'text']
+//             serviceFields = ['title', 'time', 'text']
+
+//             resetData = {
+//                 ...extractContent(content.serviceContent.header[0], headerFields),
+//                 ...extractContent(content.serviceContent.main[0], mainFields),
+//                 ...mapContent(content.serviceContent.services, serviceFields).reduce((acc, service, index) => {
+//                     acc[`service-${index}-title`] = service.title
+//                     acc[`service-${index}-time`] = service.time
+//                     acc[`service-${index}-text`] = service.text
+//                     return acc
+//                 }, {})
+//             }
+//             break
+
+//         case '3':
+//             headerFields = ['title']
+//             mainFields = ['title', 'duration', 'price']
+//             moreFields = ['title', 'price', 'text', 'choices', 'more']
+
+//             resetData = {
+//                 ...extractContent(content.priceContent.header[0], headerFields),
+//                 ...mapContent(content.priceContent.main, mainFields).reduce((acc, section, index) => {
+//                     acc[`main-${index}-title`] = section.title
+//                     acc[`main-${index}-duration`] = section.duration
+//                     acc[`main-${index}-price`] = section.price
+//                     return acc
+//                 }, {}),
+//                 ...extractContent(content.priceContent.more[0], moreFields)
+//             }
+//             break
+
+//         case '4':
+//             mainFields = ['title', 'text']
+
+//             resetData = {
+//                 ...extractContent(content.giftCardContent.main[0], mainFields)
+//             }
+//             break
+
+//         case '5':
+//             headerFields = ['title']
+//             mainFields = ['title', 'text']
+
+//             resetData = {
+//                 ...extractContent(content.certificationContent.header[0], headerFields),
+//                 ...formatMain(mapContent(content.certificationContent.main, mainFields))
+//             }
+//             break
+
+//         case '6':
+//             contactFields = ['title', 'name', 'address', 'zip', 'city', 'phone', 'email']
+
+//             resetData = {
+//                 ...extractContent(content.contactContent.header[0], contactFields)
+//             }
+//             break
+
+//         default:
+//             break
+//     }
+
+//     reset(resetData)
+// }
