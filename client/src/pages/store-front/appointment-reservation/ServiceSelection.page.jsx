@@ -127,11 +127,11 @@ const AwaySelection = StyledComponents.div`
             font-size: .875rem;
             line-height: 1.25rem;
             font-weight: bold;
-            color: hsl(231 11% 63% / 1); 
+            color: var(--grey-300); 
             transition: color .3s cubic-bezier(.4,0,.2,1);
 
             &.selected {
-                color: hsl(213 96% 18% / 1);
+                color: var(--tertiary-700);
             }
         }
 
@@ -148,7 +148,7 @@ const AwaySelection = StyledComponents.div`
         padding: .25rem; 
         border: none; 
         border-radius: 10px;
-        background-color: hsl(213 96% 18% / 1);
+        background-color: var(--tertiary-500);
         cursor: pointer; 
 
         &.activated {
@@ -159,7 +159,7 @@ const AwaySelection = StyledComponents.div`
             aspect-ratio: 1 / 1;
             height: 100%;
             border-radius: 50%;
-            background-color: hsl(0 0% 100% / 1);
+            background-color: var(--white);
         }
     }
 
@@ -180,7 +180,7 @@ const ErrorContainer = StyledComponents.div`
         font-size: .875rem;
         font-weight: bold; 
         letter-spacing: .125em; 
-        color: hsl(354 84% 57% / 1); 
+        color: var(--red); 
         margin: 0;
     }
 `

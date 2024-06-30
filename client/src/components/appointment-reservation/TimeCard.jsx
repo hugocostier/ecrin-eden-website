@@ -31,7 +31,7 @@ TimeCard.propTypes = {
 
 const StyledTimeCard = StyledComponents.label`
     display: inline-block;
-    background-color: #e5f9ff; 
+    background-color: var(--quaternary-100); 
     border-radius: 4px; 
     margin: 0 6px 12px;
     padding: 0 16px; 
@@ -39,17 +39,17 @@ const StyledTimeCard = StyledComponents.label`
     cursor: pointer; 
 
     &.selected {
-        background-color: #007ab3; 
+        background-color: var(--quaternary-700); 
         
         .time-container {
             h4 {
-                color: #fff;
+                color: var(--white);
             }   
         }
     }
 
     &:hover {
-        background-color: #ccf2ff; 
+        background-color: var(--quaternary-300); 
     }
 
     .time-container {
@@ -61,7 +61,7 @@ const StyledTimeCard = StyledComponents.label`
         h4 {
             font-family: var(--body-font); 
             font-size: 1rem;
-            color: #294056;
+            color: var(--tertiary-700);
             line-height: 1.5rem;
             margin: 0;  
         }
@@ -69,9 +69,5 @@ const StyledTimeCard = StyledComponents.label`
 
     .time-radio {
         display: none;
-    }
-  
-    @media screen and (min-width: 1024px) {
-
     }
 `

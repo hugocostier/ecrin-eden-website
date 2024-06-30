@@ -17,7 +17,7 @@ const FormActionContainer = StyledComponents.section`
     display: flex; 
     align-items: center;
     justify-content: space-between;
-    background-color: hsl(0 0% 100% / 1); 
+    background-color: var(--white); 
     position: static; 
     padding: 0 1rem 0 1rem; 
     margin-top: auto; 
@@ -25,7 +25,7 @@ const FormActionContainer = StyledComponents.section`
     .back-btn {
         font-size: 1.125rem;
         font-weight: bold;
-        color: hsl(231 11% 63% / 1); 
+        color: var(--grey-300); 
         line-height: 1.25rem;
     }
 

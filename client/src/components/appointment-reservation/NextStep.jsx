@@ -18,9 +18,9 @@ NextStep.propTypes = {
 }
 
 const NextButton = StyledComponents.button`
-    color: hsl(217 100% 97% / 1); 
+    color: var(--white); 
     line-height: 1.25rem;
-    background-color: hsl(213 96% 18% / 1); 
+    background-color: var(--secondary-500); 
     margin-left: auto; 
     padding: 10px 17px; 
     border: none; 
@@ -31,8 +31,8 @@ const NextButton = StyledComponents.button`
     transition-timing-function: cubic-bezier(.4, 0, .2, 1);
 
     &.submit-btn {
-        color: hsl(217 100% 97% / 1); 
-        background-color: hsl(243 100% 62% / 1);
+        color: var(--white); 
+        background-color: var(--tertiary-500);
     }
     
     &:hover {

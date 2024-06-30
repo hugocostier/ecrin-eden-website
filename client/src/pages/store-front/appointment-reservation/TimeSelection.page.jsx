@@ -128,6 +128,6 @@ const ErrorContainer = StyledComponents.div`
         font-weight: bold; 
         letter-spacing: .125em; 
         line-height: 1.24rem; 
-        color: hsl(354 84% 57% / 1); 
+        color: var(--red); 
     }
 `

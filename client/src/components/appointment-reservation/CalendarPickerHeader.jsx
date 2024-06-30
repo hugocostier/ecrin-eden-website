@@ -67,7 +67,7 @@ const HeaderContainer = StyledComponents.div`
             height: 30px; 
         
             &:hover {
-                background-color: var(--grey-300); 
+                background-color: var(--grey-100); 
             }
         
             &:last-child {

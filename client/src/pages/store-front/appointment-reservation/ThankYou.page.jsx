@@ -22,7 +22,7 @@ const ThankYouContainer = StyledComponents.section`
     width: 100%;
     height: 100%;
     padding: 1.75rem 1.5rem 2rem 1.5rem; 
-    background-color: hsl(0 0% 100% / 1);
+    background-color: var(--white);
     border-radius: .5rem;
     box-shadow: 0 0 rgba(0, 0, 0, 0), 0 0 rgba(0, 0, 0, 0), 0 10px 15px -3px rgba(0, 0, 0, .1), 0 4px 6px -4px rgba(0, 0, 0, .1);
 
@@ -34,16 +34,16 @@ const ThankYouContainer = StyledComponents.section`
 
     h2 {
         margin: 1rem 0 0 0;
-        color: hsl(213 96% 18% / 1); 
+        color: var(--tertiary-900); 
         font-size: 2.5rem;
     }
 
     p {
-        color: hsl(231 11% 63% / 1); 
+        color: var(--grey-500); 
         margin: .75rem 0 0 0;
 
         a {
-            color: hsl(213 96% 18% / 1); 
+            color: var(--tertiary-900); 
             text-decoration: none;
 
             &:hover {
@@ -62,6 +62,5 @@ const ThankYouContainer = StyledComponents.section`
         img {
             width: auto; 
         }
-    
     }
 `

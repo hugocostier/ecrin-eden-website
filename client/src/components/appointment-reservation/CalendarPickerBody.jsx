@@ -101,26 +101,6 @@ const CalendarPickerBodyContainer = StyledComponents.table`
             width: calc(100% / 7); 
         }
     }
-
-    tbody {
-        tr {
-            &.day-view {
-                height: 55px;
-
-                .appointment-link {
-                    font-size: 0.8rem; 
-                }
-            }
-
-            &.week-view {
-                height: 570px;
-            }
-
-            &.month-view {
-                height: 95px;
-            }
-        }
-    }
 `
 
 const Week = StyledComponents.thead`
@@ -137,7 +117,7 @@ const Month = StyledComponents.tbody`
         cursor: pointer;
 
         &:hover {
-            background: var(--grey-200); 
+            background: var(--quaternary-100); 
         }
 
         &.inactive {
@@ -151,7 +131,7 @@ const Month = StyledComponents.tbody`
             align-content: center; 
 
             &.selected {
-                background: var(--grey-200);
+                background: var(--quaternary-300);
             }
         }
 
@@ -165,26 +145,5 @@ const Month = StyledComponents.tbody`
                 color: var(--red);
             }
         }   
-        
-        .appointment-info {
-            padding-left: 10px;
-            padding-right: 10px; 
-            border-radius: 5px; 
-            font-size: 0.875rem;
-            margin-top: 2px;
-            cursor: pointer;
-        }
-
-        .appointment-link {
-            display: block; 
-            width: 100%;
-            color: inherit;
-            text-decoration: none;
-        }
-        
-        .more-appointments {
-            padding-left: 10px;  
-            color: var(--grey-600)       
-        }
     } 
 `

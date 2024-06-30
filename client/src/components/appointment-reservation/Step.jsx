@@ -46,15 +46,15 @@ const StepContainer = StyledComponents.div`
         cursor: pointer;
 
         &.active {
-            background-color: hsl(206 94% 87% / 1); 
-            color: hsl(213 96% 18% / 1); 
+            background-color: var(--quaternary-100); 
+            color: var(--tertiary-900); 
             border-color: transparent; 
         }
 
         &.inactive {
-            border-color: hsl(0 0% 100% / 1); 
+            border-color: var(--white); 
             background-color: transparent; 
-            color: hsl(0 0% 100% / 1);
+            color: var(--white);
         }
     }
 `
@@ -68,7 +68,7 @@ const StepInfoContainer = StyledComponents.div`
         font-family: var(--body-font); 
         font-size: 13px;
         font-weight: normal;
-        color: hsl(231 11% 63% / 1); 
+        color: var(--grey-300); 
         margin: 0; 
     }
 
@@ -76,7 +76,7 @@ const StepInfoContainer = StyledComponents.div`
         font-family: var(--body-font); 
         font-size: 14px;
         font-weight: bold;
-        color: hsl(0 0% 100% / 1); 
+        color: var(--white); 
         letter-spacing: .1em; 
         margin: 0; 
     }

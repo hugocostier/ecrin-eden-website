@@ -43,7 +43,7 @@ const StyledServiceCard = StyledComponents.label`
     width: 100%;
     padding: 1rem; 
     background-color: transparent;
-    border: 1px solid hsl(229 24% 87% / 1);
+    border: 1px solid var(--grey-200);
     border-radius: .375rem; 
     cursor: pointer;
     transition-duration: .3s;
@@ -52,7 +52,7 @@ const StyledServiceCard = StyledComponents.label`
 
     &:hover, 
     &.selected {
-        border-color: hsl(243 100% 62% / 1)
+        border-color: var(--primary-500); 
     }
 
     .service-icon {
@@ -72,14 +72,14 @@ const StyledServiceCard = StyledComponents.label`
             font-size: 1rem;
             font-weight: bold;
             text-transform: capitalize;
-            color: hsl(213 96% 18% / 1); 
+            color: var(--tertiary-900); 
             margin: 0;
         }
 
         p {
             font-size: .875rem;
             line-height: 1.25rem;
-            color: hsl(231 11% 63% / 1);
+            color: var(--grey-400);
             margin: 0; 
         }
     }

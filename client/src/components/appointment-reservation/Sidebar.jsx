@@ -1,7 +1,6 @@
 import { useLocation } from 'react-router-dom'
 import StyledComponents from 'styled-components'
 import bgSidebarDesktop from '../../assets/images/appointment-reservation/bg-sidebar-desktop.svg'
-import bgSidebarMobile from '../../assets/images/appointment-reservation/bg-sidebar-mobile.svg'
 import { Step } from './Step'
 
 export const Sidebar = () => {
@@ -46,7 +45,6 @@ export const Sidebar = () => {
 
     return (
         <SidebarContainer>
-            <SidebarBackground />
             <StepsContainer>
                 {Steps}
             </StepsContainer>
@@ -77,23 +75,6 @@ const SidebarContainer = StyledComponents.section`
                 display: block; 
             }
         }
-    }
-`
-
-const SidebarBackground = StyledComponents.div`
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 172px;
-    background-image: url(${bgSidebarMobile});
-    background-size: cover;
-    background-position: center;
-    z-index: -1;
-
-    @media screen and (min-width: 1024px) {
-        background-image: url(${bgSidebarDesktop});
-        height: auto;
     }
 `
 

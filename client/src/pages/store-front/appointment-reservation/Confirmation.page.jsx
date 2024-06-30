@@ -117,35 +117,40 @@ const ConfirmationContainer = StyledComponents.section`
 
             span {
                 line-height: 1.5rem; 
-
-                &.warning {
-                    font-weight: bold;
-                    color: hsl(354 84% 57% / 1); 
-                }
             }
 
             &.service-container {
                 span {
                     font-weight: bold;
-                    color: hsl(213 96% 18% / 1); 
+                    color: var(--tertiary-500); 
                     font-size: 1.25rem;
+
+                    &.warning {
+                        font-weight: bold;
+                        color: var(--red); 
+                    }
                 }
             }
 
             &.appointment-container, &.client-container {
                 span {
-                    color: hsl(231 11% 63% / 1); 
+                    color: var(--grey-500); 
+                 
+                    &.warning {
+                        font-weight: bold;
+                        color: var(--red); 
+                    }
                 }
             }
         }
 
         &.service-info {
-            border-bottom: 2px solid hsl(229 24% 87% / 1);
+            border-bottom: 2px solid var(--grey-200);
             padding: 1rem 0; 
         }
     
         &.appointment-info {
-            border-bottom: 1px solid hsl(229 24% 87% / 1);
+            border-bottom: 1px solid var(--grey-200);
         }
 
         &.appointment-info, &.client-info {
@@ -158,12 +163,12 @@ const ConfirmationContainer = StyledComponents.section`
         font-weight: bold;
         text-decoration: underline;
         text-decoration-thickness: 2px;
-        color: hsl(231 11% 63% / 1); 
+        color: var(--grey-500); 
         transition: color 0.3s cubic-bezier(.4, 0, .2, 1); 
         margin-top: .25rem; 
 
         &:hover {
-            color: hsl(243 100% 62% / 1); 
+            color: var(--secondary-500); 
         }
     }
 
@@ -175,7 +180,7 @@ const ConfirmationContainer = StyledComponents.section`
 
         span {
             font-weight: bold;
-            color: hsl(231 11% 63% / 1);
+            color: var(--grey-500);
             line-height: 1.25rem;
         }
 
@@ -186,19 +191,15 @@ const ConfirmationContainer = StyledComponents.section`
 
             #price {
                 font-weight: bold;
-                color: hsl(213 96% 18% / 1);
+                color: var(--tertiary-700);
                 line-height: 1.25rem;
             }
 
             #supplement-fee {
                 font-size: 0.75rem;
-                color: hsl(231 11% 63% / 1);
+                color: var(--grey-500);
                 line-height: 1rem;
             }
         }
-    }
-
-    @media screen and (min-width: 1024px) {
-
     }
 `

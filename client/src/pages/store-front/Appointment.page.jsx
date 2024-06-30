@@ -72,7 +72,7 @@ const ReservationContainer = StyledComponents.section`
     border-radius: 1rem;
 
     @media screen and (min-width: 1024px) {
-        background-color: hsl(0 0% 100% / 1); 
+        background-color: #FFFFFF; 
         flex-direction: row; 
         padding: 1rem; 
         box-shadow: 0 0 rgba(0, 0, 0, 0), 0 0 rgba(0, 0, 0, 0), 0 10px 15px -3px rgba(0, 0, 0, .1), 0 4px 6px -4px rgba(0, 0, 0, .1);
