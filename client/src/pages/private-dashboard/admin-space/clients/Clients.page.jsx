@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import StyledComponents from 'styled-components'
@@ -44,7 +44,9 @@ export const AdminClients = () => {
         }
     }, [])
 
-    const filteredClients = clients.filter(client => client.first_name.toLowerCase().includes(searchInput.toLowerCase()) || client.last_name.toLowerCase().includes(searchInput.toLowerCase()))
+    const filteredClients = useMemo(() => {
+        return clients.filter(client => client.first_name.toLowerCase().includes(searchInput.toLowerCase()) || client.last_name.toLowerCase().includes(searchInput.toLowerCase()))
+    }, [clients, searchInput])
 
     return (
         <ClientPage>

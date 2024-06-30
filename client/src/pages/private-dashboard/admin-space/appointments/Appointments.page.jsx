@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import StyledComponents from 'styled-components'
@@ -39,7 +39,9 @@ export const AdminAppointments = () => {
         }
     }, [show])
 
-    const filteredAppointments = appointments.filter(appointment => appointment.client.first_name.toLowerCase().includes(searchInput.toLowerCase()) || appointment.client.last_name.toLowerCase().includes(searchInput.toLowerCase()))
+    const filteredAppointments = useMemo(() => {
+        return appointments.filter(appointment => appointment.client.first_name.toLowerCase().includes(searchInput.toLowerCase()) || appointment.client.last_name.toLowerCase().includes(searchInput.toLowerCase()))
+    }, [appointments, searchInput])
 
     const handleCancel = (id) => {
         const confirmCancel = window.confirm('Êtes vous sur de vouloir annuler ce rendez-vous ?')
