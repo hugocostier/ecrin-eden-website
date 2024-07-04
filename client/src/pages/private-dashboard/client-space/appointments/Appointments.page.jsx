@@ -70,7 +70,7 @@ export const UserAppointments = () => {
             <h2>Mes rendez-vous</h2>
 
             <ActionSection>
-                <Link to={'../../../appointment'} className='btn add-appointment'>Ajouter un rendez-vous</Link>
+                <Link to={'../../../appointment/service'} className='btn add-appointment'>Ajouter un rendez-vous</Link>
                 <FilterAppointments filter={filter} show={show} setSearchParams={setSearchParams} appointments={appointments} />
             </ActionSection>
 
@@ -126,8 +126,7 @@ export const UserAppointments = () => {
                         </tbody>
                     </AppointmentsTable>
                 </section>
-            )
-            }
+            )}
         </AppointmentsPage >
     )
 }
