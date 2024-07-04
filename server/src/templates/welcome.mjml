@@ -1,0 +1,38 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-all font-family="Arial, sans-serif" font-size="16px" align="justify" line-height="20px" />
+      <mj-body background-color="#fafafa" />
+      <mj-button background-color="#66554d" color="#ffffff" font-size="16px" />
+    </mj-attributes>
+  </mj-head>
+
+  <mj-body>
+    <mj-include path="./email-header.mjml" />
+
+    <mj-section>
+      <mj-column>
+        <mj-text font-size="24px" font-weight="bold" align="center" padding-bottom="24px" padding-top="0">
+          Bienvenue chez Écrin d'Eden!
+        </mj-text>
+        <mj-text>
+          Bonjour {{firstName}},
+        </mj-text>
+        <mj-text>
+          Nous sommes ravis de vous compter parmi nous. Votre compte a été créé avec succès et vous pouvez désormais accéder à votre espace personnel sur notre site web.
+        </mj-text>
+        <mj-text>
+          Merci de vous être inscrit sur Écrin d'Eden. Nous espérons que vous apprécierez nos services.
+        </mj-text>
+        <mj-button href="{{clientUrl}}" align="center">
+          Accéder à mon espace personnel
+        </mj-button>
+        <mj-text font-size="14px" padding-bottom="0">
+          Si vous avez des questions, n'hésitez pas à nous contacter à l'adresse suivante : <a href="mailto:contact@ecrin-eden.com">contact@ecrin-eden.com</a>.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-include path="./email-footer.mjml" />
+  </mj-body>
+</mjml>

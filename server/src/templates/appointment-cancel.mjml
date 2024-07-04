@@ -1,0 +1,36 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-all font-family="Arial, sans-serif" font-size="16px" align="justify" line-height="20px" />
+      <mj-body background-color=" #fafafa" />
+      <mj-button background-color="#66554d" color="#ffffff" font-size="16px" />
+    </mj-attributes>
+  </mj-head>
+
+  <mj-body>
+    <mj-include path="./email-header.mjml" />
+
+    <mj-section>
+      <mj-column>
+        <mj-text align="center" font-weight="bold" font-size="24px" padding-top="0" padding-bottom="20px">
+          Annulation de votre rendez-vous
+        </mj-text>
+        <mj-text>
+          Bonjour {{firstNamme}} {{lastName}},
+        </mj-text>
+        <mj-text>
+          Votre rendez-vous du {{date}}, {{time}} a été annulé.
+        </mj-text>
+        <mj-text>
+          Vous pouvez reprogrammer un rendez-vous sur notre site en cliquant sur le lien suivant :
+        </mj-text>
+        <mj-button href="{{rescheduleLink}}" align="center">Reprogrammer un rendez-vous</mj-button>
+        <mj-text font-size="14px" padding-bottom="0">
+          Si vous avez besoin d'aide, n'hésitez pas à nous contacter à l'adresse suivante : <a href="mailto:contact@ecrin-eden.com">contact@ecrin-eden.com</a>.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-include path="./email-footer.mjml" />
+  </mj-body>
+</mjml>

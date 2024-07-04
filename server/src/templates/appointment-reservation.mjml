@@ -1,0 +1,63 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-all font-family="Arial, sans-serif" font-size="16px" align="justify" line-height="20px" />
+      <mj-body background-color=" #fafafa" />
+      <mj-button background-color="#66554d" color="#ffffff" font-size="16px" />
+    </mj-attributes>
+  </mj-head>
+
+  <mj-body>
+    <mj-include path="./email-header.mjml" />
+
+    <mj-section>
+      <mj-column>
+        <mj-text align="center" font-weight="bold" font-size="24px" padding-top="0" padding-bottom="20px">
+          Récapitulatif de votre réservation
+        </mj-text>
+        <mj-text>
+          Bonjour {{firstNamme}} {{lastName}},
+        </mj-text>
+        <mj-text>
+          Merci pour votre réservation, voici un récapitulatif de votre rendez-vous :
+        </mj-text>
+        <mj-text padding-top="0">
+          Date : {{date}}.
+        </mj-text>
+        <mj-text padding-top="0">
+          Heure : {{time}}.
+        </mj-text>
+        {{#if isAway }}
+          <mj-text padding-top="0">
+            Lieu : Au salon.
+          </mj-text>
+        {{else}}
+          <mj-text padding-top="0">
+            Lieu : {{address}}.
+          </mj-text>
+        {{/if}}
+        <mj-text padding-top="0">
+          Prestation : {{service}}.
+        </mj-text>
+        <mj-text padding-top="0">
+          Durée : {{duration}}.
+        </mj-text>
+        <mj-text padding-top="0">
+          Prix : {{price}}.
+        </mj-text>
+        <mj-text>
+          Vous recevrez un nouveau message lorsque votre réservation sera confirmée par la praticienne.
+        </mj-text>
+        <mj-text>
+          Vous pouvez consulter l'état de votre réservation à tout moment en vous connectant à votre compte sur notre site.
+        </mj-text>
+
+        <mj-text font-size="14px" padding-bottom="0">
+          Si vous avez besoin d'aide, n'hésitez pas à nous contacter à l'adresse suivante : <a href="mailto:contact@ecrin-eden.com">contact@ecrin-eden.com</a>.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-include path="./email-footer.mjml" />
+  </mj-body>
+</mjml>

@@ -1,0 +1,15 @@
+<mj-section>
+    <mj-column width="20%" vertical-align="middle">
+        <mj-image width="80px" src="./assets/logo-black.png" />
+    </mj-column>
+
+    <mj-column width="80%" vertical-align="middle"> 
+        <mj-text font-size="28px" font-weight="bold" color="#66554d">
+            Écrin d'Eden
+        </mj-text>
+    </mj-column> 
+
+    <mj-column width="100%">
+        <mj-divider border-color="#66554d" border-width="1px" padding-bottom="0"/>
+    </mj-column>
+</mj-section>

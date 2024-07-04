@@ -1,0 +1,23 @@
+<mj-section>
+  <mj-column width="100%">
+    <mj-divider border-color="#66554d" border-width="1px" padding-top="0" />
+  </mj-column>
+
+  <mj-column width="60%" vertical-align="middle">
+    <mj-text font-size="12px" color="#8c8c8c" padding-bottom="6px" padding-top="0">
+      © 2024 Écrin d'Eden. Tous droits réservés.
+    </mj-text>
+    <mj-text font-size="12px" color="#8c8c8c" padding-bottom="6px" padding-top="0">
+      302 Route des Tronquisses, 30960 Les Mages.
+    </mj-text>
+  </mj-column>
+
+  <mj-column width="40%" vertical-align="middle">
+    <mj-social align="right">
+      <mj-social-element href="https://www.instagram.com/" src="./assets/instagram.svg" />
+      <mj-social-element href="https://www.facebook.com/" src="./assets/facebook.svg" />
+      <mj-social-element href="https://www.twitter.com/" src="./assets/twitter.svg" />
+      <mj-social-element href="https://www.linkedin.com/" src="./assets/linkedin.svg" />
+    </mj-social>
+  </mj-column>
+</mj-section>

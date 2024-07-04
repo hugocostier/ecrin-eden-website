@@ -1,0 +1,35 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-all font-family="Arial, sans-serif" font-size="16px" align="justify" line-height="20px" />
+      <mj-body background-color="#fafafa" />
+      <mj-button background-color="#66554d" color="#ffffff" font-size="16px" />
+    </mj-attributes>
+  </mj-head>
+
+  <mj-body>
+    <mj-include path="./email-header.mjml" />
+
+    <mj-section>
+      <mj-column>
+        <mj-text font-weight="bold" font-size="24px" padding-bottom="20px" padding-top="0" align="center">
+          Validation email
+        </mj-text>
+        <mj-text>
+          Cher utilisateur,
+        </mj-text>
+        <mj-text padding-bottom="20px">
+          Merci de vous être inscrit sur Écrin d'Eden. Pour valider votre adresse email, veuillez cliquer sur le lien ci-dessous.
+        </mj-text>
+        <mj-button href="{{verificationLink}}" align="center">
+          Vérifier mon adresse email
+        </mj-button>
+        <mj-text font-size="14px" padding-top="20px" padding-bottom="0">
+          Si vous avez besoin d'aide, n'hésitez pas à nous contacter à l'adresse suivante : <a href="mailto:contact@ecrin-eden.com">contact@ecrin-eden.com</a>.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-include path="./email-footer.mjml" />
+  </mj-body>
+</mjml>
