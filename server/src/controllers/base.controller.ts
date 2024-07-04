@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import xss from 'xss'
 import { CustomAPIError } from '../errors/custom-errors.js'
 import { isAuthorized } from '../utils/isAuthorized.util.js'
 
@@ -24,7 +25,7 @@ export default abstract class BaseController {
 
         // Create a new object containing only the valid fields
         return validFields.reduce((obj: { [key: string]: any }, key: string) => {
-            obj[key] = body[key]
+            obj[key] = xss(body[key])
             return obj
         }, {})
     }
