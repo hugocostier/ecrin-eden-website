@@ -100,7 +100,7 @@ const ServiceSelectionContainer = StyledComponents.section`
     margin-top: 1.25rem; 
 
     @media screen and (min-width: 1024px) {
-        margin-top: 1.5rem; 
+        margin-top: 1rem; 
     }
 `
 

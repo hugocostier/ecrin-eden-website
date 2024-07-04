@@ -154,12 +154,6 @@ const ClientInformationContainer = StyledComponents.section`
     display: flex;
     flex-direction: column;
     margin: 1rem 0;
-    max-height: 372px;
-    overflow: hidden;
-
-    .scroll-container {
-        overflow-y: auto; 
-    }
 
     .input-container {
         display: flex;
@@ -208,6 +202,13 @@ const ClientInformationContainer = StyledComponents.section`
     }
 
     @media screen and (min-width: 1024px) {
+        max-height: 372px;    
+        overflow: hidden;
+
+        .scroll-container {
+            overflow-y: auto; 
+        }
+
         .input-container {
             .label-container {
                 label {
@@ -218,7 +219,7 @@ const ClientInformationContainer = StyledComponents.section`
 
             input {
                 border-radius: .5rem; 
-                padding: .75rem 1rem;
+                padding: .5rem 1rem;
                 line-height: 1.5rem;
                 font-weight: bold; 
             }
