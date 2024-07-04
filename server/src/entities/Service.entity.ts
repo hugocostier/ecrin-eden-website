@@ -1,4 +1,4 @@
-import { IsDefined, IsNotEmpty, IsNumber, IsPositive, IsString, Length, Max, Min } from 'class-validator'
+import { IsNotEmpty, IsNumber, IsPositive, IsString, Length, Max, Min } from 'class-validator'
 import {
     BaseEntity,
     Column,
