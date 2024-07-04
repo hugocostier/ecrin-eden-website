@@ -3,7 +3,6 @@ import { NextFunction, Request, Response } from 'express'
 import passport from 'passport'
 import User from '../entities/User.entity.js'
 import { AuthService } from '../services/auth.service.js'
-import { UserService } from '../services/user.service.js'
 import BaseController from './base.controller.js'
 import EmailController from './email.controller.js'
 
@@ -17,7 +16,6 @@ import EmailController from './email.controller.js'
  */
 export default class AuthController extends BaseController {
     private _authService: AuthService = new AuthService()
-    private _userService: UserService = new UserService()
     private _emailController: EmailController = new EmailController()
 
     /**
