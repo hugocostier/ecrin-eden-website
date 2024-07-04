@@ -57,8 +57,8 @@ Sidebar.propTypes = {
 const StyledSidebar = StyledComponents.aside`
     display: flex;
     height: 100%;
-    background: #1d212a;
-    border-right: 1px solid #2e303e;
+    background: var(--primary-500); 
+    border-right: 1px solid bar(--primary-900);
     transition: width 0.4s;    
     
     @media screen and (max-width: 1023px) {

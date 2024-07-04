@@ -80,7 +80,7 @@ const StyledCalendarHeader = StyledComponents.div`
 
         div {
             display: flex;
-            border: 1px solid var(--grey-600);
+            border: 1px solid var(--quaternary-800);
             border-radius: 10px;
 
             p {
@@ -91,12 +91,12 @@ const StyledCalendarHeader = StyledComponents.div`
                 cursor: pointer;
 
                 &.active {
-                    background-color: var(--grey-500);
+                    background-color: var(--quaternary-600);
                 }
             }
 
             &:hover {
-                background-color: var(--grey-400);
+                background-color: var(--quaternary-400);
             }
         }
     }
@@ -119,7 +119,7 @@ const StyledCalendarHeader = StyledComponents.div`
 
             span, p {
                 display: inline-block;
-                color: var(--grey-600);
+                color: var(--black);
                 margin: 0 1px; 
                 text-align: center;
                 line-height: 40px;
@@ -127,7 +127,7 @@ const StyledCalendarHeader = StyledComponents.div`
                 
             
                 &:hover {
-                    background-color: var(--grey-400); 
+                    background-color: var(--quaternary-500); 
                 }
             
                 &:last-child {

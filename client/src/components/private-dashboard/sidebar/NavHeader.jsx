@@ -30,7 +30,7 @@ const StyledNavHeader = StyledComponents.header`
         display: flex;
         flex-direction: column; 
         align-items: center;
-        border-bottom: 1px solid #2e303e;
+        border-bottom: 1px solid var(--white);
         color: var(--white);
         height: auto; 
         gap: 16px; 

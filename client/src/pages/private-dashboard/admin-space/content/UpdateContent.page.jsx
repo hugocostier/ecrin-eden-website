@@ -166,11 +166,23 @@ const ContentForm = StyledComponents.form`
             resize: vertical;
             width: 100%;
         }
+
+        input, textarea {
+            &:focus {
+                outline-color: var(--primary-400);
+            }
+        }
     }
 
     button {
         padding: 0.5rem;
         cursor: pointer; 
+        background: var(--quaternary-400);
+        border: 1px solid var(--quaternary-900);
+
+        &:hover {
+            background: var(--quaternary-600);
+        }
         
         &#edit {
             grid-column: 1 / 3;
@@ -181,6 +193,7 @@ const ContentForm = StyledComponents.form`
         display: grid;
         grid-template-columns: 1fr 1fr;
         grid-column: 1 / 3;
+        column-gap: 2rem;
     }
 
     @media screen and (min-width: 640px) {

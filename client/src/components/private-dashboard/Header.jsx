@@ -49,7 +49,7 @@ const StyledHeader = StyledComponents.header`
     justify-content: center;
     align-items: center;
     height: 60px;
-    background: #2e303e;
+    background: var(--primary-600);
     color: #ffffff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: 100%;
@@ -104,7 +104,7 @@ const StyledHeader = StyledComponents.header`
                 width: 26px;
                 height: 26px;
                 margin-left: 16px; 
-                color: var(--red-light);
+                color: var(--white); 
                 cursor: pointer;
                 background: transparent;
                 border: none;
@@ -145,9 +145,5 @@ const StyledHeader = StyledComponents.header`
         .user-container {
             margin-right: 32px;
         }
-    }
-
-    @media screen and (min-width: 1024px) {
-
     }
 `

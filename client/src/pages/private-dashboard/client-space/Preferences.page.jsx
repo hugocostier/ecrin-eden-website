@@ -221,6 +221,10 @@ const PreferencesForm = StyledComponents.form`
             margin-top: 0.5rem;
             padding: 0.5rem;
             width: 100%;
+
+            &:focus {
+                outline-color: var(--primary-400);
+            }
         }
 
         select {
@@ -235,10 +239,17 @@ const PreferencesForm = StyledComponents.form`
     button {
         padding: 0.5rem;
         cursor: pointer; 
+        background: var(--quaternary-400);
+        border: 1px solid var(--quaternary-900);
+
+        &:hover {
+            background: var(--quaternary-600);
+        }
     }
 
     #button-container {
         display: grid; 
         grid-template-columns: 1fr 1fr;
+        column-gap: 1rem; 
     }
 `

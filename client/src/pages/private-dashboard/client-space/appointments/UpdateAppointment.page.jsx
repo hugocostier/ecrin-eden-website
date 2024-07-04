@@ -226,6 +226,10 @@ const StyledForm = StyledComponents.form`
         input, select, textarea {
             padding: 0.5rem;
             width: 100%;
+
+            &:focus {
+                outline-color: var(--primary-400);
+            }
         }
 
         select, input[type='date'] {
@@ -241,11 +245,18 @@ const StyledForm = StyledComponents.form`
         margin-top: 1rem;
         padding: 0.5rem;
         cursor: pointer;
+        background: var(--quaternary-400);
+        border: 1px solid var(--quaternary-900);
+
+        &:hover {
+            background: var(--quaternary-600);
+        }
     }
 
     #button-container {
         display: grid; 
         grid-template-columns: 1fr 1fr;
+        column-gap: 1rem;
     }
 
     @media screen and (min-width: 640px) {
@@ -281,6 +292,7 @@ const StyledForm = StyledComponents.form`
         }
 
         #button-container {
+            column-gap: 2rem;
             grid-column: 1 / 4;
         }
     }

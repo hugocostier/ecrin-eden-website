@@ -154,7 +154,7 @@ export const UpdateClient = () => {
         <ClientRecord>
             <h2>Fiche client</h2>
 
-            <StyledForm onSubmit={handleSubmit(sendForm)} novalidate>
+            <StyledForm onSubmit={handleSubmit(sendForm)} noValidate>
                 <legend className='form-legend'>Informations personnelles</legend>
                 <div className='input-container' name='lastName'>
                     <input
@@ -506,14 +506,27 @@ const StyledForm = StyledComponents.form`
         resize: none;
     }
 
+    input, select, textarea {
+        &:focus {
+            outline-color: var(--primary-400);
+        }
+    }
+
     button {
         padding: 0.5rem;
         cursor: pointer;
+        background: var(--quaternary-400);
+        border: 1px solid var(--quaternary-900);
+
+        &:hover {
+            background: var(--quaternary-600);
+        }
     }
 
     #button-container {
         display: grid; 
         grid-template-columns: 1fr 1fr;
+        column-gap: 2rem; 
     }
 
     #question-1, #question-2, #question-3, #question-4, #question-5 {

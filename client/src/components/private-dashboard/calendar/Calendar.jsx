@@ -164,7 +164,7 @@ export const Calendar = () => {
 }
 
 const StyledCalendar = StyledComponents.section`
-    background: var(--grey-300); 
+    background: var(--quaternary-100); 
     border-radius: 10px;
 
     height: 750px;

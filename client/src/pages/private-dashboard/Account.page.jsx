@@ -21,7 +21,6 @@ export const AccountPage = () => {
             address: '',
             postalCode: '',
             city: '',
-            email: '',
             profilePicture: '',
             sharedInfo: '',
         }
@@ -43,7 +42,6 @@ export const AccountPage = () => {
                     address: fetchedClient.address || '',
                     postalCode: fetchedClient.postal_code || '',
                     city: fetchedClient.city || '',
-                    email: fetchedClient.user?.email || '',
                     profilePicture: fetchedClient.profile_picture || '',
                     sharedNotes: fetchedClient.shared_notes || '',
                 }
@@ -70,7 +68,6 @@ export const AccountPage = () => {
                     address: fetchedClient.address || '',
                     postalCode: fetchedClient.postal_code || '',
                     city: fetchedClient.city || '',
-                    email: fetchedClient.user?.email || '',
                     profilePicture: fetchedClient.profile_picture || '',
                     sharedNotes: fetchedClient.shared_notes || '',
                 }
@@ -172,7 +169,7 @@ export const AccountPage = () => {
                     <FormError error={errors.birthDate} />
                 </div>
 
-                <div className='input-container' name='email'>
+                {/* <div className='input-container' name='email'>
                     <input
                         type='email'
                         name='email'
@@ -182,7 +179,7 @@ export const AccountPage = () => {
                         {...register('email', { required: 'Veuillez entrer votre email', pattern: { value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/, message: 'Veuillez entrer un email valide' }, disabled: !isEditable })}
                     />
                     <FormError error={errors.email} />
-                </div>
+                </div> */}
 
                 <div className='input-container' name='address'>
                     <input
@@ -357,14 +354,27 @@ const AccountForm = StyledComponents.form`
         resize: none;
     }
 
+    input, textarea {
+        &:focus {
+            outline-color: var(--primary-400);
+        }
+    }
+
     button {
         padding: 0.5rem;
         cursor: pointer; 
+        background: var(--quaternary-400);
+        border: 1px solid var(--quaternary-900);
+
+        &:hover {
+            background: var(--quaternary-600);
+        }
     }
 
     #button-container {
         display: grid; 
         grid-template-columns: 1fr 1fr;
+        column-gap: 1rem;
     }
 
     @media screen and (min-width: 640px) {

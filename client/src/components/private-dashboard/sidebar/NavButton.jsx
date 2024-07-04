@@ -33,7 +33,7 @@ export const NavButton = ({ onClick, name, icon, isActive, hasSubNav, navigateTo
                 className={isActive ? 'active logout-nav' : 'logout-nav'}
             >
                 {icon && <Icon icon={icon} />}
-                <span>{name}</span>
+                <span className='title'>{name}</span>
             </StyledNavButton>
         )
     }
@@ -82,12 +82,12 @@ const StyledNavLink = StyledComponents(NavLink)`
     transition: background 0.3s;
 
     &:is(.active, :hover) {
-        background: #004fee;
+        background: var(--secondary-300);
         color: var(--white);
     }
 
     &:not(.active):hover {
-        background: #2e303e;
+        background: var(--secondary-500);
     }
 
     span {
@@ -131,7 +131,7 @@ const StyledNavButton = StyledComponents.button`
     font-size: var(--body-font);
 
     &:is(.active, :hover) {
-        background: #004fee;
+        background: var(--secondary-300);
         color: var(--white);
     }
 
@@ -140,7 +140,7 @@ const StyledNavButton = StyledComponents.button`
     }
 
     &:not(.active):hover {
-        background: #2e303e;
+        background: var(--secondary-500);
     }
 
     span {
@@ -148,6 +148,12 @@ const StyledNavButton = StyledComponents.button`
         
         &:nth-child(2) {
             flex: 1 1 auto;
+        }
+    }
+
+    &.logout-nav:hover {
+        span:not(.title) {
+            color: var(--red-dark);
         }
     }
 

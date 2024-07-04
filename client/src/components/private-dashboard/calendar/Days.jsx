@@ -21,7 +21,7 @@ const StyledDays = StyledComponents.tbody`
         padding: 5px; 
 
         &:hover {
-            background: var(--grey-200); 
+            background: var(--quaternary-500); 
         }
 
         &.inactive {
@@ -41,6 +41,7 @@ const StyledDays = StyledComponents.tbody`
 
             &.today {
                 color: var(--red-dark);
+                font-weight: bold;
             }
         }   
         
@@ -62,7 +63,8 @@ const StyledDays = StyledComponents.tbody`
         
         .more-appointments {
             padding-left: 10px;  
-            color: var(--grey-600)       
+            color: var(--grey-600); 
+            font-size: 1rem;      
         }
     } 
 `

@@ -102,11 +102,22 @@ const FilterContainer = StyledComponents.section`
             margin-left: 1rem;
             cursor: pointer;
         }
+
+        #filter {
+            padding: 0.2rem;
+            border-radius: 9px;
+            border: 1px solid var(--quaternary-800);
+            cursor: pointer;
+
+            &:focus {
+                outline-color: var(--quaternary-800);
+            }
+        }
     }
 
     .show-container {
         display: flex;
-        border: 1px solid var(--grey-600);
+        border: 1px solid var(--quaternary-800);
         border-radius: 10px;
 
         p {
@@ -117,12 +128,12 @@ const FilterContainer = StyledComponents.section`
             cursor: pointer;
 
             &.active {
-                background-color: var(--grey-500);
+                background-color: var(--quaternary-500);
             }
         }
 
         &:hover {
-            background-color: var(--grey-400);
+            background-color: var(--quaternary-100);
         }
     }
 

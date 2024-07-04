@@ -65,7 +65,7 @@ export const AddClient = () => {
         <ClientAdd>
             <h2>Nouveau client</h2>
 
-            <StyledForm onSubmit={handleSubmit(sendForm)} novalidate>
+            <StyledForm onSubmit={handleSubmit(sendForm)} noValidate>
                 <legend className='form-legend'>Informations personnelles</legend>
                 <div className='input-container' name='lastName'>
                     <input
@@ -294,15 +294,22 @@ const StyledForm = StyledComponents.form`
         padding: 0.5rem;
         resize: none;
     }
+    
+    input, textarea {
+        &:focus {
+            outline-color: var(--primary-400);
+        }
+    }
 
     button {
         padding: 0.5rem;
         cursor: pointer;
-    }
+        background: var(--quaternary-400);
+        border: 1px solid var(--quaternary-900);
 
-    #button-container {
-        display: grid; 
-        grid-template-columns: 1fr 1fr;
+        &:hover {
+            background: var(--quaternary-600);
+        }
     }
 
     @media screen and (min-width: 640px) {
@@ -350,10 +357,6 @@ const StyledForm = StyledComponents.form`
             &#save {
                 grid-column: 1 / 3; 
             }
-        }
-
-        #button-container {
-            grid-column: 1 / 3;
         }
     }
 `
