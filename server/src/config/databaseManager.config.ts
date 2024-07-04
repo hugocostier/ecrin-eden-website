@@ -43,15 +43,22 @@ class DatabaseManager {
         const access: ConnectionOptions = {
             user: process.env.ADMIN_USER, 
             password: process.env.ADMIN_PASSWORD,
-            database: process.env.ADMIN_DEFAULT_DB,
             host: process.env.MYSQL_HOST,
+            port: parseInt(process.env.MYSQL_PORT || '3306'),
         }
 
-        const conn = await mysql.createConnection(access) 
-        await conn.query(
-            'CREATE DATABASE IF NOT EXISTS ?', [this.dataSourceOptions.database]
-        )
-        await conn.end()
+        await mysql.createConnection(access) 
+            .then(async (conn) => {
+                const database = this.dataSourceOptions.database
+                await conn.query(
+                    `CREATE DATABASE IF NOT EXISTS \`${database}\``
+                )
+                await conn.end()
+            })
+            .catch((error) => {
+                console.error('Error creating database: ', error)
+                throw new Error('Error creating database')
+            })
     }
 
     public async dropDatabaseIfExists() {
