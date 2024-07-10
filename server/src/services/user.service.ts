@@ -13,7 +13,7 @@ import { ClientService } from './client.service.js'
  * @extends BaseService
  * @property {UserRepository} _customUserRepository - Instance of the custom repository for users
  * @property {ClientService} _clientService - Instance of ClientService
- * @property {Repository<User> & { findById(id: number): Promise<User | null>; findByEmail(email: string): Promise<{ email: string, role: string } | null>; findUserWithClient(id: number): Promise<User | null>; }} _userRepository - The extended user repository
+ * @property {Repository<User> & { findById(id: number): Promise<User | null>; findByEmail(email: string): Promise<{ email: string, role: string } | null>; findUserWithClient(id: number): Promise<User | null>; findUserByClient(clientId: number): Promise<User | null>; }} _userRepository - The extended user repository
  */
 export class UserService extends BaseService {
     private _customUserRepository: UserRepository = new UserRepository()
@@ -22,6 +22,7 @@ export class UserService extends BaseService {
         findById(id: number): Promise<User | null>
         findByEmail(email: string): Promise<{ email: string, role: string } | null>
         findUserWithClient(id: number): Promise<User | null>
+        findUserByClient(clientId: number): Promise<User | null>
     }
 
     /**
@@ -121,6 +122,34 @@ export class UserService extends BaseService {
             if (!user) {
                 throw new CustomAPIError(`No user found with email ${email}`, 404)
             }
+
+            return user
+        } catch (error: any) {
+            throw error
+        }
+    }
+
+    /**
+     * Retrieves a user by client
+     * 
+     * @async
+     * @method getUserByClient
+     * @memberof UserService
+     * @param {string} clientId - The id of the client
+     * @throws {CustomAPIError} If no user is found with the client id or if there is an error getting the user
+     * @returns {Promise<User | null>} A promise that resolves with the user or null if no user is found
+     */
+    public async getUserByClient(clientId: string): Promise<User | null> {
+        if (!this._userRepository) {
+            await this.extendUserRepository()
+        }
+
+        try {
+            const user: User | null = await this._userRepository.findUserByClient(parseInt(clientId))
+                .catch((error: any) => {
+                    console.error('Error getting user by client: ', error)
+                    throw new CustomAPIError('Error getting user by client', 500)
+                })
 
             return user
         } catch (error: any) {
