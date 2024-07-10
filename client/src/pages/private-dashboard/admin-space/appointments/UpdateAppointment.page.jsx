@@ -19,6 +19,7 @@ export const UpdateAppointment = () => {
     const [services, setServices] = useState([])
     const [isEditable, setIsEditable] = useState(false)
     const [appointment, setAppointment] = useState([])
+    const [available, setAvailable] = useState(true)
     const selectedDate = watch('date')
     const selectedService = services.find(service => service.id == watch('service'))
 
@@ -55,7 +56,7 @@ export const UpdateAppointment = () => {
 
     useEffect(() => {
         if (selectedService && selectedDate) {
-            checkAvailability(selectedService, selectedDate)
+            checkAvailability(selectedService, selectedDate, 'update')
                 .then(availableTimes => {
                     setTimes(availableTimes)
                 })
@@ -108,6 +109,25 @@ export const UpdateAppointment = () => {
             })
     }
 
+    const isStillAvailable = (time, duration) => {
+        if (times.length === 0) {
+            return false
+        }
+
+        const givenTime = new Date()
+        givenTime.setHours(time.slice(0, 2))
+        givenTime.setMinutes(time.slice(3, 5))
+
+        const updatedTime = new Date(givenTime)
+        updatedTime.setMinutes(givenTime.getMinutes() + duration)
+
+        if (times.includes(time) && times.includes(updatedTime)) {
+            return true
+        }
+
+        return false
+    }
+
     return (
         <UpdateAppointmentPage>
             <h2>Modifier le rendez-vous</h2>
@@ -124,7 +144,7 @@ export const UpdateAppointment = () => {
                     <select
                         name='service'
                         id='service'
-                        {...register('service', { required: 'Veuillez choisir une prestation', disabled: !isEditable })}
+                        {...register('service', { required: 'Veuillez choisir une prestation', disabled: !isEditable, onBlur: () => setAvailable(isStillAvailable(appointment.time, selectedService.duration)) })}
                     >
                         {services.map(service => (
                             <option key={service.id} value={service.id}>{service.name}</option>
@@ -160,6 +180,9 @@ export const UpdateAppointment = () => {
                         id='time'
                         {...register('time', { required: 'Veuillez choisir une heure', disabled: !isEditable })}
                     >
+                        {appointment.time && !times.includes(appointment.time) && available && (
+                            <option value={appointment.time}>{appointment.time?.slice(0, 5)}</option>
+                        )}
                         {times.length === 0 && (
                             <option value=''>Aucun créneau disponible</option>
                         )}
