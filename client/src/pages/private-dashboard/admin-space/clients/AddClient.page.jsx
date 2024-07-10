@@ -20,7 +20,6 @@ export const AddClient = () => {
             address: '',
             postalCode: '',
             city: '',
-            email: '',
             profilePicture: '',
             sharedNotes: '',
             privateNotes: '',
@@ -113,18 +112,6 @@ export const AddClient = () => {
                         {...register('birthDate', { validate: value => value ? new Date(value) <= new Date() || 'Veuillez entrer une date de naissance valide' : true })}
                     />
                     <FormError error={errors.birthDate} />
-                </div>
-
-                <div className='input-container' name='email'>
-                    <input
-                        type='email'
-                        name='email'
-                        id='email'
-                        placeholder='Email* (ex: adresse@mail.fr)'
-                        autoComplete='off'
-                        {...register('email', { pattern: { value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/, message: 'Veuillez entrer un email valide' } })}
-                    />
-                    <FormError error={errors.email} />
                 </div>
 
                 <div className='input-container' name='address'>

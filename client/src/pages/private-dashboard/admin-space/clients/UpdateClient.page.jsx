@@ -78,7 +78,6 @@ export const UpdateClient = () => {
                     address: fetchedClient.address || '',
                     postalCode: fetchedClient.postal_code || '',
                     city: fetchedClient.city || '',
-                    email: fetchedClient.user?.email || '',
                     profilePicture: fetchedClient.profile_picture || '',
                     sharedNotes: fetchedClient.shared_notes || '',
                     privateNotes: fetchedClient.private_notes || '',
@@ -211,7 +210,7 @@ export const UpdateClient = () => {
                         id='email'
                         placeholder='Email (ex: adresse@mail.fr)'
                         autoComplete='off'
-                        {...register('email', { pattern: { value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/, message: 'Veuillez entrer un email valide' }, disabled: hasAccount ? true : !isEditable })}
+                        {...register('email', { pattern: { value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/, message: 'Veuillez entrer un email valide' }, disabled: true })}
                     />
                     <FormError error={errors.email} />
                 </div>
