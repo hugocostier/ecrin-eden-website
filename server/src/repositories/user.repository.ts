@@ -96,6 +96,22 @@ export class UserRepository extends BaseRepository {
                     .leftJoinAndSelect('user.client', 'client')
                     .where('user.id = :id', { id })
                     .getOne()
+            }, 
+
+            /**
+             * Finds a user by their client id and returns their data.
+             * 
+             * @async
+             * @method findUserByClient
+             * @memberof userRepository
+             * @param {number} clientId - The id of the client to find.
+             * @returns {Promise<User | null>} The user data or null if the user is not found.
+             */
+            async findUserByClient(clientId: number): Promise<User | null> {
+                return this.createQueryBuilder('user')
+                    .leftJoinAndSelect('user.client', 'client')
+                    .where('user.client = :clientId', { clientId })
+                    .getOne()
             }
         })
     }
