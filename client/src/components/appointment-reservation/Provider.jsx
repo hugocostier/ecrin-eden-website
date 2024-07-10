@@ -60,10 +60,10 @@ export const Provider = ({ children }) => {
 
         if (isValid) {
             toast.promise(addAppointment(data), {
-                pending: 'Creating appointment...',
-                success: 'Appointment created!',
-                error: 'Error creating appointment',
-            })
+                pending: 'Création du rendez-vous en cours...',
+                success: 'Rendez-vous créé !',
+                error: 'Erreur lors de la création du rendez-vous',
+            }, { containerId: 'notification' })
                 .then(() => navigate('/appointment/thank-you'))
                 .catch(error => {
                     console.error('Error creating appointment:', error)
