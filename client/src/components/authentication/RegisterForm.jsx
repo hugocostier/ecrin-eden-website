@@ -1,6 +1,7 @@
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faApple, faFacebookF, faGoogle } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import DOMPurify from 'dompurify'
 import { useForm } from 'react-hook-form'
 import { useAuth } from '../../hooks/useAuth.hook'
 import { FormError } from '../FormError'
@@ -11,17 +12,19 @@ library.add(faFacebookF, faGoogle, faApple)
 export const RegisterForm = () => {
     const auth = useAuth()
 
-    const { register, handleSubmit, trigger, formState: { errors } } = useForm()
+    const { register, handleSubmit, trigger, reset, formState: { errors } } = useForm()
 
     const handleRegister = async (data) => {
         const input = {
-            last_name: data.last_name,
-            first_name: data.first_name,
-            email: data.email,
-            password: data.password
+            last_name: DOMPurify.sanitize(data.last_name.toLowerCase().trim()),
+            first_name: DOMPurify.sanitize(data.first_name.toLowerCase().trim()),
+            email: DOMPurify.sanitize(data.email.trim()),
+            password: DOMPurify.sanitize(data.password.trim())
         }
 
         auth.register(input)
+
+        reset()
     }
 
     return (

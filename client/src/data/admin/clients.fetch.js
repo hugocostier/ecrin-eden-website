@@ -1,3 +1,5 @@
+import DOMPurify from 'dompurify'
+
 const API_URL = `${import.meta.env.VITE_APP_API_URL}/clients`
 
 export const fetchClient = (id) => {
@@ -63,13 +65,13 @@ export const fetchClients = () => {
 export const addClient = (data) => {
     const formData = new FormData()
     const fields = [
-        { key: 'first_name', value: data.firstName },
-        { key: 'last_name', value: data.lastName },
+        { key: 'first_name', value: data.firstName.toLowerCase() },
+        { key: 'last_name', value: data.lastName.toLowerCase() },
         { key: 'phone_number', value: data.phone === '' ? undefined : data.phone },
         { key: 'birth_date', value: data.birthDate === '' ? undefined : data.birthDate },
-        { key: 'address', value: data.address === '' ? undefined : data.address },
+        { key: 'address', value: data.address === '' ? undefined : data.address.toLowerCase() },
         { key: 'postal_code', value: data.postalCode === '' ? undefined : data.postalCode },
-        { key: 'city', value: data.city === '' ? undefined : data.city },
+        { key: 'city', value: data.city === '' ? undefined : data.city.toLowerCase() },
         { key: 'shared_notes', value: data.sharedNotes === '' ? undefined : data.sharedNotes },
         { key: 'private_notes', value: data.privateNotes === '' ? undefined : data.privateNotes },
         { key: 'profile_picture', value: data.profilePicture?.length > 0 ? data.profilePicture[0] : undefined },
@@ -77,7 +79,7 @@ export const addClient = (data) => {
 
     fields.forEach((field) => {
         if (field.value !== undefined) {
-            formData.append(field.key, field.value)
+            formData.append(field.key, DOMPurify.sanitize(field.value.trim()))
         }
     })
 
@@ -112,13 +114,13 @@ export const updateClient = (id, data) => {
 
     const formData = new FormData()
     const fields = [
-        { key: 'first_name', value: data.firstName },
-        { key: 'last_name', value: data.lastName },
+        { key: 'first_name', value: data.firstName.toLowerCase() },
+        { key: 'last_name', value: data.lastName.toLowerCase() },
         { key: 'phone_number', value: data.phone === '' ? undefined : data.phone },
         { key: 'birth_date', value: data.birthDate === '' ? undefined : data.birthDate },
-        { key: 'address', value: data.address === '' ? undefined : data.address },
+        { key: 'address', value: data.address === '' ? undefined : data.address.toLowerCase() },
         { key: 'postal_code', value: data.postalCode === '' ? undefined : data.postalCode },
-        { key: 'city', value: data.city === '' ? undefined : data.city },
+        { key: 'city', value: data.city === '' ? undefined : data.city.toLowerCase() },
         { key: 'shared_notes', value: data.sharedNotes === '' ? undefined : data.sharedNotes },
         { key: 'private_notes', value: data.privateNotes === '' ? undefined : data.privateNotes },
         { key: 'profile_picture', value: data.profilePicture?.length > 0 ? data.profilePicture[0] : undefined },
@@ -126,7 +128,7 @@ export const updateClient = (id, data) => {
 
     fields.forEach((field) => {
         if (field.value !== undefined) {
-            formData.append(field.key, field.value)
+            formData.append(field.key, DOMPurify.sanitize(field.value.trim()))
         }
     })
 

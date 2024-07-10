@@ -1,3 +1,5 @@
+import DOMPurify from 'dompurify'
+
 const API_URL = `${import.meta.env.VITE_APP_API_URL}/preferences`
 
 export const fetchClientPreferences = (id) => {
@@ -45,7 +47,7 @@ export const updateClientPreferences = (id, data) => {
 
     fields.forEach((field) => {
         if (field.value !== undefined) {
-            formData.append(field.key, field.value)
+            formData.append(field.key, DOMPurify.sanitize(field.value.trim()))
         }
     })
 

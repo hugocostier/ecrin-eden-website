@@ -1,3 +1,4 @@
+import DOMPurify from 'dompurify'
 import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
@@ -27,9 +28,9 @@ export const ResetPassword = () => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    email: email,
-                    otp: otp,
-                    new_password: data.password
+                    email: DOMPurify.sanitize(email.trim()),
+                    otp: parseInt(DOMPurify.sanitize(otp)),
+                    new_password: DOMPurify.sanitize(data.password.trim())
                 })
             })
                 .then(res => res.json())

@@ -1,6 +1,7 @@
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faApple, faFacebookF, faGoogle } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import DOMPurify from 'dompurify'
 import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
@@ -41,8 +42,8 @@ export const LoginForm = () => {
 
     const handleLogin = async (data) => {
         const input = {
-            username: data.username,
-            password: data.password,
+            username: DOMPurify.sanitize(data.username.trim()),
+            password: DOMPurify.sanitize(data.password.trim()),
             remember_me: rememberMe
         }
 

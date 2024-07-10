@@ -1,3 +1,5 @@
+import DOMPurify from 'dompurify'
+
 const API_URL = `${import.meta.env.VITE_APP_API_URL}/appointments`
 
 export const fetchAllAppointments = (options) => {
@@ -7,9 +9,9 @@ export const fetchAllAppointments = (options) => {
         ...(show === 'showAll' && { showAll: true }),
         ...(show === 'showUpcoming' && { showUpcoming: true }),
         ...(show === 'showHistory' && { showHistory: true }),
-        ...(rangeStart && { rangeStart }),
-        ...(rangeEnd && { rangeEnd }),
-        ...(day && { day }),
+        ...(rangeStart && { rangeStart: DOMPurify.sanitize(rangeStart.trim()) }),
+        ...(rangeEnd && { rangeEnd: DOMPurify.sanitize(rangeEnd.trim()) }),
+        ...(day && { day: DOMPurify.sanitize(day.trim()) }),
     }
 
     return new Promise((resolve, reject) => {
@@ -45,9 +47,9 @@ export const fetchAppointments = (options) => {
         ...(show === 'showAll' && { showAll: true }),
         ...(show === 'showUpcoming' && { showUpcoming: true }),
         ...(show === 'showHistory' && { showHistory: true }),
-        ...(rangeStart && { rangeStart }),
-        ...(rangeEnd && { rangeEnd }),
-        ...(day && { day }),
+        ...(rangeStart && { rangeStart: DOMPurify.sanitize(rangeStart.trim()) }),
+        ...(rangeEnd && { rangeEnd: DOMPurify.sanitize(rangeEnd.trim()) }),
+        ...(day && { day: DOMPurify.sanitize(day.trim()) }),
     }
 
     return new Promise((resolve, reject) => {
@@ -106,9 +108,9 @@ export const countUserAppointments = (options) => {
     const { clientId, firstDayOfWeek, lastDayOfWeek, today } = options
 
     const body = {
-        ...(firstDayOfWeek && { startDate: firstDayOfWeek }),
-        ...(lastDayOfWeek && { endDate: lastDayOfWeek }),
-        ...(today && { date: today }),
+        ...(firstDayOfWeek && { startDate: DOMPurify.sanitize(firstDayOfWeek.trim()) }),
+        ...(lastDayOfWeek && { endDate: DOMPurify.sanitize(lastDayOfWeek.trim()) }),
+        ...(today && { date: DOMPurify.sanitize(today.trim()) }),
     }
 
     return new Promise((resolve, reject) => {
@@ -139,7 +141,7 @@ export const countUserAppointments = (options) => {
 
 export const countAllAppointments = (date) => {
     const body = {
-        ...(date && { date }),
+        ...(date && { date: DOMPurify.sanitize(date.trim()) }),
     }
 
     return new Promise((resolve, reject) => {
@@ -172,12 +174,12 @@ export const updateAppointment = (appointmentID, data) => {
     const { service, date, time, status, isAway, privateNotes } = data
 
     const body = {
-        ...(service && { service: { id: parseInt(service) } }),
-        ...(date && { date }),
-        ...(time && { time }),
-        ...(status ? { status } : { status: 'pending' }),
+        ...(service && { service: { id: parseInt(DOMPurify.sanitize(service.trim())) } }),
+        ...(date && { date: DOMPurify.sanitize(date.trim()) }),
+        ...(time && { time: DOMPurify.sanitize(time.trim()) }),
+        ...(status ? { status: DOMPurify.sanitize(status.toLowerCase().trim()) } : { status: 'pending' }),
         ...(isAway && { is_away: isAway === 'true' }),
-        ...(privateNotes && { private_notes: privateNotes }),
+        ...(privateNotes && { private_notes: DOMPurify.sanitize(privateNotes.trim()) }),
     }
 
     return new Promise((resolve, reject) => {
@@ -225,23 +227,23 @@ export const addAppointment = (data) => {
 
     const body = {
         ...(client
-            ? { client: { id: client } }
+            ? { client: { id: DOMPurify.sanitize(client.trim()) } }
             : {
                   client: {
-                      last_name: lastName.toLowerCase(),
-                      first_name: firstName.toLowerCase(),
-                      phone_number: phone,
-                      address,
-                      postal_code: postalCode,
-                      city,
+                      last_name: DOMPurify.sanitize(lastName.toLowerCase().trim()),
+                      first_name: DOMPurify.sanitize(firstName.toLowerCase().trim()),
+                      phone_number: phone ? DOMPurify.sanitize(phone.trim()) : undefined,
+                      address: address ? DOMPurify.sanitize(address.toLowerCase().trim()) : undefined,
+                      postal_code: postalCode ? DOMPurify.sanitize(postalCode.trim()) : undefined,
+                      city: city ? DOMPurify.sanitize(city.toLowerCase().trim()) : undefined,
                   },
               }),
-        ...(service && { service: { id: parseInt(service) } }),
-        ...(date && { date }),
-        ...(time && { time }),
-        ...(status ? { status } : { status: 'pending' }),
+        ...(service && { service: { id: parseInt(DOMPurify.sanitize(service.trim())) } }),
+        ...(date && { date: DOMPurify.sanitize(date.trim()) }),
+        ...(time && { time: DOMPurify.sanitize(time.trim()) }),
+        ...(status ? { status: DOMPurify.sanitize(status.toLowerCase().trim()) } : { status: 'pending' }),
         ...(isAway && { is_away: isAway === 'true' }),
-        ...(email && { email }),
+        ...(email && { email: DOMPurify.sanitize(email.trim()) }),
     }
 
     return new Promise((resolve, reject) => {

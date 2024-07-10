@@ -1,13 +1,18 @@
+import DOMPurify from 'dompurify'
+
 const API_URL = import.meta.env.VITE_APP_API_URL
 
 export const verifyEmail = async (token, email) => {
+    const cleanToken = DOMPurify.sanitize(token.trim())
+    const cleanEmail = DOMPurify.sanitize(email.trim())
+
     return new Promise((resolve, reject) => {
         fetch(`${API_URL}/auth/verify-email`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ token, email }),
+            body: JSON.stringify({ token: cleanToken, email: cleanEmail }),
         })
             .then((response) => {
                 return response.json()
@@ -23,6 +28,9 @@ export const verifyEmail = async (token, email) => {
 }
 
 export const forgetPassword = async (email, otp) => {
+    const cleanEmail = DOMPurify.sanitize(email.trim())
+    const cleanOtp = parseInt(DOMPurify.sanitize(otp))
+
     return new Promise((resolve, reject) => {
         fetch(`${API_URL}/auth/forgot-password`, {
             method: 'POST',
@@ -30,8 +38,8 @@ export const forgetPassword = async (email, otp) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                recipient_email: email,
-                otp,
+                recipient_email: cleanEmail,
+                otp: cleanOtp,
             }),
         })
             .then((response) => {
