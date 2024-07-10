@@ -2,48 +2,47 @@
   <mj-head>
     <mj-attributes>
       <mj-all font-family="Arial, sans-serif" font-size="16px" align="justify" line-height="20px" />
-      <mj-body background-color=" #fafafa" />
       <mj-button background-color="#66554d" color="#ffffff" font-size="16px" />
     </mj-attributes>
   </mj-head>
 
-  <mj-body>
+  <mj-body background-color="rgb(243, 242, 240)">
     <mj-include path="./email-header.mjml" />
 
-    <mj-section>
+    <mj-section background-color="rgb(255, 255, 255)">
       <mj-column>
         <mj-text align="center" font-weight="bold" font-size="24px" padding-top="0" padding-bottom="20px">
           Modification de votre rendez-vous
         </mj-text>
         <mj-text>
-          Bonjour {{firstNamme}} {{lastName}},
+          Bonjour {{firstName}} {{lastName}},
         </mj-text>
         <mj-text>
-          Votre rendez-vous a été modifié avec succès. Voici les détails celui-ci :
+          Votre rendez-vous a été modifié avec succès. Voici les détails de celui-ci :
         </mj-text>
         <mj-text padding-top="0">
-          Date : {{date}}.
+          Date : {{date}}
         </mj-text>
         <mj-text padding-top="0">
-          Heure : {{time}}.
+          Heure : {{time}}h
         </mj-text>
         {{#if isAway }}
           <mj-text padding-top="0">
-            Lieu : Au salon.
+            Lieu : {{address}}
           </mj-text>
         {{else}}
           <mj-text padding-top="0">
-            Lieu : {{address}}.
+            Lieu : Au salon
           </mj-text>
         {{/if}}
         <mj-text padding-top="0">
-          Prestation : {{service}}.
+          Prestation : {{service}}
         </mj-text>
         <mj-text padding-top="0">
-          Durée : {{duration}}.
+          Durée : {{duration}} minutes
         </mj-text>
         <mj-text padding-top="0">
-          Prix : {{price}}.
+          Prix : {{price}}€
         </mj-text>
         <mj-text>
           Vous pouvez consulter, modifier ou annuler votre rendez-vous à tout moment en vous connectant à votre compte sur notre site.

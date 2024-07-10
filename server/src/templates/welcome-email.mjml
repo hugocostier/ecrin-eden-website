@@ -2,21 +2,20 @@
   <mj-head>
     <mj-attributes>
       <mj-all font-family="Arial, sans-serif" font-size="16px" align="justify" line-height="20px" />
-      <mj-body background-color="#fafafa" />
       <mj-button background-color="#66554d" color="#ffffff" font-size="16px" />
     </mj-attributes>
   </mj-head>
 
-  <mj-body>
+  <mj-body background-color="rgb(243, 242, 240)">
     <mj-include path="./email-header.mjml" />
 
-    <mj-section>
+    <mj-section background-color="rgb(255, 255, 255)">
       <mj-column>
         <mj-text font-size="24px" font-weight="bold" align="center" padding-bottom="24px" padding-top="0">
           Bienvenue chez Écrin d'Eden!
         </mj-text>
         <mj-text>
-          Bonjour {{firstName}},
+          Bonjour,
         </mj-text>
         <mj-text>
           Nous sommes ravis de vous compter parmi nous. Votre compte a été créé avec succès et vous pouvez désormais accéder à votre espace personnel sur notre site web.

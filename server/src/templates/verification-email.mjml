@@ -2,15 +2,14 @@
   <mj-head>
     <mj-attributes>
       <mj-all font-family="Arial, sans-serif" font-size="16px" align="justify" line-height="20px" />
-      <mj-body background-color="#fafafa" />
       <mj-button background-color="#66554d" color="#ffffff" font-size="16px" />
     </mj-attributes>
   </mj-head>
 
-  <mj-body>
+  <mj-body background-color="rgb(243, 242, 240)">
     <mj-include path="./email-header.mjml" />
 
-    <mj-section>
+    <mj-section background-color="rgb(255, 255, 255)">
       <mj-column>
         <mj-text font-weight="bold" font-size="24px" padding-bottom="20px" padding-top="0" align="center">
           Validation email

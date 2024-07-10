@@ -2,24 +2,23 @@
   <mj-head>
     <mj-attributes>
       <mj-all font-family="Arial, sans-serif" font-size="16px" align="justify" line-height="20px" />
-      <mj-body background-color=" #fafafa" />
       <mj-button background-color="#66554d" color="#ffffff" font-size="16px" />
     </mj-attributes>
   </mj-head>
 
-  <mj-body>
+  <mj-body background-color="rgb(243, 242, 240)">
     <mj-include path="./email-header.mjml" />
 
-    <mj-section>
+    <mj-section background-color="rgb(255, 255, 255)">
       <mj-column>
         <mj-text align="center" font-weight="bold" font-size="24px" padding-top="0" padding-bottom="20px">
           Confirmation de votre rendez-vous
         </mj-text>
         <mj-text>
-          Bonjour {{firstNamme}} {{lastName}},
+          Bonjour {{firstName}} {{lastName}},
         </mj-text>
         <mj-text>
-          Votre rendez-vous a été confirmé par la praticienne.
+          Votre rendez-vous du {{date}} {{time}}h a été confirmé par la praticienne.
         </mj-text>
         <mj-text>
           Un rappel vous sera envoyé 24h avant la date de votre rendez-vous.

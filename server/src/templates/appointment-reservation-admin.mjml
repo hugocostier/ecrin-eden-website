@@ -2,7 +2,7 @@
   <mj-head>
     <mj-attributes>
       <mj-all font-family="Arial, sans-serif" font-size="16px" align="justify" line-height="20px" />
-      <mj-button background-color="#66554d" color="#FFFFFF" font-size="16px" />
+      <mj-button background-color="#66554D" color="#ffffff" font-size="16px" />
     </mj-attributes>
   </mj-head>
 
@@ -12,13 +12,13 @@
     <mj-section background-color="rgb(255, 255, 255)">
       <mj-column>
         <mj-text align="center" font-weight="bold" font-size="24px" padding-top="0" padding-bottom="20px">
-          Récapitulatif de votre réservation
+          Nouvelle réservation de rendez-vous
         </mj-text>
         <mj-text>
-          Bonjour {{firstName}} {{lastName}},
+          Vous avez reçu une nouvelle réservation de rendez-vous :
         </mj-text>
         <mj-text>
-          Merci pour votre réservation, voici un récapitulatif de votre rendez-vous :
+          Client : {{firstName}} {{lastName}}
         </mj-text>
         <mj-text padding-top="0">
           Date : {{date}}
@@ -45,15 +45,11 @@
           Prix : {{price}}€
         </mj-text>
         <mj-text>
-          Vous recevrez un nouveau message lorsque votre réservation sera confirmée par la praticienne.
+          Merci de confirmer cette réservation dans les plus brefs délais en vous connectant à votre espace praticien ou en cliquant sur le lien suivant.
         </mj-text>
-        <mj-text>
-          Vous pouvez consulter l'état de votre réservation à tout moment en vous connectant à votre compte sur notre site.
-        </mj-text>
-        <mj-text font-size="14px" padding-bottom="0">
-          Si vous avez besoin d'aide, n'hésitez pas à nous contacter à l'adresse suivante : <a href="mailto:contact@ecrin-eden.com">contact@ecrin-eden.com</a>.
-        </mj-text>
-      </mj-column>
+        <mj-button href="{{confirmUrl}}" align="center">
+          Confirmer la réservation
+        </mj-button>
     </mj-section>
 
     <mj-include path="./email-footer.mjml" />

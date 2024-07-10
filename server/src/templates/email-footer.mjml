@@ -1,4 +1,4 @@
-<mj-section>
+<mj-section background-color="rgb(255, 255, 255)">
   <mj-column width="100%">
     <mj-divider border-color="#66554d" border-width="1px" padding-top="0" />
   </mj-column>
@@ -14,10 +14,10 @@
 
   <mj-column width="40%" vertical-align="middle">
     <mj-social align="right">
-      <mj-social-element href="https://www.instagram.com/" src="./assets/instagram.svg" />
-      <mj-social-element href="https://www.facebook.com/" src="./assets/facebook.svg" />
-      <mj-social-element href="https://www.twitter.com/" src="./assets/twitter.svg" />
-      <mj-social-element href="https://www.linkedin.com/" src="./assets/linkedin.svg" />
+      <mj-social-element href="https://www.instagram.com/" src="cid:instagram" />
+      <mj-social-element href="https://www.facebook.com/" src="cid:facebook" />
+      <mj-social-element href="https://www.twitter.com/" src="cid:twitter" />
+      <mj-social-element href="https://www.linkedin.com/" src="cid:linkedin" />
     </mj-social>
   </mj-column>
 </mj-section>

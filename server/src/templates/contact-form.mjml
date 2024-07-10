@@ -2,23 +2,22 @@
   <mj-head>
     <mj-attributes>
       <mj-all font-family="Arial, sans-serif" font-size="16px" align="justify" />
-      <mj-body background-color=" #fafafa" />
     </mj-attributes>
   </mj-head>
 
-  <mj-body>
+  <mj-body background-color="rgb(243, 242, 240)">
     <mj-include path="./email-header.mjml" />
 
-    <mj-section>
+    <mj-section background-color="rgb(255, 255, 255)">
       <mj-column>
         <mj-text font-size="24px" font-weight="bold" align="center" padding-top="0" padding-bottom="24px">
           Message de la part de {{firstName}} {{lastName}}
         </mj-text>
         <mj-text>
-          {{message}}.
+          Message : {{message}}.
         </mj-text>
         <mj-text padding-bottom="0">
-          Coordoonées de contact : {{email}}, {{phone}}.
+          Coordoonées de contact : {{email}}{{#if phone }}, {{phone}}{{/if}}.
         </mj-text>
       </mj-column>
     </mj-section>
