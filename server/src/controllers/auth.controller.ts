@@ -2,6 +2,7 @@ import crypto from 'crypto'
 import { NextFunction, Request, Response } from 'express'
 import passport from 'passport'
 import User from '../entities/User.entity.js'
+import { CustomAPIError } from '../errors/custom-errors.js'
 import { AuthService } from '../services/auth.service.js'
 import BaseController from './base.controller.js'
 import EmailController from './email.controller.js'
@@ -34,7 +35,6 @@ export default class AuthController extends BaseController {
             const { email, password, first_name, last_name } = req.body
             
             const token = crypto.randomBytes(32).toString('hex')
-            console.log('Token: ', token)
 
             const registeredUser: { id: number, email: string } = await this._authService.register(email, password, first_name.toLowerCase(), last_name.toLowerCase(), token) 
             .then(async (user) => {
@@ -139,7 +139,19 @@ export default class AuthController extends BaseController {
         await this.handleRequest(req, res, async () => {
             const { token, email } = req.body
 
-            return await this._authService.verifyUser(email, token)
+            const result = await this._authService.verifyUser(email, token)
+                .then(async (result) => {
+                    if (result) {
+                        await this._emailController.sendWelcomeEmail(email)
+                            .catch((error: any) => {
+                                throw new CustomAPIError('Error sending verification confirmation email', 500)
+                            })
+                    } else {
+                        throw new CustomAPIError('Error verifying user', 500)
+                    }
+                })
+            
+            return result
         }, 'User verified successfully')
     }
 
@@ -196,7 +208,15 @@ export default class AuthController extends BaseController {
         await this.handleRequest(req, res, async () => {
             const { email, otp, new_password: password } = req.body
 
-            return await this._authService.resetPassword(email, otp, password)
+            const result = await this._authService.resetPassword(email, otp, password)
+                .then(async () => {
+                    await this._emailController.sendPasswordResetConfirmation(email)
+                        .catch((error: any) => {
+                            throw new CustomAPIError('Error sending password reset confirmation email', 500)
+                        })
+                })
+            
+            return result
         }, 'Password reset successfully')
     }
 }
