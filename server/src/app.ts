@@ -16,6 +16,7 @@ import passportConfig from './config/auth.config.js'
 import cookieParser from 'cookie-parser'
 import cors, { CorsOptions } from 'cors'
 import 'express-async-errors'
+import helmet from 'helmet'
 import morgan from 'morgan'
 import path, { dirname } from 'path'
 import { fileURLToPath } from 'url'
@@ -114,6 +115,11 @@ class ExpressApp {
         }
         this.app.use(cors(corsOptions))
 
+        // Helmet
+        // if (process.env.NODE_ENV !== 'test') {
+        //     this.app.use(helmet())
+        // }
+
         // JSON parser
         this.app.use(express.json())
         this.app.use(express.urlencoded({ extended: true }))
@@ -182,17 +188,17 @@ class ExpressApp {
      * @returns {Promise<void>} A promise that resolves when the app is fully initialized.
      */
     public async initializeApp(): Promise<void> {
-        console.log('Initializing app...')
+        // console.log('Initializing app...')
         await this.connectToDatabase() 
-        console.log('Database connected')
+        // console.log('Database connected')
         this.setupMiddlewares() 
-        console.log('Middlewares set up')
+        // console.log('Middlewares set up')
         this.setupRoutes()
-        console.log('Routes set up')
+        // console.log('Routes set up')
         this.app.use(errorHandlerMiddleware)
         this.app.use(notFoundMiddleware)
-        console.log('Error handling set up')
-        console.log('App initialized')
+        // console.log('Error handling set up')
+        // console.log('App initialized')
     }
 }
 
