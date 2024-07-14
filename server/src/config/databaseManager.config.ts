@@ -30,7 +30,6 @@ class DatabaseManager {
         } catch (error: any) {
             if (error.code === 'ER_BAD_DB_ERROR') {
                 await this.createDatabaseIfNotExists()
-                await this.initializeDataSource()
             } else {
                 console.error('Error creating database: ', error)
                 throw new Error('Error creating database')
@@ -61,6 +60,7 @@ class DatabaseManager {
                 throw new Error('Error creating database')
             })
 
+        await this.initializeDataSource()
         await this.runSeeds()
     }
 
