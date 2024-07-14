@@ -2,6 +2,7 @@ import { ConnectionOptions } from 'mysql2'
 import * as mysql from 'mysql2/promise'
 import 'reflect-metadata'
 import { DataSource, DataSourceOptions } from 'typeorm'
+import { createInitialData } from '../data/createInitialData.seed.js'
 import { importModels } from '../entities/entities.js'
 
 class DatabaseManager {
@@ -59,6 +60,8 @@ class DatabaseManager {
                 console.error('Error creating database: ', error)
                 throw new Error('Error creating database')
             })
+
+        await this.runSeeds()
     }
 
     public async dropDatabaseIfExists() {
@@ -81,6 +84,15 @@ class DatabaseManager {
     public async disconnectDataSource() {
         if (this.dataSource) {
             await this.dataSource.destroy()
+        }
+    }
+
+    private async runSeeds() {
+        try {
+            await createInitialData(this.dataSource)
+        } catch (error) {
+            console.error('Error running seeds: ', error)
+            throw new Error('Error running seeds')
         }
     }
 }
