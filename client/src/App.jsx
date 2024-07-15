@@ -280,14 +280,16 @@ const Router = createBrowserRouter(
                         }
                     />
 
-                    <Route
-                        path='settings'
-                        element={
-                            <PrivateRoute isAllowed={['user']} redirectPath='/login' >
-                                <SettingsPage />
-                            </PrivateRoute>
-                        }
-                    />
+                    <Route element={<PasswordRecoveryProvider />}>
+                        <Route
+                            path='settings'
+                            element={
+                                <PrivateRoute isAllowed={['user']} redirectPath='/login' >
+                                    <SettingsPage />
+                                </PrivateRoute>
+                            }
+                        />
+                    </Route>
                 </Route>
 
                 <Route
@@ -417,14 +419,16 @@ const Router = createBrowserRouter(
                         }
                     />
 
-                    <Route
-                        path='settings'
-                        element={
-                            <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
-                                <SettingsPage />
-                            </PrivateRoute>
-                        }
-                    />
+                    <Route element={<PasswordRecoveryProvider />}>
+                        <Route
+                            path='settings'
+                            element={
+                                <PrivateRoute isAllowed={['admin']} redirectPath='/login' >
+                                    <SettingsPage />
+                                </PrivateRoute>
+                            }
+                        />
+                    </Route>
                 </Route>
             </Route>
         </Route>
