@@ -2,7 +2,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faApple, faFacebookF, faGoogle } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import DOMPurify from 'dompurify'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -20,11 +20,15 @@ export const LoginForm = () => {
 
     const { register, handleSubmit, trigger, watch, formState: { errors } } = useForm()
     const rememberMe = watch('remember_me')
+    const enteredEmail = watch('username')
 
     const { setEmail, email, setOtp, setAccessFromLogin } = useContext(RecoveryContext)
 
+    useEffect(() => {
+        setEmail(enteredEmail)
+    }, [enteredEmail, setEmail])
+
     const navigateToOTP = async () => {
-        setEmail(watch('username'))
         setAccessFromLogin(true)
 
         if (email) {
@@ -100,6 +104,7 @@ export const LoginForm = () => {
                 <div
                     id='forgot-password'
                     onClick={() => navigateToOTP()}
+                    style={email ? { cursor: 'pointer' } : { cursor: 'not-allowed' }}
                 >
                     Mot de passe oublié ?
                 </div>
@@ -163,6 +168,10 @@ export const FormContainer = StyledComponents.section`
 
         #forgot-password {
             text-decoration: underline; 
+
+            &:hover {
+                text-decoration: none;  
+            }
         }
     }
 
