@@ -13,16 +13,16 @@ import { ClientService } from './client.service.js'
  * @extends BaseService
  * @property {UserRepository} _customUserRepository - Instance of the custom repository for users
  * @property {ClientService} _clientService - Instance of ClientService
- * @property {Repository<User> & { findById(id: number): Promise<User | null>; findByEmail(email: string): Promise<{ email: string, role: string } | null>; findUserWithClient(id: number): Promise<User | null>; findUserByClient(clientId: number): Promise<User | null>; }} _userRepository - The extended user repository
+ * @property {Repository<User> & { findById(id: string): Promise<User | null>; findByEmail(email: string): Promise<{ email: string, role: string } | null>; findUserWithClient(id: string): Promise<User | null>; findUserByClient(clientId: string): Promise<User | null>; }} _userRepository - The extended user repository
  */
 export class UserService extends BaseService {
     private _customUserRepository: UserRepository = new UserRepository()
     private _clientService: ClientService = new ClientService() 
     private _userRepository!: Repository<User> & {
-        findById(id: number): Promise<User | null>
+        findById(id: string): Promise<User | null>
         findByEmail(email: string): Promise<{ email: string, role: string } | null>
-        findUserWithClient(id: number): Promise<User | null>
-        findUserByClient(clientId: number): Promise<User | null>
+        findUserWithClient(id: string): Promise<User | null>
+        findUserByClient(clientId: string): Promise<User | null>
     }
 
     /**
@@ -81,7 +81,7 @@ export class UserService extends BaseService {
         }
 
         try {
-            const user: User | null = await this._userRepository.findById(parseInt(id))
+            const user: User | null = await this._userRepository.findById(id)
                 .catch((error: any) => {
                     console.error('Error getting user: ', error)
                     throw new CustomAPIError('Error getting user', 500)
@@ -145,7 +145,7 @@ export class UserService extends BaseService {
         }
 
         try {
-            const user: User | null = await this._userRepository.findUserByClient(parseInt(clientId))
+            const user: User | null = await this._userRepository.findUserByClient(clientId)
                 .catch((error: any) => {
                     console.error('Error getting user by client: ', error)
                     throw new CustomAPIError('Error getting user by client', 500)
@@ -209,7 +209,7 @@ export class UserService extends BaseService {
             this.validateEntity(userData, User)
 
             return this._userRepository.manager.transaction(async transactionalEntityManager => {
-                const user: User | null = await this._userRepository.findById(parseInt(id))
+                const user: User | null = await this._userRepository.findById(id)
                     .catch((error: any) => {
                         console.error('Error getting user: ', error)
                         throw new CustomAPIError('Error getting user', 500)
@@ -219,7 +219,7 @@ export class UserService extends BaseService {
                     throw new CustomAPIError(`No user found with id ${id}`, 404)
                 }
 
-                const clientId: number | undefined = user.client?.id
+                const clientId: string | undefined = user.client?.id
 
                 if (clientId === undefined) {
                     throw new CustomAPIError('Client id is undefined', 500)
@@ -253,7 +253,7 @@ export class UserService extends BaseService {
 
         try {
             return this._userRepository.manager.transaction(async transactionalEntityManager => {
-                const user: User | null = await this._userRepository.findUserWithClient(parseInt(id))
+                const user: User | null = await this._userRepository.findUserWithClient(id)
                     .catch((error: any) => {
                         console.error('Error getting user: ', error)
                         throw new CustomAPIError('Error getting user', 500)
@@ -263,13 +263,13 @@ export class UserService extends BaseService {
                     throw new CustomAPIError(`User with id ${id} doesn't exists`, 404)
                 }
 
-                const clientId: number | undefined = user.client?.id
+                const clientId: string | undefined = user.client?.id
 
                 if (clientId === undefined) {
                     throw new CustomAPIError('Client id is undefined', 500)
                 }
 
-                const client: Client = await this._clientService.getClientById(clientId.toString())
+                const client: Client = await this._clientService.getClientById(clientId)
                     .catch((error: any) => {
                         console.error('Error getting client: ', error)
                         throw new CustomAPIError('Error getting client', 500)

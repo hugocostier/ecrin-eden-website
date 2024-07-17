@@ -11,13 +11,13 @@ import BaseService from './base.service.js'
  * @class Preferences
  * @extends BaseService
  * @property {PreferencesRepository} _customRepository - Instance of the custom repository for preferences
- * @property {Repository<Preferences> & { findPreferencesForClient(clientId: number): Promise<Preferences | null>; updatePreferences(clientId: number, preferences: Partial<Preferences>): Promise<UpdateResult>; }} _preferencesRepository - The extended preferences repository
+ * @property {Repository<Preferences> & { findPreferencesForClient(clientId: string): Promise<Preferences | null>; updatePreferences(clientId: string, preferences: Partial<Preferences>): Promise<UpdateResult>; }} _preferencesRepository - The extended preferences repository
  */
 export class PreferencesService extends BaseService {
     private _customRepository: PreferencesRepository = new PreferencesRepository()
     private _preferencesRepository!: Repository<Preferences> & {
-        findPreferencesForClient(clientId: number): Promise<Preferences | null>
-        updatePreferences(clientId: number, preferences: Partial<Preferences>): Promise<UpdateResult>
+        findPreferencesForClient(clientId: string): Promise<Preferences | null>
+        updatePreferences(clientId: string, preferences: Partial<Preferences>): Promise<UpdateResult>
     }
 
     /**
@@ -54,7 +54,7 @@ export class PreferencesService extends BaseService {
         }
 
         try {
-            return await this._preferencesRepository.findPreferencesForClient(parseInt(clientId))
+            return await this._preferencesRepository.findPreferencesForClient(clientId)
         } catch (error: any) {
             console.error('Error getting preferences: ', error)
             throw new CustomAPIError('Error getting preferences', 500)
@@ -111,7 +111,7 @@ export class PreferencesService extends BaseService {
                     throw new CustomAPIError('Preferences do not exist for this client', 404)
                 }
 
-                return await transactionalEntityManager.update(Preferences, { client: { id: parseInt(clientId) } }, preferences)
+                return await transactionalEntityManager.update(Preferences, { client: { id: clientId } }, preferences)
                     .catch((error: any) => {
                         console.error('Error updating preferences: ', error)
                         throw new CustomAPIError(`Preferences for client ${clientId} could not be updated`, 400)
@@ -137,9 +137,9 @@ export class PreferencesService extends BaseService {
         }
 
         try { 
-            const preferences: number = await this._preferencesRepository.countBy({ client: { id: parseInt(clientId) } })
+            const preferences: Preferences | null = await this._preferencesRepository.findOneBy({ client: { id: clientId } })
 
-            return preferences > 0 
+            return preferences ? true : false
         
         } catch (error: any) {
             console.error('Error checking if preferences exist: ', error)

@@ -3,6 +3,7 @@ import { DeleteResult } from 'typeorm/browser'
 import EmailController from '../controllers/email.controller.js'
 import Appointment from '../entities/Appointment.entity.js'
 import Client from '../entities/Client.entity.js'
+import Preferences from '../entities/Preferences.entity.js'
 import Service from '../entities/Service.entity.js'
 import User from '../entities/User.entity.js'
 import { CustomAPIError } from '../errors/custom-errors.js'
@@ -17,31 +18,30 @@ import { UserService } from './user.service.js'
  * @class AppointmentService
  * @extends BaseService
  * @property {AppointmentRepository} _customRepository - The custom repository for appointments.
- * @property {Repository<Appointment> & { findAll(): Promise<Appointment[]>; findById(id: number): Promise<Appointment | null>; findByDay(day: string): Promise<Appointment[]>; findByDateRange(rangeStart: string, rangeEnd: string): Promise<Appointment[]>; findUpcoming(): Promise<Appointment[]>; findPast(): Promise<Appointment[]>; findByClient(clientId: number): Promise<Appointment[]>; findByClientForDay(clientId: number, day: string): Promise<Appointment[]>; findByDateRangeForClient(rangeStart: string, rangeEnd: string, clientId: number): Promise<Appointment[]>; findUpcomingByClient(clientId: number): Promise<Appointment[]>; findPastByClient(clientId: number): Promise<Appointment[]>; findByService(serviceId: number): Promise<Appointment[]>; findUpcomingByService(serviceId: number): Promise<Appointment[]>; countForDay(date: string): Promise<number>; countForWeek(startDate: string, endDate: string, clientId: number): Promise<number>; }} _appointmentRepository - The extended repository for appointments.
+ * @property {Repository<Appointment> & { findAll(): Promise<Appointment[]>; findById(id: string): Promise<Appointment | null>; findByDay(day: string): Promise<Appointment[]>; findByDateRange(rangeStart: string, rangeEnd: string): Promise<Appointment[]>; findUpcoming(): Promise<Appointment[]>; findPast(): Promise<Appointment[]>; findByClient(clientId: string): Promise<Appointment[]>; findByClientForDay(clientId: string, day: string): Promise<Appointment[]>; findByDateRangeForClient(rangeStart: string, rangeEnd: string, clientId: string): Promise<Appointment[]>; findUpcomingByClient(clientId: string): Promise<Appointment[]>; findPastByClient(clientId: string): Promise<Appointment[]>; findByService(serviceId: number): Promise<Appointment[]>; findUpcomingByService(serviceId: number): Promise<Appointment[]>; countForDay(date: string): Promise<number>; countForWeek(startDate: string, endDate: string, clientId: string): Promise<number>; }} _appointmentRepository - The extended repository for appointments.
  **/
 class AppointmentService extends BaseService {
     private _customRepository: AppointmentRepository = new AppointmentRepository()
     private _clientService: ClientService = new ClientService()
+    private _userService: UserService = new UserService()
+    private _emailController: EmailController = new EmailController()
     private _appointmentRepository!: Repository<Appointment> & {
         findAll(): Promise<Appointment[]>
-        findById(id: number): Promise<Appointment | null>
+        findById(id: string): Promise<Appointment | null>
         findByDay(day: string): Promise<Appointment[]>
         findByDateRange(rangeStart: string, rangeEnd: string): Promise<Appointment[]>
         findUpcoming(): Promise<Appointment[]>
         findPast(): Promise<Appointment[]>
-        findByClient(clientId: number): Promise<Appointment[]>
-        findByClientForDay(clientId: number, day: string): Promise<Appointment[]>
-        findByDateRangeForClient(rangeStart: string, rangeEnd: string, clientId: number): Promise<Appointment[]>
-        findUpcomingByClient(clientId: number): Promise<Appointment[]>
-        findPastByClient(clientId: number): Promise<Appointment[]>
+        findByClient(clientId: string): Promise<Appointment[]>
+        findByClientForDay(clientId: string, day: string): Promise<Appointment[]>
+        findByDateRangeForClient(rangeStart: string, rangeEnd: string, clientId: string): Promise<Appointment[]>
+        findUpcomingByClient(clientId: string): Promise<Appointment[]>
+        findPastByClient(clientId: string): Promise<Appointment[]>
         findByService(serviceId: number): Promise<Appointment[]>
         findUpcomingByService(serviceId: number): Promise<Appointment[]>
         countForDay(date: string): Promise<number>
-        countForWeek(startDate: string, endDate: string, clientId: number): Promise<number>
+        countForWeek(startDate: string, endDate: string, clientId: string): Promise<number>
     }
-
-    private _userService: UserService = new UserService()
-    private _emailController: EmailController = new EmailController()
 
     /**
      * Extends the appointment repository by assigning the result of the 'extendAppointmentRepository' method to the '_appointmentRepository' property.
@@ -77,7 +77,7 @@ class AppointmentService extends BaseService {
         }
 
         try {
-            const appointment: Appointment | null = await this._appointmentRepository.findById(parseInt(id))
+            const appointment: Appointment | null = await this._appointmentRepository.findById(id)
                 .catch((error: any) => {
                     console.error('Error getting appointment: ', error)
                     throw new CustomAPIError('Error getting appointment', 500)
@@ -184,7 +184,7 @@ class AppointmentService extends BaseService {
                     throw new CustomAPIError(`Invalid date ${day}`, 400)
                 }
 
-                return await this._appointmentRepository.findByClientForDay(parseInt(clientId), day) 
+                return await this._appointmentRepository.findByClientForDay(clientId, day) 
             } 
             // Return all appointments between a date range
             else if (rangeStart && rangeEnd) {
@@ -196,19 +196,19 @@ class AppointmentService extends BaseService {
                     throw new CustomAPIError(`Invalid date range ${rangeStart} - ${rangeEnd}`, 400)
                 }
 
-                return await this._appointmentRepository.findByDateRangeForClient(rangeStart, rangeEnd, parseInt(clientId)) 
+                return await this._appointmentRepository.findByDateRangeForClient(rangeStart, rangeEnd, clientId) 
             } 
             // Return all past appointments
             else if (showHistory) {
-                return await this._appointmentRepository.findPastByClient(parseInt(clientId))
+                return await this._appointmentRepository.findPastByClient(clientId)
             } 
             // Return all appointments
             else if (showAll) {
-                return await this._appointmentRepository.findByClient(parseInt(clientId))
+                return await this._appointmentRepository.findByClient(clientId)
             } 
             // Return all upcoming appointments
             else {
-                return await this._appointmentRepository.findUpcomingByClient(parseInt(clientId))
+                return await this._appointmentRepository.findUpcomingByClient(clientId)
             } 
         } catch (error: any) {
             if (error instanceof CustomAPIError && error.statusCode === 400) {
@@ -308,7 +308,7 @@ class AppointmentService extends BaseService {
                 throw new CustomAPIError(`Invalid date range ${startDate} - ${endDate}`, 400)
             }
 
-            return await this._appointmentRepository.countForWeek(startDate, endDate, parseInt(clientId))
+            return await this._appointmentRepository.countForWeek(startDate, endDate, clientId)
                 .catch((error: any) => {
                     console.error('Error counting appointments for week and client: ', error)
                     throw new CustomAPIError(`Cannot count appointments for client with id ${clientId} between ${startDate} and ${endDate}`, 404)
@@ -325,10 +325,11 @@ class AppointmentService extends BaseService {
      * @method addAppointment
      * @memberof AppointmentService
      * @param {Partial<Appointment>} appointmentData - The data of the appointment to add.
+     * @param {string} contactEmail - The email to send the appointment request to.
      * @throws {CustomAPIError} If the appointment could not be created.
      * @returns {Promise<{ affected: number; generatedMaps: never[]; raw: never[]; }>} The result of the add operation.
      */    
-    public async addAppointment(appointmentData: Partial<Appointment>): Promise<{ affected: number; generatedMaps: never[]; raw: never[]; }> {
+    public async addAppointment(appointmentData: Partial<Appointment>, contactEmail?: string): Promise<{ affected: number; generatedMaps: never[]; raw: never[]; }> {
         if (!this._appointmentRepository) {
             await this.extendServiceRepository()
         }
@@ -347,6 +348,20 @@ class AppointmentService extends BaseService {
                             .catch((error: any) => {
                                 console.error('Error adding client: ', error)
                                 throw new CustomAPIError('Client could not be created', 500)
+                            })
+
+                        const preferences = await transactionalEntityManager.save(Preferences, { client: newClient })
+                            .catch((error: any) => {
+                                console.error('Error adding preferences: ', error)
+                                throw new CustomAPIError('Preferences could not be created', 500)
+                            })
+
+                        newClient.preferences = preferences
+
+                        await transactionalEntityManager.save(Client, newClient)
+                            .catch((error: any) => {
+                                console.error('Error updating client: ', error)
+                                throw new CustomAPIError('Client could not be updated', 500)
                             })
 
                         clientData.id = newClient.id
@@ -375,9 +390,9 @@ class AppointmentService extends BaseService {
                     throw new CustomAPIError('Service not found', 400)
                 }
 
-                const appointment: Partial<Appointment> = {...newAppointment, service: service}
+                const appointment: Partial<Appointment> = {...newAppointment, service: service, client: clientData as Client}
 
-                await this.sendEmailNotifications(appointment as Appointment, '', appointment.status as string, 'add')
+                await this.sendEmailNotifications(appointment as Appointment, '', appointment.status as string, 'add', contactEmail || undefined)
 
                 return { affected: 1, generatedMaps: [], raw: [] }                
             })
@@ -409,7 +424,7 @@ class AppointmentService extends BaseService {
             const previousStatus = previousAppointment.status
 
             const update = await this._appointmentRepository.manager.transaction(async transactionalEntityManager => {    
-                return await transactionalEntityManager.update(Appointment, parseInt(id), appointmentData)
+                return await transactionalEntityManager.update(Appointment, id, appointmentData)
                     .catch((error: any) => {
                         console.error('Error updating appointment: ', error)
                         throw new CustomAPIError(`Appointment with id ${id} could not be updated`, 500)
@@ -472,29 +487,43 @@ class AppointmentService extends BaseService {
      * @param {string} previousStatus - The previous status of the appointment.
      * @param {string} newStatus - The new status of the appointment.
      * @param {string} action - The action to take for the appointment.
+     * @param {string} contactEmail - The email to send the appointment request to.
      * @throws {CustomAPIError} If the client is not found or if there is an error sending the email notifications.
      * @returns {Promise<void>} A promise that resolves when the email notifications are successfully sent.
      */
-    public async sendEmailNotifications(appointment: Appointment, previousStatus: string, newStatus: string, action: string): Promise<void> {
+    public async sendEmailNotifications(appointment: Appointment, previousStatus: string, newStatus: string, action: string, contactEmail?: string): Promise<void> {
         if (!appointment.client) {
             throw new CustomAPIError('Client not found', 400)
         }
 
-        const user: User | null = await this._userService.getUserByClient(appointment.client?.id.toString())
+        const user: User | null = await this._userService.getUserByClient(appointment.client?.id)
 
         switch (action) {
             case 'update': 
                 if (user) {
-                    if (newStatus === 'confirmed' && previousStatus !== newStatus) {
-                        await this._emailController.sendAppointmentConfirmation(appointment, user.email)
-                            .catch((error: any) => {
-                                throw new CustomAPIError('Error sending appointment confirmation email', 500)
-                            })
-                    } else if (newStatus === 'cancelled' && previousStatus !== newStatus) {
-                        await this._emailController.sendAppointmentCancellation(appointment, user.email)
-                            .catch((error: any) => {
-                                throw new CustomAPIError('Error sending appointment cancellation email', 500)
-                            })
+                    if (previousStatus !== newStatus) {
+                        switch (newStatus) {
+                            case 'confirmed':
+                                await this._emailController.sendAppointmentConfirmation(appointment, user.email)
+                                    .catch((error: any) => {
+                                        throw new CustomAPIError('Error sending appointment confirmation email', 500)
+                                    })
+                                break
+                            case 'cancelled':
+                                await this._emailController.sendAppointmentCancellation(appointment, user.email)
+                                    .catch((error: any) => {
+                                        throw new CustomAPIError('Error sending appointment cancellation email', 500)
+                                    })
+                                break
+                            case 'pending':
+                                await this._emailController.sendAppointmentRequestToAdmin(appointment)
+                                    .catch((error: any) => {
+                                        throw new CustomAPIError('Error sending appointment request email', 500)
+                                    })
+                                break
+                            default:
+                                break
+                        }
                     } else {
                         await this._emailController.sendAppointmentUpdate(appointment, user.email)
                             .catch((error: any) => {
@@ -506,6 +535,11 @@ class AppointmentService extends BaseService {
             case 'add':
                 if (user) {
                     await this._emailController.sendAppointmentRequest(appointment, user.email)
+                        .catch((error: any) => {
+                            throw new CustomAPIError(`Error sending appointment request email, ${error}`, 500)
+                        })
+                } else if (contactEmail) {
+                    await this._emailController.sendAppointmentRequest(appointment, contactEmail)
                         .catch((error: any) => {
                             throw new CustomAPIError(`Error sending appointment request email, ${error}`, 500)
                         })
@@ -541,7 +575,7 @@ class AppointmentService extends BaseService {
                     throw new CustomAPIError(`Appointment with id ${id} doesn't exists`, 404)
                 }
 
-                return await transactionalEntityManager.delete(Appointment, parseInt(id))
+                return await transactionalEntityManager.delete(Appointment, id)
                     .catch((error: any) => {
                         console.error('Error deleting appointment: ', error)
                         throw new CustomAPIError(`Appointment with id ${id} could not be deleted`, 500)
@@ -568,9 +602,9 @@ class AppointmentService extends BaseService {
         }
 
         try {
-            const appointment: number = await this._appointmentRepository.count({ where: { id: parseInt(id) } })
+            const appointment: Appointment | null = await this._appointmentRepository.findById(id)
     
-            return appointment > 0 
+            return appointment ? true : false
         } catch(error: any) {
             console.error('Error checking if appointment exists: ', error)
             throw new CustomAPIError(`Error checking if appointment with id ${id} exists`, 500)

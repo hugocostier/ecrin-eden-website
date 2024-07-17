@@ -46,7 +46,7 @@ export class OTPService extends BaseService {
             otpExpires: otpExpires
         }
 
-        await this._userService.updateUser(user.id.toString(), userData)
+        await this._userService.updateUser(user.id, userData)
             .catch((error: any) => {
                 console.error('Error updating user: ', error)
                 throw new CustomAPIError('Error updating user', 500)

@@ -1,4 +1,5 @@
 import { Repository, UpdateResult } from 'typeorm'
+import EmailController from '../controllers/email.controller.js'
 import Client from '../entities/Client.entity.js'
 import User from '../entities/User.entity.js'
 import { CustomAPIError } from '../errors/custom-errors.js'
@@ -17,7 +18,8 @@ import { UserService } from './user.service.js'
  * @property {ClientService} _clientService - Instance of ClientService
  * @property {OTPService} _otpService - Instance of OTPService
  * @property {UserService} _userService - Instance of UserService
- * @property {Repository<User> & {isUserAlreadyRegistered(email: string): Promise<boolean>;registerUser(email: string, password: string, client: Client): Promise<{ id: number, email: string }>; authenticateUser(email: string, password: string): Promise<{ user: Partial<User> | false, message: string }>; resetPassword(email: string, otp: number, password: string, salt: string)}} _authRepository - The extended auth repository with custom methods for the authentication process
+ * @property {EmailController} _emailController - Instance of EmailController
+ * @property {Repository<User> & {isUserAlreadyRegistered(email: string): Promise<boolean>;registerUser(email: string, password: string, client: Client): Promise<{ id: string, email: string }>; authenticateUser(email: string, password: string): Promise<{ user: Partial<User> | false, message: string }>; resetPassword(email: string, password: string, salt: string)}} _authRepository - The extended auth repository with custom methods for the authentication process
  * @property {Repository<Client> & {isExistingClient(firstName: string, lastName: string): Promise<Client | false>;}} _clientRepository - The extended client repository with custom methods for the authentication process
  */
 export class AuthService extends BaseService {
@@ -25,11 +27,12 @@ export class AuthService extends BaseService {
     private _clientService: ClientService = new ClientService()
     private _otpService: OTPService = new OTPService() 
     private _userService: UserService = new UserService() 
+    private _emailController: EmailController = new EmailController() 
     private _authRepository!: Repository<User> & {
         isUserAlreadyRegistered(email: string): Promise<boolean>
-        registerUser(email: string, password: string, token: string, client: Client): Promise<{ id: number, email: string }>
+        registerUser(email: string, password: string, token: string, client: Client): Promise<{ id: string, email: string }>
         authenticateUser(email: string, password: string): Promise<{ user: Partial<User> | false, message: string }>
-        resetPassword(email: string, otp: number, password: string, salt?: string): Promise<UpdateResult>
+        resetPassword(email: string, password: string, salt?: string): Promise<UpdateResult>
     }
     private _clientRepository!: Repository<Client> & {
         isExistingClient(firstName: string, lastName: string): Promise<Client | false>
@@ -67,9 +70,9 @@ export class AuthService extends BaseService {
      * @param {string} firstName - The first name of the user
      * @param {string} lastName - The last name of the user
      * @throws {CustomAPIError} If the email or password is not provided, if the first or last name is not provided, if the email already exists, if the client already exists, if the user could not be created, or if the client could not be linked to the user or if there is an error registering the user
-     * @returns {Promise<{ id: number, email: string}>} A promise that resolves with the id and email of the new user
+     * @returns {Promise<{ id: string, email: string}>} A promise that resolves with the id and email of the new user
      */
-    public async register(email: string, password: string, firstName: string, lastName: string, token: string): Promise<{ id: number, email: string }>{
+    public async register(email: string, password: string, firstName: string, lastName: string, token: string): Promise<{ id: string, email: string }>{
         if (!this._authRepository) {
             await this.extendAuthRepository()
         }
@@ -112,7 +115,7 @@ export class AuthService extends BaseService {
                 }
 
                 // Create a new user with the client id
-                const newUser: { id: number, email: string } = await this._authRepository.registerUser(email, password, token, client)
+                const newUser: { id: string, email: string } = await this._authRepository.registerUser(email, password, token, client)
                     .catch((error: any) => {
                         console.error('Error registering user: ', error)
                         throw new CustomAPIError('Error registering user', 500)
@@ -120,12 +123,18 @@ export class AuthService extends BaseService {
 
                 // Link the client with the user
                 if (client.id) {
-                    const linkedClient: Client | UpdateResult | undefined = await this._clientService.getClientById(client.id.toString()) ? await this._clientService.updateClient(client.id.toString(), { user: newUser } as Partial<Client>) : undefined
+                    const linkedClient: UpdateResult = await this._clientService.updateClient(client.id, { user: newUser } as Partial<Client>)
 
                     if (!linkedClient) {
                         throw new CustomAPIError('Client could not be linked to user', 500)
                     }
                 }
+
+                // Send verification email
+                await this._emailController.sendVerificationLink(email, token) 
+                    .catch((error: any) => {
+                        throw new CustomAPIError('Error sending verification email', 500)
+                    })
 
                 return newUser
             })
@@ -160,6 +169,17 @@ export class AuthService extends BaseService {
         }
     }
 
+    /**
+     * Verifies a user
+     * 
+     * @async
+     * @method verifyUser
+     * @memberof AuthService
+     * @param {string} email - The email of the user
+     * @param {string} token - The token to verify
+     * @throws {CustomAPIError} If the user is not found, if the token is invalid, or if there is an error verifying the user
+     * @returns {Promise<boolean>} A promise that resolves with a boolean indicating if the user was verified or not
+     */
     public async verifyUser(email: string, token: string): Promise<boolean> {
         if (!this._authRepository) {
             await this.extendAuthRepository()
@@ -176,9 +196,20 @@ export class AuthService extends BaseService {
                 throw new CustomAPIError('Invalid token', 400)
             }
 
-            return await this._authRepository.manager.transaction(async transactionalEntityManager => {
+            const transaction = await this._authRepository.manager.transaction(async transactionalEntityManager => {
                 return await transactionalEntityManager.update(User, user.id, { verified: true, verification_token: '' }) ? true : false
             })
+            
+            if (!transaction) {
+                throw new CustomAPIError('Error verifying user', 500)
+            }
+
+            await this._emailController.sendWelcomeEmail(email)
+                .catch((error: any) => {
+                    throw new CustomAPIError('Error sending verification confirmation email', 500)
+                })
+
+            return transaction
         } catch (error: any) {
             throw error
         }
@@ -204,29 +235,34 @@ export class AuthService extends BaseService {
         try {
             await this.validateEntity({ email, password, otp: otp }, User)
 
-            return this._authRepository.manager.transaction(async transactionalEntityManager => {
-                const user: User | null = await this._userService.getUserByEmail(email)
-                    .catch((error: any) => {
-                        console.error('Error getting user by email: ', error)
-                        throw new CustomAPIError('Error getting user by email', 500)
-                    })
+            const user: User | null = await this._userService.getUserByEmail(email)
+                .catch((error: any) => {
+                    console.error('Error getting user by email: ', error)
+                    throw new CustomAPIError('Error getting user by email', 500)
+                })
 
-                if (!user) {
-                    throw new CustomAPIError('User not found', 404)
-                }
+            if (!user) {
+                throw new CustomAPIError('User not found', 404)
+            }
 
-                if (!this._otpService.checkOTP(otp.toString())) {
-                    throw new CustomAPIError('Invalid OTP', 400)
-                }
+            if (!this._otpService.checkOTP(otp.toString())) {
+                throw new CustomAPIError('Invalid OTP', 400)
+            }
 
-                const otpVerification: { isValid: boolean, message: string } = this._otpService.verifyOTP(user, otp)
+            const otpVerification: { isValid: boolean, message: string } = this._otpService.verifyOTP(user, otp)
 
-                if (!otpVerification.isValid) {
-                    throw new CustomAPIError(otpVerification.message, 401)
-                }
+            if (!otpVerification.isValid) {
+                throw new CustomAPIError(otpVerification.message, 401)
+            }
 
-                return await this._authRepository.resetPassword(email, otp, password, user.salt)
-            }) 
+            const result = await this._authRepository.resetPassword(email, password, user.salt)
+
+            await this._emailController.sendPasswordResetConfirmation(email)
+                .catch((error: any) => {
+                    throw new CustomAPIError('Error sending password reset confirmation email', 500)
+                })
+
+            return result
         } catch (error: any) {
             throw error
         }

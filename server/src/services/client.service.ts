@@ -1,11 +1,9 @@
 import { DeleteResult, Repository, UpdateResult } from 'typeorm'
-import Appointment from '../entities/Appointment.entity.js'
 import Client from '../entities/Client.entity.js'
 import Preferences from '../entities/Preferences.entity.js'
 import { CustomAPIError } from '../errors/custom-errors.js'
 import { ClientRepository } from '../repositories/client.repository.js'
 import BaseService from './base.service.js'
-import { PreferencesService } from './preferences.service.js'
 
 /**
  * Service for handling clients
@@ -13,18 +11,16 @@ import { PreferencesService } from './preferences.service.js'
  * @class ClientService
  * @extends BaseService
  * @property {ClientRepository} _customClientRepository - Instance of the custom repository for clients
- * @property {PreferencesService} _preferencesService - Instance of PreferencesService
- * @property {Repository<Client> & { findById(id: number): Promise<Client | null>; findByName(first_name: string, last_name: string): Promise<Client | null>; findByUser(user_id: number): Promise<Client | null>; getClientWithUser(id: number): Promise<Client | null>; getPersonalInfo(id: number): Promise<Client | null;> }} _clientRepository - The extended client repository
+ * @property {Repository<Client> & { findById(id: string): Promise<Client | null>; findByName(first_name: string, last_name: string): Promise<Client | null>; findByUser(user_id: string): Promise<Client | null>; getClientWithUser(id: string): Promise<Client | null>; getPersonalInfo(id: string): Promise<Client | null;> }} _clientRepository - The extended client repository
  */
 export class ClientService extends BaseService {
     private _customClientRepository: ClientRepository = new ClientRepository()
-    private _preferencesService: PreferencesService = new PreferencesService()
     private _clientRepository!: Repository<Client> & { 
-        findById(id: number): Promise<Client | null>
+        findById(id: string): Promise<Client | null>
         findByName(first_name: string, last_name: string): Promise<Client | null>
-        findByUser(user_id: number): Promise<Client | null>
-        getClientWithUser(id: number): Promise<Client | null>
-        getPersonalInfo(id: number): Promise<Client | null>
+        findByUser(user_id: string): Promise<Client | null>
+        getClientWithUser(id: string): Promise<Client | null>
+        getPersonalInfo(id: string): Promise<Client | null>
     }
 
     /**
@@ -82,7 +78,7 @@ export class ClientService extends BaseService {
         }
 
         try {        
-            const client: Client | null = await this._clientRepository.findById(parseInt(id))
+            const client: Client | null = await this._clientRepository.findById(id)
                 .catch((error: any) => {
                     console.error('Error getting client: ', error)
                     throw new CustomAPIError('Error getting client', 500)
@@ -114,7 +110,7 @@ export class ClientService extends BaseService {
         }
 
         try {
-            const client: Client | null = await this._clientRepository.getClientWithUser(parseInt(id))
+            const client: Client | null = await this._clientRepository.getClientWithUser(id)
                 .catch((error: any) => {
                     console.error('Error getting client with user: ', error)
                     throw new CustomAPIError('Error getting client with user', 500)
@@ -179,7 +175,7 @@ export class ClientService extends BaseService {
         }
         
         try {
-            const client: Client | null = await this._clientRepository.findByUser(parseInt(userId))
+            const client: Client | null = await this._clientRepository.findByUser(userId)
                 .catch((error: any) => {
                     console.error('Error getting client by user: ', error)
                     throw new CustomAPIError('Error getting client by user', 500)
@@ -211,13 +207,13 @@ export class ClientService extends BaseService {
         }
 
         try {
-            const client: boolean = await this.checkIfClientExists(clientId)
+            const client: Client | null = await this._clientRepository.findById(clientId)
             
             if (!client) {
                 throw new CustomAPIError(`Client with id ${clientId} doesn't exists`, 404)
             }
     
-            const personalInfo: Client | null = await this._clientRepository.getPersonalInfo(parseInt(clientId))
+            const personalInfo: Client | null = await this._clientRepository.getPersonalInfo(clientId)
                 .catch((error: any) => {
                     console.error('Error getting client personal info: ', error)
                     throw new CustomAPIError('Error getting client personal info', 500)
@@ -279,13 +275,13 @@ export class ClientService extends BaseService {
         
         try {
             return await this._clientRepository.manager.transaction(async transactionalEntityManager => {
-                const clientExists: boolean = await this.checkIfClientExists(id)
+                const clientExists: Client | null = await transactionalEntityManager.findOneBy(Client, { id })
         
                 if (!clientExists) {
                     throw new CustomAPIError(`Client with id ${id} doesn't exists`, 404)
                 }
 
-                return await transactionalEntityManager.update(Client, parseInt(id), {
+                return await transactionalEntityManager.update(Client, id, {
                     phone_number: undefined, 
                     birth_date: undefined, 
                     address: undefined, 
@@ -376,14 +372,14 @@ export class ClientService extends BaseService {
         try {
             return await this._clientRepository.manager.transaction(async transactionalEntityManager => {
                 await this.validateEntity(clientData, Client)
-                
-                const clientExists: boolean = await this.checkIfClientExists(id)
+
+                const clientExists: Client | null = await transactionalEntityManager.findOneBy(Client, { id })
 
                 if (!clientExists) {
                     throw new CustomAPIError(`Client with id ${id} doesn't exists`, 404)
                 }
 
-                return await transactionalEntityManager.update(Client, parseInt(id), clientData)
+                return await transactionalEntityManager.update(Client, id, clientData)
                     .catch((error: any) => {
                         console.error('Error updating client: ', error)
                         throw new CustomAPIError(`Client with id ${id} could not be updated`, 500)
@@ -411,85 +407,20 @@ export class ClientService extends BaseService {
 
         try {
             return await this._clientRepository.manager.transaction(async transactionalEntityManager => {
-                const clientExists: boolean = await this.checkIfClientExists(id)
+                const clientExists: Client | null = await transactionalEntityManager.findOneBy(Client, { id })
 
                 if (!clientExists) {
                     throw new CustomAPIError(`Client with id ${id} doesn't exists`, 404)
                 }
 
-                return await transactionalEntityManager.softDelete(Client, parseInt(id))
+                return await transactionalEntityManager.softDelete(Client, id)
                     .catch((error: any) => {
                         console.error('Error deleting client: ', error)
                         throw new CustomAPIError(`Client with id ${id} could not be deleted`, 500)
                     })
-
-                // const preferences: Preferences | null = await transactionalEntityManager.findOneBy(Preferences, { client:  { id: parseInt(id) }})
-                //     .catch((error: any) => {
-                //         console.error('Error getting preferences: ', error)
-                //         throw new CustomAPIError('Error getting preferences', 500)
-                //     }) 
-
-                // if (preferences) {
-                //     await transactionalEntityManager.update(Preferences, preferences.id, { client: null })
-                //         .catch((error: any) => {
-                //             console.error('Error unlinking preferences from client: ', error)
-                //             throw new CustomAPIError('Preferences could not be unlinked from client', 500)
-                //         })
-
-                //     await transactionalEntityManager.delete(Preferences, preferences.id)
-                //         .catch((error: any) => {
-                //             console.error('Error deleting preferences: ', error)
-                //             throw new CustomAPIError('Preferences could not be deleted', 500)
-                //         }) 
-                // }
-
-                // const appointments: Appointment[] = await transactionalEntityManager.findBy(Appointment, { client: { id: parseInt(id) }})
-                //     .catch((error: any) => {
-                //         console.error('Error finding appointments: ', error)
-                //         throw new CustomAPIError('Error finding appointments', 500)
-                //     })
-
-                // if (appointments.length > 0) {
-                //     await transactionalEntityManager.delete(Appointment, { client: { id: parseInt(id) }})
-                //         .catch((error: any) => {
-                //             console.error('Error deleting appointments: ', error)
-                //             throw new CustomAPIError('Appointments could not be deleted', 500)
-                //         })
-                // }
-
-                // return await transactionalEntityManager.delete(Client, parseInt(id))
-                //     .catch((error: any) => {
-                //         console.error('Error deleting client: ', error)
-                //         throw new CustomAPIError(`Client with id ${id} could not be deleted`, 500)
-                //     })
             })
         } catch (error: any) {
             throw error
         }
     }
-
-    /**
-     * Check if a client exists
-     * 
-     * @async
-     * @method checkIfClientExists
-     * @memberof ClientService
-     * @param {string} id - The id of the client
-     * @throws {CustomAPIError} If there is an error checking if the client exists
-     * @returns {Promise<boolean>} A promise that resolves with a boolean indicating if the client exists
-     */
-    private async checkIfClientExists(id: string): Promise<boolean> {
-        if (!this._clientRepository) {
-            await this.extendClientRepository()
-        }
-        
-        try {
-            const existingClient: number = await this._clientRepository.countBy({ id: parseInt(id) })
-    
-            return existingClient > 0
-        } catch (error: any) {
-            console.error('Error checking if client exists: ', error)
-            throw new CustomAPIError('Error checking if client exists', 500)
-        }
-    } 
 }
