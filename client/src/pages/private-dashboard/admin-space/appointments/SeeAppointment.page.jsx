@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { fetchAppointment } from '../../../../data/appointments/appointments.fetch'
-import { capitalize } from '../../../../utils/capitalize.util'
 import { getStatusName } from '../../../../utils/appointment/getStatusName.util'
+import { capitalize } from '../../../../utils/capitalize.util'
 
 export const SeeAppointment = () => {
     const { id: appointmentID } = useParams()
@@ -32,8 +32,8 @@ export const SeeAppointment = () => {
                         <h3>Informations du client</h3>
                         <p>Prénom: {capitalize(appointment.client.first_name)}</p>
                         <p>Nom: {capitalize(appointment.client.last_name)}</p>
-                        {appointment.client.phone !== undefined && (
-                            <p>Téléphone: <a href={`tel:${appointment.client.phone}`}>{appointment.client.phone}</a></p>
+                        {appointment.client.phone_number !== undefined && (
+                            <p>Téléphone: <a href={`tel:${appointment.client.phone_number}`}>{appointment.client.phone_number}</a></p>
                         )}
 
                         <h3>Informations du rendez-vous</h3>
