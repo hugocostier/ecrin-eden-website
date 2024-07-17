@@ -1,16 +1,18 @@
-import DOMPurify from 'dompurify'
 import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import StyledComponents from 'styled-components'
 import { FormError } from '../../components/FormError'
 import { RecoveryContext } from '../../context/passwordRecovery.context'
+import { resetPassword } from '../../data/authentication.fetch'
 
 export const ResetPassword = () => {
     const navigate = useNavigate()
+    const { state } = useLocation()
     const { email, otp } = useContext(RecoveryContext)
 
-    const { register, handleSubmit, watch, trigger, setError, clearErrors, formState: { errors } } = useForm()
+    const { register, handleSubmit, watch, trigger, reset, setError, clearErrors, formState: { errors } } = useForm()
 
     const passwordMatch = () => {
         if (watch('password') !== watch('confirmPassword')) {
@@ -20,26 +22,30 @@ export const ResetPassword = () => {
         }
     }
 
-    const resetPassword = async (data) => {
-        return new Promise((resolve, reject) => {
-            fetch('http://localhost:3000/api/v1/auth/reset-password', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    email: DOMPurify.sanitize(email.trim()),
-                    otp: parseInt(DOMPurify.sanitize(otp)),
-                    new_password: DOMPurify.sanitize(data.password.trim())
-                })
+    const sendForm = async (data) => {
+        let userEmail = ''
+        if (state?.from === 'otp' && state?.email) {
+            userEmail = state.email
+        } else {
+            userEmail = email
+        }
+
+        let userOTP = ''
+        if (state?.from === 'otp' && state?.otp) {
+            userOTP = state.otp
+        } else {
+            userOTP = otp
+        }
+
+        toast.promise(resetPassword(userEmail, userOTP, data.password), {
+            pending: 'Réinitialisation en cours...',
+            success: 'Mot de passe réinitialisé avec succès',
+            error: 'Erreur lors de la réinitialisation du mot de passe'
+        }, { containerId: 'notification' })
+            .then(() => {
+                reset()
+                navigate('/login')
             })
-                .then(res => res.json())
-                .then(data => {
-                    resolve(data)
-                    navigate('/login')
-                })
-                .catch(err => reject(err))
-        })
     }
 
     return (
@@ -50,7 +56,7 @@ export const ResetPassword = () => {
                         Réinitialiser votre mot de passe
                     </h2>
                 </div>
-                <ResetForm onSubmit={handleSubmit(resetPassword)}>
+                <ResetForm onSubmit={handleSubmit(sendForm)}>
                     <div className='input-container'>
                         <label htmlFor='password'>
                             Nouveau mot de passe

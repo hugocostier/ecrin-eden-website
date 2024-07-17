@@ -1,14 +1,15 @@
 import { useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import OtpInput from 'react-otp-input'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import StyledComponents from 'styled-components'
 import { FormError } from '../../components/FormError'
 import { RecoveryContext } from '../../context/passwordRecovery.context'
-import { forgetPassword } from '../../data/authentication.fetch'
+import { forgetPassword, verifyOTP } from '../../data/authentication.fetch'
 
 export const RecoverPassword = () => {
     const navigate = useNavigate()
+    const { state } = useLocation()
     const { email, otp } = useContext(RecoveryContext)
 
     const { handleSubmit, setValue, setError, clearErrors, trigger, formState: { errors } } = useForm()
@@ -28,13 +29,23 @@ export const RecoverPassword = () => {
             })
     }
 
-    const verifyOTP = () => {
-        if (parseInt(OTPInput) === otp) {
-            return navigate('/reset-password')
+    const sendForm = async () => {
+        let userEmail = ''
+        if (state?.from === 'settings' && state?.email) {
+            userEmail = state.email
         } else {
-            setError('otp', { message: 'Code de vérification invalide' })
-            trigger('otp')
+            userEmail = email
         }
+
+        await verifyOTP(userEmail, OTPInput)
+            .then((data) => {
+                if (data.success) {
+                    navigate('/reset-password', { state: { from: 'otp', email: userEmail, otp: OTPInput } })
+                } else {
+                    setError('otp', { message: 'Code de vérification invalide' })
+                    trigger('otp')
+                }
+            })
     }
 
     useEffect(() => {
@@ -66,7 +77,7 @@ export const RecoverPassword = () => {
                         <p>Un code de vérification a été envoyé à l&apos;adresse {email}</p>
                     </div>
 
-                    <OTPForm onSubmit={handleSubmit(verifyOTP)}>
+                    <OTPForm onSubmit={handleSubmit(sendForm)}>
                         <OtpInput
                             containerStyle='otp-input-container'
                             inputStyle='otp-input'

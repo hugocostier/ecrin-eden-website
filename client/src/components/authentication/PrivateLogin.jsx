@@ -6,9 +6,15 @@ export const PrivateLogin = () => {
     const { accessFromLogin } = useContext(RecoveryContext)
     const { state } = useLocation()
 
-    if (!accessFromLogin && state?.from !== 'settings') {
-        console.log('redirecting to login')
-        return <Navigate to='/login' replace />
+    if (!accessFromLogin) {
+        switch (state?.from) {
+            case 'settings':
+                return <Outlet />
+            case 'otp':
+                return <Outlet />
+            default:
+                return <Navigate to='/login' replace />
+        }
     }
 
     return <Outlet />
