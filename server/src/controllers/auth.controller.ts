@@ -36,17 +36,7 @@ export default class AuthController extends BaseController {
             
             const token = crypto.randomBytes(32).toString('hex')
 
-            const registeredUser: { id: number, email: string } = await this._authService.register(email, password, first_name.toLowerCase(), last_name.toLowerCase(), token) 
-            .then(async (user) => {
-                await this._emailController.sendVerificationLink(email, token)
-                    .catch((error: any) => {
-                        return res.status(500).json({ error: 'Error sending verification email' })
-                    })
-
-                return user
-            }) 
-
-            return registeredUser
+            return await this._authService.register(email, password, first_name.toLowerCase(), last_name.toLowerCase(), token) 
         }, 'User registered successfully')
     }
 
@@ -139,19 +129,7 @@ export default class AuthController extends BaseController {
         await this.handleRequest(req, res, async () => {
             const { token, email } = req.body
 
-            const result = await this._authService.verifyUser(email, token)
-                .then(async (result) => {
-                    if (result) {
-                        await this._emailController.sendWelcomeEmail(email)
-                            .catch((error: any) => {
-                                throw new CustomAPIError('Error sending verification confirmation email', 500)
-                            })
-                    } else {
-                        throw new CustomAPIError('Error verifying user', 500)
-                    }
-                })
-            
-            return result
+            return await this._authService.verifyUser(email, token)
         }, 'User verified successfully')
     }
 
@@ -208,15 +186,7 @@ export default class AuthController extends BaseController {
         await this.handleRequest(req, res, async () => {
             const { email, otp, new_password: password } = req.body
 
-            const result = await this._authService.resetPassword(email, otp, password)
-                .then(async () => {
-                    await this._emailController.sendPasswordResetConfirmation(email)
-                        .catch((error: any) => {
-                            throw new CustomAPIError('Error sending password reset confirmation email', 500)
-                        })
-                })
-            
-            return result
+            return await this._authService.resetPassword(email, otp, password)
         }, 'Password reset successfully')
     }
 }
