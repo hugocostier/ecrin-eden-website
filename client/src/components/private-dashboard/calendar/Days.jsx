@@ -64,7 +64,7 @@ const StyledDays = StyledComponents.tbody`
         .more-appointments {
             padding-left: 10px;  
             color: var(--grey-600); 
-            font-size: 1rem;      
+            font-size: 0.8rem;      
         }
     } 
 `
