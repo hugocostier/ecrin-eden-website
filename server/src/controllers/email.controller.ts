@@ -234,7 +234,7 @@ export default class EmailController extends BaseController {
             const templateData = {
                 firstName: capitalize(xss(firstName.trim())),
                 lastName: capitalize(xss(lastName.trim())),
-                phone: xss(phone.trim()),
+                phone: phone ? xss(phone.trim()) : undefined,
                 email: xss(email.trim()),
                 message: xss(message.trim()),
             }
