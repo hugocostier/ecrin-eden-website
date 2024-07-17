@@ -42,10 +42,10 @@ export class UserRepository extends BaseRepository {
              * @async
              * @method findById
              * @memberof userRepository
-             * @param {number} id - The id of the user to find.
+             * @param {string} id - The id of the user to find.
              * @returns {Promise<User | null>} The user data or null if the user is not found.
              */
-            async findById(id: number): Promise<User | null> {        
+            async findById(id: string): Promise<User | null> {        
                 return this.createQueryBuilder('user')
                     .leftJoin('user.client', 'client')
                     .select([
@@ -88,10 +88,10 @@ export class UserRepository extends BaseRepository {
              * @async
              * @method findUserWithClient
              * @memberof userRepository
-             * @param {number} id - The id of the user to find.
+             * @param {string} id - The id of the user to find.
              * @returns {Promise<User | null>} The user data with the client data or null if the user is not found.
              */
-            async findUserWithClient(id: number): Promise<User | null> {
+            async findUserWithClient(id: string): Promise<User | null> {
                 return this.createQueryBuilder('user')
                     .leftJoinAndSelect('user.client', 'client')
                     .where('user.id = :id', { id })
@@ -104,10 +104,10 @@ export class UserRepository extends BaseRepository {
              * @async
              * @method findUserByClient
              * @memberof userRepository
-             * @param {number} clientId - The id of the client to find.
+             * @param {string} clientId - The id of the client to find.
              * @returns {Promise<User | null>} The user data or null if the user is not found.
              */
-            async findUserByClient(clientId: number): Promise<User | null> {
+            async findUserByClient(clientId: string): Promise<User | null> {
                 return this.createQueryBuilder('user')
                     .leftJoinAndSelect('user.client', 'client')
                     .where('user.client = :clientId', { clientId })

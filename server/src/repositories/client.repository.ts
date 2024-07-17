@@ -42,10 +42,10 @@ export class ClientRepository extends BaseRepository {
              * @async
              * @method findById
              * @memberof clientRepository
-             * @param {number} id - The id of the client to find.
+             * @param {string} id - The id of the client to find.
              * @returns {Promise<Client | null>} The client data or null if the client is not found.
              */
-            async findById(id: number): Promise<Client | null> {
+            async findById(id: string): Promise<Client | null> {
                 return this.findOneBy({ id })
             }, 
 
@@ -69,10 +69,10 @@ export class ClientRepository extends BaseRepository {
              * @async
              * @method findByUser
              * @memberof clientRepository
-             * @param {number} user_id - The user id of the client to find.
+             * @param {string} user_id - The user id of the client to find.
              * @returns {Promise<Client | null>} The client data or null if the client is not found.
              */
-            async findByUser(user_id: number): Promise<Client | null> {
+            async findByUser(user_id: string): Promise<Client | null> {
                 return this.findOneBy({ user: { id: user_id } })
             },
 
@@ -82,10 +82,10 @@ export class ClientRepository extends BaseRepository {
              * @async
              * @method getClientWithUser
              * @memberof clientRepository
-             * @param {number} id - The id of the client to find.
+             * @param {string} id - The id of the client to find.
              * @returns {Promise<Client | null>} The client data with the associated user data or null if the client is not found.
              */
-            async getClientWithUser(id: number): Promise<Client | null> {
+            async getClientWithUser(id: string): Promise<Client | null> {
                 return this.createQueryBuilder('client') 
                     .leftJoin('client.user', 'user')
                     .select([
@@ -113,10 +113,10 @@ export class ClientRepository extends BaseRepository {
              * @async
              * @method getPersonalInfo
              * @memberof clientRepository
-             * @param {number} id - The id of the client to find.
+             * @param {string} id - The id of the client to find.
              * @returns {Promise<Client | null>} The client's personal information or null if the client is not found.
              */
-            async getPersonalInfo(id: number): Promise<Client | null> {
+            async getPersonalInfo(id: string): Promise<Client | null> {
                 return this.createQueryBuilder('client') 
                     .select([
                         'client.first_name', 

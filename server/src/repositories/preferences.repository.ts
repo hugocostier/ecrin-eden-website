@@ -43,10 +43,10 @@ export class PreferencesRepository extends BaseRepository {
              * @async
              * @method findPreferencesForClient
              * @memberof preferencesRepository
-             * @param {number} clientId - The id of the client to find preferences for.
+             * @param {string} clientId - The id of the client to find preferences for.
              * @returns {Promise<Preferences | null>} The preferences data or null if the preferences are not found.
              */
-            async findPreferencesForClient(clientId: number): Promise<Preferences | null> {
+            async findPreferencesForClient(clientId: string): Promise<Preferences | null> {
                 return await this.createQueryBuilder('preferences') 
                     .leftJoin('preferences.client', 'client')
                     .select([
@@ -63,11 +63,11 @@ export class PreferencesRepository extends BaseRepository {
              * @async
              * @method updatePreferences
              * @memberof preferencesRepository
-             * @param {number} clientId - The id of the client to update preferences for.
+             * @param {string} clientId - The id of the client to update preferences for.
              * @param {Partial<Preferences>} preferences - The preferences to update.
              * @returns {Promise<UpdateResult>} The result of the update operation.
              */
-            async updatePreferences(clientId: number, preferences: Partial<Preferences>): Promise<UpdateResult> {
+            async updatePreferences(clientId: string, preferences: Partial<Preferences>): Promise<UpdateResult> {
                 return await this.createQueryBuilder('preferences')
                     .update()
                     .set(preferences)

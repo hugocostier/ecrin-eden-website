@@ -156,9 +156,9 @@ export class AuthRepository extends BaseRepository {
              * @param {string} password - The password of the user to register.
              * @param {string} token - The token to associate with the user.
              * @param {Client} client - The client to associate with the user.
-             * @returns {Promise<{ id: number, email: string }>} The id and email of the registered user.
+             * @returns {Promise<{ id: string, email: string }>} The id and email of the registered user.
              */
-            async registerUser(email: string, password: string, token: string, client: Client): Promise<{ id: number, email: string }> {
+            async registerUser(email: string, password: string, token: string, client: Client): Promise<{ id: string, email: string }> {
                 // Generate a random salt
                 const salt: string = await generateSalt() 
                     .catch((error: any) => {
@@ -242,12 +242,11 @@ export class AuthRepository extends BaseRepository {
              * @method resetPassword
              * @memberof authRepository
              * @param {string} email - The email of the user to reset the password for.
-             * @param {number} otp - The OTP to reset the password with.
              * @param {string} password - The new password of the user.
              * @param {string} salt - The salt to use for hashing the password.
              * @returns {Promise<UpdateResult>} The result of resetting the password.
              */
-            async resetPassword(email: string, otp: number, password: string, salt: string): Promise<UpdateResult> {
+            async resetPassword(email: string, password: string, salt: string): Promise<UpdateResult> {
                 const hashedPassword: string = await hashPassword(password, salt)
                     .catch((error: any) => {
                         console.error('Error hashing password: ', error)
