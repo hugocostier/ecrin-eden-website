@@ -212,9 +212,9 @@ export class ServiceService extends BaseService {
         }
 
         try {
-            const existingService: number = await this._serviceRepository.countBy({ id: parseInt(id) })
+            const existingService: Service | null = await this._serviceRepository.findById(parseInt(id))
 
-            return existingService > 0
+            return existingService ? true : false
         } catch (error: any) {
             console.error('Error checking if service exists: ', error)
             throw new CustomAPIError('Error checking if service exists', 500)
