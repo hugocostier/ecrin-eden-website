@@ -14,9 +14,9 @@
     },
     "typedocOptions": {
         "entryPoints": ["./src"],
-        "entryPointStrategy": "expand", 
+        "entryPointStrategy": "expand",
         "out": "docs"
     },
-    "include": ["src/**/*.ts", "src/**/*.json"],
+    "include": ["src/**/*.ts", "src/**/*.json", "src/utils/generateSecret.util.js"],
     "exclude": ["node_modules", "dist", "coverage", "docs", "src/__test__"]
 }
