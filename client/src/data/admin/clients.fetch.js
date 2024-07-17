@@ -114,8 +114,8 @@ export const updateClient = (id, data) => {
 
     const formData = new FormData()
     const fields = [
-        { key: 'first_name', value: data.firstName.toLowerCase().trim() },
-        { key: 'last_name', value: data.lastName.toLowerCase().trim() },
+        { key: 'first_name', value: data.firstName ? data.firstName.toLowerCase().trim() : undefined },
+        { key: 'last_name', value: data.lastName ? data.lastName.toLowerCase().trim() : undefined },
         { key: 'phone_number', value: data.phone === '' ? undefined : data.phone },
         { key: 'birth_date', value: data.birthDate === '' ? undefined : data.birthDate },
         { key: 'address', value: data.address === '' ? undefined : data.address.toLowerCase().trim() },
@@ -166,11 +166,11 @@ export const updateClient = (id, data) => {
 }
 
 export const deleteClient = (id) => {
-    const url = `${API_URL}/${id}`
+    const url = `${API_URL}/delete/${id}`
 
     return new Promise((resolve, reject) => {
         fetch(url, {
-            method: 'DELETE',
+            method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -181,14 +181,7 @@ export const deleteClient = (id) => {
                     throw new Error('HTTP Error ! Status: ' + response.status)
                 }
 
-                return response.json()
-            })
-            .then((res) => {
-                if (!res.success) {
-                    reject({ message: 'Client not deleted' })
-                }
-
-                resolve(res)
+                resolve()
             })
             .catch((err) => {
                 reject(err)
