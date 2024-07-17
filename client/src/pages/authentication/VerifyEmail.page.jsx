@@ -8,17 +8,19 @@ export const VerifyEmailPage = () => {
     const [error, setError] = useState(null)
     const [success, setSuccess] = useState(false)
 
-    const token = new URLSearchParams(window.location.search).get('token')
-    const email = new URLSearchParams(window.location.search).get('email')
-
     useEffect(() => {
-        if (!token || !email) {
+        const userInfo = {
+            token: new URLSearchParams(window.location.search).get('token'),
+            email: new URLSearchParams(window.location.search).get('email')
+        }
+
+        if (!userInfo.token || !userInfo.email) {
             setError('Code de vérification ou adresse email manquante')
             setLoading(false)
             return
         }
 
-        verifyEmail(token, email)
+        verifyEmail(userInfo.token, userInfo.email)
             .then((success) => {
                 setSuccess(success)
                 setLoading(false)
@@ -27,7 +29,7 @@ export const VerifyEmailPage = () => {
                 setError('Erreur lors de la vérification de l\'adresse email')
                 setLoading(false)
             })
-    }, [token, email])
+    }, [])
 
     const VerifyEmail = ({ text }) => {
         return (
