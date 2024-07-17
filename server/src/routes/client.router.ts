@@ -14,7 +14,9 @@ router.route('/')
 router.route('/:id')
     .get(authController.isLoggedIn, clientController.getClient)
     .patch(authController.isLoggedIn, clientController.updateClient)
-    .delete(authController.isAdmin, clientController.deleteClient)
+
+router.route('/delete/:id')
+    .patch(authController.isAdmin, clientController.deleteClient)
 
 router.route('/user/:id') 
     .get(authController.isLoggedIn, clientController.getClientByUser)
