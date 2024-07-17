@@ -87,6 +87,12 @@ export const UpdateAppointment = () => {
             isAway: data.isAway
         }
 
+        if (data.service != appointment.service.id || data.date !== appointment.date || data.time !== appointment.time || (data.isAway === 'true') != appointment.is_away) {
+            input.status = 'pending'
+        } else {
+            input.status = appointment.status
+        }
+
         toast.promise(updateAppointment(appointmentID, input), {
             pending: 'Modification...',
             success: 'Rendez-vous modifié !',
