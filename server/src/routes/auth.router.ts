@@ -44,6 +44,10 @@ router.route('/logout')
 router.route('/forgot-password')
     .post(otpController.sendOTP)
 
+// Verify OTP
+router.route('/verify-otp')
+    .post(otpController.verifyOTP)
+
 // Reset user password
 router.route('/reset-password') 
     .post(authController.resetUserPassword)
