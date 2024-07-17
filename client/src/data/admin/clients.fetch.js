@@ -65,21 +65,21 @@ export const fetchClients = () => {
 export const addClient = (data) => {
     const formData = new FormData()
     const fields = [
-        { key: 'first_name', value: data.firstName.toLowerCase() },
-        { key: 'last_name', value: data.lastName.toLowerCase() },
+        { key: 'first_name', value: data.firstName.toLowerCase().trim() },
+        { key: 'last_name', value: data.lastName.toLowerCase().trim() },
         { key: 'phone_number', value: data.phone === '' ? undefined : data.phone },
         { key: 'birth_date', value: data.birthDate === '' ? undefined : data.birthDate },
-        { key: 'address', value: data.address === '' ? undefined : data.address.toLowerCase() },
+        { key: 'address', value: data.address === '' ? undefined : data.address.toLowerCase().trim() },
         { key: 'postal_code', value: data.postalCode === '' ? undefined : data.postalCode },
-        { key: 'city', value: data.city === '' ? undefined : data.city.toLowerCase() },
-        { key: 'shared_notes', value: data.sharedNotes === '' ? undefined : data.sharedNotes },
-        { key: 'private_notes', value: data.privateNotes === '' ? undefined : data.privateNotes },
+        { key: 'city', value: data.city === '' ? undefined : data.city.toLowerCase().trim() },
+        { key: 'shared_notes', value: data.sharedNotes === '' ? undefined : data.sharedNotes.trim() },
+        { key: 'private_notes', value: data.privateNotes === '' ? undefined : data.privateNotes.trim() },
         { key: 'profile_picture', value: data.profilePicture?.length > 0 ? data.profilePicture[0] : undefined },
     ]
 
     fields.forEach((field) => {
         if (field.value !== undefined) {
-            formData.append(field.key, DOMPurify.sanitize(field.value.trim()))
+            formData.append(field.key, DOMPurify.sanitize(field.value))
         }
     })
 
@@ -114,21 +114,28 @@ export const updateClient = (id, data) => {
 
     const formData = new FormData()
     const fields = [
-        { key: 'first_name', value: data.firstName.toLowerCase() },
-        { key: 'last_name', value: data.lastName.toLowerCase() },
+        { key: 'first_name', value: data.firstName.toLowerCase().trim() },
+        { key: 'last_name', value: data.lastName.toLowerCase().trim() },
         { key: 'phone_number', value: data.phone === '' ? undefined : data.phone },
         { key: 'birth_date', value: data.birthDate === '' ? undefined : data.birthDate },
-        { key: 'address', value: data.address === '' ? undefined : data.address.toLowerCase() },
+        { key: 'address', value: data.address === '' ? undefined : data.address.toLowerCase().trim() },
         { key: 'postal_code', value: data.postalCode === '' ? undefined : data.postalCode },
-        { key: 'city', value: data.city === '' ? undefined : data.city.toLowerCase() },
-        { key: 'shared_notes', value: data.sharedNotes === '' ? undefined : data.sharedNotes },
-        { key: 'private_notes', value: data.privateNotes === '' ? undefined : data.privateNotes },
+        { key: 'city', value: data.city === '' ? undefined : data.city.toLowerCase().trim() },
+        { key: 'shared_notes', value: data.sharedNotes === '' ? undefined : data.sharedNotes.trim() },
+        {
+            key: 'private_notes',
+            value: data.privateNotes ? (data.privateNotes === '' ? undefined : data.privateNotes.trim()) : undefined,
+        },
         { key: 'profile_picture', value: data.profilePicture?.length > 0 ? data.profilePicture[0] : undefined },
     ]
 
     fields.forEach((field) => {
         if (field.value !== undefined) {
-            formData.append(field.key, DOMPurify.sanitize(field.value.trim()))
+            if (field.key === 'profile_picture') {
+                formData.append(field.key, field.value)
+            } else {
+                formData.append(field.key, DOMPurify.sanitize(field.value))
+            }
         }
     })
 

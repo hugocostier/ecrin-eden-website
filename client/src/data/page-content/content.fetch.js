@@ -1,4 +1,3 @@
-import DOMPurify from 'dompurify'
 import { initializeReset } from '../../utils/store-front-content/initializeReset.util'
 
 const API_URL = `${import.meta.env.VITE_APP_API_URL}/content`
@@ -16,8 +15,6 @@ export const fetchPageContent = async (pageId, storeFrontPages, reset) => {
 }
 
 export const updateContent = async (page, content) => {
-    const cleanContent = DOMPurify.sanitize(content.trim())
-
     return new Promise((resolve, reject) => {
         fetch(`${API_URL}/${page}`, {
             method: 'PATCH',
@@ -25,7 +22,7 @@ export const updateContent = async (page, content) => {
                 'Content-Type': 'application/json',
             },
             credentials: 'include',
-            body: JSON.stringify(cleanContent),
+            body: JSON.stringify(content),
         })
             .then((response) => {
                 if (!response.ok) {
