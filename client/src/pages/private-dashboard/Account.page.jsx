@@ -128,7 +128,7 @@ export const AccountPage = () => {
                         id='last-name'
                         placeholder='Nom*'
                         autoComplete='family-name'
-                        {...register('lastName', { required: 'Veuillez entrer votre nom', pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer un nom valide' }, disabled: !isEditable })}
+                        {...register('lastName', { required: 'Veuillez entrer votre nom', pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer un nom valide' }, disabled: true })}
                     />
                     <FormError error={errors.lastName} />
                 </div>
@@ -140,7 +140,7 @@ export const AccountPage = () => {
                         id='first-name'
                         placeholder='Prénom*'
                         autoComplete='given-name'
-                        {...register('firstName', { required: 'Veuillez entrer votre prénom', pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer un prénom valide' }, disabled: !isEditable })}
+                        {...register('firstName', { required: 'Veuillez entrer votre prénom', pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer un prénom valide' }, disabled: true })}
                     />
                     <FormError error={errors.firstName} />
                 </div>

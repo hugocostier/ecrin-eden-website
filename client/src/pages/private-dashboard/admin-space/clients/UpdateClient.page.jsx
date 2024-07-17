@@ -162,7 +162,7 @@ export const UpdateClient = () => {
                         id='last-name'
                         placeholder='Nom*'
                         autoComplete='off'
-                        {...register('lastName', { required: 'Veuillez entrer votre nom', pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer un nom valide' }, disabled: hasAccount ? true : !isEditable })}
+                        {...register('lastName', { required: 'Veuillez entrer votre nom', pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer un nom valide' }, disabled: true })}
                     />
                     <FormError error={errors.lastName} />
                 </div>
@@ -174,7 +174,8 @@ export const UpdateClient = () => {
                         id='first-name'
                         placeholder='Prénom*'
                         autoComplete='off'
-                        {...register('firstName', { required: 'Veuillez entrer votre prénom', pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer un prénom valide' }, disabled: hasAccount ? true : !isEditable })}
+                        disabled
+                        {...register('firstName', { required: 'Veuillez entrer votre prénom', pattern: { value: /^[a-zA-ZÀ-ÿ\s-]+$/, message: 'Veuillez entrer un prénom valide' }, disabled: true })}
                     />
                     <FormError error={errors.firstName} />
                 </div>
@@ -478,7 +479,7 @@ const StyledForm = StyledComponents.form`
                 
                 img {
                     max-width: 100%;
-                    height: 100%;
+                    height: auto;
                     object-fit: cover;
                     object-position: 50% 50%; 
                 }
