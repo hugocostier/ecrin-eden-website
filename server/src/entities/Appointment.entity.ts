@@ -31,7 +31,7 @@ enum AppointmentStatus {
  * @interface IAppointment
  */
 export interface IAppointment {
-    id: number
+    id: string
     date: string
     time: string
     is_away: boolean
@@ -49,7 +49,7 @@ export interface IAppointment {
  * @class Appointment
  * @extends BaseEntity
  * @implements IAppointment
- * @property {number} id - The id of the appointment
+ * @property {string} id - The id of the appointment
  * @property {string} date - The date of the appointment
  * @property {string} time - The time of the appointment
  * @property {boolean} is_away - Whether the appointment is away
@@ -62,8 +62,8 @@ export interface IAppointment {
  */
 @Entity('appointment')
 export default class Appointment extends BaseEntity implements IAppointment {
-    @PrimaryGeneratedColumn()
-        id!: number
+    @PrimaryGeneratedColumn('uuid')
+        id!: string
 
     @Column({ type: 'date' })
     @IsNotEmpty({ message: ValidationMessages.getMessage('Date', 'isDefined') })

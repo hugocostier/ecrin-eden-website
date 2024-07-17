@@ -18,7 +18,7 @@ import Client from './Client.entity.js'
  * @interface IPreferences 
  */
 export interface IPreferences {
-    id: number
+    id: string
     question_1?: string
     question_2?: string
     question_3?: string
@@ -35,7 +35,7 @@ export interface IPreferences {
  * @class Preferences
  * @extends BaseEntity
  * @implements IPreferences
- * @property {number} id - The id of the preferences
+ * @property {string} id - The id of the preferences
  * @property {string} question_1 - The answer to the question
  * @property {string} question_2 - The answer to the question
  * @property {string} question_3 - The answer to the question
@@ -47,8 +47,8 @@ export interface IPreferences {
  */
 @Entity('preferences')
 export default class Preferences extends BaseEntity implements IPreferences {
-    @PrimaryGeneratedColumn()
-        id!: number 
+    @PrimaryGeneratedColumn('uuid')
+        id!: string
 
     @Column({ nullable: true, type: 'varchar', length: 255 }) 
     @IsOptional()

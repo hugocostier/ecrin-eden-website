@@ -29,7 +29,7 @@ enum UserRole {
  * @interface IUser
  */
 export interface IUser {
-    id: number
+    id: string
     email: string
     password: string
     role?: string
@@ -49,7 +49,7 @@ export interface IUser {
  * @class User
  * @extends BaseEntity
  * @implements IUser
- * @property {number} id - The id of the user
+ * @property {string} id - The id of the user
  * @property {string} email - The email of the user
  * @property {string} password - The password of the user
  * @property {UserRole} role - The role of the user
@@ -62,8 +62,8 @@ export interface IUser {
  */
 @Entity('user')
 export default class User extends BaseEntity implements IUser {
-    @PrimaryGeneratedColumn()
-        id!: number
+    @PrimaryGeneratedColumn('uuid')
+        id!: string
 
     @Column({ unique: true, type: 'varchar', length: 255 }) 
     @Unique('Email', ['email']) 

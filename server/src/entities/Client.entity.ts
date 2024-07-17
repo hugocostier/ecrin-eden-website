@@ -22,7 +22,7 @@ import User from './User.entity.js'
  * @interface IClient
  */
 export interface IClient {
-    id: number
+    id: string
     first_name: string
     last_name: string
     phone_number?: string
@@ -47,7 +47,7 @@ export interface IClient {
  * @class Client
  * @extends BaseEntity
  * @implements IClient
- * @property {number} id - The id of the client
+ * @property {string} id - The id of the client
  * @property {string} first_name - The first name of the client
  * @property {string} last_name - The last name of the client
  * @property {string} phone_number - The phone number of the client
@@ -66,8 +66,8 @@ export interface IClient {
  */
 @Entity('client')
 export default class Client extends BaseEntity implements IClient {
-    @PrimaryGeneratedColumn()
-        id!: number 
+    @PrimaryGeneratedColumn('uuid')
+        id!: string
 
     @Column({ type: 'varchar', length: 50 }) 
     @IsNotEmpty({ message: ValidationMessages.getMessage('First name', 'isEmpty') })
