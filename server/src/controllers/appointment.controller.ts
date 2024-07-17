@@ -132,7 +132,7 @@ export default class AppointmentController extends BaseController {
         await this.handleRequest(req, res, async () => {
             const validRequestBody: Partial<Appointment> = this.filterRequestBody(req.body, Appointment)
 
-            return await this._appointmentService.addAppointment(validRequestBody)
+            return await this._appointmentService.addAppointment(validRequestBody, req.body.email || undefined)
         }, 'Appointment created successfully', 201)
     }
 
