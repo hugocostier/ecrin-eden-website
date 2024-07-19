@@ -1,0 +1,45 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-all font-family="Arial, sans-serif" font-size="16px" align="justify" line-height="20px" />
+    </mj-attributes>
+    <mj-style inline="inline">
+      .otp-digit {
+        display: inline-block;
+        padding: 10px;
+        margin: 5px;
+        border: 2px solid #66554d;
+        background-color: #d1d1d1;
+        font-size: 30px;
+        font-weight: bold;
+        text-align: center;
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+      }
+    </mj-style>
+  </mj-head>
+
+  <mj-body background-color="rgb(243, 242, 240)">
+    <mj-include path="./email-header.mjml" />
+
+    <mj-section background-color="rgb(255, 255, 255)">
+      <mj-column>
+        <mj-text font-size="24px" font-weight="bold" padding-top="0" padding-bottom="20px" align="center">
+          Adresse email modifiée avec succès !
+        </mj-text>
+        <mj-text>
+          Pour valider votre nouvelle adresse email, veuillez cliquer sur le lien ci-dessous.
+        </mj-text>
+        <mj-button href="{{verificationLink}}" align="center">
+          Vérifier mon adresse email
+        </mj-button>
+        <mj-text font-size="14px" padding-top="20px" padding-bottom="0">
+          Si vous avez besoin d'aide, n'hésitez pas à nous contacter à l'adresse suivante : <a href="mailto:contact@ecrin-eden.com">contact@ecrin-eden.com</a>.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-include path="./email-footer.mjml" />
+  </mj-body>
+</mjml>
