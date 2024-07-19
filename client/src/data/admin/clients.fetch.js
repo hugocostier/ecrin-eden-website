@@ -188,3 +188,27 @@ export const deleteClient = (id) => {
             })
     })
 }
+
+export const deletePersonalInfo = (id) => {
+    const url = `${API_URL}/delete-personal-info/${id}`
+
+    return new Promise((resolve, reject) => {
+        fetch(url, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+        })
+            .then(async (response) => {
+                if (!response.ok) {
+                    throw new Error('HTTP Error ! Status: ' + response.status)
+                }
+
+                resolve()
+            })
+            .catch((err) => {
+                reject(err)
+            })
+    })
+}
