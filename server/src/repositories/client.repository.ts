@@ -37,6 +37,30 @@ export class ClientRepository extends BaseRepository {
     private clientRepository() {
         return this.dataSource.getRepository(Client).extend({
             /**
+             * Finds all clients and returns their data with the associated user data.
+             * 
+             * @async
+             * @method findAll
+             * @memberof clientRepository
+             * @returns {Promise<Client[]>} The client data with the associated user data.
+             */
+            async findAll(): Promise<Client[]> {
+                return this.createQueryBuilder('client')
+                    .leftJoinAndSelect('client.user', 'user')
+                    .select([
+                        'client.id',
+                        'client.first_name',
+                        'client.last_name',
+                        'client.phone_number',
+                        'client.address',
+                        'client.postal_code',
+                        'client.city',
+                        'user.id',
+                    ])
+                    .getMany()
+            }, 
+
+            /**
              * Finds a client by their id and returns their data.
              * 
              * @async
