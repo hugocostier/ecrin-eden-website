@@ -9,7 +9,7 @@ import User from '../entities/User.entity.js'
  * @param {number} ownerId - The id of the ressource owner
  * @returns {boolean} A boolean indicating if the user is authorized
  */
-export const isAuthorized = (req: Request, res: Response, ownerId: number): boolean => {
+export const isAuthorized = (req: Request, res: Response, ownerId: string): boolean => {
     // Get the user from the request
     const user: User = req.user as User
 
