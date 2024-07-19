@@ -25,14 +25,14 @@ export interface IClient {
     id: string
     first_name: string
     last_name: string
-    phone_number?: string
-    birth_date?: string
-    address?: string
-    postal_code?: string
-    city?: string
-    shared_notes?: string
+    phone_number?: string | null
+    birth_date?: string | null
+    address?: string | null
+    postal_code?: string | null
+    city?: string | null
+    shared_notes?: string | null
     private_notes?: string
-    profile_picture?: string
+    profile_picture?: string | null
     created_at: Date
     updated_at: Date
     deleted_at: Date
@@ -87,7 +87,7 @@ export default class Client extends BaseEntity implements IClient {
     @IsString({ message: ValidationMessages.getMessage('Phone number', 'type', 'string') })
     @IsMobilePhone('fr-FR', {}, { message: ValidationMessages.getMessage('Phone number', 'isPhoneNumber') })
     @Length(10, 10, { message: ValidationMessages.getMessage('Phone number', 'definedLength', 10) })
-        phone_number?: string
+        phone_number?: string | null
 
     @Column({ nullable: true, type: 'date', 
         transformer: { 
@@ -98,13 +98,13 @@ export default class Client extends BaseEntity implements IClient {
     @IsOptional() 
     @ValidateIf(o => o.birth_date !== '')
     @IsDateString({ strict: true }, { message: ValidationMessages.getMessage('Birth date', 'date', 'yyyy-MM-dd') })
-        birth_date?: string
+        birth_date?: string | null
 
     @Column({ type: 'varchar', length: 255, nullable: true }) 
     @IsOptional() 
     @IsString({ message: ValidationMessages.getMessage('Address', 'type', 'string') })
     @Length(0, 255, { message: ValidationMessages.getMessage('Address', 'length', 255) })
-        address?: string
+        address?: string | null
 
     @Column({ nullable: true, type: 'varchar', length: 5 })
     @IsOptional() 
@@ -112,19 +112,19 @@ export default class Client extends BaseEntity implements IClient {
     @IsString({ message: ValidationMessages.getMessage('Postal code', 'type', 'string') })
     @IsPostalCode('FR', { message: ValidationMessages.getMessage('Postal code', 'isPostalCode') })
     @Length(5, 5, { message: ValidationMessages.getMessage('Postal code', 'definedLength', 5) })
-        postal_code?: string
+        postal_code?: string | null
 
     @Column({ type: 'varchar', length: 50, nullable: true })
     @IsOptional() 
     @IsString({ message: ValidationMessages.getMessage('City', 'type', 'string') })
     @Length(0, 50, { message: ValidationMessages.getMessage('City', 'length', 50) })
-        city?: string
+        city?: string | null
 
     @Column({ type: 'varchar', length: 1020, nullable: true })
     @IsOptional() 
     @IsString({ message: ValidationMessages.getMessage('Shared notes', 'type', 'string') })
     @Length(0, 1020, { message: ValidationMessages.getMessage('Shared notes', 'length', 1020) })
-        shared_notes?: string
+        shared_notes?: string | null
 
     @Column({ type: 'varchar', length: 1020, nullable: true })
     @IsOptional() 
@@ -136,7 +136,7 @@ export default class Client extends BaseEntity implements IClient {
     @IsOptional() 
     @IsString({ message: ValidationMessages.getMessage('Profile picture', 'type', 'string')})
     @Length(0, 255, { message: ValidationMessages.getMessage('Profile picture', 'length', 255)})
-        profile_picture?: string 
+        profile_picture?: string | null
 
     @CreateDateColumn() 
         created_at!: Date

@@ -40,7 +40,7 @@ export interface IUser {
     verified: boolean
     created_at: Date
     updated_at: Date
-    client: Client | undefined
+    client: Client | undefined | null
 }
 
 /**
@@ -125,5 +125,5 @@ export default class User extends BaseEntity implements IUser {
     // Foreign key for clients
     @OneToOne(() => Client, client => client.user)
     @JoinColumn({ name: 'client_id'})
-        client: Client | undefined 
+        client: Client | undefined | null
 }
