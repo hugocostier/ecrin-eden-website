@@ -188,17 +188,11 @@ class ExpressApp {
      * @returns {Promise<void>} A promise that resolves when the app is fully initialized.
      */
     public async initializeApp(): Promise<void> {
-        // console.log('Initializing app...')
         await this.connectToDatabase() 
-        // console.log('Database connected')
         this.setupMiddlewares() 
-        // console.log('Middlewares set up')
         this.setupRoutes()
-        // console.log('Routes set up')
         this.app.use(errorHandlerMiddleware)
         this.app.use(notFoundMiddleware)
-        // console.log('Error handling set up')
-        // console.log('App initialized')
     }
 }
 
