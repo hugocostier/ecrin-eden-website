@@ -21,8 +21,10 @@ router.route('/delete/:id')
 router.route('/user/:id') 
     .get(authController.isLoggedIn, clientController.getClientByUser)
 
-router.route('/client/:id/personal-info')
+router.route('/delete-personal-info/:id')
+    .patch(authController.isLoggedIn, clientController.deleteClientPersonalInfo)
+
+router.route('/personal-info/:id')
     .get(authController.isLoggedIn, clientController.getClientPersonalInfo)
-    .delete(authController.isLoggedIn, clientController.deleteClientPersonalInfo)
 
 export default router 
