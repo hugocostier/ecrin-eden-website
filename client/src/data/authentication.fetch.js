@@ -169,3 +169,33 @@ export const updatePassword = async (data) => {
             })
     })
 }
+
+export const deleteAccount = async (data) => {
+    const email = DOMPurify.sanitize(data.accountEmail.trim())
+    const password = DOMPurify.sanitize(data.accountPassword)
+
+    return new Promise((resolve, reject) => {
+        fetch(`${API_URL}/users/delete-account`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email,
+                password,
+            }),
+            credentials: 'include',
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('HTTP Error ! Status: ' + response.status)
+                }
+
+                resolve()
+            })
+            .catch((error) => {
+                console.error('Error fetching data:', error)
+                reject(error)
+            })
+    })
+}
