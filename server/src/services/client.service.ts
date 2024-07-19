@@ -11,11 +11,12 @@ import BaseService from './base.service.js'
  * @class ClientService
  * @extends BaseService
  * @property {ClientRepository} _customClientRepository - Instance of the custom repository for clients
- * @property {Repository<Client> & { findById(id: string): Promise<Client | null>; findByName(first_name: string, last_name: string): Promise<Client | null>; findByUser(user_id: string): Promise<Client | null>; getClientWithUser(id: string): Promise<Client | null>; getPersonalInfo(id: string): Promise<Client | null;> }} _clientRepository - The extended client repository
+ * @property {Repository<Client> & { findAll(): Promise<Client[]>; indById(id: string): Promise<Client | null>; findByName(first_name: string, last_name: string): Promise<Client | null>; findByUser(user_id: string): Promise<Client | null>; getClientWithUser(id: string): Promise<Client | null>; getPersonalInfo(id: string): Promise<Client | null;> }} _clientRepository - The extended client repository
  */
 export class ClientService extends BaseService {
     private _customClientRepository: ClientRepository = new ClientRepository()
     private _clientRepository!: Repository<Client> & { 
+        findAll(): Promise<Client[]>
         findById(id: string): Promise<Client | null>
         findByName(first_name: string, last_name: string): Promise<Client | null>
         findByUser(user_id: string): Promise<Client | null>
@@ -55,7 +56,7 @@ export class ClientService extends BaseService {
             await this.extendClientRepository()
         }
         try {
-            return await this._clientRepository.find()
+            return await this._clientRepository.findAll()
         } catch (error: any) {
             console.error('Error getting clients: ', error)
             throw new CustomAPIError('Error getting clients', 500)
@@ -282,13 +283,13 @@ export class ClientService extends BaseService {
                 }
 
                 return await transactionalEntityManager.update(Client, id, {
-                    phone_number: undefined, 
-                    birth_date: undefined, 
-                    address: undefined, 
-                    postal_code: undefined, 
-                    city: undefined, 
-                    shared_notes: undefined,
-                    profile_picture: undefined
+                    phone_number: null, 
+                    birth_date: null, 
+                    address: null, 
+                    postal_code: null, 
+                    city: null, 
+                    shared_notes: null,
+                    profile_picture: null
                 }).catch((error: any) => {
                     console.error('Error deleting personal info: ', error)
                     throw new CustomAPIError(`Personal info for client with id ${id} could not be deleted`, 500)
