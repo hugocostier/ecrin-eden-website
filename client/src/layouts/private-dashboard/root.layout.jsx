@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import StyledComponents from 'styled-components'
 import { Header } from '../../components/private-dashboard/Header'
+import { NotConnected } from '../../components/private-dashboard/NotConnected'
 import { Sidebar } from '../../components/private-dashboard/sidebar/Sidebar'
 import { ScrollToTop } from '../../components/ScrollToTop'
 import { useAuth } from '../../hooks/useAuth.hook'
@@ -117,6 +118,12 @@ export const PrivateRoot = () => {
     }, [user])
 
     if (loading) return null
+
+    if (user.user === null) {
+        return (
+            <NotConnected />
+        )
+    }
 
     const items = user.user.role === 'admin' ? adminMenu : userMenu
 
