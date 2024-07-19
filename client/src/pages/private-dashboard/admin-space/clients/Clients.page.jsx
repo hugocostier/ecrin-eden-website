@@ -86,7 +86,12 @@ export const AdminClients = () => {
                                         <Link to={`update/${client.id}`} state={{ disable: false }}>
                                             <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'><path d='M3 6H21V18H3V6ZM2 4C1.44772 4 1 4.44772 1 5V19C1 19.5523 1.44772 20 2 20H22C22.5523 20 23 19.5523 23 19V5C23 4.44772 22.5523 4 22 4H2ZM13 8H19V10H13V8ZM18 12H13V14H18V12ZM10.5 10C10.5 11.3807 9.38071 12.5 8 12.5C6.61929 12.5 5.5 11.3807 5.5 10C5.5 8.61929 6.61929 7.5 8 7.5C9.38071 7.5 10.5 8.61929 10.5 10ZM8 13.5C6.067 13.5 4.5 15.067 4.5 17H11.5C11.5 15.067 9.933 13.5 8 13.5Z'></path></svg>
                                         </Link>
-                                        <Link onClick={() => handleDelete(client.id)}>
+                                        <Link
+                                            onClick={() => handleDelete(client.id)}
+                                            style={
+                                                client.user?.id ? { pointerEvents: 'none', cursor: 'default', opacity: '0.5' } : null
+                                            }
+                                        >
                                             <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'><path d='M17 6H22V8H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V8H2V6H7V3C7 2.44772 7.44772 2 8 2H16C16.5523 2 17 2.44772 17 3V6ZM18 8H6V20H18V8ZM13.4142 13.9997L15.182 15.7675L13.7678 17.1817L12 15.4139L10.2322 17.1817L8.81802 15.7675L10.5858 13.9997L8.81802 12.232L10.2322 10.8178L12 12.5855L13.7678 10.8178L15.182 12.232L13.4142 13.9997ZM9 4V6H15V4H9Z'></path></svg>
                                         </Link>
                                     </td>
@@ -96,7 +101,7 @@ export const AdminClients = () => {
                     </ClientsTable>
                 </section>
             }
-        </ClientPage>
+        </ClientPage >
     )
 }
 
