@@ -295,6 +295,39 @@ export class AuthRepository extends BaseRepository {
                         console.error('Error updating password: ', error)
                         throw new CustomAPIError('Error updating password', 500)
                     })
+            }, 
+            
+            /**
+             * Verifies a user with an email and token.
+             * 
+             * @async
+             * @method verifyUser
+             * @memberof authRepository
+             * @param {string} email - The email of the user to verify.
+             * @param {string} password - The password of the user to verify.
+             * @returns {Promise<UpdateResult>} The result of verifying the user.
+             */
+            async validateUser(email: string, password: string): Promise<User | false> {
+                console.log('validateUser')
+                console.log('email: ', email)
+                console.log('password', password)
+
+                const user: User | null = await this.createQueryBuilder('user')
+                    .leftJoinAndSelect('user.client', 'client')
+                    .where('user.email = :email', { email })
+                    .getOne()
+
+                console.log('user: ', user)
+
+                if (!user) {
+                    return false
+                }
+
+                if (!await comparePasswords(password, user.salt, user.password)) {
+                    return false
+                }
+
+                return user
             }
         })
     }
