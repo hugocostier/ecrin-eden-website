@@ -66,7 +66,7 @@ export const ResetPassword = () => {
                             name='password'
                             id='password'
                             placeholder='ex: Exempl1!'
-                            autoComplete='none'
+                            autoComplete='off'
                             {...register('password', {
                                 required: 'Veuillez saisir votre mot de passe',
                                 minLength: { value: 8, message: 'Minimum 8 caractères' },
@@ -88,7 +88,7 @@ export const ResetPassword = () => {
                             name='confirmPassword'
                             id='confirm-password'
                             placeholder='••••••••'
-                            autoComplete='none'
+                            autoComplete='off'
                             {...register('confirmPassword', {
                                 required: 'Veuillez confirmer votre mot de passe',
                                 onChange: () => passwordMatch()
