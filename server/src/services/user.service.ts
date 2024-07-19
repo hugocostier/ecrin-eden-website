@@ -2,6 +2,7 @@ import { DeleteResult, Repository, UpdateResult } from 'typeorm'
 import Client from '../entities/Client.entity.js'
 import User from '../entities/User.entity.js'
 import { CustomAPIError } from '../errors/custom-errors.js'
+import { AuthRepository } from '../repositories/auth.repository.js'
 import { UserRepository } from '../repositories/user.repository.js'
 import BaseService from './base.service.js'
 import { ClientService } from './client.service.js'
@@ -24,6 +25,15 @@ export class UserService extends BaseService {
         findUserWithClient(id: string): Promise<User | null>
         findUserByClient(clientId: string): Promise<User | null>
     }
+    private _customAuthRepository: AuthRepository = new AuthRepository()
+    private _authRepository!: Repository<User> & {
+        isUserAlreadyRegistered(email: string): Promise<boolean>
+        registerUser(email: string, password: string, token: string, client: Client): Promise<{ id: string, email: string }>
+        authenticateUser(email: string, password: string): Promise<{ user: Partial<User> | false, message: string }>
+        resetPassword(email: string, password: string, salt?: string): Promise<UpdateResult>
+        updatePassword(password: string, newPassword: string, user: User): Promise<UpdateResult>
+        validateUser(email: string, password: string): Promise<boolean | User>
+    }
 
     /**
      * Extends the user repository by assigning the result of the 'extendUserRepository' method to the '_userRepository' property
@@ -39,6 +49,26 @@ export class UserService extends BaseService {
             this._userRepository = await this._customUserRepository.extendUserRepository()
         } catch (error: any) {
             console.error('Error extending user repository: ', error)
+            throw new Error(error)
+        }
+    }
+
+    /**
+     * Extends the auth repository by assigning the result of the 'extendAuthRepository' method to the '_authRepository' property
+     * 
+     * @async
+     * @method extendAuthRepository
+     * @memberof UserService
+     * @throws {Error} If there is an error extending the auth repository
+     * @returns {Promise<void>} A promise that resolves if the auth repository is successfully extended
+     */
+    private async extendAuthRepository(): Promise<void> {
+        try {
+            const returnedObject = await this._customAuthRepository.extendAuthRepository()
+
+            this._authRepository = returnedObject.authRepository
+        } catch (error: any) {
+            console.error('Error extending auth repository: ', error)
             throw new Error(error)
         }
     }
@@ -242,26 +272,29 @@ export class UserService extends BaseService {
      * @async
      * @method deleteUser
      * @memberof UserService
-     * @param {string} id - The id of the user
+     * @param {string} email - The email of the user
+     * @param {string} password - The password of the user
      * @throws {CustomAPIError} If no user is found with the id, if the client id is undefined, if no client is found with the id, or if there is an error saving the client or deleting the user
      * @returns {Promise<DeleteResult>} A promise that resolves with the result of the delete operation
      */
-    public async deleteUser(id: string): Promise<DeleteResult> {
+    public async deleteUser(email: string, password: string): Promise<DeleteResult> {
         if (!this._userRepository) {
             await this.extendUserRepository()
         }
 
+        if (!this._authRepository) {
+            await this.extendAuthRepository()
+        }
+
         try {
             return this._userRepository.manager.transaction(async transactionalEntityManager => {
-                const user: User | null = await this._userRepository.findUserWithClient(id)
-                    .catch((error: any) => {
-                        console.error('Error getting user: ', error)
-                        throw new CustomAPIError('Error getting user', 500)
-                    })
+                const isValidUser: boolean | User = await this._authRepository.validateUser(email, password)
 
-                if (!user) {
-                    throw new CustomAPIError(`User with id ${id} doesn't exists`, 404)
+                if (!isValidUser) {
+                    throw new CustomAPIError('Invalid user', 401)
                 }
+
+                const user: User = isValidUser as User
 
                 const clientId: string | undefined = user.client?.id
 
@@ -276,18 +309,24 @@ export class UserService extends BaseService {
                     })
 
                 if (!client) {
-                    throw new CustomAPIError(`Client with id ${id} doesn't exists`, 404)
+                    throw new CustomAPIError(`Client with id ${clientId} doesn't exists`, 404)
                 }
 
                 client.user = null
-
                 await transactionalEntityManager.save(client)
                     .catch((error: any) => {
                         console.error('Error saving client: ', error)
                         throw new CustomAPIError('Error saving client', 500)
                     }) 
 
-                return await transactionalEntityManager.delete(User, id)
+                user.client = null
+                await transactionalEntityManager.save(user)
+                    .catch((error: any) => {
+                        console.error('Error saving user: ', error)
+                        throw new CustomAPIError('Error saving user', 500)
+                    })
+
+                return await transactionalEntityManager.delete(User, user.id)
                     .catch((error: any) => {
                         console.error('Error deleting user: ', error)
                         throw new CustomAPIError('Error deleting user', 500)

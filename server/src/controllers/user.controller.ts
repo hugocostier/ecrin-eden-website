@@ -99,9 +99,9 @@ export default class UserController extends BaseController {
      */
     public deleteUser = async (req: Request, res: Response): Promise<void> => {
         await this.handleRequest(req, res, async () => {
-            const { id: userId } = req.params
+            const { email, password } = req.body
 
-            return await this._userService.deleteUser(userId)
+            return await this._userService.deleteUser(email, password)
         }, 'User deleted successfully', 204)
     }
 }
