@@ -110,9 +110,10 @@ export const verifyOTP = async (email, otp) => {
     })
 }
 
-export const updateEmail = async (email, newEmail) => {
-    console.log('email', email)
-    console.log('newEmail', newEmail)
+export const updateEmail = async (userEmail, data) => {
+    const email = DOMPurify.sanitize(userEmail.username.trim())
+    const newEmail = DOMPurify.sanitize(data.newEmail.trim())
+
     return new Promise((resolve, reject) => {
         fetch(`${API_URL}/auth/update-email`, {
             method: 'PATCH',
@@ -138,7 +139,11 @@ export const updateEmail = async (email, newEmail) => {
     })
 }
 
-export const updatePassword = async (email, currentPassword, newPassword) => {
+export const updatePassword = async (data) => {
+    const email = DOMPurify.sanitize(data.username.trim())
+    const currentPassword = DOMPurify.sanitize(data.currentPassword)
+    const newPassword = DOMPurify.sanitize(data.newPassword)
+
     return new Promise((resolve, reject) => {
         fetch(`${API_URL}/auth/update-password`, {
             method: 'PATCH',
