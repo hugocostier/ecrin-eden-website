@@ -13,6 +13,8 @@ router.route('/')
 router.route('/:id')
     .get(authController.isLoggedIn, userController.getUser)
     .patch(authController.isLoggedIn, userController.updateUser)
+
+router.route('/delete-account')
     .delete(authController.isLoggedIn, userController.deleteUser)
 
 router.route('/email/:email')
