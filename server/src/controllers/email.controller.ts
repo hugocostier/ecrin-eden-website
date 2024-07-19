@@ -215,6 +215,60 @@ export default class EmailController extends BaseController {
         await this.sendEmailWithTransporter(mailOptions)
     }
 
+    /**
+     * Send an email to confirm the email update
+     *
+     * @async
+     * @method sendEmailUpdateConfirmation
+     * @memberof EmailController
+     * @param {string} email - The email of the user
+     * @param {string} token - The verification token
+     * @returns {Promise<void>} A promise that resolves when the email is sent
+     */
+    public async sendEmailUpdateConfirmation(email: string, token: string): Promise<void> {
+        const verificationLink = `${process.env.CLIENT_URL}/login/verify-email?token=${token}&email=${email}`
+        const templatePath = `${process.cwd()}/src/templates/email-update-confirmation.mjml`
+        const templateData = { verificationLink }
+
+        const html = await this.generateEmailHTML(templatePath, templateData)
+
+        const mailOptions: Mail.Options = {
+            from: process.env.GMAIL_EMAIL,
+            to: email,
+            subject: 'Adresse email mise à jour',
+            html,
+            attachments: this.attachments,
+        }
+
+        await this.sendEmailWithTransporter(mailOptions)
+    }
+
+    /**
+     * Send an email to confirm the password update
+     *
+     * @async
+     * @method sendPasswordUpdateConfirmation
+     * @memberof EmailController
+     * @param {string} email - The email of the user
+     * @returns {Promise<void>} A promise that resolves when the email is sent
+     */
+    public async sendPasswordUpdateConfirmation(email: string): Promise<void> {
+        const templatePath = `${process.cwd()}/src/templates/reset-password-confirmation.mjml`
+        const templateData = {}
+
+        const html = await this.generateEmailHTML(templatePath, templateData)
+
+        const mailOptions: Mail.Options = {
+            from: process.env.GMAIL_EMAIL,
+            to: email,
+            subject: 'Mot de passe mis à jour',
+            html,
+            attachments: this.attachments,
+        }
+
+        await this.sendEmailWithTransporter(mailOptions)
+    }
+
     // ############### CONTACT FORM EMAILS ###############
     /**
      * Send an email with the contact form
