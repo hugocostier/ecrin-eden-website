@@ -262,6 +262,39 @@ export class AuthRepository extends BaseRepository {
                         console.error('Error resetting password: ', error)
                         throw new CustomAPIError('Error resetting password', 500)
                     })
+            }, 
+
+            /**
+             * Updates the password of a user with a password, new password, and user.
+             * 
+             * @async
+             * @method updatePassword
+             * @memberof authRepository
+             * @param {string} password - The current password of the user.
+             * @param {string} newPassword - The new password of the user.
+             * @param {User} user - The user to update the password for.
+             * @returns {Promise<UpdateResult>} The result of updating the password.
+             */
+            async updatePassword(password: string, newPassword: string, user: User): Promise<UpdateResult> {
+                if (!await comparePasswords(password, user.salt, user.password)) {
+                    throw new CustomAPIError('Incorrect password', 400)
+                }
+
+                const hashedNewPassword: string = await hashPassword(newPassword, user.salt)
+                    .catch((error: any) => {
+                        console.error('Error hashing new password: ', error)
+                        throw new CustomAPIError('Error hashing new password', 500)
+                    })
+
+                return await this.createQueryBuilder()
+                    .update(User)
+                    .set({ password: hashedNewPassword })
+                    .where('id = :id', { id: user.id })
+                    .execute()
+                    .catch((error: any) => {
+                        console.error('Error updating password: ', error)
+                        throw new CustomAPIError('Error updating password', 500)
+                    })
             }
         })
     }

@@ -19,7 +19,7 @@ import { UserService } from './user.service.js'
  * @property {OTPService} _otpService - Instance of OTPService
  * @property {UserService} _userService - Instance of UserService
  * @property {EmailController} _emailController - Instance of EmailController
- * @property {Repository<User> & {isUserAlreadyRegistered(email: string): Promise<boolean>;registerUser(email: string, password: string, client: Client): Promise<{ id: string, email: string }>; authenticateUser(email: string, password: string): Promise<{ user: Partial<User> | false, message: string }>; resetPassword(email: string, password: string, salt: string)}} _authRepository - The extended auth repository with custom methods for the authentication process
+ * @property {Repository<User> & {isUserAlreadyRegistered(email: string): Promise<boolean>;registerUser(email: string, password: string, client: Client): Promise<{ id: string, email: string }>; authenticateUser(email: string, password: string): Promise<{ user: Partial<User> | false, message: string }>; resetPassword(email: string, password: string, salt: string): Promise<UpdateResult>; updatePassword(password: string, newPassword: string, user: User): Promise<UpdateResult>}} _authRepository - The extended auth repository with custom methods for the authentication process
  * @property {Repository<Client> & {isExistingClient(firstName: string, lastName: string): Promise<Client | false>;}} _clientRepository - The extended client repository with custom methods for the authentication process
  */
 export class AuthService extends BaseService {
@@ -33,6 +33,7 @@ export class AuthService extends BaseService {
         registerUser(email: string, password: string, token: string, client: Client): Promise<{ id: string, email: string }>
         authenticateUser(email: string, password: string): Promise<{ user: Partial<User> | false, message: string }>
         resetPassword(email: string, password: string, salt?: string): Promise<UpdateResult>
+        updatePassword(password: string, newPassword: string, user: User): Promise<UpdateResult>
     }
     private _clientRepository!: Repository<Client> & {
         isExistingClient(firstName: string, lastName: string): Promise<Client | false>
@@ -260,6 +261,92 @@ export class AuthService extends BaseService {
             await this._emailController.sendPasswordResetConfirmation(email)
                 .catch((error: any) => {
                     throw new CustomAPIError('Error sending password reset confirmation email', 500)
+                })
+
+            return result
+        } catch (error: any) {
+            throw error
+        }
+    }
+
+    /**
+     * Updates the email address of a user
+     * 
+     * @async
+     * @method updateEmailAddress
+     * @memberof AuthService
+     * @param {string} email - The email of the user
+     * @param {string} newEmail - The new email address of the user
+     * @param {string} token - The token to verify the new email address
+     * @throws {CustomAPIError} If the user is not found, if the email is invalid, if the new email is already registered, or if there is an error updating the email address
+     * @returns {Promise<UpdateResult>} A promise that resolves with the result of the email address update
+     */
+    public async updateEmailAddress(email: string, newEmail: string, token: string): Promise<UpdateResult> {
+        if (!this._authRepository) {
+            await this.extendAuthRepository()
+        }
+
+        try {
+            await this.validateEntity({ email: newEmail }, User)
+            
+            const user: User | null = await this._userService.getUserByEmail(email)
+                .catch((error: any) => {
+                    console.error('Error getting user by email: ', error)
+                    throw new CustomAPIError('Error getting user by email', 500)
+                })
+
+            if (!user) {
+                throw new CustomAPIError('User not found', 404)
+            }
+
+            const result: UpdateResult = await this._authRepository.update(user.id, { email: newEmail, verified: false, verification_token: token })
+
+            await this._emailController.sendEmailUpdateConfirmation(newEmail, token)
+                .catch((error: any) => {
+                    throw new CustomAPIError('Error sending email update confirmation email', 500)
+                })
+
+            return result
+        } catch (error: any) {
+            throw error
+        }
+    }
+
+    /**
+     * Updates the password of a user
+     * 
+     * @async
+     * @method updatePassword
+     * @memberof AuthService
+     * @param {string} email - The email of the user
+     * @param {string} password - The current password of the user
+     * @param {string} newPassword - The new password of the user
+     * @throws {CustomAPIError} If the user is not found, if the password is invalid, or if there is an error updating the password
+     * @returns {Promise<UpdateResult>} A promise that resolves with the result of the password update
+     */
+    public async updatePassword(email: string, password: string, newPassword: string): Promise<UpdateResult> {
+        if (!this._authRepository) {
+            await this.extendAuthRepository()
+        }
+
+        try {
+            await this.validateEntity({ email, password: newPassword }, User)
+
+            const user: User | null = await this._userService.getUserByEmail(email)
+                .catch((error: any) => {
+                    console.error('Error getting user by email: ', error)
+                    throw new CustomAPIError('Error getting user by email', 500)
+                })
+
+            if (!user) {
+                throw new CustomAPIError('User not found', 404)
+            }
+            
+            const result: UpdateResult = await this._authRepository.updatePassword(password, newPassword, user)
+
+            await this._emailController.sendPasswordUpdateConfirmation(email)
+                .catch((error: any) => {
+                    throw new CustomAPIError('Error sending password update confirmation email', 500)
                 })
 
             return result

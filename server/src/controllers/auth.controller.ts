@@ -180,7 +180,7 @@ export default class AuthController extends BaseController {
      * @param {Request} req - The request object
      * @param {Response} res - The response object
      * @param {NextFunction} next - The next function
-     * @returns {Promise<Response<any, Record<string, any>>>} A response object with a status code and a message or the next function if an error occurs
+     * @returns {Promise<void>} A response object with a status code and a message or the next function if an error occurs
      */
     public resetUserPassword = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         await this.handleRequest(req, res, async () => {
@@ -188,5 +188,43 @@ export default class AuthController extends BaseController {
 
             return await this._authService.resetPassword(email, otp, password)
         }, 'Password reset successfully')
+    }
+
+    /**
+     * Updates the email address of a user
+     * 
+     * @async
+     * @method updateEmailAddress
+     * @memberof AuthController
+     * @param {Request} req - The request object
+     * @param {Response} res - The response object
+     * @returns {Promise<void>} A response object with a status code and a message 
+     */
+    public updateEmailAddress = async (req: Request, res: Response): Promise<void> => {
+        await this.handleRequest(req, res, async () => {
+            const { email, new_email } = req.body 
+
+            const token = crypto.randomBytes(32).toString('hex')
+            
+            return await this._authService.updateEmailAddress(email, new_email, token) 
+        }, 'Email address updated successfully')
+    }
+
+    /**
+     * Updates the password of a user
+     * 
+     * @async
+     * @method updatePassword
+     * @memberof AuthController
+     * @param {Request} req - The request object
+     * @param {Response} res - The response object
+     * @returns {Promise<void>} A response object with a status code and a message 
+     */
+    public updatePassword = async (req: Request, res: Response): Promise<void> => {
+        await this.handleRequest(req, res, async () => {
+            const { email, current_password, new_password } = req.body 
+            
+            return await this._authService.updatePassword(email, current_password, new_password) 
+        }, 'Password updated successfully')
     }
 }

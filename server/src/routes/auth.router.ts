@@ -52,4 +52,12 @@ router.route('/verify-otp')
 router.route('/reset-password') 
     .post(authController.resetUserPassword)
 
+// Update user password
+router.route('/update-password')
+    .patch(authController.isLoggedIn, authController.updatePassword) 
+
+// Update user email address
+router.route('/update-email')
+    .patch(authController.isLoggedIn, authController.updateEmailAddress)
+
 export default router 
