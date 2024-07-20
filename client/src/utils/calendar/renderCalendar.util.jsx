@@ -224,6 +224,17 @@ export const renderDay = (date, appointments, userRole) => {
             return parseInt(appointmentTime) === i
         })
 
+        // Arrange appointments in the order of their time 
+        appointmentsForHour.sort((a, b) => {
+            const aTime = a.time.split(':')
+            const bTime = b.time.split(':')
+
+            const minutesComparison = parseInt(aTime[1]) - parseInt(bTime[1])
+            if (minutesComparison !== 0) return minutesComparison
+
+            return parseInt(aTime[0]) - parseInt(bTime[0])
+        })
+
         hours.push(
             <tr key={i} className='day-view'>
                 <td className='day-time'>{hour}:00</td>
