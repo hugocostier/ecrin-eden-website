@@ -1,6 +1,6 @@
 import { fetchAllAppointments } from '../../data/appointments/appointments.fetch'
 
-export const checkAvailability = async (service, date) => {
+export const checkAvailability = async (service, date, currentAppointmentID = null) => {
     const serviceDuration = parseInt(service.duration)
     const appointments = await fetchAllAppointments({ day: date })
         .then(appointments => appointments.data)
@@ -9,7 +9,7 @@ export const checkAvailability = async (service, date) => {
             return []
         })
 
-    return getAvailableTimes(appointments, serviceDuration, date)
+    return getAvailableTimes(appointments, serviceDuration, date, currentAppointmentID)
 }
 
 const OPENING_HOURS = {
@@ -22,8 +22,10 @@ const OPENING_HOURS = {
     sunday: { start: 'closed', end: 'closed' },
 }
 
-const getAvailableTimes = (appointments, serviceDuration, date) => {
-    const availableTimes = []
+const TIME_INCREMENT = 30
+
+const getAvailableTimes = (appointments, serviceDuration, date, currentAppointmentID) => {
+    let availableTimes = []
 
     const selectedDayName = new Date(date).toLocaleDateString('en-EN', { weekday: 'long' }).toLowerCase()
 
@@ -35,46 +37,40 @@ const getAvailableTimes = (appointments, serviceDuration, date) => {
     }
 
     for (let hour = openingTime; hour <= closingTime; hour++) {
-        for (let minute = 0; minute < 60; minute += 30) {
+        for (let minute = 0; minute < 60; minute += TIME_INCREMENT) {
             const currentTime = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`
 
-            if (isTimeAvailable(date, currentTime, appointments, serviceDuration)) {
-                availableTimes.push(currentTime)
-            }
+            availableTimes.push(currentTime)
         }
     }
 
-    return availableTimes
+    const filteredAppointments = appointments.filter(appointment => appointment.status !== 'cancelled' && appointment.id !== currentAppointmentID)
+
+    return filterConflictingTimes(date, availableTimes, filteredAppointments, serviceDuration)
 }
 
-const isTimeAvailable = (date, startTime, appointments, serviceDuration) => {
-    // Parse and set start time 
-    const [startHour, startMinutes] = startTime.split(':').map(time => parseInt(time))
-    const newAppointmentStart = new Date(date)
-    newAppointmentStart.setHours(startHour, startMinutes, 0, 0)
+const isConflicting = (start1, end1, start2, end2) => {
+    return (start1 < end2 && start2 < end1)
+}
 
-    // Calculate end time
-    const newAppointmentEnd = new Date(newAppointmentStart.getTime() + serviceDuration * 60000)
+const filterConflictingTimes = (date, availableTimes, appointments, serviceDuration) => {
+    return availableTimes.filter(time => {
+        const [availableHour, availableMinute] = time.split(':').map(time => parseInt(time))
 
-    for (const appointment of appointments) {
-        // Parse and set appointment start time
-        const [appointmentHour, appointmentMinutes] = appointment.time.split(':').map(time => parseInt(time))
-        const appointmentStart = new Date(appointment.date)
-        appointmentStart.setHours(appointmentHour, appointmentMinutes, 0, 0)
+        const availableStart = new Date(date)
+        availableStart.setHours(availableHour, availableMinute, 0, 0)
 
-        // Calculate appointment end time
-        const appointmentEnd = new Date(appointmentStart.getTime() + appointment.service.duration * 60000)
+        const availableEnd = new Date(availableStart.getTime() + serviceDuration * 60000)
 
-        // Check if new appointment overlaps with existing appointment
-        if (appointment.status !== 'cancelled' &&
-            (
-                (newAppointmentStart >= appointmentStart && newAppointmentStart < appointmentEnd) ||
-                (newAppointmentEnd > appointmentStart && newAppointmentEnd <= appointmentEnd)
-            )
-        ) {
-            return false
-        }
-    }
+        return !appointments.some(appointment => {
+            const [appointmentHour, appointmentMinute] = appointment.time.split(':').map(time => parseInt(time))
 
-    return true
+            const appointmentStart = new Date(appointment.date)
+            appointmentStart.setHours(appointmentHour, appointmentMinute, 0, 0)
+
+            const appointmentEnd = new Date(appointmentStart.getTime() + appointment.service.duration * 60000)
+
+            return isConflicting(availableStart, availableEnd, appointmentStart, appointmentEnd)
+        })
+    })
 }
