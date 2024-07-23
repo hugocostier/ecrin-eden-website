@@ -334,7 +334,7 @@ class AppointmentService extends BaseService {
             await this.extendServiceRepository()
         }
 
-        const clientData: Partial<Client> = appointmentData.client as Partial<Client>
+        let clientData: Partial<Client> = appointmentData.client as Partial<Client>
 
         try {
             return await this._appointmentRepository.manager.transaction(async transactionalEntityManager => {
@@ -371,6 +371,12 @@ class AppointmentService extends BaseService {
                     }
                     
                     appointmentData.client = clientData as Client
+                } else {
+                    const client: Client | null = await transactionalEntityManager.findOneBy(Client, { id: clientData.id })
+                    if (!client) {
+                        throw new CustomAPIError('Client not found', 400)
+                    }
+                    clientData = client 
                 }
 
                 await this.validateEntity(appointmentData, Appointment)
@@ -544,10 +550,12 @@ class AppointmentService extends BaseService {
                             throw new CustomAPIError(`Error sending appointment request email, ${error}`, 500)
                         })
                 }
-                await this._emailController.sendAppointmentRequestToAdmin(appointment)
-                    .catch((error: any) => {
-                        throw new CustomAPIError('Error sending appointment update email to admin', 500)
-                    })
+                if (appointment.status === 'pending') {
+                    await this._emailController.sendAppointmentRequestToAdmin(appointment)
+                        .catch((error: any) => {
+                            throw new CustomAPIError(`Error sending appointment request email to admin ${error}`, 500)
+                        })
+                }
                 break
         }
     }
