@@ -21,6 +21,13 @@ const getAppointmentLink = (appointment, userRole) => {
         ? `/admin/appointments/${appointment.id}`
         : `/user/appointments/${appointment.id}`
 
+    if (window.innerWidth < 640) {
+        return (
+            <Link to={linkPath} className='appointment-link'>
+            </Link>
+        )
+    }
+
     return (
         <Link to={linkPath} className='appointment-link'>
             {appointment.time.slice(0, 5)}
