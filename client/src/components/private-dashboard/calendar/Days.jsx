@@ -46,6 +46,7 @@ const StyledDays = StyledComponents.tbody`
         }   
         
         .appointment-info {
+            min-height: 20px; 
             padding-left: 10px;
             padding-right: 10px; 
             border-radius: 5px; 
@@ -67,4 +68,13 @@ const StyledDays = StyledComponents.tbody`
             font-size: 0.8rem;      
         }
     } 
+
+    @media screen and (max-width: 639px) {
+        td {
+            .more-appointments {
+                padding-left: 2px; 
+                font-size: .5rem; 
+            }
+        }
+    }
 `

@@ -108,7 +108,7 @@ const StyledCalendarHeader = StyledComponents.div`
         padding: 25px 30px 10px; 
     
         .current-date {
-            font-size: 1.5rem;
+            font-size: 1rem;
             margin: 0;
         }
     
@@ -146,6 +146,12 @@ const StyledCalendarHeader = StyledComponents.div`
                 width: 40px;
                 cursor: pointer;
             }
+        }
+    }
+
+    @media screen and (min-width: 640px) {
+        .current-date {
+            font-size: 1.5rem;
         }
     }
 `

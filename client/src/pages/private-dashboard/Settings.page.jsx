@@ -594,44 +594,44 @@ const SettingsContainer = StyledComponents.main`
                     }
                 }
             }
-        }
 
-        button.save {
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 4px;
-            background-color: var(--primary-300);
-            color: var(--white);
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s;
+            .forget-password {
+                margin-bottom: 1rem;
 
-            &:hover {
-                background-color: var(--primary-500);
+                p {
+                    margin-bottom: 0.25rem;
+                }
+
+                a { 
+                    line-height: none; 
+                }
+                    
+                button {
+                    border: none;
+                    background-color: transparent;
+                    text-decoration: underline;
+                    font-weight: bold;
+                    color: var(--primary-400);
+                    cursor: pointer;
+
+                    &:hover {
+                        text-decoration: none;
+                    }
+                }
             }
-        }
 
-        .forget-password {
-            margin-bottom: 1rem;
-
-            p {
-                margin-bottom: 0.25rem;
-            }
-
-            a { 
-                line-height: none; 
-            }
-                
-            button {
+            button.save {
+                padding: 0.5rem 1rem;
                 border: none;
-                background-color: transparent;
-                text-decoration: underline;
+                border-radius: 4px;
+                background-color: var(--primary-300);
+                color: var(--white);
                 font-weight: bold;
-                color: var(--primary-400);
                 cursor: pointer;
+                transition: background-color 0.3s;
 
                 &:hover {
-                    text-decoration: none;
+                    background-color: var(--primary-500);
                 }
             }
         }
@@ -654,6 +654,7 @@ const SettingsContainer = StyledComponents.main`
             font-weight: bold;
             color: var(--red);
             cursor: pointer;
+            text-align: start;
         }
     }
 
@@ -681,18 +682,19 @@ const SettingsContainer = StyledComponents.main`
                 .previous-password {
                     grid-column: 1 / 3;
                 }
-            }
 
-            .forget-password {
-                display: flex;
-                align-items: center; 
-
-                p {
-                    margin: 0; 
-                }
-
-                button {
-                    margin-left: 0.5rem; 
+                .forget-password {
+                    grid-column: 1 / 3;
+                    display: flex;
+                    align-items: center; 
+    
+                    p {
+                        margin: 0; 
+                    }
+    
+                    button {
+                        margin-left: 0.5rem; 
+                    }
                 }
             }
         }
@@ -721,6 +723,10 @@ const SettingsContainer = StyledComponents.main`
 
                 .previous-password {
                     grid-column: 1 / 2;
+                }
+
+                .forget-password {
+                    grid-column: 1 / 4; 
                 }
             }
         }
